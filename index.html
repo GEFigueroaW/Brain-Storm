@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activador de Contenido - Tu Coach Digital</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más cálida/profesional */
+            background-color: #f5f5f5; /* Gris muy claro */
+            color: #4a4a4a; /* Texto oscuro estándar */
+        }
+        .navbar {
+            background-color: #00d1b2; /* Color primario de Bulma */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-item, .navbar-link {
+            color: #fff !important;
+        }
+        .navbar-burger span {
+             background-color: #fff;
+        }
+        .navbar-dropdown {
+            background-color: #00d1b2;
+        }
+        .navbar-dropdown .navbar-item {
+            color: #fff !important;
+        }
+         .navbar-dropdown .navbar-item:hover {
+            background-color: #00b89c;
+        }
+        .hero.is-coach {
+            background-color: #3273dc; /* Color azul de Bulma */
+            color: #fff;
+            padding: 3rem 1.5rem;
+        }
+        .hero.is-coach .title {
+            color: #fff;
+        }
+        .hero.is-coach .subtitle {
+             color: rgba(255, 255, 255, 0.9);
+        }
+        .section {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        .box {
+            box-shadow: 0 0.5em 1em -0.125em rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.02);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        .button.is-primary {
+            background-color: #00d1b2;
+            border-color: transparent;
+        }
+        .button.is-primary:hover {
+            background-color: #00b89c;
+        }
+        .button.is-link {
+             background-color: #3273dc;
+            border-color: transparent;
+        }
+         .button.is-link:hover {
+             background-color: #276cda;
+         }
+         .button.is-info {
+             background-color: #3e8edb;
+             border-color: transparent;
+         }
+          .button.is-info:hover {
+             background-color: #337bc4;
+          }
+
+        .card {
+             margin-bottom: 1.5rem;
+             border-radius: 8px;
+             box-shadow: 0 0.25em 0.5em 0 rgba(0,0,0,0.1);
+        }
+        .card-header-title {
+            color: #3273dc; /* Azul para el título de la idea */
+        }
+        .card-content {
+            padding: 1.25rem;
+        }
+        .card-content strong {
+            color: #4a4a4a; /* Asegura que las etiquetas sean visibles */
+        }
+        .tag.is-hashtags {
+            background-color: #e8e8e8;
+            color: #4a4a4a;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .footer {
+            background-color: #f0f0f0; /* Un gris claro */
+            padding: 2rem 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        #loadingIndicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden; /* Oculto por defecto */
+        }
+        #loadingIndicator.is-active {
+             visibility: visible;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3273dc;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Estilos para la sección de Audiencia */
+        .audience-group {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #dbdbdb;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+        .audience-group-header label {
+            font-weight: bold;
+            color: #3273dc;
+            cursor: pointer;
+        }
+        .audience-list {
+            margin-top: 1rem;
+            padding-left: 1rem; /* Indentar sub-audiencias */
+            border-left: 2px solid #ededed;
+        }
+        .audience-list .checkbox {
+            margin-bottom: 0.5rem;
+            display: block; /* Cada checkbox en nueva línea */
+        }
+        .audience-list.is-hidden {
+            display: none;
+        }
+         #audienceCount {
+             font-weight: bold;
+             color: #3273dc;
+             margin-left: 10px;
+         }
+         #audienceError {
+             color: #ff3860; /* Rojo */
+             font-size: 0.9em;
+             margin-top: 0.5rem;
+         }
+
+         /* Historial Modal */
+         .modal-card-head, .modal-card-foot {
+             background-color: #00d1b2;
+         }
+         .modal-card-title {
+             color: #fff;
+         }
+         .modal-close {
+             background: none;
+         }
+         .modal-card-body {
+             max-height: 400px; /* Altura fija para scroll */
+             overflow-y: auto;
+         }
+         .history-item {
+             padding: 10px;
+             border-bottom: 1px solid #eee;
+             cursor: pointer;
+         }
+         .history-item:last-child {
+             border-bottom: none;
+         }
+         .history-item:hover {
+             background-color: #f0f0f0;
+         }
+         .history-item-date {
+             font-size: 0.9em;
+             color: #666;
+         }
+    </style>
+</head>
+<body>
+
+    <div id="loadingIndicator" class="">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <span class="is-size-4 has-text-weight-bold">Coach Digital</span>
+            </a>
+             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+             <div class="navbar-start">
+                 </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a id="historyButton" class="button is-info is-hidden">
+                            Historial
+                        </a>
+                        <a id="logoutButton" class="button is-light is-hidden">
+                            Cerrar Sesión
+                        </a>
+                         <a id="loginButtonNavbar" class="button is-light is-hidden">
+                            Iniciar Sesión
+                        </a>
+                         <a id="signupButtonNavbar" class="button is-primary is-hidden">
+                            <strong>Registrarse</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <section id="authSection" class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    <div class="box">
+                        <h1 class="title is-4 has-text-centered">Accede a tu Activador</h1>
+                         <p class="subtitle is-6 has-text-centered">Inspírate, crea, impacta.</p>
+
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control">
+                                <input id="authEmail" class="input" type="email" placeholder="ej. tu@email.com">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Contraseña</label>
+                            <div class="control">
+                                <input id="authPassword" class="input" type="password" placeholder="********">
+                            </div>
+                        </div>
+
+                        <div class="field is-grouped is-grouped-centered">
+                            <div class="control">
+                                <button id="loginEmailButton" class="button is-primary">Iniciar Sesión</button>
+                            </div>
+                             <div class="control">
+                                <button id="signupEmailButton" class="button is-link">Registrarse</button>
+                            </div>
+                        </div>
+
+                         <hr> <div class="field">
+                             <p class="has-text-centered">o</p>
+                         </div>
+
+                        <div class="field">
+                            <div class="control">
+                                 <button id="loginGoogleButton" class="button is-danger is-fullwidth">
+                                     <span class="icon is-small"><i class="fab fa-google"></i></span>
+                                     <span>Iniciar Sesión con Google</span>
+                                 </button>
+                            </div>
+                        </div>
+
+                        <p id="authErrorMessages" class="help is-danger has-text-centered"></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="appSection" class="section is-hidden">
+        <div class="container">
+             <div class="hero is-coach is-medium animate__animated animate__fadeIn">
+                 <div class="hero-body">
+                     <p class="title">
+                        ¡Hola, <span id="userNameDisplay">Coach</span>!
+                     </p>
+                     <p class="subtitle">
+                         Desbloquea tu próximo gran tema.
+                     </p>
+                 </div>
+            </div>
+
+            <div class="box mt-5">
+                <h2 class="title is-5">Define tu Propósito Creativo</h2>
+
+                 <div class="field">
+                    <label class="label">Tema o Palabra Clave</label>
+                     <div class="control">
+                         <input id="inputTopic" class="input" type="text" placeholder="Ej: Marketing digital para PYMES, Nutrición deportiva, Liderazgo consciente..." required>
+                     </div>
+                    <p class="help is-info">✨ **¡Sé nítido como un láser!** Cuanto más preciso sea tu tema, más brillantes serán las ideas que desbloquearemos juntos. ✨</p>
+                </div>
+
+                 <div class="field">
+                    <label class="label">Tono</label>
+                     <div class="control">
+                         <div class="select is-fullwidth">
+                             <select id="selectTone">
+                                 <option value="Formal">Formal</option>
+                                 <option value="Informal">Informal</option>
+                                 <option value="Neutral" selected>Neutral</option>
+                                 <option value="Alegre/Entusiasta">Alegre/Entusiasta</option>
+                                 <option value="Empático">Empático</option>
+                                 <option value="Asertivo">Asertivo</option>
+                                 <option value="Persuasivo">Persuasivo</option>
+                                 <option value="Sarcástico/Irónico">Sarcástico/Irónico</option>
+                                 <option value="Motivacional">Motivacional</option>
+                                 <option value="Didáctico">Didáctico</option>
+                             </select>
+                         </div>
+                     </div>
+                </div>
+
+                 <div class="field">
+                    <label class="label">Audiencia Objetivo <span id="audienceCount" class="tag is-link is-light">0/5 Seleccionadas</span></label>
+                     <p class="help">Activa uno o más grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
+                    <div id="audienceSelectionArea">
+                        </div>
+                    <p id="audienceError" class="help is-danger is-hidden">Debes seleccionar al menos un grupo activado o una sub-audiencia.</p>
+                </div>
+
+                 <div class="field">
+                    <label class="label">Máximo de Palabras por Post</label>
+                     <div class="control">
+                         <input id="inputMaxWords" class="input" type="number" value="100" min="50" max="500">
+                     </div>
+                     <p class="help">Define el tamaño máximo del borrador de post (entre 50 y 500 palabras). Por defecto: 100.</p>
+                </div>
+
+
+                <div class="field mt-5">
+                    <div class="control">
+                        <button id="generateIdeasButton" class="button is-primary is-large is-fullwidth animate__animated animate__pulse animate__infinite">
+                            ✨ ¡Generar 10 Inspiraciones! ✨
+                        </button>
+                    </div>
+                </div>
+
+            </div> <div id="ideasResultsArea" class="mt-5">
+                </div>
+
+            <div id="actionsArea" class="box mt-5 is-hidden">
+                 <h3 class="title is-6">Opciones Adicionales</h3>
+                 <div class="field is-grouped">
+                     <p class="control">
+                         <button id="refreshIdeasButton" class="button is-info">Refrescar Inspiraciones</button>
+                     </p>
+                     <p class="control">
+                         <button id="exportPdfButton" class="button is-link">Exportar a PDF</button>
+                     </p>
+                      <p class="control">
+                         <button id="exportCsvButton" class="button is-link">Exportar a CSV</button>
+                     </p>
+                 </div>
+             </div>
+
+             <div id="motivationalPhraseArea" class="box mt-5 is-hidden">
+                 <p class="is-size-5 has-text-centered has-text-weight-bold" id="motivationalPhraseText"></p>
+             </div>
+
+
+        </div> </section>
+
+    <div id="historyModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Historial de Inspiraciones (Últimas 50)</p>
+          <button class="delete" aria-label="close" id="closeHistoryModal"></button>
+        </header>
+        <section class="modal-card-body">
+          <div id="historyList">
+             <p class="has-text-centered" id="historyLoading">Cargando historial...</p>
+             <p class="has-text-centered is-hidden" id="noHistoryMessage">Aún no tienes inspiraciones guardadas.</p>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+           <button class="button is-link" id="loadHistoryDetailsButton" disabled>Cargar Detalles para Exportar</button>
+           <p id="selectedHistoryInfo" class="ml-4 is-hidden">Seleccionado: <span id="selectedHistoryDate"></span> (<span id="selectedHistoryTopic"></span>)</p>
+        </footer>
+      </div>
+    </div>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Activador de Contenido</strong> por Tu Coach Digital.
+            </p>
+            <p>
+                 Descargo de Responsabilidad: Las ideas, hashtags y contenidos generados por esta aplicación se basan en modelos de inteligencia artificial y tendencias públicas. No garantizamos su precisión, efectividad o la ausencia de derechos de terceros sobre hashtags o marcas registradas. Usted es responsable de verificar y asegurar el uso apropiado y legal de cualquier contenido generado.
+            </p>
+             </div>
+    </footer>
+
+
+    <script src="https://kit.fontawesome.com/YOUR_FONT_AWESOME_KIT_ID.js" crossorigin="anonymous"></script> <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
+
+    <script>
+        // Tu configuración de Firebase va aquí. Reemplaza con la configuración de tu proyecto.
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Inicializar Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const functions = firebase.functions();
+
+        // Si estás emulando las funciones localmente, descomenta la siguiente línea y ajusta la URL
+        // functions.useEmulator("http://localhost:5001");
+
+
+        // Referencias a elementos del DOM
+        const authSection = document.getElementById('authSection');
+        const appSection = document.getElementById('appSection');
+        const authEmailInput = document.getElementById('authEmail');
+        const authPasswordInput = document.getElementById('authPassword');
+        const loginEmailButton = document.getElementById('loginEmailButton');
+        const signupEmailButton = document.getElementById('signupEmailButton');
+        const loginGoogleButton = document.getElementById('loginGoogleButton');
+        const authErrorMessages = document.getElementById('authErrorMessages');
+        const logoutButton = document.getElementById('logoutButton');
+        const loginButtonNavbar = document.getElementById('loginButtonNavbar'); // Navbar link
+        const signupButtonNavbar = document.getElementById('signupButtonNavbar'); // Navbar link
+        const historyButton = document.getElementById('historyButton'); // Navbar link
+
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const inputTopic = document.getElementById('inputTopic');
+        const selectTone = document.getElementById('selectTone');
+        const audienceSelectionArea = document.getElementById('audienceSelectionArea');
+        const audienceCountSpan = document.getElementById('audienceCount');
+        const audienceError = document.getElementById('audienceError');
+        const inputMaxWords = document.getElementById('inputMaxWords');
+        const generateIdeasButton = document.getElementById('generateIdeasButton');
+        const ideasResultsArea = document.getElementById('ideasResultsArea');
+        const actionsArea = document.getElementById('actionsArea');
+        const refreshIdeasButton = document.getElementById('refreshIdeasButton');
+        const exportPdfButton = document.getElementById('exportPdfButton');
+        const exportCsvButton = document.getElementById('exportCsvButton');
+        const motivationalPhraseArea = document.getElementById('motivationalPhraseArea');
+        const motivationalPhraseText = document.getElementById('motivationalPhraseText');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        // Historial Modal
+        const historyModal = document.getElementById('historyModal');
+        const closeHistoryModalButton = document.getElementById('closeHistoryModal');
+        const historyListDiv = document.getElementById('historyList');
+        const historyLoadingMessage = document.getElementById('historyLoading');
+        const noHistoryMessage = document.getElementById('noHistoryMessage');
+        const loadHistoryDetailsButton = document.getElementById('loadHistoryDetailsButton');
+        const selectedHistoryInfo = document.getElementById('selectedHistoryInfo');
+        const selectedHistoryDateSpan = document.getElementById('selectedHistoryDate');
+        const selectedHistoryTopicSpan = document.getElementById('selectedHistoryTopic');
+
+        // --- Datos y Lógica de Audiencia ---
+        const audienceGroupsData = [
+            {
+                name: "Profesionales y Emprendedores",
+                id: "profesionales_emprendedores",
+                subAudiences: [
+                    "Emprendedores", "Profesionales jóvenes", "Freelancers/independientes",
+                    "Inversionistas/financieros", "Pequeños empresarios", "Trabajadores remotos"
+                ]
+            },
+            {
+                name: "Comunidades por Intereses o Pasatiempos",
+                id: "intereses_pasatiempos",
+                subAudiences: [
+                    "Amantes de la tecnología", "Aficionados al deporte", "Gamers",
+                    "Gourmets/amantes de la gastronomía", "Artistas y diseñadores", "Coleccionistas"
+                ]
+            },
+             {
+                name: "Grupos por Etapa de Vida o Rol Familiar",
+                id: "etapa_vida",
+                subAudiences: [
+                    "Estudiantes universitarios", "Padres de familia", "Adultos mayores",
+                    "Nuevos padres/madres", "Personas en reinvención profesional"
+                ]
+            },
+            {
+                name: "Audiencias con Estilos de Vida Específicos",
+                id: "estilos_vida",
+                subAudiences: [
+                    "Ecológicos/ambientalistas", "Viajeros frecuentes", "Amantes del lujo",
+                    "Personas enfocadas en salud y bienestar", "Comunidad LGBTQ+", "Influencers/content creators"
+                ]
+            },
+            {
+                name: "Personas en Contextos o Necesidades Particulares",
+                id: "contextos_necesidades",
+                subAudiences: [
+                    "Personas con discapacidades", "Desempleados", "Activistas",
+                    "Comunidades rurales", "Público general"
+                ]
+            }
+        ];
+
+        let selectedSubAudiencesCount = 0;
+        const MAX_SUB_AUDIENCES = 5;
+        const selectedHistorySessionId = null; // Para almacenar el ID de la sesión seleccionada en el historial
+
+        // Renderizar la sección de audiencia dinámicamente
+        function renderAudienceSelection() {
+            audienceSelectionArea.innerHTML = ''; // Limpiar área
+            audienceGroupsData.forEach(group => {
+                const groupDiv = document.createElement('div');
+                groupDiv.classList.add('audience-group');
+
+                const headerDiv = document.createElement('div');
+                headerDiv.classList.add('audience-group-header');
+                headerDiv.innerHTML = `
+                    <label class="checkbox">
+                        <input type="checkbox" data-group-id="${group.id}" class="group-toggle">
+                        ${group.name}
+                    </label>
+                `;
+                groupDiv.appendChild(headerDiv);
+
+                const listDiv = document.createElement('div');
+                listDiv.classList.add('audience-list', 'is-hidden'); // Oculta la lista por defecto
+                listDiv.setAttribute('data-group-list-id', group.id);
+
+                group.subAudiences.forEach(sub => {
+                    const subCheckboxLabel = document.createElement('label');
+                    subCheckboxLabel.classList.add('checkbox');
+                    subCheckboxLabel.innerHTML = `<input type="checkbox" value="${sub}" class="sub-audience-checkbox"> ${sub}`;
+                    listDiv.appendChild(subCheckboxLabel);
+                });
+
+                groupDiv.appendChild(listDiv);
+                audienceSelectionArea.appendChild(groupDiv);
+            });
+            addAudienceEventListeners(); // Añadir listeners DESPUÉS de renderizar
+            updateAudienceCount(); // Inicializar el contador
+        }
+
+        function addAudienceEventListeners() {
+             // Event listener para los toggles de grupo
+            document.querySelectorAll('.group-toggle').forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const groupId = this.dataset.groupId;
+                    const listDiv = audienceSelectionArea.querySelector(`[data-group-list-id="${groupId}"]`);
+                    if (this.checked) {
+                        listDiv.classList.remove('is-hidden');
+                    } else {
+                        listDiv.classList.add('is-hidden');
+                        // Deseleccionar todas las sub-audiencias si el grupo se desactiva
+                        listDiv.querySelectorAll('.sub-audience-checkbox').forEach(checkbox => {
+                            if (checkbox.checked) {
+                                checkbox.checked = false;
+                                selectedSubAudiencesCount--; // Decrementar contador
+                            }
+                        });
+                         updateAudienceCount(); // Actualizar contador global
+                    }
+                     validateAudienceSelection(); // Re-validar al cambiar estado del grupo
+                });
+            });
+
+            // Event listener para las sub-audiencias checkboxes
+            document.querySelectorAll('.sub-audience-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        if (selectedSubAudiencesCount < MAX_SUB_AUDIENCES) {
+                            selectedSubAudiencesCount++;
+                        } else {
+                            this.checked = false; // Evitar seleccionar si ya hay MAX
+                             alert(`Solo puedes seleccionar hasta ${MAX_SUB_AUDIENCES} audiencias específicas.`);
+                        }
+                    } else {
+                        selectedSubAudiencesCount--;
+                    }
+                     updateAudienceCount();
+                     validateAudienceSelection(); // Re-validar al cambiar selección de sub-audiencia
+                });
+            });
+        }
+
+        function updateAudienceCount() {
+            audienceCountSpan.textContent = `${selectedSubAudiencesCount}/${MAX_SUB_AUDIENCES} Seleccionadas`;
+        }
+
+        function getSelectedAudience() {
+            const selectedSubAudiences = [];
+            document.querySelectorAll('.sub-audience-checkbox:checked').forEach(checkbox => {
+                selectedSubAudiences.push(checkbox.value);
+            });
+
+            if (selectedSubAudiences.length > 0) {
+                return selectedSubAudiences; // Prioridad 1: Sub-audiencias seleccionadas
+            }
+
+            const activatedGroups = [];
+            document.querySelectorAll('.group-toggle:checked').forEach(toggle => {
+                // Encuentra el nombre completo del grupo basado en el ID data-group-id
+                 const group = audienceGroupsData.find(g => g.id === toggle.dataset.groupId);
+                 if(group) {
+                     activatedGroups.push(group.name); // Prioridad 2: Nombres de grupos activados
+                 }
+            });
+
+             if (activatedGroups.length > 0) {
+                 return activatedGroups;
+             }
+
+            return []; // Nada seleccionado (debería ser prevenido por validación)
+        }
+
+        function validateAudienceSelection() {
+             const selectedSub = document.querySelectorAll('.sub-audience-checkbox:checked').length;
+             const activatedGroups = document.querySelectorAll('.group-toggle:checked').length;
+
+             if (selectedSub === 0 && activatedGroups === 0) {
+                 audienceError.classList.remove('is-hidden');
+                 return false;
+             } else {
+                 audienceError.classList.add('is-hidden');
+                 return true;
+             }
+        }
+
+
+        // --- Funciones de Autenticación ---
+        function showLoading() { loadingIndicator.classList.add('is-active'); }
+        function hideLoading() { loadingIndicator.classList.remove('is-active'); }
+        function showAuthError(message) {
+             authErrorMessages.textContent = message;
+             authErrorMessages.classList.remove('is-hidden');
+        }
+         function hideAuthError() {
+             authErrorMessages.textContent = '';
+             authErrorMessages.classList.add('is-hidden');
+         }
+
+
+        loginEmailButton.addEventListener('click', async () => {
+            const email = authEmailInput.value;
+            const password = authPasswordInput.value;
+            hideAuthError();
+            showLoading();
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                // onAuthStateChanged manejará el cambio de UI
+            } catch (error) {
+                console.error("Error login:", error);
+                showAuthError(`Error al iniciar sesión: ${error.message}`);
+            } finally {
+                hideLoading();
+            }
+        });
+
+        signupEmailButton.addEventListener('click', async () => {
+            const email = authEmailInput.value;
+            const password = authPasswordInput.value;
+             hideAuthError();
+             showLoading();
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                // Al registrar, también iniciamos sesión. Guardar info básica del usuario.
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    email: userCredential.user.email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    // Nombre puede pedirse después si es necesario
+                }, { merge: true }); // merge: true para no sobrescribir si el doc ya existe por alguna razón
+                // onAuthStateChanged manejará el cambio de UI
+            } catch (error) {
+                 console.error("Error signup:", error);
+                 showAuthError(`Error al registrar: ${error.message}`);
+            } finally {
+                 hideLoading();
+            }
+        });
+
+         loginGoogleButton.addEventListener('click', async () => {
+            hideAuthError();
+             showLoading();
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                const userCredential = await auth.signInWithPopup(provider);
+                 // Guardar info básica del usuario al loggearse con Google por primera vez
+                 await db.collection('users').doc(userCredential.user.uid).set({
+                    email: userCredential.user.email,
+                    name: userCredential.user.displayName, // Nombre de Google
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                 }, { merge: true });
+                // onAuthStateChanged manejará el cambio de UI
+            } catch (error) {
+                console.error("Error Google login:", error);
+                 showAuthError(`Error al iniciar sesión con Google: ${error.message}`);
+            } finally {
+                hideLoading();
+            }
+         });
+
+
+        logoutButton.addEventListener('click', async () => {
+             showLoading();
+            try {
+                await auth.signOut();
+                // onAuthStateChanged manejará el cambio de UI
+                // Limpiar UI o resetear estado si es necesario
+                 ideasResultsArea.innerHTML = '';
+                 actionsArea.classList.add('is-hidden');
+                 motivationalPhraseArea.classList.add('is-hidden');
+                 inputTopic.value = '';
+                 selectTone.value = 'Neutral';
+                 // Resetear selección de audiencia
+                 document.querySelectorAll('.group-toggle').forEach(toggle => toggle.checked = false);
+                 document.querySelectorAll('.audience-list').forEach(list => list.classList.add('is-hidden'));
+                 document.querySelectorAll('.sub-audience-checkbox').forEach(checkbox => checkbox.checked = false);
+                 selectedSubAudiencesCount = 0;
+                 updateAudienceCount();
+                 hideAuthError(); // Ocultar posibles errores de auth anteriores
+            } catch (error) {
+                 console.error("Error logout:", error);
+                 // Mostrar error de logout si aplica, aunque es raro
+            } finally {
+                 hideLoading();
+            }
+        });
+
+        // Observador del estado de autenticación
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                // Usuario loggeado
+                authSection.classList.add('is-hidden');
+                appSection.classList.remove('is-hidden');
+                logoutButton.classList.remove('is-hidden');
+                 historyButton.classList.remove('is-hidden');
+                 loginButtonNavbar.classList.add('is-hidden'); // Ocultar auth links en navbar
+                 signupButtonNavbar.classList.add('is-hidden');
+
+                // Mostrar nombre de usuario si está disponible, sino usar email
+                 const userName = user.displayName || user.email || 'Usuario';
+                 userNameDisplay.textContent = userName.split('@')[0]; // Mostrar parte antes del @ si es email
+
+                 // Asegurar que el usuario esté registrado en nuestra colección 'users'
+                 const userDoc = await db.collection('users').doc(user.uid).get();
+                 if (!userDoc.exists) {
+                      await db.collection('users').doc(user.uid).set({
+                         email: user.email,
+                         name: user.displayName || null,
+                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                      }, { merge: true });
+                 }
+
+
+                console.log("Usuario autenticado:", user.uid);
+                 // Aquí podrías cargar data inicial del usuario si fuera necesario
+            } else {
+                // Usuario no loggeado
+                authSection.classList.remove('is-hidden');
+                appSection.classList.add('is-hidden');
+                logoutButton.classList.add('is-hidden');
+                 historyButton.classList.add('is-hidden');
+                  loginButtonNavbar.classList.remove('is-hidden'); // Mostrar auth links en navbar
+                 signupButtonNavbar.classList.remove('is-hidden');
+                console.log("Usuario desautenticado.");
+            }
+        });
+
+
+        // --- Lógica de Generación de Ideas ---
+        generateIdeasButton.addEventListener('click', handleGenerateIdeas);
+        refreshIdeasButton.addEventListener('click', handleGenerateIdeas); // Refrescar usa la misma lógica
+
+        async function handleGenerateIdeas() {
+            const topic = inputTopic.value.trim();
+            const tone = selectTone.value;
+            const audience = getSelectedAudience();
+            const maxWords = parseInt(inputMaxWords.value, 10) || 100; // Default a 100 si vacío o inválido
+             inputMaxWords.value = maxWords; // Asegurar que el input muestre el valor por defecto si estaba vacío
+
+            if (!topic) {
+                alert("Por favor, ingresa un tema o palabra clave.");
+                inputTopic.focus();
+                return;
+            }
+
+             if (!validateAudienceSelection()) {
+                 alert("Debes seleccionar al menos un grupo activado o una sub-audiencia.");
+                 // audienceError ya se muestra en validateAudienceSelection()
+                 return;
+             }
+
+            showLoading();
+            hideAuthError(); // Ocultar errores de auth si estaban visibles
+            ideasResultsArea.innerHTML = ''; // Limpiar resultados anteriores
+            actionsArea.classList.add('is-hidden'); // Ocultar botones de acción
+            motivationalPhraseArea.classList.add('is-hidden'); // Ocultar frase motivacional
+
+
+            try {
+                // Llamar a la Firebase Function 'generateIdeas'
+                const generateIdeas = functions.httpsCallable('generateIdeas');
+                const result = await generateIdeas({
+                    topic: topic,
+                    tone: tone,
+                    audience: audience, // Esto será la lista de sub-audiencias o grupos
+                    maxWords: maxWords
+                });
+
+                const data = result.data; // La respuesta de la función
+                console.log("Respuesta de Function:", data);
+
+                if (data.success) {
+                    displayIdeas(data.ideas);
+                    displayMotivationalPhrase(data.finalPhrase);
+                     actionsArea.classList.remove('is-hidden'); // Mostrar botones de acción
+                     motivationalPhraseArea.classList.remove('is-hidden'); // Mostrar frase motivacional
+                } else {
+                     console.error("Error al generar ideas:", data.error);
+                    alert(`Error al generar ideas: ${data.error || 'Error desconocido'}`);
+                }
+
+            } catch (error) {
+                console.error("Error llamando a Firebase Function:", error);
+                alert(`Error en la comunicación con el servidor: ${error.message}`);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // --- Funciones para mostrar resultados ---
+        function displayIdeas(ideas) {
+            ideasResultsArea.innerHTML = ''; // Limpiar área
+            if (!ideas || ideas.length === 0) {
+                ideasResultsArea.innerHTML = '<p class="has-text-centered">No se generaron ideas. Intenta con un tema diferente.</p>';
+                return;
+            }
+
+            ideas.forEach((idea, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card', 'animate__animated', 'animate__fadeInUp'); // Animación para cada tarjeta
+                card.innerHTML = `
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            Idea ${index + 1}
+                        </p>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            <p><strong>Ángulo Narrativo:</strong> ${escapeHTML(idea.angle)}</p>
+                            <p><strong>Hashtags:</strong> ${idea.hashtags.split(',').map(tag => `<span class="tag is-hashtags">${escapeHTML(tag.trim())}</span>`).join('')}</p>
+                            <p><strong>Formato Visual Sugerido:</strong> ${escapeHTML(idea.format)}</p>
+                            <p><strong>Gancho Verbal Impactante:</strong> ${escapeHTML(idea.hook)}</p>
+                            <p><strong>Post Relacionado (${idea.post ? idea.post.split(/\s+/).length : 0} palabras):</strong></p>
+                            <p>${escapeHTML(idea.post)}</p>
+                        </div>
+                    </div>
+                `;
+                ideasResultsArea.appendChild(card);
+            });
+        }
+
+         function displayMotivationalPhrase(phrase) {
+             motivationalPhraseText.textContent = phrase ? escapeHTML(phrase) : '¡Sigue creando!';
+         }
+
+         // Función de ayuda para escapar HTML y prevenir XSS
+         function escapeHTML(str) {
+             if (!str) return '';
+             const div = document.createElement('div');
+             div.appendChild(document.createTextNode(str));
+             return div.innerHTML;
+         }
+
+
+        // --- Lógica de Exportación ---
+        exportPdfButton.addEventListener('click', handleExportPdf);
+        exportCsvButton.addEventListener('click', handleExportCsv);
+
+        function handleExportPdf() {
+            // Para exportar a PDF, html2pdf.js necesita acceder al contenido del DOM.
+            // La forma más sencilla es renderizar primero las ideas en un área oculta
+            // si estamos exportando desde el historial, o usar el área visible si es la generación actual.
+            // Simplificamos: tomaremos el contenido directamente de `ideasResultsArea`
+            // asumiendo que siempre mostraremos ahí las ideas a exportar (sea generación actual o del historial).
+
+            const element = ideasResultsArea; // El área que contiene las tarjetas de ideas
+
+            if (!element || element.innerHTML.trim() === '') {
+                alert("No hay contenido para exportar a PDF.");
+                return;
+            }
+
+            showLoading();
+
+            const options = {
+                margin: 10,
+                filename: `Inspiraciones_${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Usar html2pdf.js
+            html2pdf().from(element).set(options).save().then(() => {
+                 hideLoading();
+                 console.log("PDF exportado.");
+            }).catch(error => {
+                 console.error("Error exportando PDF:", error);
+                 alert("Error al exportar PDF.");
+                 hideLoading();
+            });
+        }
+
+        async function handleExportCsv() {
+            showLoading();
+             // Necesitamos el ID de la sesión actual o del historial seleccionado
+             // Para la generación actual, el Backend guarda la sesión y devuelve un ID (esto no lo tenemos aún en la respuesta actual, debemos modificar el backend)
+             // O más simple: si estamos en la vista de la generación actual, podríamos NO necesitar un ID si la function exportCsv simplemente espera los datos {ideas: [...]}
+             // Si estamos en la vista del historial, SÍ necesitamos el ID para que el Backend la recupere.
+
+             // Por ahora, asumamos que la generación actual se guarda y su ID se nos devuelve, o que la función CSV puede procesar los datos si se los pasamos (aunque es menos seguro pasar mucha data al backend).
+             // La forma más robusta es que el backend use el SessionId.
+
+             // TODO: Modificar generateIdeas function para que devuelva el sessionId de la nueva generación.
+             // Por simplicidad en este FE, vamos a asumir que si estamos viendo la `ideasResultsArea`, tenemos un `currentSessionId` global o estamos visualizando un historial seleccionado.
+             // Para este ejemplo, vamos a simular que siempre exportamos la data *visible* en `ideasResultsArea`. Esto no es ideal si queremos exportar *cualquier* historial.
+             // La implementación correcta requiere guardar el sessionId de la generación actual y usarla, o cargar el historial completo y usar su sessionId.
+
+             // Implementación que llama al backend con un ID (necesita sessionId global o de historial)
+             // const sessionIdToExport = selectedHistorySessionId || currentSessionId; // Necesitamos `currentSessionId` de la respuesta de generateIdeas
+             // if (!sessionIdToExport) {
+             //     alert("No hay sesión para exportar. Genera ideas o selecciona del historial.");
+             //     hideLoading();
+             //     return;
+             // }
+
+             // Implementación más simple: pasa la data visible (MENOS segura, pero funciona sin cambiar backend API shape AHORA)
+             // Esta es una simplificación para el frontend único. Lo ideal es el backend.
+             // const ideasToExport = getIdeasFromDisplayedResults(); // Necesitas parsear el DOM
+             // if (!ideasToExport || ideasToExport.length === 0) {
+             //      alert("No hay contenido para exportar a CSV.");
+             //      hideLoading();
+             //      return;
+             // }
+             // try {
+             //      const exportCsvFunction = functions.httpsCallable('generateCsv'); // Nombre de la función en backend
+             //      const result = await exportCsvFunction({ ideas: ideasToExport }); // Pasa los datos
+             //      const csvText = result.data.csv; // Asume que el backend devuelve { csv: "..." }
+             //
+             //      // Crear Blob y descargar
+             //      const blob = new Blob([csvText], { type: 'text/csv' });
+             //      const url = window.URL.createObjectURL(blob);
+             //      const a = document.createElement('a');
+             //      a.setAttribute('hidden', '');
+             //      a.setAttribute('href', url);
+             //      a.setAttribute('download', `Inspiraciones_${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}.csv`);
+             //      document.body.appendChild(a);
+             //      a.click();
+             //      document.body.removeChild(a);
+             //
+             // } catch (error) {
+             //      console.error("Error exportando CSV:", error);
+             //      alert("Error al exportar CSV.");
+             // } finally {
+             //      hideLoading();
+             // }
+
+
+             // **Implementación que usa el sessionId (Requiere Backend `exportCsv` function que recibe ID):**
+              // Asumimos que al cargar una sesión (sea la actual o del historial), su ID se guarda en una variable global o similar.
+              // Let's use `window.currentViewingSessionId` to store the ID of the session currently rendered in `ideasResultsArea`.
+             if (!window.currentViewingSessionId) {
+                  alert("No hay sesión cargada para exportar a CSV. Genera ideas o selecciona del historial.");
+                  hideLoading();
+                  return;
+             }
+
+             try {
+                  const exportCsvFunction = functions.httpsCallable('exportCsv'); // Nombre de la función en backend
+                  const result = await exportCsvFunction({ sessionId: window.currentViewingSessionId });
+                  const csvText = result.data.csv; // Asume que el backend devuelve { csv: "..." }
+
+                   // Crear Blob y descargar
+                  const blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' }); // Asegurar charset UTF-8
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.setAttribute('hidden', '');
+                  a.setAttribute('href', url);
+                  a.setAttribute('download', `Inspiraciones_${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}.csv`);
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                   window.URL.revokeObjectURL(url); // Liberar memoria
+
+             } catch (error) {
+                  console.error("Error exportando CSV:", error);
+                  alert(`Error al exportar CSV: ${error.message}`);
+             } finally {
+                  hideLoading();
+             }
+
+        }
+
+         // --- Lógica de Historial ---
+         historyButton.addEventListener('click', handleOpenHistoryModal);
+         closeHistoryModalButton.addEventListener('click', handleCloseHistoryModal);
+         loadHistoryDetailsButton.addEventListener('click', handleLoadHistoryDetails);
+
+         function handleOpenHistoryModal() {
+              historyModal.classList.add('is-active');
+              loadHistorySummary(); // Cargar la lista al abrir
+         }
+
+         function handleCloseHistoryModal() {
+             historyModal.classList.remove('is-active');
+             // Limpiar modal al cerrar
+             historyListDiv.innerHTML = '';
+             historyLoadingMessage.classList.remove('is-hidden');
+             noHistoryMessage.classList.add('is-hidden');
+             loadHistoryDetailsButton.disabled = true;
+             selectedHistoryInfo.classList.add('is-hidden');
+              window.selectedHistorySessionId = null; // Resetear selección
+         }
+
+         async function loadHistorySummary() {
+             historyListDiv.innerHTML = ''; // Limpiar lista
+             historyLoadingMessage.classList.remove('is-hidden');
+             noHistoryMessage.classList.add('is-hidden');
+              loadHistoryDetailsButton.disabled = true; // Deshabilitar botón de carga al recargar lista
+               selectedHistoryInfo.classList.add('is-hidden');
+              window.selectedHistorySessionId = null; // Resetear selección
+
+             try {
+                 const getHistory = functions.httpsCallable('getHistorySummary');
+                 const result = await getHistory();
+                 const summaryList = result.data.sessions;
+
+                 historyLoadingMessage.classList.add('is-hidden');
+
+                 if (!summaryList || summaryList.length === 0) {
+                     noHistoryMessage.classList.remove('is-hidden');
+                     return;
+                 }
+
+                 summaryList.forEach(session => {
+                     const itemDiv = document.createElement('div');
+                     itemDiv.classList.add('history-item');
+                     itemDiv.dataset.sessionId = session.id;
+
+                     // Formatear fecha (Firestore Timestamp)
+                     const date = session.timestamp ? new Date(session.timestamp._seconds * 1000) : new Date();
+                     const formattedDate = date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+                     itemDiv.innerHTML = `
+                         <p class="history-item-date">${formattedDate}</p>
+                         <p><strong>Tema:</strong> ${escapeHTML(session.topic || 'Sin tema')}</p>
+                         <p><strong>Tono:</strong> ${escapeHTML(session.tone || 'N/A')}</p>
+                          <p><strong>Audiencia:</strong> ${session.audience && Array.isArray(session.audience) ? escapeHTML(session.audience.join(', ')) : 'N/A'}</p>
+                     `;
+
+                     itemDiv.addEventListener('click', function() {
+                         // Remover selección anterior
+                         historyListDiv.querySelectorAll('.history-item').forEach(item => {
+                             item.style.backgroundColor = ''; // Resetear color de fondo
+                         });
+                         // Marcar seleccionado
+                         this.style.backgroundColor = '#e0e0e0'; // Gris claro para marcar
+                         window.selectedHistorySessionId = this.dataset.sessionId; // Guardar ID seleccionado
+                         loadHistoryDetailsButton.disabled = false; // Habilitar botón de carga
+                          // Mostrar info de la selección
+                          selectedHistoryDateSpan.textContent = formattedDate;
+                          selectedHistoryTopicSpan.textContent = escapeHTML(session.topic || 'Sin tema');
+                          selectedHistoryInfo.classList.remove('is-hidden');
+                     });
+
+                     historyListDiv.appendChild(itemDiv);
+                 });
+
+             } catch (error) {
+                 console.error("Error cargando historial:", error);
+                 historyLoadingMessage.classList.add('is-hidden');
+                 historyListDiv.innerHTML = '<p class="has-text-centered has-text-danger">Error al cargar el historial.</p>';
+                  noHistoryMessage.classList.add('is-hidden'); // Asegurarse que no aparezca el mensaje de no historial si hay un error
+             }
+         }
+
+         async function handleLoadHistoryDetails() {
+             if (!window.selectedHistorySessionId) {
+                 alert("Por favor, selecciona una sesión del historial.");
+                 return;
+             }
+
+             handleCloseHistoryModal(); // Cerrar modal
+
+             showLoading();
+              ideasResultsArea.innerHTML = ''; // Limpiar resultados actuales
+             actionsArea.classList.add('is-hidden'); // Ocultar botones de acción
+             motivationalPhraseArea.classList.add('is-hidden'); // Ocultar frase motivacional
+
+
+             try {
+                 const getDetails = functions.httpsCallable('getGenerationDetails');
+                 const result = await getDetails({ sessionId: window.selectedHistorySessionId });
+                 const sessionDetails = result.data.session;
+
+                 if (sessionDetails && sessionDetails.ideas) {
+                     displayIdeas(sessionDetails.ideas);
+                     displayMotivationalPhrase(sessionDetails.finalPhrase || 'Inspiración recuperada.'); // Puede que no se guardara la frase final original, usar una por defecto
+                     actionsArea.classList.remove('is-hidden'); // Mostrar botones de acción
+                     motivationalPhraseArea.classList.remove('is-hidden'); // Mostrar frase motivacional
+
+                     // IMPORTANT: Update the global variable for export buttons
+                     window.currentViewingSessionId = window.selectedHistorySessionId; // Ahora los botones de exportar usarán este ID
+                      console.log("Historial cargado. Session ID:", window.currentViewingSessionId);
+
+                 } else {
+                      alert("No se pudieron cargar los detalles de la sesión seleccionada.");
+                       window.currentViewingSessionId = null; // Resetear
+                 }
+
+
+             } catch (error) {
+                  console.error("Error cargando detalles del historial:", error);
+                  alert(`Error al cargar los detalles del historial: ${error.message}`);
+                   window.currentViewingSessionId = null; // Resetear en caso de error
+             } finally {
+                 hideLoading();
+             }
+         }
+
+
+         // --- Inicialización ---
+         document.addEventListener('DOMContentLoaded', () => {
+             renderAudienceSelection(); // Renderizar la sección de audiencia al cargar la página
+
+              // Lógica para el burger menu en móviles (Bulma)
+             const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+             if ($navbarBurgers.length > 0) {
+               $navbarBurgers.forEach( el => {
+                 el.addEventListener('click', () => {
+                   const target = el.dataset.target;
+                   const $target = document.getElementById(target);
+                   el.classList.toggle('is-active');
+                   $target.classList.toggle('is-active');
+                 });
+               });
+             }
+         });
+
+         // Script para html2pdf.js (ya incluido por CDN)
+         // No necesita script adicional aquí, solo se usa la librería en handleExportPdf
+
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+</body>
+</html>
