@@ -352,30 +352,29 @@
                      </div>
                 </div>
 
-                 <div class="field">
+                <div class="field">
+                    <label class="label">Máximo de Palabras por Post</label>
+                     <div class="control">
+                         <input id="inputMaxWords" class="input" type="number" value="100" min="50" max="500">
+                     </div>
+                     <p class="help">Define el tamaño máximo del borrador de post (entre 50 y 500 palabras). Por defecto: 100.</p>
+                </div>
+                <div class="field">
                     <label class="label">Audiencia Objetivo <span id="audienceCount" class="tag is-link is-light">0/5 Seleccionadas</span></label>
-                     <p class="help" id="audienceHelpText">Selecciona "Todo Público" o activa grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
-                    <div class="control">
+                     <div class="control">
                         <label class="radio">
                             <input type="radio" name="audienceOption" value="all" id="audienceAllRadio">
-                            Todo Público
+                            Público en General
                         </label>
                         <label class="radio">
                             <input type="radio" name="audienceOption" value="specific" id="audienceSpecificRadio" checked>
                             Selección Específica
                         </label>
                     </div>
+                    <p class="help" id="audienceHelpText">Selecciona "Público en General" o activa grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
                     <div id="audienceSpecificSelectionArea">
                         </div>
-                    <p id="audienceError" class="help is-danger is-hidden">Debes seleccionar "Todo Público" o al menos un grupo activado o una sub-audiencia.</p>
-                </div>
-
-                 <div class="field">
-                    <label class="label">Máximo de Palabras por Post</label>
-                     <div class="control">
-                         <input id="inputMaxWords" class="input" type="number" value="100" min="50" max="500">
-                     </div>
-                     <p class="help">Define el tamaño máximo del borrador de post (entre 50 y 500 palabras). Por defecto: 100.</p>
+                    <p id="audienceError" class="help is-danger is-hidden">Debes seleccionar "Público en General" o al menos un grupo activado o una sub-audiencia.</p>
                 </div>
 
 
@@ -506,7 +505,7 @@
         const audienceHelpText = document.getElementById('audienceHelpText'); // Nuevo ref para texto de ayuda
         const audienceCountSpan = document.getElementById('audienceCount');
         const audienceError = document.getElementById('audienceError');
-        const audienceAllRadio = document.getElementById('audienceAllRadio'); // Nuevo ref para radio Todo Público
+        const audienceAllRadio = document.getElementById('audienceAllRadio'); // Nuevo ref para radio Público en General
         const audienceSpecificRadio = document.getElementById('audienceSpecificRadio'); // Nuevo ref para radio Selección Específica
         const audienceSpecificSelectionArea = document.getElementById('audienceSpecificSelectionArea'); // Nuevo ref para el área de selección específica
 
@@ -666,8 +665,8 @@
         function handleAudienceOptionChange() {
             if (audienceAllRadio.checked) {
                 audienceSpecificSelectionArea.classList.add('is-hidden');
-                audienceCountSpan.classList.add('is-hidden'); // Ocultar contador en "Todo Público"
-                 // Deseleccionar y desactivar todo en la selección específica al elegir "Todo Público"
+                audienceCountSpan.classList.add('is-hidden'); // Ocultar contador en "Público en General"
+                 // Deseleccionar y desactivar todo en la selección específica al elegir "Público en General"
                  document.querySelectorAll('.group-toggle').forEach(toggle => toggle.checked = false);
                  document.querySelectorAll('.audience-list').forEach(list => list.classList.add('is-hidden'));
                  document.querySelectorAll('.sub-audience-checkbox').forEach(checkbox => checkbox.checked = false);
@@ -688,7 +687,7 @@
 
         function getSelectedAudience() {
             if (audienceAllRadio.checked) {
-                return ["Todo Público"]; // Enviar un indicador específico al backend
+                return ["Público en General"]; // Enviar un indicador específico al backend
             }
 
             const selectedSubAudiences = [];
@@ -718,7 +717,7 @@
 
         function validateAudienceSelection() {
              if (audienceAllRadio.checked) {
-                 audienceError.classList.add('is-hidden'); // Válido si "Todo Público" está seleccionado
+                 audienceError.classList.add('is-hidden'); // Válido si "Público en General" está seleccionado
                  return true;
              }
 
@@ -984,7 +983,7 @@
             }
 
              if (!validateAudienceSelection()) {
-                 alert("Debes seleccionar 'Todo Público' o al menos un grupo activado o una sub-audiencia.");
+                 alert("Debes seleccionar 'Público en General' o al menos un grupo activado o una sub-audiencia.");
                  // audienceError ya se muestra en validateAudienceSelection()
                  return;
              }
@@ -1003,7 +1002,7 @@
                 const result = await generateIdeasCallable({
                     topic: topic,
                     tone: tone,
-                    audience: audience, // Esto será ["Todo Público"] o la lista de sub-audiencias/grupos
+                    audience: audience, // Esto será ["Público en General"] o la lista de sub-audiencias/grupos
                     maxWords: maxWords,
                     numIdeas: 5 // Enviar el número de ideas deseado al backend
                 });
