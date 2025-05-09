@@ -354,10 +354,20 @@
 
                  <div class="field">
                     <label class="label">Audiencia Objetivo <span id="audienceCount" class="tag is-link is-light">0/5 Seleccionadas</span></label>
-                     <p class="help">Activa uno o más grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
-                    <div id="audienceSelectionArea">
+                     <p class="help" id="audienceHelpText">Selecciona "Todo Público" o activa grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
+                    <div class="control">
+                        <label class="radio">
+                            <input type="radio" name="audienceOption" value="all" id="audienceAllRadio">
+                            Todo Público
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="audienceOption" value="specific" id="audienceSpecificRadio" checked>
+                            Selección Específica
+                        </label>
+                    </div>
+                    <div id="audienceSpecificSelectionArea">
                         </div>
-                    <p id="audienceError" class="help is-danger is-hidden">Debes seleccionar al menos un grupo activado o una sub-audiencia.</p>
+                    <p id="audienceError" class="help is-danger is-hidden">Debes seleccionar "Todo Público" o al menos un grupo activado o una sub-audiencia.</p>
                 </div>
 
                  <div class="field">
@@ -372,7 +382,7 @@
                 <div class="field mt-5">
                     <div class="control">
                         <button id="generateIdeasButton" class="button is-primary is-large is-fullwidth animate__animated animate__pulse animate__infinite">
-                            ✨ ¡Generar 10 Inspiraciones! ✨
+                            ✨ ¡Generar 5 Inspiraciones! ✨
                         </button>
                     </div>
                 </div>
@@ -493,8 +503,13 @@
         const inputTopic = document.getElementById('inputTopic');
         const selectTone = document.getElementById('selectTone');
         const audienceSelectionArea = document.getElementById('audienceSelectionArea');
+        const audienceHelpText = document.getElementById('audienceHelpText'); // Nuevo ref para texto de ayuda
         const audienceCountSpan = document.getElementById('audienceCount');
         const audienceError = document.getElementById('audienceError');
+        const audienceAllRadio = document.getElementById('audienceAllRadio'); // Nuevo ref para radio Todo Público
+        const audienceSpecificRadio = document.getElementById('audienceSpecificRadio'); // Nuevo ref para radio Selección Específica
+        const audienceSpecificSelectionArea = document.getElementById('audienceSpecificSelectionArea'); // Nuevo ref para el área de selección específica
+
         const inputMaxWords = document.getElementById('inputMaxWords');
         const generateIdeasButton = document.getElementById('generateIdeasButton');
         const ideasResultsArea = document.getElementById('ideasResultsArea');
@@ -567,9 +582,9 @@
         window.currentViewingSessionId = null;
 
 
-        // Renderizar la sección de audiencia dinámicamente
-        function renderAudienceSelection() {
-            audienceSelectionArea.innerHTML = ''; // Limpiar área
+        // Renderizar la sección de audiencia específica dinámicamente
+        function renderAudienceSpecificSelection() {
+            audienceSpecificSelectionArea.innerHTML = ''; // Limpiar área
             audienceGroupsData.forEach(group => {
                 const groupDiv = document.createElement('div');
                 groupDiv.classList.add('audience-group');
@@ -596,7 +611,7 @@
                 });
 
                 groupDiv.appendChild(listDiv);
-                audienceSelectionArea.appendChild(groupDiv);
+                audienceSpecificSelectionArea.appendChild(groupDiv);
             });
             addAudienceEventListeners(); // Añadir listeners DESPUÉS de renderizar
             updateAudienceCount(); // Inicializar el contador
@@ -607,7 +622,7 @@
             document.querySelectorAll('.group-toggle').forEach(toggle => {
                 toggle.addEventListener('change', function() {
                     const groupId = this.dataset.groupId;
-                    const listDiv = audienceSelectionArea.querySelector(`[data-group-list-id="${groupId}"]`);
+                    const listDiv = audienceSpecificSelectionArea.querySelector(`[data-group-list-id="${groupId}"]`);
                     if (this.checked) {
                         listDiv.classList.remove('is-hidden');
                     } else {
@@ -642,13 +657,40 @@
                      validateAudienceSelection(); // Re-validar al cambiar selección de sub-audiencia
                 });
             });
+
+            // Event listeners para los radio buttons de opción de audiencia
+            audienceAllRadio.addEventListener('change', handleAudienceOptionChange);
+            audienceSpecificRadio.addEventListener('change', handleAudienceOptionChange);
         }
+
+        function handleAudienceOptionChange() {
+            if (audienceAllRadio.checked) {
+                audienceSpecificSelectionArea.classList.add('is-hidden');
+                audienceCountSpan.classList.add('is-hidden'); // Ocultar contador en "Todo Público"
+                 // Deseleccionar y desactivar todo en la selección específica al elegir "Todo Público"
+                 document.querySelectorAll('.group-toggle').forEach(toggle => toggle.checked = false);
+                 document.querySelectorAll('.audience-list').forEach(list => list.classList.add('is-hidden'));
+                 document.querySelectorAll('.sub-audience-checkbox').forEach(checkbox => checkbox.checked = false);
+                 selectedSubAudiencesCount = 0; // Resetear contador
+                 updateAudienceCount(); // Actualizar contador global (aunque esté oculto)
+
+            } else { // audienceSpecificRadio.checked
+                audienceSpecificSelectionArea.classList.remove('is-hidden');
+                 audienceCountSpan.classList.remove('is-hidden'); // Mostrar contador
+            }
+            validateAudienceSelection(); // Re-validar al cambiar la opción principal
+        }
+
 
         function updateAudienceCount() {
             audienceCountSpan.textContent = `${selectedSubAudiencesCount}/${MAX_SUB_AUDIENCES} Seleccionadas`;
         }
 
         function getSelectedAudience() {
+            if (audienceAllRadio.checked) {
+                return ["Todo Público"]; // Enviar un indicador específico al backend
+            }
+
             const selectedSubAudiences = [];
             document.querySelectorAll('.sub-audience-checkbox:checked').forEach(checkbox => {
                 selectedSubAudiences.push(checkbox.value);
@@ -675,6 +717,12 @@
         }
 
         function validateAudienceSelection() {
+             if (audienceAllRadio.checked) {
+                 audienceError.classList.add('is-hidden'); // Válido si "Todo Público" está seleccionado
+                 return true;
+             }
+
+             // Si "Selección Específica" está marcado, aplicar validación anterior
              const selectedSub = document.querySelectorAll('.sub-audience-checkbox:checked').length;
              const activatedGroups = document.querySelectorAll('.group-toggle:checked').length;
 
@@ -855,11 +903,8 @@
                  inputTopic.value = '';
                  selectTone.value = 'Neutral';
                  // Resetear selección de audiencia
-                 document.querySelectorAll('.group-toggle').forEach(toggle => toggle.checked = false);
-                 document.querySelectorAll('.audience-list').forEach(list => list.classList.add('is-hidden'));
-                 document.querySelectorAll('.sub-audience-checkbox').forEach(checkbox => checkbox.checked = false);
-                 selectedSubAudiencesCount = 0;
-                 updateAudienceCount();
+                 audienceSpecificRadio.checked = true; // Volver a selección específica por defecto
+                 handleAudienceOptionChange(); // Ejecutar lógica para mostrar/ocultar áreas
                  hideAuthError(); // Ocultar posibles errores de auth anteriores
                  hideAuthSuccess(); // Ocultar mensaje de éxito previo
                  window.currentViewingSessionId = null; // Resetear ID de sesión visible
@@ -928,7 +973,7 @@
         async function handleGenerateIdeas() {
             const topic = inputTopic.value.trim();
             const tone = selectTone.value;
-            const audience = getSelectedAudience();
+            const audience = getSelectedAudience(); // Obtiene el valor basado en la selección de radio/checkboxes
             const maxWords = parseInt(inputMaxWords.value, 10) || 100; // Default a 100 si vacío o inválido
              inputMaxWords.value = maxWords; // Asegurar que el input muestre el valor por defecto si estaba vacío
 
@@ -939,7 +984,7 @@
             }
 
              if (!validateAudienceSelection()) {
-                 alert("Debes seleccionar al menos un grupo activado o una sub-audiencia.");
+                 alert("Debes seleccionar 'Todo Público' o al menos un grupo activado o una sub-audiencia.");
                  // audienceError ya se muestra en validateAudienceSelection()
                  return;
              }
@@ -958,15 +1003,16 @@
                 const result = await generateIdeasCallable({
                     topic: topic,
                     tone: tone,
-                    audience: audience, // Esto será la lista de sub-audiencias o grupos
-                    maxWords: maxWords
+                    audience: audience, // Esto será ["Todo Público"] o la lista de sub-audiencias/grupos
+                    maxWords: maxWords,
+                    numIdeas: 5 // Enviar el número de ideas deseado al backend
                 });
 
                 const data = result.data; // La respuesta de la función
                 console.log("Respuesta de Function:", data);
 
                 if (data.success) {
-                    displayIdeas(data.ideas);
+                    displayIdeas(data.ideas); // Mostrar las 5 ideas
                     displayMotivationalPhrase(data.finalPhrase);
                      actionsArea.classList.remove('is-hidden'); // Mostrar botones de acción
                      motivationalPhraseArea.classList.remove('is-hidden'); // Mostrar frase motivacional
@@ -1251,7 +1297,8 @@
 
          // --- Inicialización ---
          document.addEventListener('DOMContentLoaded', () => {
-             renderAudienceSelection(); // Renderizar la sección de audiencia al cargar la página
+             renderAudienceSpecificSelection(); // Renderizar la sección de audiencia específica al cargar la página
+             handleAudienceOptionChange(); // Inicializar la visibilidad basada en el radio button por defecto
 
               // Lógica para el burger menu en móviles (Bulma)
              const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
