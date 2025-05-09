@@ -371,7 +371,7 @@
                             Selección Específica
                         </label>
                     </div>
-                    <p class="help" id="audienceHelpText">Selecciona "Público en General" o activa grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
+                    <p class="help" id="audienceHelpText">Activa grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
                     <div id="audienceSpecificSelectionArea">
                         </div>
                     <p id="audienceError" class="help is-danger is-hidden">Debes seleccionar "Público en General" o al menos un grupo activado o una sub-audiencia.</p>
@@ -442,9 +442,6 @@
             </p>
              </div>
     </footer>
-
-
-    <script src="https://kit.fontawesome.com/YOUR_FONT_AWESOME_KIT_ID.js" crossorigin="anonymous"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 
     <script type="module">
@@ -647,7 +644,7 @@
                             selectedSubAudiencesCount++;
                         } else {
                             this.checked = false; // Evitar seleccionar si ya hay MAX
-                             alert(`Solo puedes seleccionar hasta ${MAX_SUB_AUDIENCES} audiencias específicas.`);
+                             alert(`Solo puedes seleccionar hasta ${MAX_SUB_AUDIENCIAS} audiencias específicas.`);
                         }
                     } else {
                         selectedSubAudiencesCount--;
