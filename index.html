@@ -3,1317 +3,1187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activador de Contenido - Tu Coach Digital</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <title>Generador de Ideas para Contenido</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
     <style>
+        /* Estilos personalizados */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más cálida/profesional */
-            background-color: #f5f5f5; /* Gris muy claro */
-            color: #4a4a4a; /* Texto oscuro estándar */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6; /* Un fondo suave y cálido */
+            color: #363636;
         }
+
         .navbar {
-            background-color: #00d1b2; /* Color primario de Bulma */
+            background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .navbar-item, .navbar-link {
-            color: #fff !important;
+
+        .navbar-item img {
+            max-height: 3.75rem; /* Ajusta según tu logo */
         }
-        .navbar-burger span {
-             background-color: #fff;
-        }
-        .navbar-dropdown {
-            background-color: #00d1b2;
-        }
-        .navbar-dropdown .navbar-item {
-            color: #fff !important;
-        }
-         .navbar-dropdown .navbar-item:hover {
-            background-color: #00b89c;
-        }
-        .hero.is-coach {
-            background-color: #3273dc; /* Color azul de Bulma */
-            color: #fff;
-            padding: 3rem 1.5rem;
-        }
-        .hero.is-coach .title {
-            color: #fff;
-        }
-        .hero.is-coach .subtitle {
-             color: rgba(255, 255, 255, 0.9);
-        }
-        .section {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-        }
-        .box {
-            box-shadow: 0 0.5em 1em -0.125em rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.02);
-            border-radius: 8px;
-            padding: 1.5rem;
-        }
+
         .button.is-primary {
-            background-color: #00d1b2;
+            background-color: #ff6f61; /* Un color coral cálido y enérgico */
             border-color: transparent;
         }
         .button.is-primary:hover {
-            background-color: #00b89c;
+            background-color: #e65a50;
         }
-        .button.is-link {
-             background-color: #3273dc;
+
+        .button.is-success {
+            background-color: #79c790; /* Verde suave */
             border-color: transparent;
         }
+        .button.is-success:hover {
+            background-color: #6ab37f;
+        }
+
+
+        .button.is-link {
+            background-color: #5b9bd5; /* Azul profesional */
+        }
          .button.is-link:hover {
-             background-color: #276cda;
-         }
-         .button.is-info {
-             background-color: #3e8edb;
-             border-color: transparent;
-         }
-          .button.is-info:hover {
-             background-color: #337bc4;
-          }
+            background-color: #4a8ac7;
+        }
+
+        .title, .subtitle {
+            color: #333;
+        }
+
+        .hero.is-primary {
+            background-color: #ff6f61;
+        }
+        .hero.is-primary .title, .hero.is-primary .subtitle {
+            color: #fff;
+        }
 
         .card {
-             margin-bottom: 1.5rem;
-             border-radius: 8px;
-             box-shadow: 0 0.25em 0.5em 0 rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
         }
         .card-header-title {
-            color: #3273dc; /* Azul para el título de la idea */
+            background-color: #f9f9f9;
+            color: #333;
         }
-        .card-content {
-            padding: 1.25rem;
-        }
-        .card-content strong {
-            color: #4a4a4a; /* Asegura que las etiquetas sean visibles */
-        }
-        .tag.is-hashtags {
-            background-color: #e8e8e8;
-            color: #4a4a4a;
-            margin-right: 5px;
-            margin-bottom: 5px;
-        }
-        .footer {
-            background-color: #f0f0f0; /* Un gris claro */
-            padding: 2rem 1.5rem;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        #loadingIndicator {
+
+        #loadingOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            visibility: hidden; /* Oculto por defecto */
-        }
-        #loadingIndicator.is-active {
-             visibility: visible;
-        }
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3273dc;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
+            font-size: 1.5rem;
+            color: #333;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Estilos para la sección de Audiencia */
-        .audience-group {
+        /* Estética Coaching */
+        .coach-motivation {
+            font-style: italic;
+            color: #555;
+            margin-top: 0.5rem;
             margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        #ideasResultsArea .card {
+            background-color: #fff; /* Fondo blanco para las tarjetas de ideas */
+            border-left: 5px solid #ff6f61; /* Acento de color */
+        }
+
+        #finalPhraseContainer {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #e6fff3; /* Un fondo suave para la frase final */
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #79c790;
+        }
+        #finalPhraseContainer p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2b7a78; /* Verde oscuro para el texto */
+        }
+
+        /* Responsividad */
+        @media screen and (max-width: 768px) {
+            .columns.is-desktop {
+                flex-direction: column;
+            }
+        }
+
+        /* Mejoras para la sección de audiencia */
+        .audience-group {
+            margin-bottom: 1rem;
             padding: 1rem;
             border: 1px solid #dbdbdb;
             border-radius: 4px;
             background-color: #fafafa;
         }
-        .audience-group-header label {
+        .audience-group .label {
             font-weight: bold;
-            color: #3273dc;
-            cursor: pointer;
         }
-        .audience-list {
+        .sub-audience-list label {
+            margin-right: 10px;
+            display: inline-block; /* Para mejor alineación */
+        }
+        .max-audience-notice {
+            color: red;
+            font-size: 0.8em;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #363636;
+            color: #fff;
+            padding: 3rem 1.5rem 3rem;
+        }
+        .footer a {
+            color: #ff6f61;
+        }
+        .footer a:hover {
+            color: #e65a50;
+        }
+        .disclaimer {
+            font-size: 0.8rem;
+            color: #ccc;
             margin-top: 1rem;
-            padding-left: 1rem; /* Indentar sub-audiencias */
-            border-left: 2px solid #ededed;
         }
-        .audience-list .checkbox {
-            margin-bottom: 0.5rem;
-            display: block; /* Cada checkbox en nueva línea */
-        }
-        .audience-list.is-hidden {
-            display: none;
-        }
-         #audienceCount {
-             font-weight: bold;
-             color: #3273dc;
-             margin-left: 10px;
-         }
-         #audienceError {
-             color: #ff3860; /* Rojo */
-             font-size: 0.9em;
-             margin-top: 0.5rem;
-         }
-
-         /* Historial Modal */
-         .modal-card-head, .modal-card-foot {
-             background-color: #00d1b2;
-         }
-         .modal-card-title {
-             color: #fff;
-         }
-         .modal-close {
-             background: none;
-         }
-         .modal-card-body {
-             max-height: 400px; /* Altura fija para scroll */
-             overflow-y: auto;
-         }
-         .history-item {
-             padding: 10px;
-             border-bottom: 1px solid #eee;
-             cursor: pointer;
-         }
-         .history-item:last-child {
-             border-bottom: none;
-         }
-         .history-item:hover {
-             background-color: #f0f0f0;
-         }
-         .history-item-date {
-             font-size: 0.9em;
-             color: #666;
-         }
-
-         /* Mensaje de éxito */
-         .message.is-success-auth {
-             background-color: #d0f0e0; /* Verde claro */
-             border-color: #48c78e; /* Verde de Bulma */
-             color: #0f3d2c; /* Verde oscuro */
-         }
-         .message-body.is-success-auth {
-              padding: 0.75em 1em; /* Ajustar padding */
-         }
     </style>
 </head>
 <body>
-
-    <div id="loadingIndicator" class="">
-        <div class="loading-spinner"></div>
+    <div id="loadingOverlay" class="is-hidden">
+        <div class="loader is-loading"></div>
+        <p style="margin-left: 10px;">Cargando...</p>
     </div>
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="#">
-                <span class="is-size-4 has-text-weight-bold">Coach Digital</span>
+                <h1 class="title is-4">Creador de Contenido IA</h1>
             </a>
-             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
             </a>
         </div>
-
         <div id="navbarBasicExample" class="navbar-menu">
-             <div class="navbar-start">
-                 </div>
+            <div class="navbar-start">
+                </div>
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a id="historyButton" class="button is-info is-hidden">
-                            Historial
-                        </a>
-                        <a id="logoutButton" class="button is-light is-hidden">
-                            Cerrar Sesión
-                        </a>
-                         <a id="loginButtonNavbar" class="button is-light is-hidden">
-                            Iniciar Sesión
-                        </a>
-                         <a id="signupButtonNavbar" class="button is-primary is-hidden">
-                            <strong>Registrarse</strong>
-                        </a>
+                        <a id="navLoginButton" class="button is-light">Iniciar Sesión</a>
+                        <a id="navRegisterButton" class="button is-primary">Registrarse</a>
+                        <a id="navHistoryButton" class="button is-info is-hidden"><i class="fas fa-history mr-2"></i>Historial</a>
+                        <a id="navLogoutButton" class="button is-danger is-hidden"><i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión</a>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 
-
-    <section id="authSection" class="section">
+    <section id="authView" class="section">
         <div class="container">
             <div class="columns is-centered">
                 <div class="column is-half">
-                    <div class="box">
-                        <h1 class="title is-4 has-text-centered">Accede a tu Activador</h1>
-                         <p class="subtitle is-6 has-text-centered">Inspírate, crea, impacta.</p>
-
-                        <div id="authSuccessMessage" class="message is-success-auth is-hidden">
-                             <div class="message-body is-success-auth">
-                                 ¡Registro exitoso! Ya puedes iniciar sesión.
-                             </div>
-                         </div>
-
-                        <div class="field">
-                            <label class="label">Email</label>
-                            <div class="control">
-                                <input id="authEmail" class="input" type="email" placeholder="ej. tu@email.com">
+                    <div id="loginFormContainer">
+                        <h2 class="title is-3 has-text-centered">Iniciar Sesión</h2>
+                        <div class="box">
+                            <div class="field">
+                                <label class="label">Email</label>
+                                <div class="control has-icons-left">
+                                    <input id="loginEmail" class="input" type="email" placeholder="tu@email.com">
+                                    <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                                </div>
                             </div>
+                            <div class="field">
+                                <label class="label">Contraseña</label>
+                                <div class="control has-icons-left">
+                                    <input id="loginPassword" class="input" type="password" placeholder="********">
+                                    <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <button id="loginButton" class="button is-primary is-fullwidth">Iniciar Sesión</button>
+                            </div>
+                            <hr>
+                            <button id="googleLoginButton" class="button is-fullwidth has-background-white has-text-grey-darker" style="border: 1px solid #dbdbdb;">
+                                <span class="icon"><i class="fab fa-google"></i></span>
+                                <span>Iniciar Sesión con Google</span>
+                            </button>
+                            <p id="loginError" class="help is-danger has-text-centered mt-2"></p>
+                            <p class="has-text-centered mt-3">
+                                ¿No tienes cuenta? <a href="#" id="showRegisterLink">Regístrate aquí</a>
+                            </p>
                         </div>
+                    </div>
 
-                        <div class="field">
-                            <label class="label">Contraseña</label>
-                            <div class="control">
-                                <input id="authPassword" class="input" type="password" placeholder="********">
+                    <div id="registerFormContainer" class="is-hidden">
+                        <h2 class="title is-3 has-text-centered">Registrarse</h2>
+                        <div class="box">
+                            <div class="field">
+                                <label class="label">Nombre (Opcional)</label>
+                                <div class="control has-icons-left">
+                                    <input id="registerName" class="input" type="text" placeholder="Tu Nombre">
+                                    <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+                                </div>
                             </div>
+                            <div class="field">
+                                <label class="label">Email</label>
+                                <div class="control has-icons-left">
+                                    <input id="registerEmail" class="input" type="email" placeholder="tu@email.com" required>
+                                    <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Contraseña</label>
+                                <div class="control has-icons-left">
+                                    <input id="registerPassword" class="input" type="password" placeholder="********" required>
+                                    <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <button id="registerButton" class="button is-success is-fullwidth">Registrarse</button>
+                            </div>
+                            <p id="registerError" class="help is-danger has-text-centered mt-2"></p>
+                             <p class="has-text-centered mt-3">
+                                ¿Ya tienes cuenta? <a href="#" id="showLoginLink">Inicia sesión aquí</a>
+                            </p>
                         </div>
-
-                        <div class="field is-grouped is-grouped-centered">
-                            <div class="control">
-                                <button id="loginEmailButton" class="button is-primary">Iniciar Sesión</button>
-                            </div>
-                             <div class="control">
-                                <button id="signupEmailButton" class="button is-link">Registrarse</button>
-                            </div>
-                        </div>
-
-                         <hr> <div class="field">
-                             <p class="has-text-centered">o</p>
-                         </div>
-
-                        <div class="field">
-                            <div class="control">
-                                 <button id="loginGoogleButton" class="button is-danger is-fullwidth">
-                                     <span class="icon is-small"><i class="fab fa-google"></i></span>
-                                     <span>Iniciar Sesión con Google</span>
-                                 </button>
-                            </div>
-                        </div>
-
-                        <p id="authErrorMessages" class="help is-danger has-text-centered"></p>
-
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="appSection" class="section is-hidden">
+    <section id="appView" class="section is-hidden">
         <div class="container">
-             <div class="hero is-coach is-medium animate__animated animate__fadeIn">
-                 <div class="hero-body">
-                     <p class="title">
-                        ¡Hola, <span id="userNameDisplay">Coach</span>!
-                     </p>
-                     <p class="subtitle">
-                         Desbloquea tu próximo gran tema.
-                     </p>
-                 </div>
-            </div>
+            <h1 class="title is-2" id="greeting">¡Hola!</h1>
+            <p class="subtitle">Vamos a generar ideas increíbles para tu contenido.</p>
 
-            <div class="box mt-5">
-                <h2 class="title is-5">Define tu Propósito Creativo</h2>
-
-                 <div class="field">
-                    <label class="label">Tema o Palabra Clave</label>
-                     <div class="control">
-                         <input id="inputTopic" class="input" type="text" placeholder="Ej: Marketing digital para PYMES, Nutrición deportiva, Liderazgo consciente..." required>
-                     </div>
-                    <p class="help is-info">✨ **¡Sé nítido como un láser!** Cuanto más preciso sea tu tema, más brillantes serán las ideas que desbloquearemos juntos. ✨</p>
-                </div>
-
-                 <div class="field">
-                    <label class="label">Tono</label>
-                     <div class="control">
-                         <div class="select is-fullwidth">
-                             <select id="selectTone">
-                                 <option value="Formal">Formal</option>
-                                 <option value="Informal">Informal</option>
-                                 <option value="Neutral" selected>Neutral</option>
-                                 <option value="Alegre/Entusiasta">Alegre/Entusiasta</option>
-                                 <option value="Empático">Empático</option>
-                                 <option value="Asertivo">Asertivo</option>
-                                 <option value="Persuasivo">Persuasivo</option>
-                                 <option value="Sarcástico/Irónico">Sarcástico/Irónico</option>
-                                 <option value="Motivacional">Motivacional</option>
-                                 <option value="Didáctico">Didáctico</option>
-                             </select>
-                         </div>
-                     </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Máximo de Palabras por Post</label>
-                     <div class="control">
-                         <input id="inputMaxWords" class="input" type="number" value="100" min="50" max="500">
-                     </div>
-                     <p class="help">Define el tamaño máximo del borrador de post (entre 50 y 500 palabras). Por defecto: 100.</p>
-                </div>
-                <div class="field">
-                    <label class="label">Audiencia Objetivo <span id="audienceCount" class="tag is-link is-light">0/5 Seleccionadas</span></label>
-                     <div class="control">
-                        <label class="radio">
-                            <input type="radio" name="audienceOption" value="all" id="audienceAllRadio">
-                            Público en General
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="audienceOption" value="specific" id="audienceSpecificRadio" checked>
-                            Target
-                        </label>
-                    </div>
-                    <p class="help" id="audienceHelpText">Activa grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
-                    <div id="audienceSpecificSelectionArea">
+            <div class="columns">
+                <div class="column is-one-third">
+                    <div class="box">
+                        <h2 class="title is-4">Parámetros de Generación</h2>
+                        <div class="field">
+                            <label class="label" for="topicInput">Tema o Palabra Clave Principal</label>
+                            <div class="control">
+                                <input class="input" type="text" id="topicInput" placeholder="Ej: Marketing Digital para Principiantes">
+                            </div>
+                            <p class="coach-motivation">✨ ¡Sé nítido como un láser! Cuanto más preciso sea tu tema, más brillantes serán las ideas que desbloquearemos juntos. ✨</p>
                         </div>
-                    <p id="audienceError" class="help is-danger is-hidden">Debes seleccionar "Público en General" o al menos un grupo activado o una sub-audiencia.</p>
+
+                        <div class="field">
+                            <label class="label" for="toneSelect">Tono</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select id="toneSelect">
+                                        <option value="Neutral" selected>Neutral</option>
+                                        <option value="Formal">Formal</option>
+                                        <option value="Informal">Informal</option>
+                                        <option value="Alegre/Entusiasta">Alegre/Entusiasta</option>
+                                        <option value="Empático">Empático</option>
+                                        <option value="Asertivo">Asertivo</option>
+                                        <option value="Persuasivo">Persuasivo</option>
+                                        <option value="Sarcástico/Irónico">Sarcástico/Irónico</option>
+                                        <option value="Motivacional">Motivacional</option>
+                                        <option value="Didáctico">Didáctico</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Audiencia Objetivo</label>
+                            <div class="control">
+                                <label class="radio">
+                                    <input type="radio" name="audienceType" value="general" checked>
+                                    Público en general
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="audienceType" value="target">
+                                    Target Específico
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="targetAudienceSection" class="is-hidden mt-3">
+                            <p class="is-size-7 mb-2">Selecciona los grupos y sub-audiencias (máximo 5 sub-audiencias en total): <span id="subAudienceCounter">0/5</span></p>
+                            <div id="audienceGroupsContainer">
+                                </div>
+                            <p id="audienceError" class="help is-danger"></p>
+                        </div>
+
+
+                        <div class="field mt-4">
+                            <label class="label" for="maxWordsInput">Máximo de Palabras para el Post (50-500)</label>
+                            <div class="control">
+                                <input class="input" type="number" id="maxWordsInput" value="100" min="50" max="500">
+                            </div>
+                        </div>
+
+                        <div class="field mt-4">
+                            <label class="checkbox">
+                                <input type="checkbox" id="includeLocationCheckbox">
+                                Incluir sugerencia de ubicación (Geotagging)
+                            </label>
+                        </div>
+                        <div id="locationInputContainer" class="field is-hidden">
+                            <label class="label" for="locationInput">Ubicación deseada para la sugerencia</label>
+                            <div class="control">
+                                <input class="input" type="text" id="locationInput" placeholder="Ej: 'Ciudad de México', 'Parque Central', 'Online'">
+                            </div>
+                        </div>
+
+                        <div class="field mt-5">
+                            <button id="generateIdeasButton" class="button is-primary is-fullwidth is-large animate__animated animate__pulse animate__infinite">
+                                <span class="icon"><i class="fas fa-lightbulb"></i></span>
+                                <span>✨ ¡Generar 5 Ideas! ✨</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-
-                <div class="field mt-5">
-                    <div class="control">
-                        <button id="generateIdeasButton" class="button is-primary is-large is-fullwidth animate__animated animate__pulse animate__infinite">
-                            ✨ ¡Generar 5 ideas! ✨
+                <div class="column">
+                     <div id="actionButtonsContainer" class="mb-4 is-hidden has-text-right">
+                        <button id="refreshIdeasButton" class="button is-link mr-2">
+                            <span class="icon"><i class="fas fa-sync-alt"></i></span>
+                            <span>Refrescar Inspiraciones</span>
+                        </button>
+                        <button id="exportPdfButton" class="button is-success mr-2">
+                            <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                            <span>Exportar a PDF</span>
+                        </button>
+                        <button id="exportCsvButton" class="button is-info">
+                            <span class="icon"><i class="fas fa-file-csv"></i></span>
+                            <span>Exportar a CSV</span>
                         </button>
                     </div>
+                    <div id="ideasResultsArea">
+                        <p id="noResultsMessage" class="has-text-centered has-text-grey">Aún no se han generado ideas. ¡Completa los campos y haz clic en generar!</p>
+                    </div>
+                    <div id="finalPhraseContainer" class="is-hidden">
+                        <p id="finalPhraseText"></p>
+                    </div>
                 </div>
-
-            </div> <div id="ideasResultsArea" class="mt-5">
-                </div>
-
-            <div id="actionsArea" class="box mt-5 is-hidden">
-                 <h3 class="title is-6">Opciones Adicionales</h3>
-                 <div class="field is-grouped">
-                     <p class="control">
-                         <button id="refreshIdeasButton" class="button is-info">Refrescar Inspiraciones</button>
-                     </p>
-                     <p class="control">
-                         <button id="exportPdfButton" class="button is-link">Exportar a PDF</button>
-                     </p>
-                      <p class="control">
-                         <button id="exportCsvButton" class="button is-link">Exportar a CSV</button>
-                     </p>
-                 </div>
-             </div>
-
-             <div id="motivationalPhraseArea" class="box mt-5 is-hidden">
-                 <p class="is-size-5 has-text-centered has-text-weight-bold" id="motivationalPhraseText"></p>
-             </div>
-
-
-        </div> </section>
+            </div>
+        </div>
+    </section>
 
     <div id="historyModal" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Historial de Inspiraciones (Últimas 50)</p>
-          <button class="delete" aria-label="close" id="closeHistoryModal"></button>
-        </header>
-        <section class="modal-card-body">
-          <div id="historyList">
-             <p class="has-text-centered" id="historyLoading">Cargando historial...</p>
-             <p class="has-text-centered is-hidden" id="noHistoryMessage">Aún no tienes inspiraciones guardadas.</p>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-           <button class="button is-link" id="loadHistoryDetailsButton" disabled>Cargar Detalles para Exportar</button>
-           <p id="selectedHistoryInfo" class="ml-4 is-hidden">Seleccionado: <span id="selectedHistoryDate"></span> (<span id="selectedHistoryTopic"></span>)</p>
-        </footer>
-      </div>
+        <div class="modal-background"></div>
+        <div class="modal-card" style="width: 80%; max-width: 800px;">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Historial de Generaciones (Últimas 50)</p>
+                <button class="delete" aria-label="close" id="closeHistoryModal"></button>
+            </header>
+            <section class="modal-card-body">
+                <div id="historyListContainer">
+                    <p>Cargando historial...</p>
+                </div>
+                <p id="historyError" class="help is-danger"></p>
+            </section>
+            <footer class="modal-card-foot">
+                <button id="loadHistoryDetailsButton" class="button is-success" disabled>Cargar Detalles para Exportar</button>
+                <button id="cancelHistoryModal" class="button">Cancelar</button>
+            </footer>
+        </div>
     </div>
-
 
     <footer class="footer">
         <div class="content has-text-centered">
             <p>
-                <strong>Activador de Contenido</strong> por Tu Coach Digital.
+                <strong>Generador de Ideas para Contenido IA</strong> por TuNombre/TuEmpresa.
             </p>
-            <p>
-                 Descargo de Responsabilidad: Las ideas, hashtags y contenidos generados por esta aplicación se basan en modelos de inteligencia artificial y tendencias públicas. No garantizamos su precisión, efectividad o la ausencia de derechos de terceros sobre hashtags o marcas registradas. Usted es responsable de verificar y asegurar el uso apropiado y legal de cualquier contenido generado.
+            <p class="disclaimer">
+                Descargo de responsabilidad: El contenido generado por esta aplicación es producido por una Inteligencia Artificial (IA) y se basa en tendencias y conocimientos disponibles para dicha IA hasta su última actualización. El usuario es el único responsable de verificar, validar y asegurar la originalidad, precisión, legalidad y adecuación de cualquier contenido generado, incluyendo, pero no limitándose a, textos, hashtags, sugerencias de formato visual y sugerencias de ubicación. El uso de marcas registradas, nombres propios o cualquier material protegido por derechos de autor debe hacerse de acuerdo con las leyes aplicables. No nos hacemos responsables por el uso indebido o las consecuencias derivadas del uso del contenido generado.
             </p>
-             </div>
+        </div>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js"; // Usando la versión que proporcionaste
-        // Importar los módulos necesarios para Auth, Firestore y Functions (compatibles con v11.7.1)
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, setDoc, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
-        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-functions.js";
-        // getAnalytics is optional unless you plan to use it
-        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
-
-
-        // Your web app's Firebase configuration
+    <script>
+        // Configuración de Firebase (reemplaza con tus datos)
         const firebaseConfig = {
-            apiKey: "AIzaSyA6MZwE3_4K6CU0JTDVBG_c5GCgX5I00VE",
-            authDomain: "brain-storm-8f0d8.firebaseapp.com",
-            projectId: "brain-storm-8f0d8",
-            storageBucket: "brain-storm-8f0d8.firebasestorage.app",
-            messagingSenderId: "401208607043",
-            appId: "1:401208607043:web:6b4038ab14c9bee3beaff6"
+            apiKey: "TU_API_KEY",
+            authDomain: "TU_AUTH_DOMAIN",
+            projectId: "TU_PROJECT_ID",
+            storageBucket: "TU_STORAGE_BUCKET",
+            messagingSenderId: "TU_MESSAGING_SENDER_ID",
+            appId: "TU_APP_ID"
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        // const analytics = getAnalytics(app); // Inicializar analytics if lo usas
-
-        // Obtener instancias de los servicios de Firebase
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const functions = getFunctions(app);
-
-        // If you are using the Firebase emulator suite locally, uncomment the following line and adjust the URL
-        // connectAuthEmulator(auth, "http://localhost:9099");
-        // connectFirestoreEmulator(db, "localhost", 8080);
-        // connectFunctionsEmulator(functions, "localhost", 5001);
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const functions = firebase.functions();
+        // Si estás en un entorno de desarrollo local para Functions:
+        // functions.useEmulator("localhost", 5001);
 
 
-        // Referencias a elementos del DOM
-        const authSection = document.getElementById('authSection');
-        const appSection = document.getElementById('appSection');
-        const authEmailInput = document.getElementById('authEmail');
-        const authPasswordInput = document.getElementById('authPassword');
-        const loginEmailButton = document.getElementById('loginEmailButton');
-        const signupEmailButton = document.getElementById('signupEmailButton');
-        const loginGoogleButton = document.getElementById('loginGoogleButton');
-        const authErrorMessages = document.getElementById('authErrorMessages');
-        const authSuccessMessage = document.getElementById('authSuccessMessage'); // Referencia al mensaje de éxito
-        const logoutButton = document.getElementById('logoutButton');
-        const loginButtonNavbar = document.getElementById('loginButtonNavbar'); // Navbar link
-        const signupButtonNavbar = document.getElementById('signupButtonNavbar'); // Navbar link
-        const historyButton = document.getElementById('historyButton'); // Navbar link
+        // Variables globales
+        let currentUser = null;
+        let currentViewingSessionId = null; // Para saber qué sesión se está mostrando (nueva o del historial)
+        const MAX_SUB_AUDIENCES = 5;
+        let selectedSubAudiencesCount = 0;
 
-        const userNameDisplay = document.getElementById('userNameDisplay');
-        const inputTopic = document.getElementById('inputTopic');
-        const selectTone = document.getElementById('selectTone');
-        const audienceSelectionArea = document.getElementById('audienceSelectionArea');
-        const audienceHelpText = document.getElementById('audienceHelpText'); // Nuevo ref para texto de ayuda
-        const audienceCountSpan = document.getElementById('audienceCount');
-        const audienceError = document.getElementById('audienceError'); // Mensaje de error de validación (se mantiene, pero se controla visibilidad)
-        const audienceAllRadio = document.getElementById('audienceAllRadio'); // Nuevo ref para radio Público en General
-        const audienceSpecificRadio = document.getElementById('audienceSpecificRadio'); // Nuevo ref para radio Selección Específica
-        const audienceSpecificSelectionArea = document.getElementById('audienceSpecificSelectionArea'); // Nuevo ref para el área de selección específica
+        // Selectores de Elementos del DOM
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const authView = document.getElementById('authView');
+        const appView = document.getElementById('appView');
+        const greeting = document.getElementById('greeting');
 
-        const inputMaxWords = document.getElementById('inputMaxWords');
+        // Navbar
+        const navLoginButton = document.getElementById('navLoginButton');
+        const navRegisterButton = document.getElementById('navRegisterButton');
+        const navHistoryButton = document.getElementById('navHistoryButton');
+        const navLogoutButton = document.getElementById('navLogoutButton');
+
+        // Forms Auth
+        const loginFormContainer = document.getElementById('loginFormContainer');
+        const registerFormContainer = document.getElementById('registerFormContainer');
+        const loginEmailInput = document.getElementById('loginEmail');
+        const loginPasswordInput = document.getElementById('loginPassword');
+        const loginButton = document.getElementById('loginButton');
+        const googleLoginButton = document.getElementById('googleLoginButton');
+        const loginError = document.getElementById('loginError');
+        const showRegisterLink = document.getElementById('showRegisterLink');
+
+        const registerNameInput = document.getElementById('registerName');
+        const registerEmailInput = document.getElementById('registerEmail');
+        const registerPasswordInput = document.getElementById('registerPassword');
+        const registerButton = document.getElementById('registerButton');
+        const registerError = document.getElementById('registerError');
+        const showLoginLink = document.getElementById('showLoginLink');
+
+        // App View Inputs
+        const topicInput = document.getElementById('topicInput');
+        const toneSelect = document.getElementById('toneSelect');
+        const audienceTypeRadios = document.querySelectorAll('input[name="audienceType"]');
+        const targetAudienceSection = document.getElementById('targetAudienceSection');
+        const audienceGroupsContainer = document.getElementById('audienceGroupsContainer');
+        const subAudienceCounter = document.getElementById('subAudienceCounter');
+        const audienceError = document.getElementById('audienceError');
+        const maxWordsInput = document.getElementById('maxWordsInput');
+        const includeLocationCheckbox = document.getElementById('includeLocationCheckbox');
+        const locationInputContainer = document.getElementById('locationInputContainer');
+        const locationInput = document.getElementById('locationInput');
         const generateIdeasButton = document.getElementById('generateIdeasButton');
+
+        // App View Outputs
         const ideasResultsArea = document.getElementById('ideasResultsArea');
-        const actionsArea = document.getElementById('actionsArea');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        const finalPhraseContainer = document.getElementById('finalPhraseContainer');
+        const finalPhraseText = document.getElementById('finalPhraseText');
+        const actionButtonsContainer = document.getElementById('actionButtonsContainer');
         const refreshIdeasButton = document.getElementById('refreshIdeasButton');
         const exportPdfButton = document.getElementById('exportPdfButton');
         const exportCsvButton = document.getElementById('exportCsvButton');
-        const motivationalPhraseArea = document.getElementById('motivationalPhraseArea');
-        const motivationalPhraseText = document.getElementById('motivationalPhraseText');
-        const loadingIndicator = document.getElementById('loadingIndicator');
 
         // Historial Modal
         const historyModal = document.getElementById('historyModal');
-        const closeHistoryModalButton = document.getElementById('closeHistoryModal');
-        const historyListDiv = document.getElementById('historyList');
-        const historyLoadingMessage = document.getElementById('historyLoading');
-        const noHistoryMessage = document.getElementById('noHistoryMessage');
+        const closeHistoryModal = document.getElementById('closeHistoryModal');
+        const cancelHistoryModal = document.getElementById('cancelHistoryModal');
+        const historyListContainer = document.getElementById('historyListContainer');
         const loadHistoryDetailsButton = document.getElementById('loadHistoryDetailsButton');
-        const selectedHistoryInfo = document.getElementById('selectedHistoryInfo');
-        const selectedHistoryDateSpan = document.getElementById('selectedHistoryDate');
-        const selectedHistoryTopicSpan = document.getElementById('selectedHistoryTopic');
-
-        // --- Datos y Lógica de Audiencia ---
-        const audienceGroupsData = [
-            {
-                name: "Profesionales y Emprendedores",
-                id: "profesionales_emprendedores",
-                subAudiences: [
-                    "Emprendedores", "Profesionales jóvenes", "Freelancers/independientes",
-                    "Inversionistas/financieros", "Pequeños empresarios", "Trabajadores remotos"
-                ]
-            },
-            {
-                name: "Comunidades por Intereses o Pasatiempos",
-                id: "intereses_pasatiempos",
-                subAudiences: [
-                    "Amantes de la tecnología", "Aficionados al deporte", "Gamers",
-                    "Gourmets/amantes de la gastronomía", "Artistas y diseñadores", "Coleccionistas"
-                ]
-            },
-             {
-                name: "Grupos por Etapa de Vida o Rol Familiar",
-                id: "etapa_vida",
-                subAudiences: [
-                    "Estudiantes universitarios", "Padres de familia", "Adultos mayores",
-                    "Nuevos padres/madres", "Personas en reinvención profesional"
-                ]
-            },
-            {
-                name: "Audiencias con Estilos de Vida Específicos",
-                id: "estilos_vida",
-                subAudiences: [
-                    "Ecológicos/ambientalistas", "Viajeros frecuentes", "Amantes del lujo",
-                    "Personas enfocadas en salud y bienestar", "Comunidad LGBTQ+", "Influencers/content creators"
-                ]
-            },
-            {
-                name: "Personas en Contextos o Necesidades Particulares",
-                id: "contextos_necesidades",
-                subAudiences: [
-                    "Personas con discapacidades", "Desempleados", "Activistas",
-                    "Comunidades rurales", "Público general"
-                ]
-            }
-        ];
-
-        let selectedSubAudiencesCount = 0;
-        const MAX_SUB_AUDIENCES = 5;
-        // Variable global para almacenar el ID de la sesión actualmente mostrada (para exportación)
-        window.currentViewingSessionId = null;
+        const historyError = document.getElementById('historyError');
+        let selectedHistoryEntryId = null;
 
 
-        // Renderizar la sección de audiencia específica dinámicamente
-        function renderAudienceSpecificSelection() {
-            audienceSpecificSelectionArea.innerHTML = ''; // Limpiar área
-            audienceGroupsData.forEach(group => {
+        // --- ESTRUCTURA DE AUDIENCIAS ---
+        const audienceData = {
+            "Profesionales y Emprendedores": ["Emprendedores", "Profesionales jóvenes", "Freelancers/independientes", "Inversionistas/financieros", "Pequeños empresarios", "Trabajadores remotos"],
+            "Comunidades por Intereses o Pasatiempos": ["Amantes de la tecnología", "Aficionados al deporte", "Gamers", "Gourmets/amantes de la gastronomía", "Artistas y diseñadores", "Coleccionistas"],
+            "Grupos por Etapa de Vida o Rol Familiar": ["Estudiantes universitarios", "Padres de familia", "Adultos mayores", "Nuevos padres/madres", "Personas en reinvención profesional"],
+            "Audiencias con Estilos de Vida Específicos": ["Ecológicos/ambientalistas", "Viajeros frecuentes", "Amantes del lujo", "Personas enfocadas en salud y bienestar", "Comunidad LGBTQ+", "Influencers/content creators"],
+            "Personas en Contextos o Necesidades Particulares": ["Personas con discapacidades", "Desempleados", "Activistas", "Comunidades rurales"]
+        };
+
+        function renderAudienceGroups() {
+            audienceGroupsContainer.innerHTML = '';
+            for (const groupName in audienceData) {
                 const groupDiv = document.createElement('div');
                 groupDiv.classList.add('audience-group');
 
-                const headerDiv = document.createElement('div');
-                headerDiv.classList.add('audience-group-header');
-                headerDiv.innerHTML = `
-                    <label class="checkbox">
-                        <input type="checkbox" data-group-id="${group.id}" class="group-toggle">
-                        ${group.name}
-                    </label>
-                `;
-                groupDiv.appendChild(headerDiv);
+                const groupLabel = document.createElement('label');
+                groupLabel.classList.add('label', 'checkbox');
+                const groupCheckbox = document.createElement('input');
+                groupCheckbox.type = 'checkbox';
+                groupCheckbox.dataset.groupName = groupName;
+                groupCheckbox.classList.add('mr-2');
+                groupLabel.appendChild(groupCheckbox);
+                groupLabel.appendChild(document.createTextNode(groupName));
+                groupDiv.appendChild(groupLabel);
 
-                const listDiv = document.createElement('div');
-                listDiv.classList.add('audience-list', 'is-hidden'); // Oculta la lista por defecto
-                listDiv.setAttribute('data-group-list-id', group.id);
+                const subAudienceListDiv = document.createElement('div');
+                subAudienceListDiv.classList.add('sub-audience-list', 'ml-4', 'mt-2', 'is-hidden');
 
-                group.subAudiences.forEach(sub => {
-                    const subCheckboxLabel = document.createElement('label');
-                    subCheckboxLabel.classList.add('checkbox');
-                    subCheckboxLabel.innerHTML = `<input type="checkbox" value="${sub}" class="sub-audience-checkbox"> ${sub}`;
-                    listDiv.appendChild(subCheckboxLabel);
-                });
+                audienceData[groupName].forEach(subAudience => {
+                    const subAudienceLabel = document.createElement('label');
+                    subAudienceLabel.classList.add('checkbox', 'mr-3');
+                    const subAudienceCheckbox = document.createElement('input');
+                    subAudienceCheckbox.type = 'checkbox';
+                    subAudienceCheckbox.value = subAudience;
+                    subAudienceCheckbox.name = 'subAudience';
+                    subAudienceCheckbox.classList.add('mr-1');
+                    subAudienceLabel.appendChild(subAudienceCheckbox);
+                    subAudienceLabel.appendChild(document.createTextNode(subAudience));
+                    subAudienceListDiv.appendChild(subAudienceLabel);
 
-                groupDiv.appendChild(listDiv);
-                audienceSpecificSelectionArea.appendChild(groupDiv);
-            });
-            addAudienceEventListeners(); // Añadir listeners DESPUÉS de renderizar
-            updateAudienceCount(); // Inicializar el contador
-        }
-
-        function addAudienceEventListeners() {
-             // Event listener para los toggles de grupo
-            document.querySelectorAll('.group-toggle').forEach(toggle => {
-                toggle.addEventListener('change', function() {
-                    const groupId = this.dataset.groupId;
-                    const listDiv = audienceSpecificSelectionArea.querySelector(`[data-group-list-id="${groupId}"]`);
-                    if (this.checked) {
-                        listDiv.classList.remove('is-hidden');
-                    } else {
-                        listDiv.classList.add('is-hidden');
-                        // Deseleccionar todas las sub-audiencias si el grupo se desactiva
-                        listDiv.querySelectorAll('.sub-audience-checkbox').forEach(checkbox => {
-                            if (checkbox.checked) {
-                                checkbox.checked = false;
-                                selectedSubAudiencesCount--; // Decrementar contador
+                    subAudienceCheckbox.addEventListener('change', () => {
+                        if (subAudienceCheckbox.checked) {
+                            if (selectedSubAudiencesCount < MAX_SUB_AUDIENCES) {
+                                selectedSubAudiencesCount++;
+                            } else {
+                                subAudienceCheckbox.checked = false; // No permitir seleccionar más
+                                // Opcional: mostrar un mensaje
+                                showTemporaryMessage(audienceError, "No puedes seleccionar más de 5 sub-audiencias.", "is-warning");
                             }
-                        });
-                         updateAudienceCount(); // Actualizar contador global
-                    }
-                     validateAudienceSelection(); // Re-validar al cambiar estado del grupo
-                });
-            });
-
-            // Event listener para las sub-audiencias checkboxes
-            document.querySelectorAll('.sub-audience-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    if (this.checked) {
-                        if (selectedSubAudiencesCount < MAX_SUB_AUDIENCES) {
-                            selectedSubAudiencesCount++;
                         } else {
-                            this.checked = false; // Evitar seleccionar si ya hay MAX
-                             alert(`Solo puedes seleccionar hasta ${MAX_SUB_AUDIENCES} audiencias específicas.`);
+                            selectedSubAudiencesCount--;
                         }
-                    } else {
-                        selectedSubAudiencesCount--;
-                    }
-                     updateAudienceCount();
-                     validateAudienceSelection(); // Re-validar al cambiar selección de sub-audiencia
+                        updateSubAudienceCounter();
+                        validateAudienceSelection();
+                    });
                 });
-            });
 
-            // Event listeners para los radio buttons de opción de audiencia
-            audienceAllRadio.addEventListener('change', handleAudienceOptionChange);
-            audienceSpecificRadio.addEventListener('change', handleAudienceOptionChange);
+                groupDiv.appendChild(subAudienceListDiv);
+                audienceGroupsContainer.appendChild(groupDiv);
+
+                groupCheckbox.addEventListener('change', () => {
+                    if (groupCheckbox.checked) {
+                        subAudienceListDiv.classList.remove('is-hidden');
+                    } else {
+                        subAudienceListDiv.classList.add('is-hidden');
+                        // Desmarcar sub-audiencias de este grupo si el grupo se desactiva
+                        subAudienceListDiv.querySelectorAll('input[type="checkbox"]:checked').forEach(chk => {
+                            chk.checked = false;
+                            selectedSubAudiencesCount--;
+                        });
+                        updateSubAudienceCounter();
+                    }
+                    validateAudienceSelection();
+                });
+            }
+            updateSubAudienceCounter();
         }
 
-        function handleAudienceOptionChange() {
-            if (audienceAllRadio.checked) {
-                audienceSpecificSelectionArea.classList.add('is-hidden');
-                audienceCountSpan.classList.add('is-hidden'); // Ocultar contador en "Público en General"
-                audienceHelpText.classList.add('is-hidden'); // Ocultar texto de ayuda
-                 // Deseleccionar y desactivar todo en la selección específica al elegir "Público en General"
-                 document.querySelectorAll('.group-toggle').forEach(toggle => toggle.checked = false);
-                 document.querySelectorAll('.audience-list').forEach(list => list.classList.add('is-hidden'));
-                 document.querySelectorAll('.sub-audience-checkbox').forEach(checkbox => checkbox.checked = false);
-                 selectedSubAudiencesCount = 0; // Resetear contador
-                 updateAudienceCount(); // Actualizar contador global (aunque esté oculto)
+        function updateSubAudienceCounter() {
+            subAudienceCounter.textContent = `${selectedSubAudiencesCount}/${MAX_SUB_AUDIENCES}`;
+            if (selectedSubAudiencesCount >= MAX_SUB_AUDIENCES) {
+                audienceGroupsContainer.querySelectorAll('input[name="subAudience"]:not(:checked)').forEach(chk => chk.disabled = true);
+                subAudienceCounter.classList.add('max-audience-notice');
 
-            } else { // audienceSpecificRadio.checked
-                audienceSpecificSelectionArea.classList.remove('is-hidden');
-                 audienceCountSpan.classList.remove('is-hidden'); // Mostrar contador
-                 audienceHelpText.classList.remove('is-hidden'); // Mostrar texto de ayuda
+            } else {
+                audienceGroupsContainer.querySelectorAll('input[name="subAudience"]:not(:checked)').forEach(chk => chk.disabled = false);
+                subAudienceCounter.classList.remove('max-audience-notice');
             }
-            validateAudienceSelection(); // Re-validar al cambiar la opción principal
         }
 
-
-        function updateAudienceCount() {
-            audienceCountSpan.textContent = `${selectedSubAudiencesCount}/${MAX_SUB_AUDIENCES} Seleccionadas`;
-        }
-
-        function getSelectedAudience() {
-            if (audienceAllRadio.checked) {
-                return ["Público en General"]; // Enviar un indicador específico al backend
-            }
-
-            const selectedSubAudiences = [];
-            document.querySelectorAll('.sub-audience-checkbox:checked').forEach(checkbox => {
-                selectedSubAudiences.push(checkbox.value);
+        function getSelectedAudienceDetails() {
+            const selected = [];
+            audienceGroupsContainer.querySelectorAll('input[name="subAudience"]:checked').forEach(chk => {
+                selected.push(chk.value);
             });
+            // Incluir nombres de grupos activados si no hay sub-audiencias seleccionadas de ese grupo
+            audienceGroupsContainer.querySelectorAll('input[data-group-name]:checked').forEach(groupChk => {
+                const groupName = groupChk.dataset.groupName;
+                const hasSelectedSub = Array.from(audienceGroupsContainer.querySelectorAll(`input[name="subAudience"][value^="${groupName.substring(0,5)}"]:checked`)).length > 0; // Simplistic check
 
-            if (selectedSubAudiences.length > 0) {
-                return selectedSubAudiences; // Prioridad 1: Sub-audiencias seleccionadas
-            }
+                let groupHasSelectedSub = false;
+                audienceData[groupName].forEach(sub => {
+                    if(selected.includes(sub)) groupHasSelectedSub = true;
+                });
 
-            const activatedGroups = [];
-            document.querySelectorAll('.group-toggle:checked').forEach(toggle => {
-                // Encuentra el nombre completo del grupo basado en el ID data-group-id
-                 const group = audienceGroupsData.find(g => g.id === toggle.dataset.groupId);
-                 if(group) {
-                     activatedGroups.push(group.name); // Prioridad 2: Nombres de grupos activados
-                 }
+                if (!groupHasSelectedSub && !selected.includes(groupName)) { // Evitar duplicar si ya está por sub-audiencia
+                     // selected.push(groupName); // Se podría agregar el nombre del grupo si es necesario
+                }
             });
-
-             if (activatedGroups.length > 0) {
-                 return activatedGroups;
-             }
-
-            return []; // Nada seleccionado (debería ser prevenido por validación)
+            return selected;
         }
 
         function validateAudienceSelection() {
-             if (audienceAllRadio.checked) {
-                 audienceError.classList.add('is-hidden'); // Válido si "Público en General" está seleccionado
-                 return true;
-             }
-
-             // Si "Selección Específica" está marcado, aplicar validación anterior
-             const selectedSub = document.querySelectorAll('.sub-audience-checkbox:checked').length;
-             const activatedGroups = document.querySelectorAll('.group-toggle:checked').length;
-
-             if (selectedSub === 0 && activatedGroups === 0) {
-                 audienceError.classList.remove('is-hidden');
-                 return false;
-             } else {
-                 audienceError.classList.add('is-hidden');
-                 return true;
-             }
-        }
-
-
-        // --- Funciones de Autenticación ---
-        function showLoading() { loadingIndicator.classList.add('is-active'); }
-        function hideLoading() { loadingIndicator.classList.remove('is-active'); }
-        function showAuthError(message) {
-             authErrorMessages.textContent = message;
-             authErrorMessages.classList.remove('is-hidden');
-             authSuccessMessage.classList.add('is-hidden'); // Ocultar mensaje de éxito si hay error
-        }
-         function hideAuthError() {
-             authErrorMessages.textContent = '';
-             authErrorMessages.classList.add('is-hidden');
-         }
-         function showAuthSuccess(message) {
-             authSuccessMessage.querySelector('.message-body').textContent = message;
-             authSuccessMessage.classList.remove('is-hidden');
-             authErrorMessages.classList.add('is-hidden'); // Ocultar mensaje de error si hay éxito
-         }
-         function hideAuthSuccess() {
-             authSuccessMessage.classList.add('is-hidden');
-         }
-
-
-        loginEmailButton.addEventListener('click', async () => {
-            const email = authEmailInput.value;
-            const password = authPasswordInput.value;
-            hideAuthError();
-            hideAuthSuccess(); // Ocultar mensaje de éxito previo
-            showLoading();
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                // onAuthStateChanged manejará el cambio de UI
-            } catch (error) {
-                console.error("Error login:", error);
-                // Mostrar un mensaje de error más amigable basado en el código de error de Firebase
-                let errorMessage = "Error al iniciar sesión.";
-                switch (error.code) {
-                    case 'auth/invalid-email':
-                        errorMessage = 'El formato del correo electrónico es inválido.';
-                        break;
-                    case 'auth/user-disabled':
-                        errorMessage = 'El usuario ha sido deshabilitado.';
-                        break;
-                    case 'auth/user-not-found':
-                        errorMessage = 'Usuario no encontrado. Regístrate si no tienes cuenta.';
-                        break;
-                    case 'auth/wrong-password':
-                        errorMessage = 'Contraseña incorrecta.';
-                        break;
-                    case 'auth/invalid-credential': // Para versiones más recientes de Firebase Auth
-                         errorMessage = 'Credenciales inválidas. Verifica tu correo y contraseña.';
-                         break;
-                    default:
-                        errorMessage = `Error al iniciar sesión: ${error.message}`;
+            const audienceType = document.querySelector('input[name="audienceType"]:checked').value;
+            audienceError.textContent = '';
+            if (audienceType === 'target') {
+                const selectedGroups = audienceGroupsContainer.querySelectorAll('input[data-group-name]:checked').length;
+                const selectedSubs = getSelectedAudienceDetails().length;
+                if (selectedGroups === 0 && selectedSubs === 0) {
+                    audienceError.textContent = 'Si seleccionas "Target Específico", debes activar al menos un grupo O seleccionar al menos una sub-audiencia.';
+                    return false;
                 }
-                showAuthError(errorMessage);
-            } finally {
-                hideLoading();
+                 if (selectedSubs > MAX_SUB_AUDIENCES) {
+                    audienceError.textContent = `Has seleccionado ${selectedSubs} sub-audiencias. El máximo es ${MAX_SUB_AUDIENCES}.`;
+                    return false;
+                }
             }
-        });
-
-        signupEmailButton.addEventListener('click', async () => {
-            const email = authEmailInput.value;
-            const password = authPasswordInput.value;
-             hideAuthError();
-             hideAuthSuccess(); // Ocultar mensaje de éxito previo
-             showLoading();
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                // Al registrar, también iniciamos sesión. Guardar info básica del usuario.
-                await setDoc(doc(db, 'users', userCredential.user.uid), {
-                    email: userCredential.user.email,
-                    createdAt: serverTimestamp() // Usar serverTimestamp modular
-                    // Nombre puede pedirse después si es necesario
-                }, { merge: true }); // merge: true para no sobrescribir si el doc ya existe por alguna razón
-
-                // Mostrar mensaje de éxito de registro
-                showAuthSuccess('¡Registro exitoso! Ahora puedes iniciar sesión con tu correo y contraseña.');
-
-                // Opcional: Limpiar campos después de registro exitoso
-                authEmailInput.value = '';
-                authPasswordInput.value = '';
-
-                // No redirigimos automáticamente, el usuario debe iniciar sesión después de ver el mensaje de éxito.
-                // onAuthStateChanged NO se disparará aquí porque no iniciamos sesión automáticamente tras el registro con createUserWithEmailAndPassword
-                // Si quisiéramos iniciar sesión automáticamente, usaríamos signInWithEmailAndPassword después del registro.
-                // Como la instrucción es "que agregue confirmacion de usuario registrado" y "asegura que el login funcione",
-                // el flujo es: Registrar -> Ver confirmación -> Usar el formulario de Login.
-
-            } catch (error) {
-                 console.error("Error signup:", error);
-                 // Mostrar un mensaje de error más amigable basado en el código de error de Firebase
-                 let errorMessage = "Error al registrar usuario.";
-                 switch (error.code) {
-                     case 'auth/email-already-in-use':
-                         errorMessage = 'El correo electrónico ya está registrado.';
-                         break;
-                     case 'auth/invalid-email':
-                         errorMessage = 'El formato del correo electrónico es inválido.';
-                         break;
-                     case 'auth/operation-not-allowed':
-                         errorMessage = 'El registro con correo y contraseña no está habilitado.'; // Asegúrate de habilitarlo en Firebase Console
-                         break;
-                     case 'auth/weak-password':
-                         errorMessage = 'La contraseña es demasiado débil. Debe tener al menos 6 caracteres.';
-                         break;
-                     default:
-                         errorMessage = `Error al registrar: ${error.message}`;
-                 }
-                 showAuthError(errorMessage);
-            } finally {
-                 hideLoading();
-            }
-        });
-
-         loginGoogleButton.addEventListener('click', async () => {
-            hideAuthError();
-            hideAuthSuccess(); // Ocultar mensaje de éxito previo
-             showLoading();
-            try {
-                const provider = new GoogleAuthProvider();
-                const userCredential = await signInWithPopup(auth, provider);
-                 // Guardar info básica del usuario al loggearse con Google por primera vez
-                 const userDocRef = doc(db, 'users', userCredential.user.uid);
-                 const userDocSnap = await getDoc(userDocRef);
-
-                 if (!userDocSnap.exists()) {
-                     await setDoc(userDocRef, {
-                        email: userCredential.user.email,
-                        name: userCredential.user.displayName || null,
-                        createdAt: serverTimestamp() // Usar serverTimestamp modular
-                     }, { merge: true });
-                 }
-                // onAuthStateChanged manejará el cambio de UI
-            } catch (error) {
-                console.error("Error Google login:", error);
-                 // Mostrar un mensaje de error más amigable
-                 let errorMessage = "Error al iniciar sesión con Google.";
-                 switch (error.code) {
-                     case 'auth/popup-closed-by-user':
-                         errorMessage = 'Ventana de Google cerrada por el usuario.';
-                         break;
-                    case 'auth/cancelled-popup-request':
-                        errorMessage = 'Solicitud de ventana emergente cancelada.';
-                        break;
-                     // Otros errores de Google Auth
-                     default:
-                        errorMessage = `Error al iniciar sesión con Google: ${error.message}`;
-                 }
-                 showAuthError(errorMessage);
-            } finally {
-                hideLoading();
-            }
-         });
+            return true;
+        }
 
 
-        logoutButton.addEventListener('click', async () => {
-             showLoading();
-            try {
-                await signOut(auth);
-                // onAuthStateChanged manejará el cambio de UI
-                // Limpiar UI o resetear estado si es necesario
-                 ideasResultsArea.innerHTML = '';
-                 actionsArea.classList.add('is-hidden');
-                 motivationalPhraseArea.classList.add('is-hidden');
-                 inputTopic.value = '';
-                 selectTone.value = 'Neutral';
-                 // Resetear selección de audiencia
-                 audienceSpecificRadio.checked = true; // Volver a selección específica por defecto
-                 handleAudienceOptionChange(); // Ejecutar lógica para mostrar/ocultar áreas
-                 hideAuthError(); // Ocultar posibles errores de auth anteriores
-                 hideAuthSuccess(); // Ocultar mensaje de éxito previo
-                 window.currentViewingSessionId = null; // Resetear ID de sesión visible
+        // --- Funciones Auxiliares ---
+        function showLoading(show) {
+            loadingOverlay.classList.toggle('is-hidden', !show);
+        }
 
-            } catch (error) {
-                 console.error("Error logout:", error);
-                 // Mostrar error de logout si aplica, aunque es raro
-            } finally {
-                 hideLoading();
-            }
-        });
+        function showTemporaryMessage(element, message, bulmaClass = 'is-danger', duration = 4000) {
+            element.textContent = message;
+            element.classList.remove('is-danger', 'is-success', 'is-warning', 'is-info'); // Limpiar clases previas
+            element.classList.add(bulmaClass);
+            element.classList.remove('is-hidden');
+            setTimeout(() => {
+                element.textContent = '';
+                element.classList.add('is-hidden');
+            }, duration);
+        }
 
-        // Observador del estado de autenticación
-        onAuthStateChanged(auth, async (user) => {
+        function updateUIForAuthState(user) {
+            currentUser = user;
             if (user) {
-                // Usuario loggeado
-                authSection.classList.add('is-hidden');
-                appSection.classList.remove('is-hidden');
-                logoutButton.classList.remove('is-hidden');
-                 historyButton.classList.remove('is-hidden');
-                 loginButtonNavbar.classList.add('is-hidden'); // Ocultar auth links en navbar
-                 signupButtonNavbar.classList.add('is-hidden');
-                 hideAuthError(); // Asegurarse de ocultar errores de auth al loggearse
-                 hideAuthSuccess(); // Asegurarse de ocultar éxito de auth al loggearse
+                authView.classList.add('is-hidden');
+                appView.classList.remove('is-hidden');
+                greeting.textContent = `¡Hola, ${user.displayName || user.email}!`;
 
+                navLoginButton.classList.add('is-hidden');
+                navRegisterButton.classList.add('is-hidden');
+                navHistoryButton.classList.remove('is-hidden');
+                navLogoutButton.classList.remove('is-hidden');
 
-                // Mostrar nombre de usuario si está disponible, sino usar email
-                 const userName = user.displayName || user.email || 'Usuario';
-                 userNameDisplay.textContent = userName.split('@')[0]; // Mostrar parte antes del @ si es email
-
-                 // Asegurar que el usuario esté registrado en nuestra colección 'users'
-                 // Esta lógica ya está en login/signup, pero la mantenemos aquí como fallback
-                 // por si el usuario ya estaba loggeado de una sesión anterior.
-                 const userDocRef = doc(db, 'users', user.uid);
-                 const userDocSnap = await getDoc(userDocRef);
-
-                 if (!userDocSnap.exists()) {
-                      await setDoc(userDocRef, {
-                         email: user.email,
-                         name: user.displayName || null,
-                         createdAt: serverTimestamp()
-                      }, { merge: true });
-                 }
-
-
-                console.log("Usuario autenticado:", user.uid);
-                 // Aquí podrías cargar data inicial del usuario si fuera necesario
+                // Resetear campos por si acaso
+                clearGenerationForm();
+                clearResultsArea();
+                currentViewingSessionId = null; // Nueva sesión al loguear
             } else {
-                // Usuario no loggeado
-                authSection.classList.remove('is-hidden');
-                appSection.classList.add('is-hidden');
-                logoutButton.classList.add('is-hidden');
-                 historyButton.classList.add('is-hidden');
-                  loginButtonNavbar.classList.remove('is-hidden'); // Mostrar auth links en navbar
-                 signupButtonNavbar.classList.remove('is-hidden');
-                console.log("Usuario desautenticado.");
-                 window.currentViewingSessionId = null; // Asegurar que no haya ID de sesión cargado
+                authView.classList.remove('is-hidden');
+                appView.classList.add('is-hidden');
+                greeting.textContent = '¡Hola!';
+
+                navLoginButton.classList.remove('is-hidden');
+                navRegisterButton.classList.remove('is-hidden');
+                navHistoryButton.classList.add('is-hidden');
+                navLogoutButton.classList.add('is-hidden');
+
+                loginError.textContent = '';
+                registerError.textContent = '';
+                currentViewingSessionId = null;
+            }
+        }
+
+        function clearGenerationForm() {
+            topicInput.value = '';
+            toneSelect.value = 'Neutral';
+            document.querySelector('input[name="audienceType"][value="general"]').checked = true;
+            targetAudienceSection.classList.add('is-hidden');
+            renderAudienceGroups(); // Resetea la selección de audiencias
+            selectedSubAudiencesCount = 0;
+            updateSubAudienceCounter();
+            maxWordsInput.value = 100;
+            includeLocationCheckbox.checked = false;
+            locationInputContainer.classList.add('is-hidden');
+            locationInput.value = '';
+            audienceError.textContent = '';
+        }
+
+        function clearResultsArea() {
+            ideasResultsArea.innerHTML = '';
+            ideasResultsArea.appendChild(noResultsMessage); // Mostrar mensaje inicial
+            noResultsMessage.classList.remove('is-hidden');
+            finalPhraseContainer.classList.add('is-hidden');
+            finalPhraseText.textContent = '';
+            actionButtonsContainer.classList.add('is-hidden');
+        }
+
+
+        // --- Lógica de Autenticación ---
+        auth.onAuthStateChanged(updateUIForAuthState);
+
+        showRegisterLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginFormContainer.classList.add('is-hidden');
+            registerFormContainer.classList.remove('is-hidden');
+            loginError.textContent = '';
+        });
+
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerFormContainer.classList.add('is-hidden');
+            loginFormContainer.classList.remove('is-hidden');
+            registerError.textContent = '';
+        });
+
+        loginButton.addEventListener('click', async () => {
+            const email = loginEmailInput.value;
+            const password = loginPasswordInput.value;
+            loginError.textContent = '';
+            showLoading(true);
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                // Actualizar lastLoginAt
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                // UI se actualiza con onAuthStateChanged
+            } catch (error) {
+                console.error("Error en login:", error);
+                loginError.textContent = "Error al iniciar sesión: " + error.message;
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        registerButton.addEventListener('click', async () => {
+            const name = registerNameInput.value;
+            const email = registerEmailInput.value;
+            const password = registerPasswordInput.value;
+            registerError.textContent = '';
+
+            if (!email || !password) {
+                registerError.textContent = "Email y contraseña son obligatorios.";
+                return;
+            }
+            showLoading(true);
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                await user.updateProfile({ displayName: name });
+
+                // Guardar usuario en Firestore
+                await db.collection('users').doc(user.uid).set({
+                    email: user.email,
+                    name: name || user.displayName, // Usar el nombre proporcionado o el del perfil
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                // UI se actualiza con onAuthStateChanged
+            } catch (error) {
+                console.error("Error en registro:", error);
+                registerError.textContent = "Error al registrarse: " + error.message;
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        googleLoginButton.addEventListener('click', async () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            loginError.textContent = '';
+            showLoading(true);
+            try {
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+
+                // Guardar/actualizar usuario en Firestore
+                const userRef = db.collection('users').doc(user.uid);
+                const userDoc = await userRef.get();
+                if (!userDoc.exists) {
+                    await userRef.set({
+                        email: user.email,
+                        name: user.displayName,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } else {
+                    await userRef.update({
+                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        name: user.displayName // Actualizar nombre por si cambia en Google
+                    });
+                }
+                // UI se actualiza con onAuthStateChanged
+            } catch (error) {
+                console.error("Error con Google login:", error);
+                loginError.textContent = "Error con Google: " + error.message;
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        navLogoutButton.addEventListener('click', async () => {
+            showLoading(true);
+            try {
+                await auth.signOut();
+                // UI se actualiza con onAuthStateChanged
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
+                // Manejar error si es necesario
+            } finally {
+                showLoading(false);
             }
         });
 
 
-        // --- Lógica de Generación de Ideas ---
-        generateIdeasButton.addEventListener('click', handleGenerateIdeas);
-        refreshIdeasButton.addEventListener('click', handleGenerateIdeas); // Refrescar usa la misma lógica
+        // --- Lógica de la Aplicación Principal ---
+        audienceTypeRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                if (event.target.value === 'target') {
+                    targetAudienceSection.classList.remove('is-hidden');
+                    validateAudienceSelection(); // Validar al mostrar
+                } else {
+                    targetAudienceSection.classList.add('is-hidden');
+                    audienceError.textContent = ''; // Limpiar error si se cambia a general
+                }
+            });
+        });
 
-        async function handleGenerateIdeas() {
-            const topic = inputTopic.value.trim();
-            const tone = selectTone.value;
-            const audience = getSelectedAudience(); // Obtiene el valor basado en la selección de radio/checkboxes
-            const maxWords = parseInt(inputMaxWords.value, 10) || 100; // Default a 100 si vacío o inválido
-             inputMaxWords.value = maxWords; // Asegurar que el input muestre el valor por defecto si estaba vacío
+        renderAudienceGroups(); // Cargar grupos de audiencia al inicio
 
-            if (!topic) {
-                alert("Por favor, ingresa un tema o palabra clave.");
-                inputTopic.focus();
+        includeLocationCheckbox.addEventListener('change', () => {
+            locationInputContainer.classList.toggle('is-hidden', !includeLocationCheckbox.checked);
+            if (!includeLocationCheckbox.checked) {
+                locationInput.value = ''; // Limpiar si se desmarca
+            }
+        });
+
+        generateIdeasButton.addEventListener('click', async () => {
+            if (!currentUser) {
+                showTemporaryMessage(ideasResultsArea.querySelector('#noResultsMessage') || ideasResultsArea, "Debes iniciar sesión para generar ideas.");
                 return;
             }
 
-             if (!validateAudienceSelection()) {
-                 // Este mensaje de error solo se muestra si la validación falla (cuando Selección Específica está marcada y no hay nada seleccionado)
-                 alert("Debes seleccionar 'Público en General' o al menos un grupo activado o una sub-audiencia.");
-                 return;
-             }
+            const topic = topicInput.value.trim();
+            const tone = toneSelect.value;
+            const audienceType = document.querySelector('input[name="audienceType"]:checked').value;
+            let audienceDetails = [];
+            const maxWords = parseInt(maxWordsInput.value, 10);
+            const includeLocation = includeLocationCheckbox.checked;
+            const locationText = locationInput.value.trim();
 
-            showLoading();
-            hideAuthError(); // Ocultar errores de auth si estaban visibles
-            hideAuthSuccess(); // Ocultar mensajes de éxito si estaban visibles
-            ideasResultsArea.innerHTML = ''; // Limpiar resultados anteriores
-            actionsArea.classList.add('is-hidden'); // Ocultar botones de acción
-            motivationalPhraseArea.classList.add('is-hidden'); // Ocultar frase motivacional
-            window.currentViewingSessionId = null; // Resetear ID de sesión visible
+            if (!topic) {
+                showTemporaryMessage(topicInput.nextElementSibling, "El tema es obligatorio.", 'is-danger', 3000);
+                topicInput.focus();
+                return;
+            }
+            if (isNaN(maxWords) || maxWords < 50 || maxWords > 500) {
+                 showTemporaryMessage(maxWordsInput.parentElement.nextElementSibling || maxWordsInput.parentElement, "Máximo de palabras debe ser entre 50 y 500.", 'is-danger', 3000);
+                maxWordsInput.focus();
+                return;
+            }
+             if (includeLocation && !locationText) {
+                showTemporaryMessage(locationInput.nextElementSibling || locationInput.parentElement , "Debes especificar una ubicación si la casilla está marcada.", 'is-danger', 3000);
+                locationInput.focus();
+                return;
+            }
+
+
+            if (audienceType === 'target') {
+                if (!validateAudienceSelection()){
+                    return; // Detener si la validación de audiencia falla
+                }
+                audienceDetails = getSelectedAudienceDetails();
+            }
+
+
+            showLoading(true);
+            ideasResultsArea.innerHTML = '<p class="has-text-centered">✨ Generando ideas...</p>'; // Mensaje mientras carga
+            finalPhraseContainer.classList.add('is-hidden');
+            actionButtonsContainer.classList.add('is-hidden');
+
 
             try {
-                // Llamar a la Firebase Function 'generateIdeas'
-                const generateIdeasCallable = httpsCallable(functions, 'generateIdeas');
-                const result = await generateIdeasCallable({
+                const generateIdeasFunction = functions.httpsCallable('generateIdeas');
+                const result = await generateIdeasFunction({
                     topic: topic,
                     tone: tone,
-                    audience: audience, // Esto será ["Público en General"] o la lista de sub-audiencias/grupos
+                    audienceType: audienceType,
+                    audienceDetails: audienceDetails,
                     maxWords: maxWords,
-                    numIdeas: 5 // Enviar el número de ideas deseado al backend
+                    includeLocation: includeLocation,
+                    locationInput: locationText
                 });
 
-                const data = result.data; // La respuesta de la función
-                console.log("Respuesta de Function:", data);
-
-                if (data.success) {
-                    displayIdeas(data.ideas); // Mostrar las 5 ideas
-                    displayMotivationalPhrase(data.finalPhrase);
-                     actionsArea.classList.remove('is-hidden'); // Mostrar botones de acción
-                     motivationalPhraseArea.classList.remove('is-hidden'); // Mostrar frase motivacional
-                     // Guardar el ID de la sesión recién creada para futuras exportaciones
-                     window.currentViewingSessionId = data.sessionId;
-                     console.log("Generación exitosa. Session ID:", window.currentViewingSessionId);
-
+                if (result.data && result.data.success) {
+                    currentViewingSessionId = result.data.sessionId; // Guardar ID de la sesión actual
+                    displayGeneratedIdeas(result.data.ideas);
+                    displayFinalPhrase(result.data.finalPhrase);
+                    actionButtonsContainer.classList.remove('is-hidden');
+                    noResultsMessage.classList.add('is-hidden');
                 } else {
-                     console.error("Error al generar ideas:", data.error);
-                    alert(`Error al generar ideas: ${data.error || 'Error desconocido'}`);
+                    throw new Error(result.data.error || "No se pudieron generar las ideas.");
                 }
-
             } catch (error) {
-                console.error("Error llamando a Firebase Function:", error);
-                 // Firebase Functions errors have specific codes and messages
-                 if (error.code) {
-                     alert(`Error en el servidor (${error.code}): ${error.message}`);
-                 } else {
-                    alert(`Error en la comunicación con el servidor: ${error.message}`);
-                 }
+                console.error("Error al generar ideas:", error);
+                ideasResultsArea.innerHTML = `<div class="notification is-danger">Error al generar ideas: ${error.message}</div>`;
             } finally {
-                hideLoading();
+                showLoading(false);
             }
-        }
+        });
 
-        // --- Funciones para mostrar resultados ---
-        function displayIdeas(ideas) {
+        function displayGeneratedIdeas(ideas) {
             ideasResultsArea.innerHTML = ''; // Limpiar área
             if (!ideas || ideas.length === 0) {
-                ideasResultsArea.innerHTML = '<p class="has-text-centered">No se generaron ideas. Intenta con un tema diferente.</p>';
+                ideasResultsArea.innerHTML = '<p class="has-text-centered">No se generaron ideas. Intenta ajustar tus parámetros.</p>';
                 return;
             }
 
             ideas.forEach((idea, index) => {
                 const card = document.createElement('div');
-                card.classList.add('card', 'animate__animated', 'animate__fadeInUp'); // Animación para cada tarjeta
-                card.innerHTML = `
-                    <header class="card-header">
-                        <p class="card-header-title">
-                            Idea ${index + 1}
-                        </p>
-                    </header>
-                    <div class="card-content">
-                        <div class="content">
-                            <p><strong>Ángulo Narrativo:</strong> ${escapeHTML(idea.angle)}</p>
-                            <p><strong>Hashtags:</strong> ${idea.hashtags.split(',').map(tag => `<span class="tag is-hashtags">${escapeHTML(tag.trim())}</span>`).join('')}</p>
-                            <p><strong>Formato Visual Sugerido:</strong> ${escapeHTML(idea.format)}</p>
-                            <p><strong>Gancho Verbal Impactante:</strong> ${escapeHTML(idea.hook)}</p>
-                            <p><strong>Post Relacionado (${idea.post ? idea.post.split(/\s+/).length : 0} palabras):</strong></p>
-                            <p>${escapeHTML(idea.post)}</p>
-                        </div>
+                card.classList.add('card', 'animate__animated', 'animate__fadeInUp');
+                card.style.animationDelay = `${index * 0.1}s`;
+
+                const header = document.createElement('header');
+                header.classList.add('card-header');
+                const title = document.createElement('p');
+                title.classList.add('card-header-title');
+                title.textContent = `Idea ${index + 1}`;
+                header.appendChild(title);
+                card.appendChild(header);
+
+                const content = document.createElement('div');
+                content.classList.add('card-content');
+
+                content.innerHTML = `
+                    <div class="content">
+                        <p><strong>Texto o Copy:</strong></p>
+                        <p>${idea.textoCopy || 'N/A'}</p>
+                        <p><strong>Hashtags:</strong> ${Array.isArray(idea.hashtags) ? idea.hashtags.join(', ') : (idea.hashtags || 'N/A')}</p>
+                        <p><strong>Formato Visual Sugerido:</strong> ${idea.formatoVisual || 'N/A'}</p>
+                        <p><strong>Gancho Verbal Impactante:</strong> ${idea.ganchoVerbal || 'N/A'}</p>
+                        ${(idea.sugerenciaUbicacion && idea.sugerenciaUbicacion !== "N/A") ? `<p><strong>Sugerencia de Ubicación:</strong> ${idea.sugerenciaUbicacion}</p>` : ''}
                     </div>
                 `;
+                card.appendChild(content);
                 ideasResultsArea.appendChild(card);
             });
         }
 
-         function displayMotivationalPhrase(phrase) {
-             motivationalPhraseText.textContent = phrase ? escapeHTML(phrase) : '¡Sigue creando!';
-         }
+        function displayFinalPhrase(phrase) {
+            if (phrase) {
+                finalPhraseText.textContent = phrase;
+                finalPhraseContainer.classList.remove('is-hidden');
+                finalPhraseContainer.classList.add('animate__animated', 'animate__fadeIn');
+            } else {
+                finalPhraseContainer.classList.add('is-hidden');
+            }
+        }
 
-         // Función de ayuda para escapar HTML y prevenir XSS
-         function escapeHTML(str) {
-             if (!str) return '';
-             const div = document.createElement('div');
-             div.appendChild(document.createTextNode(str));
-             return div.innerHTML;
-         }
+        refreshIdeasButton.addEventListener('click', () => {
+            // Simplemente vuelve a llamar a generateIdeasButton. La lógica de obtener los valores ya está ahí.
+            // Asegurarse que los inputs no se borren si el usuario solo quiere refrescar.
+            if (currentViewingSessionId) { // Solo si hay algo que "refrescar" basado en los mismos inputs
+                 generateIdeasButton.click();
+            } else {
+                showTemporaryMessage(ideasResultsArea.firstChild || ideasResultsArea, "Primero genera un conjunto de ideas para poder refrescarlas.", "is-info");
+            }
+        });
 
 
-        // --- Lógica de Exportación ---
-        exportPdfButton.addEventListener('click', handleExportPdf);
-        exportCsvButton.addEventListener('click', handleExportCsv);
+        // --- Lógica de Historial ---
+        navHistoryButton.addEventListener('click', async () => {
+            if (!currentUser) return;
+            historyModal.classList.add('is-active');
+            historyListContainer.innerHTML = '<p>Cargando historial...</p>';
+            historyError.textContent = '';
+            loadHistoryDetailsButton.disabled = true;
+            selectedHistoryEntryId = null;
 
-        function handleExportPdf() {
-            // html2pdf.js toma el contenido visible en `ideasResultsArea`
-            const element = ideasResultsArea;
+            try {
+                const getHistorySummaryFunction = functions.httpsCallable('getHistorySummary');
+                const result = await getHistorySummaryFunction();
 
-            if (!element || element.innerHTML.trim() === '') {
-                alert("No hay contenido para exportar a PDF.");
+                if (result.data && result.data.success) {
+                    renderHistoryList(result.data.history);
+                } else {
+                    throw new Error(result.data.error || "No se pudo cargar el historial.");
+                }
+            } catch (error) {
+                console.error("Error al cargar historial:", error);
+                historyListContainer.innerHTML = `<div class="notification is-danger">Error al cargar el historial: ${error.message}</div>`;
+            }
+        });
+
+        function renderHistoryList(historyItems) {
+            historyListContainer.innerHTML = '';
+            if (!historyItems || historyItems.length === 0) {
+                historyListContainer.innerHTML = '<p class="has-text-centered">No tienes generaciones guardadas en tu historial.</p>';
                 return;
             }
 
-            showLoading();
+            const list = document.createElement('div');
+            list.classList.add('list', 'is-hoverable');
 
-            const options = {
-                margin: 10,
-                filename: `Inspiraciones_${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}.pdf`,
+            historyItems.forEach(item => {
+                const listItem = document.createElement('a');
+                listItem.classList.add('list-item');
+                listItem.dataset.sessionId = item.id;
+
+                const timestamp = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('es-ES') : 'Fecha desconocida';
+                let audienceText = item.audienceType === 'general' ? 'Público en general' : (item.audienceDetails && item.audienceDetails.length > 0 ? item.audienceDetails.join(', ') : 'Target específico (sin detalles)');
+                if (audienceText.length > 50) audienceText = audienceText.substring(0, 47) + "..."; // Acortar
+
+                listItem.innerHTML = `
+                    <div class="list-item-content">
+                        <div class="list-item-title"><strong>Tema:</strong> ${item.topic || 'N/A'}</div>
+                        <div class="list-item-description">
+                            <small><strong>Fecha:</strong> ${timestamp}</small><br>
+                            <small><strong>Tono:</strong> ${item.tone || 'N/A'}</small><br>
+                            <small><strong>Audiencia:</strong> ${audienceText}</small>
+                            ${item.locationInput ? `<br><small><strong>Ubicación:</strong> ${item.locationInput}</small>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                listItem.addEventListener('click', () => {
+                    // Desmarcar previamente seleccionado
+                    const currentlySelected = list.querySelector('.is-active');
+                    if (currentlySelected) {
+                        currentlySelected.classList.remove('is-active');
+                    }
+                    // Marcar nuevo
+                    listItem.classList.add('is-active');
+                    selectedHistoryEntryId = item.id;
+                    loadHistoryDetailsButton.disabled = false;
+                });
+                list.appendChild(listItem);
+            });
+            historyListContainer.appendChild(list);
+        }
+
+        closeHistoryModal.addEventListener('click', () => historyModal.classList.remove('is-active'));
+        cancelHistoryModal.addEventListener('click', () => historyModal.classList.remove('is-active'));
+
+        loadHistoryDetailsButton.addEventListener('click', async () => {
+            if (!selectedHistoryEntryId || !currentUser) return;
+
+            showLoading(true);
+            historyModal.classList.remove('is-active'); // Cerrar modal
+            ideasResultsArea.innerHTML = '<p class="has-text-centered">✨ Cargando detalles del historial...</p>';
+            finalPhraseContainer.classList.add('is-hidden');
+            actionButtonsContainer.classList.add('is-hidden');
+
+
+            try {
+                const getGenerationDetailsFunction = functions.httpsCallable('getGenerationDetails');
+                const result = await getGenerationDetailsFunction({ sessionId: selectedHistoryEntryId });
+
+                if (result.data && result.data.success) {
+                    const sessionData = result.data.session;
+                    currentViewingSessionId = sessionData.id; // ID del documento de Firestore es el sessionId
+                    displayGeneratedIdeas(sessionData.ideas);
+                    displayFinalPhrase(sessionData.finalPhrase);
+                    actionButtonsContainer.classList.remove('is-hidden');
+                    noResultsMessage.classList.add('is-hidden');
+
+                    // Opcional: rellenar los inputs con los datos de la sesión cargada
+                    topicInput.value = sessionData.topic || '';
+                    toneSelect.value = sessionData.tone || 'Neutral';
+                    // ...y así sucesivamente para otros campos si se desea.
+                    // Esto es más complejo para la audiencia, requeriría lógica adicional.
+
+                } else {
+                    throw new Error(result.data.error || "No se pudieron cargar los detalles de la sesión.");
+                }
+
+            } catch (error) {
+                console.error("Error al cargar detalles de sesión:", error);
+                ideasResultsArea.innerHTML = `<div class="notification is-danger">Error al cargar detalles: ${error.message}</div>`;
+            } finally {
+                showLoading(false);
+            }
+        });
+
+
+        // --- Lógica de Exportación ---
+        exportPdfButton.addEventListener('click', () => {
+            if (!ideasResultsArea.querySelector('.card')) { // Si no hay 'cards' de ideas
+                showTemporaryMessage(actionButtonsContainer.querySelector('.is-danger') || actionButtonsContainer, "No hay contenido para exportar a PDF.", 'is-warning');
+                return;
+            }
+            showLoading(true);
+            const element = ideasResultsArea; // Exportar solo el área de resultados
+            const timestamp = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+
+            // Clonar el elemento para no modificar el original directamente
+            const elementToExport = element.cloneNode(true);
+            // Opcional: remover elementos no deseados del clon antes de exportar
+            // elementToExport.querySelectorAll('.acciones-idea-no-exportar').forEach(el => el.remove());
+
+            html2pdf().from(elementToExport).set({
+                margin: [15, 10, 15, 10], // arriba, derecha, abajo, izquierda en mm
+                filename: `Inspiraciones-${timestamp}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, logging: false, dpi: 192, letterRendering: true }, // logging: false para producción
+                html2canvas: { scale: 2, logging: false, useCORS: true }, // useCORS si hay imágenes externas
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+            }).save().then(() => {
+                showLoading(false);
+            }).catch(err => {
+                showLoading(false);
+                console.error("Error al generar PDF:", err);
+                showTemporaryMessage(actionButtonsContainer, "Error al generar PDF.", 'is-danger');
+            });
+        });
 
-            // Usar html2pdf.js
-            html2pdf().from(element).set(options).save().then(() => {
-                 hideLoading();
-                 console.log("PDF exportado.");
-            }).catch(error => {
-                 console.error("Error exportando PDF:", error);
-                 alert("Error al exportar PDF.");
-                 hideLoading();
+        exportCsvButton.addEventListener('click', async () => {
+            if (!currentViewingSessionId) {
+                 showTemporaryMessage(actionButtonsContainer.querySelector('.is-danger') || actionButtonsContainer, "No hay una sesión activa para exportar a CSV. Genera ideas o carga desde el historial.", 'is-warning');
+                return;
+            }
+            showLoading(true);
+            try {
+                const exportCsvFunction = functions.httpsCallable('exportCsv');
+                const result = await exportCsvFunction({ sessionId: currentViewingSessionId });
+
+                if (result.data && result.data.success) {
+                    const csvString = result.data.csv;
+                    const timestamp = new Date().toISOString().slice(0,10);
+                    const filename = `Inspiraciones-${timestamp}.csv`;
+
+                    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+                    const link = document.createElement("a");
+                    if (link.download !== undefined) { // Feature detection
+                        const url = URL.createObjectURL(blob);
+                        link.setAttribute("href", url);
+                        link.setAttribute("download", filename);
+                        link.style.visibility = 'hidden';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    } else {
+                        alert("Tu navegador no soporta la descarga directa. El CSV se mostrará en una nueva pestaña si es posible.");
+                        // Fallback para navegadores antiguos (puede no funcionar bien)
+                        window.open('data:text/csv;charset=utf-8,' + encodeURIComponent(csvString));
+                    }
+                } else {
+                    throw new Error(result.data.error || "No se pudo generar el CSV.");
+                }
+
+            } catch (error) {
+                console.error("Error al exportar CSV:", error);
+                showTemporaryMessage(actionButtonsContainer.querySelector('.is-danger') || actionButtonsContainer, `Error al exportar CSV: ${error.message}`, 'is-danger');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+
+        // --- Inicialización y Listeners Adicionales ---
+        // Burger menu para móviles
+        const burger = document.querySelector('.navbar-burger');
+        const menu = document.querySelector('.navbar-menu');
+        if (burger && menu) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('is-active');
+                menu.classList.toggle('is-active');
             });
         }
 
-        async function handleExportCsv() {
-            // Exportar CSV siempre usa el SessionId de la sesión actualmente mostrada
-            if (!window.currentViewingSessionId) {
-                  alert("No hay sesión cargada para exportar a CSV. Genera ideas o selecciona del historial.");
-                  return; // No ocultar loading aquí, ya que no se mostró
-             }
-
-            showLoading();
-
-             try {
-                  const exportCsvCallable = httpsCallable(functions, 'exportCsv'); // Nombre de la función en backend
-                  const result = await exportCsvCallable({ sessionId: window.currentViewingSessionId });
-                  const csvText = result.data.csv; // Asume que el backend devuelve { csv: "..." }
-
-                   // Crear Blob y descargar
-                  const blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' }); // Asegurar charset UTF-8
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.setAttribute('hidden', '');
-                  a.setAttribute('href', url);
-                  a.setAttribute('download', `Inspiraciones_${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}.csv`);
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-                   window.URL.revokeObjectURL(url); // Liberar memoria
-
-             } catch (error) {
-                  console.error("Error exportando CSV:", error);
-                   if (error.code) {
-                     alert(`Error al exportar CSV (${error.code}): ${error.message}`);
-                 } else {
-                    alert(`Error al exportar CSV: ${error.message}`);
-                 }
-             } finally {
-                  hideLoading();
-             }
-        }
-
-         // --- Lógica de Historial ---
-         historyButton.addEventListener('click', handleOpenHistoryModal);
-         closeHistoryModalButton.addEventListener('click', handleCloseHistoryModal);
-         loadHistoryDetailsButton.addEventListener('click', handleLoadHistoryDetails);
-
-         function handleOpenHistoryModal() {
-              historyModal.classList.add('is-active');
-              loadHistorySummary(); // Cargar la lista al abrir
-         }
-
-         function handleCloseHistoryModal() {
-             historyModal.classList.remove('is-active');
-             // Limpiar modal al cerrar
-             historyListDiv.innerHTML = '';
-             historyLoadingMessage.classList.remove('is-hidden');
-             noHistoryMessage.classList.add('is-hidden');
-             loadHistoryDetailsButton.disabled = true;
-             selectedHistoryInfo.classList.add('is-hidden');
-              window.selectedHistorySessionIdForModal = null; // Resetear selección del modal
-         }
-
-         async function loadHistorySummary() {
-             historyListDiv.innerHTML = ''; // Limpiar lista
-             historyLoadingMessage.classList.remove('is-hidden');
-             noHistoryMessage.classList.add('is-hidden');
-              loadHistoryDetailsButton.disabled = true; // Deshabilitar botón de carga al recargar lista
-               selectedHistoryInfo.classList.add('is-hidden');
-              window.selectedHistorySessionIdForModal = null; // Resetear selección del modal
-
-
-             try {
-                 const getHistoryCallable = httpsCallable(functions, 'getHistorySummary');
-                 const result = await getHistoryCallable();
-                 const summaryList = result.data.sessions;
-
-                 historyLoadingMessage.classList.add('is-hidden');
-
-                 if (!summaryList || summaryList.length === 0) {
-                     noHistoryMessage.classList.remove('is-hidden');
-                     return;
-                 }
-
-                 summaryList.forEach(session => {
-                     const itemDiv = document.createElement('div');
-                     itemDiv.classList.add('history-item');
-                     itemDiv.dataset.sessionId = session.id;
-
-                     // Formatear fecha (Firestore Timestamp)
-                     // Firestore Timestamp object has seconds and nanoseconds
-                     const date = session.timestamp ? new Date(session.timestamp.seconds * 1000) : new Date();
-                     const formattedDate = date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-                     // Formatear audiencia para mostrar en el resumen
-                     const audienceDisplay = session.audience && Array.isArray(session.audience) ? escapeHTML(session.audience.join(', ')) : 'N/A';
-
-                     itemDiv.innerHTML = `
-                         <p class="history-item-date">${formattedDate}</p>
-                         <p><strong>Tema:</strong> ${escapeHTML(session.topic || 'Sin tema')}</p>
-                         <p><strong>Tono:</strong> ${escapeHTML(session.tone || 'N/A')}</p>
-                          <p><strong>Audiencia:</strong> ${audienceDisplay}</p>
-                     `;
-
-                     itemDiv.addEventListener('click', function() {
-                         // Remover selección anterior
-                         historyListDiv.querySelectorAll('.history-item').forEach(item => {
-                             item.style.backgroundColor = ''; // Resetear color de fondo
-                         });
-                         // Marcar seleccionado
-                         this.style.backgroundColor = '#e0e0e0'; // Gris claro para marcar
-                         window.selectedHistorySessionIdForModal = this.dataset.sessionId; // Guardar ID seleccionado en variable temporal del modal
-                         loadHistoryDetailsButton.disabled = false; // Habilitar botón de carga
-                          // Mostrar info de la selección
-                          selectedHistoryDateSpan.textContent = formattedDate;
-                          selectedHistoryTopicSpan.textContent = escapeHTML(session.topic || 'Sin tema');
-                          selectedHistoryInfo.classList.remove('is-hidden');
-                     });
-
-                     historyListDiv.appendChild(itemDiv);
-                 });
-
-             } catch (error) {
-                 console.error("Error cargando historial:", error);
-                 historyLoadingMessage.classList.add('is-hidden');
-                 historyListDiv.innerHTML = '<p class="has-text-centered has-text-danger">Error al cargar el historial.</p>';
-                  noHistoryMessage.classList.add('is-hidden'); // Asegurarse que no aparezca el mensaje de no historial si hay un error
-             }
-         }
-
-         async function handleLoadHistoryDetails() {
-             // Usar el ID almacenado temporalmente al seleccionar en el modal
-             const sessionIdToLoad = window.selectedHistorySessionIdForModal;
-
-             if (!sessionIdToLoad) {
-                 alert("Por favor, selecciona una sesión del historial.");
-                 return;
-             }
-
-             handleCloseHistoryModal(); // Cerrar modal
-
-             showLoading();
-              ideasResultsArea.innerHTML = ''; // Limpiar resultados actuales
-             actionsArea.classList.add('is-hidden'); // Ocultar botones de acción
-             motivationalPhraseArea.classList.add('is-hidden'); // Ocultar frase motivacional
-             window.currentViewingSessionId = null; // Resetear ID de sesión visible hasta que se cargue
-
-             try {
-                 const getDetailsCallable = httpsCallable(functions, 'getGenerationDetails');
-                 const result = await getDetailsCallable({ sessionId: sessionIdToLoad });
-                 const sessionDetails = result.data.session;
-
-                 if (sessionDetails && sessionDetails.ideas) {
-                     displayIdeas(sessionDetails.ideas);
-                     displayMotivationalPhrase(sessionDetails.finalPhrase || 'Inspiración recuperada.'); // Puede que no se guardara la frase final original, usar una por defecto
-                     actionsArea.classList.remove('is-hidden'); // Mostrar botones de acción
-                     motivationalPhraseArea.classList.remove('is-hidden'); // Mostrar frase motivacional
-
-                     // IMPORTANT: Update the global variable for export buttons
-                     window.currentViewingSessionId = sessionIdToLoad; // Ahora los botones de exportar usarán este ID
-                      console.log("Historial cargado. Session ID:", window.currentViewingSessionId);
-
-                 } else {
-                      alert("No se pudieron cargar los detalles de la sesión seleccionada.");
-                       window.currentViewingSessionId = null; // Resetear
-                 }
-
-
-             } catch (error) {
-                  console.error("Error cargando detalles del historial:", error);
-                   if (error.code) {
-                     alert(`Error al cargar los detalles del historial (${error.code}): ${error.message}`);
-                 } else {
-                    alert(`Error al cargar los detalles del historial: ${error.message}`);
-                 }
-                   window.currentViewingSessionId = null; // Resetear en caso de error
-             } finally {
-                 hideLoading();
-             }
-         }
-
-
-         // --- Inicialización ---
-         document.addEventListener('DOMContentLoaded', () => {
-             renderAudienceSpecificSelection(); // Renderizar la sección de audiencia específica al cargar la página
-             handleAudienceOptionChange(); // Inicializar la visibilidad basada en el radio button por defecto
-
-              // Lógica para el burger menu en móviles (Bulma)
-             const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-             if ($navbarBurgers.length > 0) {
-               $navbarBurgers.forEach( el => {
-                 el.addEventListener('click', () => {
-                   const target = el.dataset.target;
-                   const $target = document.getElementById(target);
-                   el.classList.toggle('is-active');
-                   $target.classList.toggle('is-active');
-                 });
-               });
-             }
-         });
-
+        // Mensaje de bienvenida o carga inicial
+        console.log("Aplicación de generación de ideas inicializada.");
 
     </script>
-
 </body>
 </html>
