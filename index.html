@@ -374,7 +374,8 @@
                     <p class="help" id="audienceHelpText">Selecciona "Público en General" o activa grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
                     <div id="audienceSpecificSelectionArea">
                         </div>
-                    </div>
+                    <p id="audienceError" class="help is-danger is-hidden">Debes seleccionar "Público en General" o al menos un grupo activado o una sub-audiencia.</p>
+                </div>
 
 
                 <div class="field mt-5">
@@ -503,7 +504,7 @@
         const audienceSelectionArea = document.getElementById('audienceSelectionArea');
         const audienceHelpText = document.getElementById('audienceHelpText'); // Nuevo ref para texto de ayuda
         const audienceCountSpan = document.getElementById('audienceCount');
-        const audienceError = document.getElementById('audienceError');
+        const audienceError = document.getElementById('audienceError'); // Mensaje de error de validación (se mantiene, pero se controla visibilidad)
         const audienceAllRadio = document.getElementById('audienceAllRadio'); // Nuevo ref para radio Público en General
         const audienceSpecificRadio = document.getElementById('audienceSpecificRadio'); // Nuevo ref para radio Selección Específica
         const audienceSpecificSelectionArea = document.getElementById('audienceSpecificSelectionArea'); // Nuevo ref para el área de selección específica
@@ -665,6 +666,7 @@
             if (audienceAllRadio.checked) {
                 audienceSpecificSelectionArea.classList.add('is-hidden');
                 audienceCountSpan.classList.add('is-hidden'); // Ocultar contador en "Público en General"
+                audienceHelpText.classList.add('is-hidden'); // Ocultar texto de ayuda
                  // Deseleccionar y desactivar todo en la selección específica al elegir "Público en General"
                  document.querySelectorAll('.group-toggle').forEach(toggle => toggle.checked = false);
                  document.querySelectorAll('.audience-list').forEach(list => list.classList.add('is-hidden'));
@@ -675,6 +677,7 @@
             } else { // audienceSpecificRadio.checked
                 audienceSpecificSelectionArea.classList.remove('is-hidden');
                  audienceCountSpan.classList.remove('is-hidden'); // Mostrar contador
+                 audienceHelpText.classList.remove('is-hidden'); // Mostrar texto de ayuda
             }
             validateAudienceSelection(); // Re-validar al cambiar la opción principal
         }
@@ -982,8 +985,8 @@
             }
 
              if (!validateAudienceSelection()) {
+                 // Este mensaje de error solo se muestra si la validación falla (cuando Selección Específica está marcada y no hay nada seleccionado)
                  alert("Debes seleccionar 'Público en General' o al menos un grupo activado o una sub-audiencia.");
-                 // audienceError ya se muestra en validateAudienceSelection()
                  return;
              }
 
