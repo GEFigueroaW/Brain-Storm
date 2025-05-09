@@ -368,7 +368,7 @@
                         </label>
                         <label class="radio">
                             <input type="radio" name="audienceOption" value="specific" id="audienceSpecificRadio" checked>
-                            Selección Específica
+                            Target
                         </label>
                     </div>
                     <p class="help" id="audienceHelpText">Activa grupos y/o selecciona hasta 5 audiencias específicas. Debes seleccionar al menos una opción.</p>
@@ -644,7 +644,7 @@
                             selectedSubAudiencesCount++;
                         } else {
                             this.checked = false; // Evitar seleccionar si ya hay MAX
-                             alert(`Solo puedes seleccionar hasta ${MAX_SUB_AUDIENCIAS} audiencias específicas.`);
+                             alert(`Solo puedes seleccionar hasta ${MAX_SUB_AUDIENCES} audiencias específicas.`);
                         }
                     } else {
                         selectedSubAudiencesCount--;
