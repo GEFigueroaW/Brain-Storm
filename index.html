@@ -441,29 +441,27 @@
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js"; // Usando la versión que proporcionaste
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js"; // Usando la versión que proporcionaste
-
         // Importar los módulos necesarios para Auth, Firestore y Functions (compatibles con v11.7.1)
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
         import { getFirestore, collection, doc, getDoc, setDoc, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-functions.js";
+        // getAnalytics is optional unless you plan to use it
+        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
 
 
         // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
-            apiKey: "AIzaSyDW9emm1GsZ1HCtQLyluMIV2P8a0IEQz5I",
-            authDomain: "brain-storm-eee7c.firebaseapp.com",
-            projectId: "brain-storm-eee7c",
-            storageBucket: "brain-storm-eee7c.firebasestorage.app",
-            messagingSenderId: "868176562615",
-            appId: "1:868176562615:web:85db9c19c16b280957c032",
-            measurementId: "G-PXDR2V5B0P" // Optional
+            apiKey: "AIzaSyA6MZwE3_4K6CU0JTDVBG_c5GCgX5I00VE",
+            authDomain: "brain-storm-8f0d8.firebaseapp.com",
+            projectId: "brain-storm-8f0d8",
+            storageBucket: "brain-storm-8f0d8.firebasestorage.app",
+            messagingSenderId: "401208607043",
+            appId: "1:401208607043:web:6b4038ab14c9bee3beaff6"
         };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app); // Inicializar analytics si lo usas
+        // const analytics = getAnalytics(app); // Inicializar analytics if lo usas
 
         // Obtener instancias de los servicios de Firebase
         const auth = getAuth(app);
