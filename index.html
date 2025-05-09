@@ -1,17 +1,4 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Mi App con Firebase</title>
-    </head>
-<body>
-
-    <h1>¡Hola Firebase!</h1>
-
-    <script type="module" src="./index.js"></script>
-
-</body>
-</html>
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -208,6 +195,16 @@
              font-size: 0.9em;
              color: #666;
          }
+
+         /* Mensaje de éxito */
+         .message.is-success-auth {
+             background-color: #d0f0e0; /* Verde claro */
+             border-color: #48c78e; /* Verde de Bulma */
+             color: #0f3d2c; /* Verde oscuro */
+         }
+         .message-body.is-success-auth {
+              padding: 0.75em 1em; /* Ajustar padding */
+         }
     </style>
 </head>
 <body>
@@ -260,6 +257,12 @@
                     <div class="box">
                         <h1 class="title is-4 has-text-centered">Accede a tu Activador</h1>
                          <p class="subtitle is-6 has-text-centered">Inspírate, crea, impacta.</p>
+
+                        <div id="authSuccessMessage" class="message is-success-auth is-hidden">
+                             <div class="message-body is-success-auth">
+                                 ¡Registro exitoso! Ya puedes iniciar sesión.
+                             </div>
+                         </div>
 
                         <div class="field">
                             <label class="label">Email</label>
@@ -432,30 +435,45 @@
     </footer>
 
 
-    <script src="https://kit.fontawesome.com/YOUR_FONT_AWESOME_KIT_ID.js" crossorigin="anonymous"></script> <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
+    <script src="https://kit.fontawesome.com/YOUR_FONT_AWESOME_KIT_ID.js" crossorigin="anonymous"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <script>
-        // Tu configuración de Firebase va aquí. Reemplaza con la configuración de tu proyecto.
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js"; // Usando la versión que proporcionaste
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js"; // Usando la versión que proporcionaste
+
+        // Importar los módulos necesarios para Auth, Firestore y Functions (compatibles con v11.7.1)
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, setDoc, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-functions.js";
+
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDW9emm1GsZ1HCtQLyluMIV2P8a0IEQz5I",
+            authDomain: "brain-storm-eee7c.firebaseapp.com",
+            projectId: "brain-storm-eee7c",
+            storageBucket: "brain-storm-eee7c.firebasestorage.app",
+            messagingSenderId: "868176562615",
+            appId: "1:868176562615:web:85db9c19c16b280957c032",
+            measurementId: "G-PXDR2V5B0P" // Optional
         };
 
-        // Inicializar Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const functions = firebase.functions();
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app); // Inicializar analytics si lo usas
 
-        // Si estás emulando las funciones localmente, descomenta la siguiente línea y ajusta la URL
-        // functions.useEmulator("http://localhost:5001");
+        // Obtener instancias de los servicios de Firebase
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const functions = getFunctions(app);
+
+        // If you are using the Firebase emulator suite locally, uncomment the following line and adjust the URL
+        // connectAuthEmulator(auth, "http://localhost:9099");
+        // connectFirestoreEmulator(db, "localhost", 8080);
+        // connectFunctionsEmulator(functions, "localhost", 5001);
 
 
         // Referencias a elementos del DOM
@@ -467,6 +485,7 @@
         const signupEmailButton = document.getElementById('signupEmailButton');
         const loginGoogleButton = document.getElementById('loginGoogleButton');
         const authErrorMessages = document.getElementById('authErrorMessages');
+        const authSuccessMessage = document.getElementById('authSuccessMessage'); // Referencia al mensaje de éxito
         const logoutButton = document.getElementById('logoutButton');
         const loginButtonNavbar = document.getElementById('loginButtonNavbar'); // Navbar link
         const signupButtonNavbar = document.getElementById('signupButtonNavbar'); // Navbar link
@@ -546,7 +565,9 @@
 
         let selectedSubAudiencesCount = 0;
         const MAX_SUB_AUDIENCES = 5;
-        const selectedHistorySessionId = null; // Para almacenar el ID de la sesión seleccionada en el historial
+        // Variable global para almacenar el ID de la sesión actualmente mostrada (para exportación)
+        window.currentViewingSessionId = null;
+
 
         // Renderizar la sección de audiencia dinámicamente
         function renderAudienceSelection() {
@@ -675,10 +696,19 @@
         function showAuthError(message) {
              authErrorMessages.textContent = message;
              authErrorMessages.classList.remove('is-hidden');
+             authSuccessMessage.classList.add('is-hidden'); // Ocultar mensaje de éxito si hay error
         }
          function hideAuthError() {
              authErrorMessages.textContent = '';
              authErrorMessages.classList.add('is-hidden');
+         }
+         function showAuthSuccess(message) {
+             authSuccessMessage.querySelector('.message-body').textContent = message;
+             authSuccessMessage.classList.remove('is-hidden');
+             authErrorMessages.classList.add('is-hidden'); // Ocultar mensaje de error si hay éxito
+         }
+         function hideAuthSuccess() {
+             authSuccessMessage.classList.add('is-hidden');
          }
 
 
@@ -686,13 +716,35 @@
             const email = authEmailInput.value;
             const password = authPasswordInput.value;
             hideAuthError();
+            hideAuthSuccess(); // Ocultar mensaje de éxito previo
             showLoading();
             try {
-                await auth.signInWithEmailAndPassword(email, password);
+                await signInWithEmailAndPassword(auth, email, password);
                 // onAuthStateChanged manejará el cambio de UI
             } catch (error) {
                 console.error("Error login:", error);
-                showAuthError(`Error al iniciar sesión: ${error.message}`);
+                // Mostrar un mensaje de error más amigable basado en el código de error de Firebase
+                let errorMessage = "Error al iniciar sesión.";
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'El formato del correo electrónico es inválido.';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = 'El usuario ha sido deshabilitado.';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'Usuario no encontrado. Regístrate si no tienes cuenta.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'Contraseña incorrecta.';
+                        break;
+                    case 'auth/invalid-credential': // Para versiones más recientes de Firebase Auth
+                         errorMessage = 'Credenciales inválidas. Verifica tu correo y contraseña.';
+                         break;
+                    default:
+                        errorMessage = `Error al iniciar sesión: ${error.message}`;
+                }
+                showAuthError(errorMessage);
             } finally {
                 hideLoading();
             }
@@ -702,19 +754,51 @@
             const email = authEmailInput.value;
             const password = authPasswordInput.value;
              hideAuthError();
+             hideAuthSuccess(); // Ocultar mensaje de éxito previo
              showLoading();
             try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 // Al registrar, también iniciamos sesión. Guardar info básica del usuario.
-                await db.collection('users').doc(userCredential.user.uid).set({
+                await setDoc(doc(db, 'users', userCredential.user.uid), {
                     email: userCredential.user.email,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: serverTimestamp() // Usar serverTimestamp modular
                     // Nombre puede pedirse después si es necesario
                 }, { merge: true }); // merge: true para no sobrescribir si el doc ya existe por alguna razón
-                // onAuthStateChanged manejará el cambio de UI
+
+                // Mostrar mensaje de éxito de registro
+                showAuthSuccess('¡Registro exitoso! Ahora puedes iniciar sesión con tu correo y contraseña.');
+
+                // Opcional: Limpiar campos después de registro exitoso
+                authEmailInput.value = '';
+                authPasswordInput.value = '';
+
+                // No redirigimos automáticamente, el usuario debe iniciar sesión después de ver el mensaje de éxito.
+                // onAuthStateChanged NO se disparará aquí porque no iniciamos sesión automáticamente tras el registro con createUserWithEmailAndPassword
+                // Si quisiéramos iniciar sesión automáticamente, usaríamos signInWithEmailAndPassword después del registro.
+                // Como la instrucción es "que agregue confirmacion de usuario registrado" y "asegura que el login funcione",
+                // el flujo es: Registrar -> Ver confirmación -> Usar el formulario de Login.
+
             } catch (error) {
                  console.error("Error signup:", error);
-                 showAuthError(`Error al registrar: ${error.message}`);
+                 // Mostrar un mensaje de error más amigable basado en el código de error de Firebase
+                 let errorMessage = "Error al registrar usuario.";
+                 switch (error.code) {
+                     case 'auth/email-already-in-use':
+                         errorMessage = 'El correo electrónico ya está registrado.';
+                         break;
+                     case 'auth/invalid-email':
+                         errorMessage = 'El formato del correo electrónico es inválido.';
+                         break;
+                     case 'auth/operation-not-allowed':
+                         errorMessage = 'El registro con correo y contraseña no está habilitado.'; // Asegúrate de habilitarlo en Firebase Console
+                         break;
+                     case 'auth/weak-password':
+                         errorMessage = 'La contraseña es demasiado débil. Debe tener al menos 6 caracteres.';
+                         break;
+                     default:
+                         errorMessage = `Error al registrar: ${error.message}`;
+                 }
+                 showAuthError(errorMessage);
             } finally {
                  hideLoading();
             }
@@ -722,20 +806,39 @@
 
          loginGoogleButton.addEventListener('click', async () => {
             hideAuthError();
+            hideAuthSuccess(); // Ocultar mensaje de éxito previo
              showLoading();
             try {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                const userCredential = await auth.signInWithPopup(provider);
+                const provider = new GoogleAuthProvider();
+                const userCredential = await signInWithPopup(auth, provider);
                  // Guardar info básica del usuario al loggearse con Google por primera vez
-                 await db.collection('users').doc(userCredential.user.uid).set({
-                    email: userCredential.user.email,
-                    name: userCredential.user.displayName, // Nombre de Google
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                 }, { merge: true });
+                 const userDocRef = doc(db, 'users', userCredential.user.uid);
+                 const userDocSnap = await getDoc(userDocRef);
+
+                 if (!userDocSnap.exists()) {
+                     await setDoc(userDocRef, {
+                        email: userCredential.user.email,
+                        name: userCredential.user.displayName || null,
+                        createdAt: serverTimestamp() // Usar serverTimestamp modular
+                     }, { merge: true });
+                 }
                 // onAuthStateChanged manejará el cambio de UI
             } catch (error) {
                 console.error("Error Google login:", error);
-                 showAuthError(`Error al iniciar sesión con Google: ${error.message}`);
+                 // Mostrar un mensaje de error más amigable
+                 let errorMessage = "Error al iniciar sesión con Google.";
+                 switch (error.code) {
+                     case 'auth/popup-closed-by-user':
+                         errorMessage = 'Ventana de Google cerrada por el usuario.';
+                         break;
+                    case 'auth/cancelled-popup-request':
+                        errorMessage = 'Solicitud de ventana emergente cancelada.';
+                        break;
+                     // Otros errores de Google Auth
+                     default:
+                        errorMessage = `Error al iniciar sesión con Google: ${error.message}`;
+                 }
+                 showAuthError(errorMessage);
             } finally {
                 hideLoading();
             }
@@ -745,7 +848,7 @@
         logoutButton.addEventListener('click', async () => {
              showLoading();
             try {
-                await auth.signOut();
+                await signOut(auth);
                 // onAuthStateChanged manejará el cambio de UI
                 // Limpiar UI o resetear estado si es necesario
                  ideasResultsArea.innerHTML = '';
@@ -760,6 +863,9 @@
                  selectedSubAudiencesCount = 0;
                  updateAudienceCount();
                  hideAuthError(); // Ocultar posibles errores de auth anteriores
+                 hideAuthSuccess(); // Ocultar mensaje de éxito previo
+                 window.currentViewingSessionId = null; // Resetear ID de sesión visible
+
             } catch (error) {
                  console.error("Error logout:", error);
                  // Mostrar error de logout si aplica, aunque es raro
@@ -769,7 +875,7 @@
         });
 
         // Observador del estado de autenticación
-        auth.onAuthStateChanged(async (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // Usuario loggeado
                 authSection.classList.add('is-hidden');
@@ -778,18 +884,25 @@
                  historyButton.classList.remove('is-hidden');
                  loginButtonNavbar.classList.add('is-hidden'); // Ocultar auth links en navbar
                  signupButtonNavbar.classList.add('is-hidden');
+                 hideAuthError(); // Asegurarse de ocultar errores de auth al loggearse
+                 hideAuthSuccess(); // Asegurarse de ocultar éxito de auth al loggearse
+
 
                 // Mostrar nombre de usuario si está disponible, sino usar email
                  const userName = user.displayName || user.email || 'Usuario';
                  userNameDisplay.textContent = userName.split('@')[0]; // Mostrar parte antes del @ si es email
 
                  // Asegurar que el usuario esté registrado en nuestra colección 'users'
-                 const userDoc = await db.collection('users').doc(user.uid).get();
-                 if (!userDoc.exists) {
-                      await db.collection('users').doc(user.uid).set({
+                 // Esta lógica ya está en login/signup, pero la mantenemos aquí como fallback
+                 // por si el usuario ya estaba loggeado de una sesión anterior.
+                 const userDocRef = doc(db, 'users', user.uid);
+                 const userDocSnap = await getDoc(userDocRef);
+
+                 if (!userDocSnap.exists()) {
+                      await setDoc(userDocRef, {
                          email: user.email,
                          name: user.displayName || null,
-                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                         createdAt: serverTimestamp()
                       }, { merge: true });
                  }
 
@@ -805,6 +918,7 @@
                   loginButtonNavbar.classList.remove('is-hidden'); // Mostrar auth links en navbar
                  signupButtonNavbar.classList.remove('is-hidden');
                 console.log("Usuario desautenticado.");
+                 window.currentViewingSessionId = null; // Asegurar que no haya ID de sesión cargado
             }
         });
 
@@ -834,15 +948,16 @@
 
             showLoading();
             hideAuthError(); // Ocultar errores de auth si estaban visibles
+            hideAuthSuccess(); // Ocultar mensajes de éxito si estaban visibles
             ideasResultsArea.innerHTML = ''; // Limpiar resultados anteriores
             actionsArea.classList.add('is-hidden'); // Ocultar botones de acción
             motivationalPhraseArea.classList.add('is-hidden'); // Ocultar frase motivacional
-
+            window.currentViewingSessionId = null; // Resetear ID de sesión visible
 
             try {
                 // Llamar a la Firebase Function 'generateIdeas'
-                const generateIdeas = functions.httpsCallable('generateIdeas');
-                const result = await generateIdeas({
+                const generateIdeasCallable = httpsCallable(functions, 'generateIdeas');
+                const result = await generateIdeasCallable({
                     topic: topic,
                     tone: tone,
                     audience: audience, // Esto será la lista de sub-audiencias o grupos
@@ -857,6 +972,10 @@
                     displayMotivationalPhrase(data.finalPhrase);
                      actionsArea.classList.remove('is-hidden'); // Mostrar botones de acción
                      motivationalPhraseArea.classList.remove('is-hidden'); // Mostrar frase motivacional
+                     // Guardar el ID de la sesión recién creada para futuras exportaciones
+                     window.currentViewingSessionId = data.sessionId;
+                     console.log("Generación exitosa. Session ID:", window.currentViewingSessionId);
+
                 } else {
                      console.error("Error al generar ideas:", data.error);
                     alert(`Error al generar ideas: ${data.error || 'Error desconocido'}`);
@@ -864,7 +983,12 @@
 
             } catch (error) {
                 console.error("Error llamando a Firebase Function:", error);
-                alert(`Error en la comunicación con el servidor: ${error.message}`);
+                 // Firebase Functions errors have specific codes and messages
+                 if (error.code) {
+                     alert(`Error en el servidor (${error.code}): ${error.message}`);
+                 } else {
+                    alert(`Error en la comunicación con el servidor: ${error.message}`);
+                 }
             } finally {
                 hideLoading();
             }
@@ -920,13 +1044,8 @@
         exportCsvButton.addEventListener('click', handleExportCsv);
 
         function handleExportPdf() {
-            // Para exportar a PDF, html2pdf.js necesita acceder al contenido del DOM.
-            // La forma más sencilla es renderizar primero las ideas en un área oculta
-            // si estamos exportando desde el historial, o usar el área visible si es la generación actual.
-            // Simplificamos: tomaremos el contenido directamente de `ideasResultsArea`
-            // asumiendo que siempre mostraremos ahí las ideas a exportar (sea generación actual o del historial).
-
-            const element = ideasResultsArea; // El área que contiene las tarjetas de ideas
+            // html2pdf.js toma el contenido visible en `ideasResultsArea`
+            const element = ideasResultsArea;
 
             if (!element || element.innerHTML.trim() === '') {
                 alert("No hay contenido para exportar a PDF.");
@@ -939,7 +1058,7 @@
                 margin: 10,
                 filename: `Inspiraciones_${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+                html2canvas: { scale: 2, logging: false, dpi: 192, letterRendering: true }, // logging: false para producción
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
@@ -955,72 +1074,17 @@
         }
 
         async function handleExportCsv() {
-            showLoading();
-             // Necesitamos el ID de la sesión actual o del historial seleccionado
-             // Para la generación actual, el Backend guarda la sesión y devuelve un ID (esto no lo tenemos aún en la respuesta actual, debemos modificar el backend)
-             // O más simple: si estamos en la vista de la generación actual, podríamos NO necesitar un ID si la function exportCsv simplemente espera los datos {ideas: [...]}
-             // Si estamos en la vista del historial, SÍ necesitamos el ID para que el Backend la recupere.
-
-             // Por ahora, asumamos que la generación actual se guarda y su ID se nos devuelve, o que la función CSV puede procesar los datos si se los pasamos (aunque es menos seguro pasar mucha data al backend).
-             // La forma más robusta es que el backend use el SessionId.
-
-             // TODO: Modificar generateIdeas function para que devuelva el sessionId de la nueva generación.
-             // Por simplicidad en este FE, vamos a asumir que si estamos viendo la `ideasResultsArea`, tenemos un `currentSessionId` global o estamos visualizando un historial seleccionado.
-             // Para este ejemplo, vamos a simular que siempre exportamos la data *visible* en `ideasResultsArea`. Esto no es ideal si queremos exportar *cualquier* historial.
-             // La implementación correcta requiere guardar el sessionId de la generación actual y usarla, o cargar el historial completo y usar su sessionId.
-
-             // Implementación que llama al backend con un ID (necesita sessionId global o de historial)
-             // const sessionIdToExport = selectedHistorySessionId || currentSessionId; // Necesitamos `currentSessionId` de la respuesta de generateIdeas
-             // if (!sessionIdToExport) {
-             //     alert("No hay sesión para exportar. Genera ideas o selecciona del historial.");
-             //     hideLoading();
-             //     return;
-             // }
-
-             // Implementación más simple: pasa la data visible (MENOS segura, pero funciona sin cambiar backend API shape AHORA)
-             // Esta es una simplificación para el frontend único. Lo ideal es el backend.
-             // const ideasToExport = getIdeasFromDisplayedResults(); // Necesitas parsear el DOM
-             // if (!ideasToExport || ideasToExport.length === 0) {
-             //      alert("No hay contenido para exportar a CSV.");
-             //      hideLoading();
-             //      return;
-             // }
-             // try {
-             //      const exportCsvFunction = functions.httpsCallable('generateCsv'); // Nombre de la función en backend
-             //      const result = await exportCsvFunction({ ideas: ideasToExport }); // Pasa los datos
-             //      const csvText = result.data.csv; // Asume que el backend devuelve { csv: "..." }
-             //
-             //      // Crear Blob y descargar
-             //      const blob = new Blob([csvText], { type: 'text/csv' });
-             //      const url = window.URL.createObjectURL(blob);
-             //      const a = document.createElement('a');
-             //      a.setAttribute('hidden', '');
-             //      a.setAttribute('href', url);
-             //      a.setAttribute('download', `Inspiraciones_${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}.csv`);
-             //      document.body.appendChild(a);
-             //      a.click();
-             //      document.body.removeChild(a);
-             //
-             // } catch (error) {
-             //      console.error("Error exportando CSV:", error);
-             //      alert("Error al exportar CSV.");
-             // } finally {
-             //      hideLoading();
-             // }
-
-
-             // **Implementación que usa el sessionId (Requiere Backend `exportCsv` function que recibe ID):**
-              // Asumimos que al cargar una sesión (sea la actual o del historial), su ID se guarda en una variable global o similar.
-              // Let's use `window.currentViewingSessionId` to store the ID of the session currently rendered in `ideasResultsArea`.
-             if (!window.currentViewingSessionId) {
+            // Exportar CSV siempre usa el SessionId de la sesión actualmente mostrada
+            if (!window.currentViewingSessionId) {
                   alert("No hay sesión cargada para exportar a CSV. Genera ideas o selecciona del historial.");
-                  hideLoading();
-                  return;
+                  return; // No ocultar loading aquí, ya que no se mostró
              }
 
+            showLoading();
+
              try {
-                  const exportCsvFunction = functions.httpsCallable('exportCsv'); // Nombre de la función en backend
-                  const result = await exportCsvFunction({ sessionId: window.currentViewingSessionId });
+                  const exportCsvCallable = httpsCallable(functions, 'exportCsv'); // Nombre de la función en backend
+                  const result = await exportCsvCallable({ sessionId: window.currentViewingSessionId });
                   const csvText = result.data.csv; // Asume que el backend devuelve { csv: "..." }
 
                    // Crear Blob y descargar
@@ -1037,11 +1101,14 @@
 
              } catch (error) {
                   console.error("Error exportando CSV:", error);
-                  alert(`Error al exportar CSV: ${error.message}`);
+                   if (error.code) {
+                     alert(`Error al exportar CSV (${error.code}): ${error.message}`);
+                 } else {
+                    alert(`Error al exportar CSV: ${error.message}`);
+                 }
              } finally {
                   hideLoading();
              }
-
         }
 
          // --- Lógica de Historial ---
@@ -1062,7 +1129,7 @@
              noHistoryMessage.classList.add('is-hidden');
              loadHistoryDetailsButton.disabled = true;
              selectedHistoryInfo.classList.add('is-hidden');
-              window.selectedHistorySessionId = null; // Resetear selección
+              window.selectedHistorySessionIdForModal = null; // Resetear selección del modal
          }
 
          async function loadHistorySummary() {
@@ -1071,11 +1138,12 @@
              noHistoryMessage.classList.add('is-hidden');
               loadHistoryDetailsButton.disabled = true; // Deshabilitar botón de carga al recargar lista
                selectedHistoryInfo.classList.add('is-hidden');
-              window.selectedHistorySessionId = null; // Resetear selección
+              window.selectedHistorySessionIdForModal = null; // Resetear selección del modal
+
 
              try {
-                 const getHistory = functions.httpsCallable('getHistorySummary');
-                 const result = await getHistory();
+                 const getHistoryCallable = httpsCallable(functions, 'getHistorySummary');
+                 const result = await getHistoryCallable();
                  const summaryList = result.data.sessions;
 
                  historyLoadingMessage.classList.add('is-hidden');
@@ -1091,14 +1159,18 @@
                      itemDiv.dataset.sessionId = session.id;
 
                      // Formatear fecha (Firestore Timestamp)
-                     const date = session.timestamp ? new Date(session.timestamp._seconds * 1000) : new Date();
+                     // Firestore Timestamp object has seconds and nanoseconds
+                     const date = session.timestamp ? new Date(session.timestamp.seconds * 1000) : new Date();
                      const formattedDate = date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+                     // Formatear audiencia para mostrar en el resumen
+                     const audienceDisplay = session.audience && Array.isArray(session.audience) ? escapeHTML(session.audience.join(', ')) : 'N/A';
 
                      itemDiv.innerHTML = `
                          <p class="history-item-date">${formattedDate}</p>
                          <p><strong>Tema:</strong> ${escapeHTML(session.topic || 'Sin tema')}</p>
                          <p><strong>Tono:</strong> ${escapeHTML(session.tone || 'N/A')}</p>
-                          <p><strong>Audiencia:</strong> ${session.audience && Array.isArray(session.audience) ? escapeHTML(session.audience.join(', ')) : 'N/A'}</p>
+                          <p><strong>Audiencia:</strong> ${audienceDisplay}</p>
                      `;
 
                      itemDiv.addEventListener('click', function() {
@@ -1108,7 +1180,7 @@
                          });
                          // Marcar seleccionado
                          this.style.backgroundColor = '#e0e0e0'; // Gris claro para marcar
-                         window.selectedHistorySessionId = this.dataset.sessionId; // Guardar ID seleccionado
+                         window.selectedHistorySessionIdForModal = this.dataset.sessionId; // Guardar ID seleccionado en variable temporal del modal
                          loadHistoryDetailsButton.disabled = false; // Habilitar botón de carga
                           // Mostrar info de la selección
                           selectedHistoryDateSpan.textContent = formattedDate;
@@ -1128,7 +1200,10 @@
          }
 
          async function handleLoadHistoryDetails() {
-             if (!window.selectedHistorySessionId) {
+             // Usar el ID almacenado temporalmente al seleccionar en el modal
+             const sessionIdToLoad = window.selectedHistorySessionIdForModal;
+
+             if (!sessionIdToLoad) {
                  alert("Por favor, selecciona una sesión del historial.");
                  return;
              }
@@ -1139,11 +1214,11 @@
               ideasResultsArea.innerHTML = ''; // Limpiar resultados actuales
              actionsArea.classList.add('is-hidden'); // Ocultar botones de acción
              motivationalPhraseArea.classList.add('is-hidden'); // Ocultar frase motivacional
-
+             window.currentViewingSessionId = null; // Resetear ID de sesión visible hasta que se cargue
 
              try {
-                 const getDetails = functions.httpsCallable('getGenerationDetails');
-                 const result = await getDetails({ sessionId: window.selectedHistorySessionId });
+                 const getDetailsCallable = httpsCallable(functions, 'getGenerationDetails');
+                 const result = await getDetailsCallable({ sessionId: sessionIdToLoad });
                  const sessionDetails = result.data.session;
 
                  if (sessionDetails && sessionDetails.ideas) {
@@ -1153,7 +1228,7 @@
                      motivationalPhraseArea.classList.remove('is-hidden'); // Mostrar frase motivacional
 
                      // IMPORTANT: Update the global variable for export buttons
-                     window.currentViewingSessionId = window.selectedHistorySessionId; // Ahora los botones de exportar usarán este ID
+                     window.currentViewingSessionId = sessionIdToLoad; // Ahora los botones de exportar usarán este ID
                       console.log("Historial cargado. Session ID:", window.currentViewingSessionId);
 
                  } else {
@@ -1164,7 +1239,11 @@
 
              } catch (error) {
                   console.error("Error cargando detalles del historial:", error);
-                  alert(`Error al cargar los detalles del historial: ${error.message}`);
+                   if (error.code) {
+                     alert(`Error al cargar los detalles del historial (${error.code}): ${error.message}`);
+                 } else {
+                    alert(`Error al cargar los detalles del historial: ${error.message}`);
+                 }
                    window.currentViewingSessionId = null; // Resetear en caso de error
              } finally {
                  hideLoading();
@@ -1190,14 +1269,8 @@
              }
          });
 
-         // Script para html2pdf.js (ya incluido por CDN)
-         // No necesita script adicional aquí, solo se usa la librería en handleExportPdf
-
 
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 
 </body>
 </html>
