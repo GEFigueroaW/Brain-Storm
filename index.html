@@ -10,57 +10,48 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
     <style>
-        /* Estilos personalizados */
+        /* Estilos personalizados (los mismos que antes) */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6; /* Un fondo suave y cálido */
+            background-color: #f4f7f6;
             color: #363636;
         }
-
         .navbar {
             background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
         .navbar-item img {
-            max-height: 3.75rem; /* Ajusta según tu logo */
+            max-height: 3.75rem;
         }
-
         .button.is-primary {
-            background-color: #ff6f61; /* Un color coral cálido y enérgico */
+            background-color: #ff6f61;
             border-color: transparent;
         }
         .button.is-primary:hover {
             background-color: #e65a50;
         }
-
         .button.is-success {
-            background-color: #79c790; /* Verde suave */
+            background-color: #79c790;
             border-color: transparent;
         }
         .button.is-success:hover {
             background-color: #6ab37f;
         }
-
-
         .button.is-link {
-            background-color: #5b9bd5; /* Azul profesional */
+            background-color: #5b9bd5;
         }
          .button.is-link:hover {
             background-color: #4a8ac7;
         }
-
         .title, .subtitle {
             color: #333;
         }
-
         .hero.is-primary {
             background-color: #ff6f61;
         }
         .hero.is-primary .title, .hero.is-primary .subtitle {
             color: #fff;
         }
-
         .card {
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -70,7 +61,6 @@
             background-color: #f9f9f9;
             color: #333;
         }
-
         #loadingOverlay {
             position: fixed;
             top: 0;
@@ -85,8 +75,6 @@
             font-size: 1.5rem;
             color: #333;
         }
-
-        /* Estética Coaching */
         .coach-motivation {
             font-style: italic;
             color: #555;
@@ -95,16 +83,14 @@
             font-size: 0.9rem;
             text-align: center;
         }
-
         #ideasResultsArea .card {
-            background-color: #fff; /* Fondo blanco para las tarjetas de ideas */
-            border-left: 5px solid #ff6f61; /* Acento de color */
+            background-color: #fff;
+            border-left: 5px solid #ff6f61;
         }
-
         #finalPhraseContainer {
             margin-top: 2rem;
             padding: 1.5rem;
-            background-color: #e6fff3; /* Un fondo suave para la frase final */
+            background-color: #e6fff3;
             border-radius: 8px;
             text-align: center;
             border: 1px solid #79c790;
@@ -112,17 +98,13 @@
         #finalPhraseContainer p {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #2b7a78; /* Verde oscuro para el texto */
+            color: #2b7a78;
         }
-
-        /* Responsividad */
         @media screen and (max-width: 768px) {
             .columns.is-desktop {
                 flex-direction: column;
             }
         }
-
-        /* Mejoras para la sección de audiencia */
         .audience-group {
             margin-bottom: 1rem;
             padding: 1rem;
@@ -135,14 +117,12 @@
         }
         .sub-audience-list label {
             margin-right: 10px;
-            display: inline-block; /* Para mejor alineación */
+            display: inline-block;
         }
         .max-audience-notice {
             color: red;
             font-size: 0.8em;
         }
-
-        /* Footer */
         .footer {
             background-color: #363636;
             color: #fff;
@@ -179,8 +159,7 @@
             </a>
         </div>
         <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                </div>
+            <div class="navbar-start"></div>
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
@@ -229,7 +208,6 @@
                             </p>
                         </div>
                     </div>
-
                     <div id="registerFormContainer" class="is-hidden">
                         <h2 class="title is-3 has-text-centered">Registrarse</h2>
                         <div class="box">
@@ -272,7 +250,6 @@
         <div class="container">
             <h1 class="title is-2" id="greeting">¡Hola!</h1>
             <p class="subtitle">Vamos a generar ideas increíbles para tu contenido.</p>
-
             <div class="columns">
                 <div class="column is-one-third">
                     <div class="box">
@@ -284,7 +261,6 @@
                             </div>
                             <p class="coach-motivation">✨ ¡Sé nítido como un láser! Cuanto más preciso sea tu tema, más brillantes serán las ideas que desbloquearemos juntos. ✨</p>
                         </div>
-
                         <div class="field">
                             <label class="label" for="toneSelect">Tono</label>
                             <div class="control">
@@ -304,7 +280,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="field">
                             <label class="label">Audiencia Objetivo</label>
                             <div class="control">
@@ -318,22 +293,17 @@
                                 </label>
                             </div>
                         </div>
-
                         <div id="targetAudienceSection" class="is-hidden mt-3">
                             <p class="is-size-7 mb-2">Selecciona los grupos y sub-audiencias (máximo 5 sub-audiencias en total): <span id="subAudienceCounter">0/5</span></p>
-                            <div id="audienceGroupsContainer">
-                                </div>
+                            <div id="audienceGroupsContainer"></div>
                             <p id="audienceError" class="help is-danger"></p>
                         </div>
-
-
                         <div class="field mt-4">
                             <label class="label" for="maxWordsInput">Máximo de Palabras para el Post (50-500)</label>
                             <div class="control">
                                 <input class="input" type="number" id="maxWordsInput" value="100" min="50" max="500">
                             </div>
                         </div>
-
                         <div class="field mt-4">
                             <label class="checkbox">
                                 <input type="checkbox" id="includeLocationCheckbox">
@@ -346,7 +316,6 @@
                                 <input class="input" type="text" id="locationInput" placeholder="Ej: 'Ciudad de México', 'Parque Central', 'Online'">
                             </div>
                         </div>
-
                         <div class="field mt-5">
                             <button id="generateIdeasButton" class="button is-primary is-fullwidth is-large animate__animated animate__pulse animate__infinite">
                                 <span class="icon"><i class="fas fa-lightbulb"></i></span>
@@ -355,7 +324,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="column">
                      <div id="actionButtonsContainer" class="mb-4 is-hidden has-text-right">
                         <button id="refreshIdeasButton" class="button is-link mr-2">
@@ -372,7 +340,7 @@
                         </button>
                     </div>
                     <div id="ideasResultsArea">
-                        <p id="noResultsMessage" class="has-text-centered has-text-grey">Aún no se han generado ideas. ¡Completa los campos y haz clic en generar!</p>
+                         <p id="noResultsMessage" class="has-text-centered has-text-grey">Aún no se han generado ideas. ¡Completa los campos y haz clic en generar!</p>
                     </div>
                     <div id="finalPhraseContainer" class="is-hidden">
                         <p id="finalPhraseText"></p>
@@ -390,9 +358,7 @@
                 <button class="delete" aria-label="close" id="closeHistoryModal"></button>
             </header>
             <section class="modal-card-body">
-                <div id="historyListContainer">
-                    <p>Cargando historial...</p>
-                </div>
+                <div id="historyListContainer"><p>Cargando historial...</p></div>
                 <p id="historyError" class="help is-danger"></p>
             </section>
             <footer class="modal-card-foot">
@@ -404,59 +370,60 @@
 
     <footer class="footer">
         <div class="content has-text-centered">
-            <p>
-                <strong>Generador de Ideas para Contenido IA</strong> por TuNombre/TuEmpresa.
-            </p>
+            <p><strong>Generador de Ideas para Contenido IA</strong> por TuNombre/TuEmpresa.</p>
             <p class="disclaimer">
                 Descargo de responsabilidad: El contenido generado por esta aplicación es producido por una Inteligencia Artificial (IA) y se basa en tendencias y conocimientos disponibles para dicha IA hasta su última actualización. El usuario es el único responsable de verificar, validar y asegurar la originalidad, precisión, legalidad y adecuación de cualquier contenido generado, incluyendo, pero no limitándose a, textos, hashtags, sugerencias de formato visual y sugerencias de ubicación. El uso de marcas registradas, nombres propios o cualquier material protegido por derechos de autor debe hacerse de acuerdo con las leyes aplicables. No nos hacemos responsables por el uso indebido o las consecuencias derivadas del uso del contenido generado.
             </p>
         </div>
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
-
-    <script>
-        // Configuración de Firebase (reemplaza con tus datos)
-        const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_AUTH_DOMAIN",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_STORAGE_BUCKET",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
-        };
-
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const functions = firebase.functions();
-        // Si estás en un entorno de desarrollo local para Functions:
-        // functions.useEmulator("localhost", 5001);
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"; // Actualizado a una versión más reciente
+      import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getFirestore, doc, setDoc, getDoc, serverTimestamp, collection, query, where, orderBy, limit, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { getFunctions, httpsCallable, connectFunctionsEmulator } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
 
-        // Variables globales
+      // Your web app's Firebase configuration
+      // ¡ASEGÚRATE DE QUE ESTA API KEY ESTÉ CORRECTAMENTE RESTRINGIDA EN GOOGLE CLOUD CONSOLE!
+      const firebaseConfig = {
+        apiKey: "AIzaSyA6MZwE3_4K6CU0JTDVBG_c5GCgX5I00VE", // TU API KEY
+        authDomain: "brain-storm-8f0d8.firebaseapp.com",
+        projectId: "brain-storm-8f0d8",
+        storageBucket: "brain-storm-8f0d8.appspot.com", // Corregido ".firebaseapp.com" a ".appspot.com" que es lo usual
+        messagingSenderId: "401208607043",
+        appId: "1:401208607043:web:6b4038ab14c9bee3beaff6"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      const functions = getFunctions(app); // O getFunctions(app, "tu-region") si es necesario
+
+      // Para desarrollo local con emuladores (descomentar si es necesario):
+      // import { connectAuthEmulator } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      // import { connectFirestoreEmulator } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      // connectAuthEmulator(auth, "http://localhost:9099");
+      // connectFirestoreEmulator(db, "localhost", 8080);
+      // connectFunctionsEmulator(functions, "localhost", 5001);
+
+
+        // --- Variables globales y Selectores del DOM (sin cambios) ---
         let currentUser = null;
-        let currentViewingSessionId = null; // Para saber qué sesión se está mostrando (nueva o del historial)
+        let currentViewingSessionId = null;
         const MAX_SUB_AUDIENCES = 5;
         let selectedSubAudiencesCount = 0;
 
-        // Selectores de Elementos del DOM
         const loadingOverlay = document.getElementById('loadingOverlay');
         const authView = document.getElementById('authView');
         const appView = document.getElementById('appView');
         const greeting = document.getElementById('greeting');
-
-        // Navbar
         const navLoginButton = document.getElementById('navLoginButton');
         const navRegisterButton = document.getElementById('navRegisterButton');
         const navHistoryButton = document.getElementById('navHistoryButton');
         const navLogoutButton = document.getElementById('navLogoutButton');
-
-        // Forms Auth
         const loginFormContainer = document.getElementById('loginFormContainer');
         const registerFormContainer = document.getElementById('registerFormContainer');
         const loginEmailInput = document.getElementById('loginEmail');
@@ -465,15 +432,12 @@
         const googleLoginButton = document.getElementById('googleLoginButton');
         const loginError = document.getElementById('loginError');
         const showRegisterLink = document.getElementById('showRegisterLink');
-
         const registerNameInput = document.getElementById('registerName');
         const registerEmailInput = document.getElementById('registerEmail');
         const registerPasswordInput = document.getElementById('registerPassword');
         const registerButton = document.getElementById('registerButton');
         const registerError = document.getElementById('registerError');
         const showLoginLink = document.getElementById('showLoginLink');
-
-        // App View Inputs
         const topicInput = document.getElementById('topicInput');
         const toneSelect = document.getElementById('toneSelect');
         const audienceTypeRadios = document.querySelectorAll('input[name="audienceType"]');
@@ -486,8 +450,6 @@
         const locationInputContainer = document.getElementById('locationInputContainer');
         const locationInput = document.getElementById('locationInput');
         const generateIdeasButton = document.getElementById('generateIdeasButton');
-
-        // App View Outputs
         const ideasResultsArea = document.getElementById('ideasResultsArea');
         const noResultsMessage = document.getElementById('noResultsMessage');
         const finalPhraseContainer = document.getElementById('finalPhraseContainer');
@@ -496,18 +458,15 @@
         const refreshIdeasButton = document.getElementById('refreshIdeasButton');
         const exportPdfButton = document.getElementById('exportPdfButton');
         const exportCsvButton = document.getElementById('exportCsvButton');
-
-        // Historial Modal
         const historyModal = document.getElementById('historyModal');
         const closeHistoryModal = document.getElementById('closeHistoryModal');
         const cancelHistoryModal = document.getElementById('cancelHistoryModal');
         const historyListContainer = document.getElementById('historyListContainer');
         const loadHistoryDetailsButton = document.getElementById('loadHistoryDetailsButton');
-        const historyError = document.getElementById('historyError');
+        const historyErrorText = document.getElementById('historyError'); // Renombrado para evitar conflicto
         let selectedHistoryEntryId = null;
 
-
-        // --- ESTRUCTURA DE AUDIENCIAS ---
+        // --- ESTRUCTURA DE AUDIENCIAS (sin cambios) ---
         const audienceData = {
             "Profesionales y Emprendedores": ["Emprendedores", "Profesionales jóvenes", "Freelancers/independientes", "Inversionistas/financieros", "Pequeños empresarios", "Trabajadores remotos"],
             "Comunidades por Intereses o Pasatiempos": ["Amantes de la tecnología", "Aficionados al deporte", "Gamers", "Gourmets/amantes de la gastronomía", "Artistas y diseñadores", "Coleccionistas"],
@@ -521,7 +480,6 @@
             for (const groupName in audienceData) {
                 const groupDiv = document.createElement('div');
                 groupDiv.classList.add('audience-group');
-
                 const groupLabel = document.createElement('label');
                 groupLabel.classList.add('label', 'checkbox');
                 const groupCheckbox = document.createElement('input');
@@ -531,10 +489,8 @@
                 groupLabel.appendChild(groupCheckbox);
                 groupLabel.appendChild(document.createTextNode(groupName));
                 groupDiv.appendChild(groupLabel);
-
                 const subAudienceListDiv = document.createElement('div');
                 subAudienceListDiv.classList.add('sub-audience-list', 'ml-4', 'mt-2', 'is-hidden');
-
                 audienceData[groupName].forEach(subAudience => {
                     const subAudienceLabel = document.createElement('label');
                     subAudienceLabel.classList.add('checkbox', 'mr-3');
@@ -546,14 +502,12 @@
                     subAudienceLabel.appendChild(subAudienceCheckbox);
                     subAudienceLabel.appendChild(document.createTextNode(subAudience));
                     subAudienceListDiv.appendChild(subAudienceLabel);
-
                     subAudienceCheckbox.addEventListener('change', () => {
                         if (subAudienceCheckbox.checked) {
                             if (selectedSubAudiencesCount < MAX_SUB_AUDIENCES) {
                                 selectedSubAudiencesCount++;
                             } else {
-                                subAudienceCheckbox.checked = false; // No permitir seleccionar más
-                                // Opcional: mostrar un mensaje
+                                subAudienceCheckbox.checked = false;
                                 showTemporaryMessage(audienceError, "No puedes seleccionar más de 5 sub-audiencias.", "is-warning");
                             }
                         } else {
@@ -563,16 +517,13 @@
                         validateAudienceSelection();
                     });
                 });
-
                 groupDiv.appendChild(subAudienceListDiv);
                 audienceGroupsContainer.appendChild(groupDiv);
-
                 groupCheckbox.addEventListener('change', () => {
                     if (groupCheckbox.checked) {
                         subAudienceListDiv.classList.remove('is-hidden');
                     } else {
                         subAudienceListDiv.classList.add('is-hidden');
-                        // Desmarcar sub-audiencias de este grupo si el grupo se desactiva
                         subAudienceListDiv.querySelectorAll('input[type="checkbox"]:checked').forEach(chk => {
                             chk.checked = false;
                             selectedSubAudiencesCount--;
@@ -584,41 +535,23 @@
             }
             updateSubAudienceCounter();
         }
-
         function updateSubAudienceCounter() {
             subAudienceCounter.textContent = `${selectedSubAudiencesCount}/${MAX_SUB_AUDIENCES}`;
             if (selectedSubAudiencesCount >= MAX_SUB_AUDIENCES) {
                 audienceGroupsContainer.querySelectorAll('input[name="subAudience"]:not(:checked)').forEach(chk => chk.disabled = true);
                 subAudienceCounter.classList.add('max-audience-notice');
-
             } else {
                 audienceGroupsContainer.querySelectorAll('input[name="subAudience"]:not(:checked)').forEach(chk => chk.disabled = false);
                 subAudienceCounter.classList.remove('max-audience-notice');
             }
         }
-
         function getSelectedAudienceDetails() {
             const selected = [];
             audienceGroupsContainer.querySelectorAll('input[name="subAudience"]:checked').forEach(chk => {
                 selected.push(chk.value);
             });
-            // Incluir nombres de grupos activados si no hay sub-audiencias seleccionadas de ese grupo
-            audienceGroupsContainer.querySelectorAll('input[data-group-name]:checked').forEach(groupChk => {
-                const groupName = groupChk.dataset.groupName;
-                const hasSelectedSub = Array.from(audienceGroupsContainer.querySelectorAll(`input[name="subAudience"][value^="${groupName.substring(0,5)}"]:checked`)).length > 0; // Simplistic check
-
-                let groupHasSelectedSub = false;
-                audienceData[groupName].forEach(sub => {
-                    if(selected.includes(sub)) groupHasSelectedSub = true;
-                });
-
-                if (!groupHasSelectedSub && !selected.includes(groupName)) { // Evitar duplicar si ya está por sub-audiencia
-                     // selected.push(groupName); // Se podría agregar el nombre del grupo si es necesario
-                }
-            });
             return selected;
         }
-
         function validateAudienceSelection() {
             const audienceType = document.querySelector('input[name="audienceType"]:checked').value;
             audienceError.textContent = '';
@@ -637,15 +570,13 @@
             return true;
         }
 
-
-        // --- Funciones Auxiliares ---
+        // --- Funciones Auxiliares (sin cambios en la lógica interna, solo cómo se llaman) ---
         function showLoading(show) {
             loadingOverlay.classList.toggle('is-hidden', !show);
         }
-
         function showTemporaryMessage(element, message, bulmaClass = 'is-danger', duration = 4000) {
             element.textContent = message;
-            element.classList.remove('is-danger', 'is-success', 'is-warning', 'is-info'); // Limpiar clases previas
+            element.classList.remove('is-danger', 'is-success', 'is-warning', 'is-info');
             element.classList.add(bulmaClass);
             element.classList.remove('is-hidden');
             setTimeout(() => {
@@ -653,45 +584,38 @@
                 element.classList.add('is-hidden');
             }, duration);
         }
-
         function updateUIForAuthState(user) {
             currentUser = user;
             if (user) {
                 authView.classList.add('is-hidden');
                 appView.classList.remove('is-hidden');
                 greeting.textContent = `¡Hola, ${user.displayName || user.email}!`;
-
                 navLoginButton.classList.add('is-hidden');
                 navRegisterButton.classList.add('is-hidden');
                 navHistoryButton.classList.remove('is-hidden');
                 navLogoutButton.classList.remove('is-hidden');
-
-                // Resetear campos por si acaso
                 clearGenerationForm();
                 clearResultsArea();
-                currentViewingSessionId = null; // Nueva sesión al loguear
+                currentViewingSessionId = null;
             } else {
                 authView.classList.remove('is-hidden');
                 appView.classList.add('is-hidden');
                 greeting.textContent = '¡Hola!';
-
                 navLoginButton.classList.remove('is-hidden');
                 navRegisterButton.classList.remove('is-hidden');
                 navHistoryButton.classList.add('is-hidden');
                 navLogoutButton.classList.add('is-hidden');
-
                 loginError.textContent = '';
                 registerError.textContent = '';
                 currentViewingSessionId = null;
             }
         }
-
         function clearGenerationForm() {
             topicInput.value = '';
             toneSelect.value = 'Neutral';
             document.querySelector('input[name="audienceType"][value="general"]').checked = true;
             targetAudienceSection.classList.add('is-hidden');
-            renderAudienceGroups(); // Resetea la selección de audiencias
+            renderAudienceGroups();
             selectedSubAudiencesCount = 0;
             updateSubAudienceCounter();
             maxWordsInput.value = 100;
@@ -700,19 +624,17 @@
             locationInput.value = '';
             audienceError.textContent = '';
         }
-
         function clearResultsArea() {
             ideasResultsArea.innerHTML = '';
-            ideasResultsArea.appendChild(noResultsMessage); // Mostrar mensaje inicial
+            ideasResultsArea.appendChild(noResultsMessage);
             noResultsMessage.classList.remove('is-hidden');
             finalPhraseContainer.classList.add('is-hidden');
             finalPhraseText.textContent = '';
             actionButtonsContainer.classList.add('is-hidden');
         }
 
-
-        // --- Lógica de Autenticación ---
-        auth.onAuthStateChanged(updateUIForAuthState);
+        // --- Lógica de Autenticación (Adaptada a v9+) ---
+        onAuthStateChanged(auth, updateUIForAuthState);
 
         showRegisterLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -720,7 +642,6 @@
             registerFormContainer.classList.remove('is-hidden');
             loginError.textContent = '';
         });
-
         showLoginLink.addEventListener('click', (e) => {
             e.preventDefault();
             registerFormContainer.classList.add('is-hidden');
@@ -734,12 +655,9 @@
             loginError.textContent = '';
             showLoading(true);
             try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                // Actualizar lastLoginAt
-                await db.collection('users').doc(userCredential.user.uid).set({
-                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
-                // UI se actualiza con onAuthStateChanged
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const userRef = doc(db, 'users', userCredential.user.uid);
+                await setDoc(userRef, { lastLoginAt: serverTimestamp() }, { merge: true });
             } catch (error) {
                 console.error("Error en login:", error);
                 loginError.textContent = "Error al iniciar sesión: " + error.message;
@@ -753,25 +671,22 @@
             const email = registerEmailInput.value;
             const password = registerPasswordInput.value;
             registerError.textContent = '';
-
             if (!email || !password) {
                 registerError.textContent = "Email y contraseña son obligatorios.";
                 return;
             }
             showLoading(true);
             try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                await user.updateProfile({ displayName: name });
-
-                // Guardar usuario en Firestore
-                await db.collection('users').doc(user.uid).set({
+                await updateProfile(user, { displayName: name });
+                const userRef = doc(db, 'users', user.uid);
+                await setDoc(userRef, {
                     email: user.email,
-                    name: name || user.displayName, // Usar el nombre proporcionado o el del perfil
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                    name: name || user.displayName,
+                    createdAt: serverTimestamp(),
+                    lastLoginAt: serverTimestamp()
                 });
-                // UI se actualiza con onAuthStateChanged
             } catch (error) {
                 console.error("Error en registro:", error);
                 registerError.textContent = "Error al registrarse: " + error.message;
@@ -781,33 +696,31 @@
         });
 
         googleLoginButton.addEventListener('click', async () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
+            const provider = new GoogleAuthProvider();
             loginError.textContent = '';
             showLoading(true);
             try {
-                const result = await auth.signInWithPopup(provider);
+                const result = await signInWithPopup(auth, provider);
                 const user = result.user;
-
-                // Guardar/actualizar usuario en Firestore
-                const userRef = db.collection('users').doc(user.uid);
-                const userDoc = await userRef.get();
-                if (!userDoc.exists) {
-                    await userRef.set({
+                const userRef = doc(db, 'users', user.uid);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) {
+                    await setDoc(userRef, {
                         email: user.email,
                         name: user.displayName,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                        createdAt: serverTimestamp(),
+                        lastLoginAt: serverTimestamp()
                     });
                 } else {
-                    await userRef.update({
-                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        name: user.displayName // Actualizar nombre por si cambia en Google
-                    });
+                    await setDoc(userRef, {
+                        lastLoginAt: serverTimestamp(),
+                        name: user.displayName
+                    }, { merge: true });
                 }
-                // UI se actualiza con onAuthStateChanged
             } catch (error) {
                 console.error("Error con Google login:", error);
-                loginError.textContent = "Error con Google: " + error.message;
+                // El error que reportaste (API key not valid) se mostraría aquí
+                loginError.textContent = "Error con Google: " + (error.customData?._tokenResponse?.error?.message || error.message);
             } finally {
                 showLoading(false);
             }
@@ -816,37 +729,30 @@
         navLogoutButton.addEventListener('click', async () => {
             showLoading(true);
             try {
-                await auth.signOut();
-                // UI se actualiza con onAuthStateChanged
+                await signOut(auth);
             } catch (error) {
                 console.error("Error al cerrar sesión:", error);
-                // Manejar error si es necesario
             } finally {
                 showLoading(false);
             }
         });
 
-
-        // --- Lógica de la Aplicación Principal ---
+        // --- Lógica de la Aplicación Principal (Adaptada a v9+ para Functions) ---
         audienceTypeRadios.forEach(radio => {
             radio.addEventListener('change', (event) => {
                 if (event.target.value === 'target') {
                     targetAudienceSection.classList.remove('is-hidden');
-                    validateAudienceSelection(); // Validar al mostrar
+                    validateAudienceSelection();
                 } else {
                     targetAudienceSection.classList.add('is-hidden');
-                    audienceError.textContent = ''; // Limpiar error si se cambia a general
+                    audienceError.textContent = '';
                 }
             });
         });
-
-        renderAudienceGroups(); // Cargar grupos de audiencia al inicio
-
+        renderAudienceGroups();
         includeLocationCheckbox.addEventListener('change', () => {
             locationInputContainer.classList.toggle('is-hidden', !includeLocationCheckbox.checked);
-            if (!includeLocationCheckbox.checked) {
-                locationInput.value = ''; // Limpiar si se desmarca
-            }
+            if (!includeLocationCheckbox.checked) locationInput.value = '';
         });
 
         generateIdeasButton.addEventListener('click', async () => {
@@ -854,7 +760,6 @@
                 showTemporaryMessage(ideasResultsArea.querySelector('#noResultsMessage') || ideasResultsArea, "Debes iniciar sesión para generar ideas.");
                 return;
             }
-
             const topic = topicInput.value.trim();
             const tone = toneSelect.value;
             const audienceType = document.querySelector('input[name="audienceType"]:checked').value;
@@ -865,49 +770,34 @@
 
             if (!topic) {
                 showTemporaryMessage(topicInput.nextElementSibling, "El tema es obligatorio.", 'is-danger', 3000);
-                topicInput.focus();
-                return;
+                topicInput.focus(); return;
             }
             if (isNaN(maxWords) || maxWords < 50 || maxWords > 500) {
                  showTemporaryMessage(maxWordsInput.parentElement.nextElementSibling || maxWordsInput.parentElement, "Máximo de palabras debe ser entre 50 y 500.", 'is-danger', 3000);
-                maxWordsInput.focus();
-                return;
+                maxWordsInput.focus(); return;
             }
              if (includeLocation && !locationText) {
                 showTemporaryMessage(locationInput.nextElementSibling || locationInput.parentElement , "Debes especificar una ubicación si la casilla está marcada.", 'is-danger', 3000);
-                locationInput.focus();
-                return;
+                locationInput.focus(); return;
             }
-
-
             if (audienceType === 'target') {
-                if (!validateAudienceSelection()){
-                    return; // Detener si la validación de audiencia falla
-                }
+                if (!validateAudienceSelection()) return;
                 audienceDetails = getSelectedAudienceDetails();
             }
 
-
             showLoading(true);
-            ideasResultsArea.innerHTML = '<p class="has-text-centered">✨ Generando ideas...</p>'; // Mensaje mientras carga
+            ideasResultsArea.innerHTML = '<p class="has-text-centered">✨ Generando ideas...</p>';
             finalPhraseContainer.classList.add('is-hidden');
             actionButtonsContainer.classList.add('is-hidden');
 
-
             try {
-                const generateIdeasFunction = functions.httpsCallable('generateIdeas');
+                const generateIdeasFunction = httpsCallable(functions, 'generateIdeas');
                 const result = await generateIdeasFunction({
-                    topic: topic,
-                    tone: tone,
-                    audienceType: audienceType,
-                    audienceDetails: audienceDetails,
-                    maxWords: maxWords,
-                    includeLocation: includeLocation,
-                    locationInput: locationText
+                    topic: topic, tone: tone, audienceType: audienceType, audienceDetails: audienceDetails,
+                    maxWords: maxWords, includeLocation: includeLocation, locationInput: locationText
                 });
-
                 if (result.data && result.data.success) {
-                    currentViewingSessionId = result.data.sessionId; // Guardar ID de la sesión actual
+                    currentViewingSessionId = result.data.sessionId;
                     displayGeneratedIdeas(result.data.ideas);
                     displayFinalPhrase(result.data.finalPhrase);
                     actionButtonsContainer.classList.remove('is-hidden');
@@ -924,17 +814,15 @@
         });
 
         function displayGeneratedIdeas(ideas) {
-            ideasResultsArea.innerHTML = ''; // Limpiar área
+            ideasResultsArea.innerHTML = '';
             if (!ideas || ideas.length === 0) {
                 ideasResultsArea.innerHTML = '<p class="has-text-centered">No se generaron ideas. Intenta ajustar tus parámetros.</p>';
                 return;
             }
-
             ideas.forEach((idea, index) => {
                 const card = document.createElement('div');
                 card.classList.add('card', 'animate__animated', 'animate__fadeInUp');
                 card.style.animationDelay = `${index * 0.1}s`;
-
                 const header = document.createElement('header');
                 header.classList.add('card-header');
                 const title = document.createElement('p');
@@ -942,11 +830,9 @@
                 title.textContent = `Idea ${index + 1}`;
                 header.appendChild(title);
                 card.appendChild(header);
-
-                const content = document.createElement('div');
-                content.classList.add('card-content');
-
-                content.innerHTML = `
+                const contentDiv = document.createElement('div'); // Renombrado para evitar conflicto
+                contentDiv.classList.add('card-content');
+                contentDiv.innerHTML = `
                     <div class="content">
                         <p><strong>Texto o Copy:</strong></p>
                         <p>${idea.textoCopy || 'N/A'}</p>
@@ -956,11 +842,10 @@
                         ${(idea.sugerenciaUbicacion && idea.sugerenciaUbicacion !== "N/A") ? `<p><strong>Sugerencia de Ubicación:</strong> ${idea.sugerenciaUbicacion}</p>` : ''}
                     </div>
                 `;
-                card.appendChild(content);
+                card.appendChild(contentDiv);
                 ideasResultsArea.appendChild(card);
             });
         }
-
         function displayFinalPhrase(phrase) {
             if (phrase) {
                 finalPhraseText.textContent = phrase;
@@ -970,31 +855,25 @@
                 finalPhraseContainer.classList.add('is-hidden');
             }
         }
-
         refreshIdeasButton.addEventListener('click', () => {
-            // Simplemente vuelve a llamar a generateIdeasButton. La lógica de obtener los valores ya está ahí.
-            // Asegurarse que los inputs no se borren si el usuario solo quiere refrescar.
-            if (currentViewingSessionId) { // Solo si hay algo que "refrescar" basado en los mismos inputs
+            if (currentViewingSessionId) {
                  generateIdeasButton.click();
             } else {
                 showTemporaryMessage(ideasResultsArea.firstChild || ideasResultsArea, "Primero genera un conjunto de ideas para poder refrescarlas.", "is-info");
             }
         });
 
-
-        // --- Lógica de Historial ---
+        // --- Lógica de Historial (Adaptada a v9+ para Functions y Firestore) ---
         navHistoryButton.addEventListener('click', async () => {
             if (!currentUser) return;
             historyModal.classList.add('is-active');
             historyListContainer.innerHTML = '<p>Cargando historial...</p>';
-            historyError.textContent = '';
+            historyErrorText.textContent = '';
             loadHistoryDetailsButton.disabled = true;
             selectedHistoryEntryId = null;
-
             try {
-                const getHistorySummaryFunction = functions.httpsCallable('getHistorySummary');
+                const getHistorySummaryFunction = httpsCallable(functions, 'getHistorySummary');
                 const result = await getHistorySummaryFunction();
-
                 if (result.data && result.data.success) {
                     renderHistoryList(result.data.history);
                 } else {
@@ -1012,38 +891,32 @@
                 historyListContainer.innerHTML = '<p class="has-text-centered">No tienes generaciones guardadas en tu historial.</p>';
                 return;
             }
-
             const list = document.createElement('div');
             list.classList.add('list', 'is-hoverable');
-
             historyItems.forEach(item => {
                 const listItem = document.createElement('a');
                 listItem.classList.add('list-item');
                 listItem.dataset.sessionId = item.id;
+                // Firestore Timestamps (v9+) son objetos con segundos y nanosegundos
+                const timestampDate = item.timestamp && item.timestamp.seconds ? new Date(item.timestamp.seconds * 1000 + (item.timestamp.nanoseconds || 0) / 1000000) : null;
+                const formattedTimestamp = timestampDate ? timestampDate.toLocaleString('es-ES') : 'Fecha desconocida';
 
-                const timestamp = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('es-ES') : 'Fecha desconocida';
                 let audienceText = item.audienceType === 'general' ? 'Público en general' : (item.audienceDetails && item.audienceDetails.length > 0 ? item.audienceDetails.join(', ') : 'Target específico (sin detalles)');
-                if (audienceText.length > 50) audienceText = audienceText.substring(0, 47) + "..."; // Acortar
-
+                if (audienceText.length > 50) audienceText = audienceText.substring(0, 47) + "...";
                 listItem.innerHTML = `
                     <div class="list-item-content">
                         <div class="list-item-title"><strong>Tema:</strong> ${item.topic || 'N/A'}</div>
                         <div class="list-item-description">
-                            <small><strong>Fecha:</strong> ${timestamp}</small><br>
+                            <small><strong>Fecha:</strong> ${formattedTimestamp}</small><br>
                             <small><strong>Tono:</strong> ${item.tone || 'N/A'}</small><br>
                             <small><strong>Audiencia:</strong> ${audienceText}</small>
                             ${item.locationInput ? `<br><small><strong>Ubicación:</strong> ${item.locationInput}</small>` : ''}
                         </div>
                     </div>
                 `;
-
                 listItem.addEventListener('click', () => {
-                    // Desmarcar previamente seleccionado
                     const currentlySelected = list.querySelector('.is-active');
-                    if (currentlySelected) {
-                        currentlySelected.classList.remove('is-active');
-                    }
-                    // Marcar nuevo
+                    if (currentlySelected) currentlySelected.classList.remove('is-active');
                     listItem.classList.add('is-active');
                     selectedHistoryEntryId = item.id;
                     loadHistoryDetailsButton.disabled = false;
@@ -1052,42 +925,31 @@
             });
             historyListContainer.appendChild(list);
         }
-
         closeHistoryModal.addEventListener('click', () => historyModal.classList.remove('is-active'));
         cancelHistoryModal.addEventListener('click', () => historyModal.classList.remove('is-active'));
 
         loadHistoryDetailsButton.addEventListener('click', async () => {
             if (!selectedHistoryEntryId || !currentUser) return;
-
             showLoading(true);
-            historyModal.classList.remove('is-active'); // Cerrar modal
+            historyModal.classList.remove('is-active');
             ideasResultsArea.innerHTML = '<p class="has-text-centered">✨ Cargando detalles del historial...</p>';
             finalPhraseContainer.classList.add('is-hidden');
             actionButtonsContainer.classList.add('is-hidden');
-
-
             try {
-                const getGenerationDetailsFunction = functions.httpsCallable('getGenerationDetails');
+                const getGenerationDetailsFunction = httpsCallable(functions, 'getGenerationDetails');
                 const result = await getGenerationDetailsFunction({ sessionId: selectedHistoryEntryId });
-
                 if (result.data && result.data.success) {
                     const sessionData = result.data.session;
-                    currentViewingSessionId = sessionData.id; // ID del documento de Firestore es el sessionId
+                    currentViewingSessionId = sessionData.id;
                     displayGeneratedIdeas(sessionData.ideas);
                     displayFinalPhrase(sessionData.finalPhrase);
                     actionButtonsContainer.classList.remove('is-hidden');
                     noResultsMessage.classList.add('is-hidden');
-
-                    // Opcional: rellenar los inputs con los datos de la sesión cargada
                     topicInput.value = sessionData.topic || '';
                     toneSelect.value = sessionData.tone || 'Neutral';
-                    // ...y así sucesivamente para otros campos si se desea.
-                    // Esto es más complejo para la audiencia, requeriría lógica adicional.
-
                 } else {
                     throw new Error(result.data.error || "No se pudieron cargar los detalles de la sesión.");
                 }
-
             } catch (error) {
                 console.error("Error al cargar detalles de sesión:", error);
                 ideasResultsArea.innerHTML = `<div class="notification is-danger">Error al cargar detalles: ${error.message}</div>`;
@@ -1096,55 +958,44 @@
             }
         });
 
-
-        // --- Lógica de Exportación ---
+        // --- Lógica de Exportación (Adaptada a v9+ para Functions) ---
         exportPdfButton.addEventListener('click', () => {
-            if (!ideasResultsArea.querySelector('.card')) { // Si no hay 'cards' de ideas
+            if (!ideasResultsArea.querySelector('.card')) {
                 showTemporaryMessage(actionButtonsContainer.querySelector('.is-danger') || actionButtonsContainer, "No hay contenido para exportar a PDF.", 'is-warning');
                 return;
             }
             showLoading(true);
-            const element = ideasResultsArea; // Exportar solo el área de resultados
-            const timestamp = new Date().toISOString().slice(0,10); // YYYY-MM-DD
-
-            // Clonar el elemento para no modificar el original directamente
+            const element = ideasResultsArea;
+            const timestamp = new Date().toISOString().slice(0,10);
             const elementToExport = element.cloneNode(true);
-            // Opcional: remover elementos no deseados del clon antes de exportar
-            // elementToExport.querySelectorAll('.acciones-idea-no-exportar').forEach(el => el.remove());
-
             html2pdf().from(elementToExport).set({
-                margin: [15, 10, 15, 10], // arriba, derecha, abajo, izquierda en mm
-                filename: `Inspiraciones-${timestamp}.pdf`,
+                margin: [15, 10, 15, 10], filename: `Inspiraciones-${timestamp}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, logging: false, useCORS: true }, // useCORS si hay imágenes externas
+                html2canvas: { scale: 2, logging: false, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).save().then(() => {
-                showLoading(false);
-            }).catch(err => {
-                showLoading(false);
-                console.error("Error al generar PDF:", err);
+            }).save().then(() => showLoading(false))
+            .catch(err => {
+                showLoading(false); console.error("Error al generar PDF:", err);
                 showTemporaryMessage(actionButtonsContainer, "Error al generar PDF.", 'is-danger');
             });
         });
 
         exportCsvButton.addEventListener('click', async () => {
             if (!currentViewingSessionId) {
-                 showTemporaryMessage(actionButtonsContainer.querySelector('.is-danger') || actionButtonsContainer, "No hay una sesión activa para exportar a CSV. Genera ideas o carga desde el historial.", 'is-warning');
+                 showTemporaryMessage(actionButtonsContainer.querySelector('.is-danger') || actionButtonsContainer, "No hay una sesión activa para exportar a CSV.", 'is-warning');
                 return;
             }
             showLoading(true);
             try {
-                const exportCsvFunction = functions.httpsCallable('exportCsv');
+                const exportCsvFunction = httpsCallable(functions, 'exportCsv');
                 const result = await exportCsvFunction({ sessionId: currentViewingSessionId });
-
                 if (result.data && result.data.success) {
                     const csvString = result.data.csv;
                     const timestamp = new Date().toISOString().slice(0,10);
                     const filename = `Inspiraciones-${timestamp}.csv`;
-
                     const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
                     const link = document.createElement("a");
-                    if (link.download !== undefined) { // Feature detection
+                    if (link.download !== undefined) {
                         const url = URL.createObjectURL(blob);
                         link.setAttribute("href", url);
                         link.setAttribute("download", filename);
@@ -1153,14 +1004,11 @@
                         link.click();
                         document.body.removeChild(link);
                     } else {
-                        alert("Tu navegador no soporta la descarga directa. El CSV se mostrará en una nueva pestaña si es posible.");
-                        // Fallback para navegadores antiguos (puede no funcionar bien)
                         window.open('data:text/csv;charset=utf-8,' + encodeURIComponent(csvString));
                     }
                 } else {
                     throw new Error(result.data.error || "No se pudo generar el CSV.");
                 }
-
             } catch (error) {
                 console.error("Error al exportar CSV:", error);
                 showTemporaryMessage(actionButtonsContainer.querySelector('.is-danger') || actionButtonsContainer, `Error al exportar CSV: ${error.message}`, 'is-danger');
@@ -1169,9 +1017,7 @@
             }
         });
 
-
-        // --- Inicialización y Listeners Adicionales ---
-        // Burger menu para móviles
+        // --- Inicialización y Listeners Adicionales (sin cambios) ---
         const burger = document.querySelector('.navbar-burger');
         const menu = document.querySelector('.navbar-menu');
         if (burger && menu) {
@@ -1180,10 +1026,7 @@
                 menu.classList.toggle('is-active');
             });
         }
-
-        // Mensaje de bienvenida o carga inicial
-        console.log("Aplicación de generación de ideas inicializada.");
-
+        console.log("Aplicación de generación de ideas inicializada con Firebase SDK v10+ (modular).");
     </script>
 </body>
 </html>
