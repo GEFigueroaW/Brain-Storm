@@ -296,7 +296,7 @@
     <script type="module">
       // Importaciones de Firebase (sin cambios)
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, /* aquí faltarían las de Google */ updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
       import { getFirestore, doc, setDoc, getDoc, serverTimestamp, collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; // Quité writeBatch ya que limitUserHistory usa admin SDK
       import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
@@ -325,6 +325,15 @@
       const navRegisterButton = document.getElementById('navRegisterButton');
       const navHistoryButton = document.getElementById('navHistoryButton');
       const navLogoutButton = document.getElementById('navLogoutButton');
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const googleLoginButton = document.getElementById('googleLoginButton');
+      const loginError = document.getElementById('loginError'); // Para mostrar errores de login
+      const registerError = document.getElementById('registerError'); // Para mostrar errores de registro
+      const showRegisterLink = document.getElementById('showRegisterLink');
+      const showLoginLink = document.getElementById('showLoginLink');
+      const loginBox = document.getElementById('loginBox');
+      const registerBox = document.getElementById('registerBox');
       // ... (otros selectores como login, register, navbar buttons se mantienen)
 
       // ELIMINADOS Selectores de Audiencia y Ubicación:
@@ -436,7 +445,75 @@
           }
         });
       }
+      if (showRegisterLink && showLoginLink && loginBox && registerBox) {
+        showRegisterLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          loginBox.classList.add('is-hidden');
+          registerBox.classList.remove('is-hidden');
+        });
 
+        showLoginLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          registerBox.classList.add('is-hidden');
+          loginBox.classList.remove('is-hidden');
+        });
+      }
+
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (loginError) loginError.textContent = ''; // Limpiar error previo
+          const email = document.getElementById('loginEmail').value;
+          const password = document.getElementById('loginPassword').value;
+          try {
+            showLoading(true);
+            await signInWithEmailAndPassword(auth, email, password);
+            // onAuthStateChanged se encargará de actualizar la UI y ocultar showLoading
+          } catch (error) {
+            console.error("Error al iniciar sesión:", error.message);
+            if (loginError) loginError.textContent = `Error: ${error.message}`;
+            showLoading(false);
+          }
+        });
+      }
+
+      if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (registerError) registerError.textContent = ''; // Limpiar error previo
+          const name = document.getElementById('registerName').value;
+          const email = document.getElementById('registerEmail').value;
+          const password = document.getElementById('registerPassword').value;
+          try {
+            showLoading(true);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            if (name.trim() !== '') {
+              await updateProfile(userCredential.user, { displayName: name.trim() });
+            }
+            // onAuthStateChanged se encargará de actualizar la UI y ocultar showLoading
+          } catch (error) {
+            console.error("Error al registrar:", error.message);
+            if (registerError) registerError.textContent = `Error: ${error.message}`;
+            showLoading(false);
+          }
+        });
+      }
+
+      if (googleLoginButton) {
+        googleLoginButton.addEventListener('click', async () => {
+          const provider = new GoogleAuthProvider(); // Asegúrate de tener importado GoogleAuthProvider
+          try {
+            showLoading(true);
+            await signInWithPopup(auth, provider);
+            // onAuthStateChanged se encargará de actualizar la UI y ocultar showLoading
+          } catch (error) {
+            console.error("Error con Google Sign-In:", error);
+            // Podrías mostrar este error en loginError o registerError
+            if (loginError) loginError.textContent = `Error con Google: ${error.message}`;
+            showLoading(false);
+          }
+        });
+      }
       // --- Lógica de la Aplicación Principal (MODIFICADA) ---
       // ELIMINADA la lógica de listeners para audienceTypeRadios, includeLocationCheckbox
       // ELIMINADA la llamada a renderAudienceGroups
