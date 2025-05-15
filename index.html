@@ -172,13 +172,13 @@
                     <div id="timerContainer" class="has-text-centered my-2"></div>
                 </div>
             </div>
-            ```
-            <div id="finalPhraseContainer" class="is-hidden">
-                <p id="finalPhraseText"></p>
-            </div>
         </div>
-        </div>
-        </div>
+    </section> ```
+    Elimina el bloque duplicado de `finalPhraseContainer` que está fuera de lugar y los `div` extra que marqué como
+    "ESTE PARECE EXTRA". El `finalPhraseContainer` correcto ya está *dentro* de `resultsView`.
+    </div>
+    </div>
+    </div>
     </section>
 
     <div id="historyModal" class="modal">
@@ -392,15 +392,15 @@
                     // Guardar tema en el historial de autocompletado
                     const currentTopicForStorage = topicInput.value.trim();
                     if (currentTopicForStorage) {
-                       let recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
-                       // Evitar duplicados (insensible a mayúsculas/minúsculas para la comparación, pero guarda el original)
-                       if (!recentTopics.some(rt => rt.toLowerCase() === currentTopicForStorage.toLowerCase())) {
-                           recentTopics.unshift(currentTopicForStorage); // Añadir al principio
-                           recentTopics = recentTopics.slice(0, 10); // Mantener solo los últimos 10
-                           localStorage.setItem('recentTopics', JSON.stringify(recentTopics));
-                           // No es estrictamente necesario llamar a populateTopicSuggestions() aquí,
-                           // ya que se llama en el 'focus' del input.
-                       }
+                        let recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
+                        // Evitar duplicados (insensible a mayúsculas/minúsculas para la comparación, pero guarda el original)
+                        if (!recentTopics.some(rt => rt.toLowerCase() === currentTopicForStorage.toLowerCase())) {
+                            recentTopics.unshift(currentTopicForStorage); // Añadir al principio
+                            recentTopics = recentTopics.slice(0, 10); // Mantener solo los últimos 10
+                            localStorage.setItem('recentTopics', JSON.stringify(recentTopics));
+                            // No es estrictamente necesario llamar a populateTopicSuggestions() aquí,
+                            // ya que se llama en el 'focus' del input.
+                        }
                     }
                 } else {
                     timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
@@ -571,7 +571,7 @@ loadLastSearchButton.addEventListener('click', () => {
         document.querySelectorAll('input[name="socialNetwork"]').forEach(checkbox => checkbox.checked = false);
         if (dataToLoad.socialNetworks && Array.isArray(dataToLoad.socialNetworks)) {
             dataToLoad.socialNetworks.forEach(networkValue => {
-                const checkbox = document.querySelector(`input[name="socialNetwork"][value="${networkValue}"]`);
+                const checkbox = document.querySelector(`input[name = "socialNetwork"][value = "${networkValue}"]`);
                 if (checkbox) {
                     checkbox.checked = true;
                 }
@@ -599,7 +599,7 @@ exportUserHistoryCsvButton.addEventListener('click', async () => {
                 const url = URL.createObjectURL(blob);
                 const userPrefix = currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-zA-Z0-9]/g, "_") : currentUser.uid.substring(0, 5);
                 link.setAttribute("href", url);
-                link.setAttribute("download", `historial_ideas_${userPrefix}_${new Date().toISOString().slice(0,10)}.csv`);
+                link.setAttribute("download", `historial_ideas_${ userPrefix }_${ new Date().toISOString().slice(0, 10) }.csv`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -612,7 +612,7 @@ exportUserHistoryCsvButton.addEventListener('click', async () => {
         }
     } catch (error) {
         console.error("Error al exportar historial CSV:", error);
-        showTemporaryMessage(exportUserHistoryCsvButton.parentElement, `Error: ${error.message}`, 'is-danger', 4000);
+        showTemporaryMessage(exportUserHistoryCsvButton.parentElement, `Error: ${ error.message } `, 'is-danger', 4000);
     } finally {
         showLoading(false);
     }
@@ -664,7 +664,7 @@ topicInput.addEventListener('focus', populateTopicSuggestions);
 
                 // Mostrar solo los campos relevantes
                 listItem.innerHTML = `
-                <div class="list-item-content">
+            < div class="list-item-content" >
                     <div class="list-item-title"><strong>Tema:</strong> ${item.topic || 'N/A'}</div>
                     <div class="list-item-description">
                         <small><strong>Fecha:</strong> ${formattedTimestamp}</small><br>
