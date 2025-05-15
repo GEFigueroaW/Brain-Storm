@@ -530,140 +530,141 @@
  )</p><p><strong>FormatoVisualSugerido:</strong><br>{idea.formatoVisual || 'N/A'}</p>
 </div>
 `;
+                ```
                 card.appendChild(contentDiv);
                 ideasResultsArea.appendChild(card);
             });
             actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones de "Nueva Generación", "Exportar PDF"
         }
         ```
-        function displayFinalPhrase(phrase) { /* ... sin cambios ... */ }
-backToFormButton.addEventListener('click', () => {
-    resultsView.classList.add('is-hidden'); // Ocultar la vista de resultados
-    if(timerContainer) timerContainer.innerHTML = ''; // Limpiar el contenedor de frases/timer
-    ideasResultsArea.innerHTML = ''; // Limpiar el área de ideas por si acaso
-    noResultsMessage.classList.remove('is-hidden'); // Mostrar el mensaje inicial
-    finalPhraseContainer.classList.add('is-hidden');
-    actionButtonsContainer.classList.add('is-hidden'); // Ocultar los botones de acción de resultados
+                function displayFinalPhrase(phrase) { /* ... sin cambios ... */ }
+                backToFormButton.addEventListener('click', () => {
+                    resultsView.classList.add('is-hidden'); // Ocultar la vista de resultados
+                    if (timerContainer) timerContainer.innerHTML = ''; // Limpiar el contenedor de frases/timer
+                    ideasResultsArea.innerHTML = ''; // Limpiar el área de ideas por si acaso
+                    noResultsMessage.classList.remove('is-hidden'); // Mostrar el mensaje inicial
+                    finalPhraseContainer.classList.add('is-hidden');
+                    actionButtonsContainer.classList.add('is-hidden'); // Ocultar los botones de acción de resultados
 
-    formView.classList.remove('is-hidden');   // Mostrar la vista del formulario
+                    formView.classList.remove('is-hidden');   // Mostrar la vista del formulario
 
-    clearSimplifiedGenerationForm(); // Limpiar los campos del formulario
-    currentViewingSessionId = null; // Resetear el ID de la sesión que se estaba viendo
-    topicInput.focus(); // Poner el cursor en el campo de tema
-});
-// Cargar datos al iniciar la app si existen en localStorage (esto puede ir cerca de donde defines `lastInputData`)
-const storedLastInput = localStorage.getItem('lastInputData');
-if (storedLastInput) {
-    lastInputData = JSON.parse(storedLastInput);
-} else {
-    lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] }; // Inicializar con valores por defecto si no hay nada guardado
-}
-
-loadLastSearchButton.addEventListener('click', () => {
-    // Siempre intenta leer la versión más reciente de localStorage por si se guardó en otra pestaña (poco probable aquí pero buena práctica)
-    const dataToLoad = JSON.parse(localStorage.getItem('lastInputData'));
-
-    if (dataToLoad && typeof dataToLoad === 'object') {
-        topicInput.value = dataToLoad.topic || '';
-        copyTypeSelect.value = dataToLoad.copyType || 'promocional';
-
-        // Limpiar checkboxes actuales antes de marcar los guardados
-        document.querySelectorAll('input[name="socialNetwork"]').forEach(checkbox => checkbox.checked = false);
-        if (dataToLoad.socialNetworks && Array.isArray(dataToLoad.socialNetworks)) {
-            dataToLoad.socialNetworks.forEach(networkValue => {
-                const checkbox = document.querySelector(`input[name = "socialNetwork"][value = "${networkValue}"]`);
-                if (checkbox) {
-                    checkbox.checked = true;
+                    clearSimplifiedGenerationForm(); // Limpiar los campos del formulario
+                    currentViewingSessionId = null; // Resetear el ID de la sesión que se estaba viendo
+                    topicInput.focus(); // Poner el cursor en el campo de tema
+                });
+                // Cargar datos al iniciar la app si existen en localStorage (esto puede ir cerca de donde defines `lastInputData`)
+                const storedLastInput = localStorage.getItem('lastInputData');
+                if (storedLastInput) {
+                    lastInputData = JSON.parse(storedLastInput);
+                } else {
+                    lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] }; // Inicializar con valores por defecto si no hay nada guardado
                 }
-            });
-        }
-        showTemporaryMessage(loadLastSearchButton.parentElement, "Última configuración cargada.", 'is-success', 2000);
-    } else {
-        showTemporaryMessage(loadLastSearchButton.parentElement, "No hay configuración previa guardada.", 'is-info', 2000);
-    }
-});
-exportUserHistoryCsvButton.addEventListener('click', async () => {
-    if (!currentUser) {
-        showTemporaryMessage(exportUserHistoryCsvButton.parentElement, "Debes iniciar sesión para exportar.", 'is-danger', 3000);
-        return;
-    }
-    showLoading(true); // Muestra el overlay general de carga
-    try {
-        const exportHistoryFunc = httpsCallable(functions, 'exportUserHistoryCsv'); // Llamará a la NUEVA función backend
-        const result = await exportHistoryFunc();
 
-        if (result.data && result.data.success && typeof result.data.csv === 'string') {
-            if (result.data.csv.length > 0) { // Solo descargar si hay contenido
-                const blob = new Blob(["\uFEFF" + result.data.csv], { type: 'text/csv;charset=utf-8;' }); // BOM para UTF-8 en Excel
-                const link = document.createElement("a");
-                const url = URL.createObjectURL(blob);
-                const userPrefix = currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-zA-Z0-9]/g, "_") : currentUser.uid.substring(0, 5);
-                link.setAttribute("href", url);
-                link.setAttribute("download", `historial_ideas_${ userPrefix }_${ new Date().toISOString().slice(0, 10) }.csv`);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url); // Liberar memoria
-            } else {
-                showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "No hay datos en el historial para exportar.", 'is-info', 3000);
-            }
-        } else {
-            showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "Error al generar CSV del historial.", 'is-danger', 4000);
-        }
-    } catch (error) {
-        console.error("Error al exportar historial CSV:", error);
-        showTemporaryMessage(exportUserHistoryCsvButton.parentElement, `Error: ${ error.message } `, 'is-danger', 4000);
-    } finally {
-        showLoading(false);
-    }
-});
-function populateTopicSuggestions() {
-    const recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
-    topicSuggestions.innerHTML = ''; // Limpiar opciones previas
-    recentTopics.forEach(topic => {
-        const option = document.createElement('option');
-        option.value = topic; // El texto que se autocompleta
-        // option.textContent = topic; // Para algunos navegadores, si quieres que se muestre en la lista desplegable
-        topicSuggestions.appendChild(option);
-    });
-}
+                loadLastSearchButton.addEventListener('click', () => {
+                    // Siempre intenta leer la versión más reciente de localStorage por si se guardó en otra pestaña (poco probable aquí pero buena práctica)
+                    const dataToLoad = JSON.parse(localStorage.getItem('lastInputData'));
 
-// Llamar al cargar la página (después de que el DOM esté listo) y cuando el input reciba foco
-document.addEventListener('DOMContentLoaded', () => {
-    populateTopicSuggestions(); // Para la carga inicial
+                    if (dataToLoad && typeof dataToLoad === 'object') {
+                        topicInput.value = dataToLoad.topic || '';
+                        copyTypeSelect.value = dataToLoad.copyType || 'promocional';
 
-    // También, cargar lastInputData aquí es un buen lugar
-    const storedLastInputOnLoad = localStorage.getItem('lastInputData');
-    if (storedLastInputOnLoad) {
-        lastInputData = JSON.parse(storedLastInputOnLoad);
-    } else {
-        // Si no hay nada, podrías querer inicializar lastInputData con valores por defecto
-        lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] };
-    }
-});
-topicInput.addEventListener('focus', populateTopicSuggestions);
-        // ELIMINADO listener de refreshIdeasButton
+                        // Limpiar checkboxes actuales antes de marcar los guardados
+                        document.querySelectorAll('input[name="socialNetwork"]').forEach(checkbox => checkbox.checked = false);
+                        if (dataToLoad.socialNetworks && Array.isArray(dataToLoad.socialNetworks)) {
+                            dataToLoad.socialNetworks.forEach(networkValue => {
+                                const checkbox = document.querySelector(`input[name = "socialNetwork"][value = "${networkValue}"]`);
+                                if (checkbox) {
+                                    checkbox.checked = true;
+                                }
+                            });
+                        }
+                        showTemporaryMessage(loadLastSearchButton.parentElement, "Última configuración cargada.", 'is-success', 2000);
+                    } else {
+                        showTemporaryMessage(loadLastSearchButton.parentElement, "No hay configuración previa guardada.", 'is-info', 2000);
+                    }
+                });
+                exportUserHistoryCsvButton.addEventListener('click', async () => {
+                    if (!currentUser) {
+                        showTemporaryMessage(exportUserHistoryCsvButton.parentElement, "Debes iniciar sesión para exportar.", 'is-danger', 3000);
+                        return;
+                    }
+                    showLoading(true); // Muestra el overlay general de carga
+                    try {
+                        const exportHistoryFunc = httpsCallable(functions, 'exportUserHistoryCsv'); // Llamará a la NUEVA función backend
+                        const result = await exportHistoryFunc();
 
-        // --- Lógica de Historial (MODIFICADA para no mostrar audiencia/ubicación) ---
-        navHistoryButton.addEventListener('click', async () => { /* ... (la llamada a getHistorySummary es igual) ... */ });
+                        if (result.data && result.data.success && typeof result.data.csv === 'string') {
+                            if (result.data.csv.length > 0) { // Solo descargar si hay contenido
+                                const blob = new Blob(["\uFEFF" + result.data.csv], { type: 'text/csv;charset=utf-8;' }); // BOM para UTF-8 en Excel
+                                const link = document.createElement("a");
+                                const url = URL.createObjectURL(blob);
+                                const userPrefix = currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-zA-Z0-9]/g, "_") : currentUser.uid.substring(0, 5);
+                                link.setAttribute("href", url);
+                                link.setAttribute("download", `historial_ideas_${userPrefix}_${new Date().toISOString().slice(0, 10)}.csv`);
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                                URL.revokeObjectURL(url); // Liberar memoria
+                            } else {
+                                showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "No hay datos en el historial para exportar.", 'is-info', 3000);
+                            }
+                        } else {
+                            showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "Error al generar CSV del historial.", 'is-danger', 4000);
+                        }
+                    } catch (error) {
+                        console.error("Error al exportar historial CSV:", error);
+                        showTemporaryMessage(exportUserHistoryCsvButton.parentElement, `Error: ${error.message} `, 'is-danger', 4000);
+                    } finally {
+                        showLoading(false);
+                    }
+                });
+                function populateTopicSuggestions() {
+                    const recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
+                    topicSuggestions.innerHTML = ''; // Limpiar opciones previas
+                    recentTopics.forEach(topic => {
+                        const option = document.createElement('option');
+                        option.value = topic; // El texto que se autocompleta
+                        // option.textContent = topic; // Para algunos navegadores, si quieres que se muestre en la lista desplegable
+                        topicSuggestions.appendChild(option);
+                    });
+                }
 
-        function renderHistoryList(historyItems) {
-            historyListContainer.innerHTML = '';
-            if (!historyItems || historyItems.length === 0) {
-                historyListContainer.innerHTML = '<p class="has-text-centered">No tienes generaciones guardadas.</p>';
-                return;
-            }
-            const list = document.createElement('div');
-            list.classList.add('list', 'is-hoverable');
-            historyItems.forEach(item => {
-                const listItem = document.createElement('a');
-                listItem.classList.add('list-item');
-                listItem.dataset.sessionId = item.id;
-                const timestampDate = item.timestamp && item.timestamp.seconds ? new Date(item.timestamp.seconds * 1000 + (item.timestamp.nanoseconds || 0) / 1000000) : null;
-                const formattedTimestamp = timestampDate ? timestampDate.toLocaleString('es-ES') : 'Fecha desconocida';
+                // Llamar al cargar la página (después de que el DOM esté listo) y cuando el input reciba foco
+                document.addEventListener('DOMContentLoaded', () => {
+                    populateTopicSuggestions(); // Para la carga inicial
 
-                // Mostrar solo los campos relevantes
-                listItem.innerHTML = `
+                    // También, cargar lastInputData aquí es un buen lugar
+                    const storedLastInputOnLoad = localStorage.getItem('lastInputData');
+                    if (storedLastInputOnLoad) {
+                        lastInputData = JSON.parse(storedLastInputOnLoad);
+                    } else {
+                        // Si no hay nada, podrías querer inicializar lastInputData con valores por defecto
+                        lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] };
+                    }
+                });
+                topicInput.addEventListener('focus', populateTopicSuggestions);
+                // ELIMINADO listener de refreshIdeasButton
+
+                // --- Lógica de Historial (MODIFICADA para no mostrar audiencia/ubicación) ---
+                navHistoryButton.addEventListener('click', async () => { /* ... (la llamada a getHistorySummary es igual) ... */ });
+
+                function renderHistoryList(historyItems) {
+                    historyListContainer.innerHTML = '';
+                    if (!historyItems || historyItems.length === 0) {
+                        historyListContainer.innerHTML = '<p class="has-text-centered">No tienes generaciones guardadas.</p>';
+                        return;
+                    }
+                    const list = document.createElement('div');
+                    list.classList.add('list', 'is-hoverable');
+                    historyItems.forEach(item => {
+                        const listItem = document.createElement('a');
+                        listItem.classList.add('list-item');
+                        listItem.dataset.sessionId = item.id;
+                        const timestampDate = item.timestamp && item.timestamp.seconds ? new Date(item.timestamp.seconds * 1000 + (item.timestamp.nanoseconds || 0) / 1000000) : null;
+                        const formattedTimestamp = timestampDate ? timestampDate.toLocaleString('es-ES') : 'Fecha desconocida';
+
+                        // Mostrar solo los campos relevantes
+                        listItem.innerHTML = `
             < div class="list-item-content" >
                     <div class="list-item-title"><strong>Tema:</strong> ${item.topic || 'N/A'}</div>
                     <div class="list-item-description">
@@ -673,22 +674,22 @@ topicInput.addEventListener('focus', populateTopicSuggestions);
                     </div>
                 </div>
             `;
-                listItem.addEventListener('click', () => { /* ... (lógica de selección sin cambios) ... */ });
-                list.appendChild(listItem);
-            });
-            historyListContainer.appendChild(list);
-        }
-        // ... (closeHistoryModal, cancelHistoryModal, loadHistoryDetailsButton sin cambios en su lógica principal, pero loadHistoryDetailsButton ya no llenará campos de audiencia/ubicación)
+                        listItem.addEventListener('click', () => { /* ... (lógica de selección sin cambios) ... */ });
+                        list.appendChild(listItem);
+                    });
+                    historyListContainer.appendChild(list);
+                }
+                // ... (closeHistoryModal, cancelHistoryModal, loadHistoryDetailsButton sin cambios en su lógica principal, pero loadHistoryDetailsButton ya no llenará campos de audiencia/ubicación)
 
-        // --- Lógica de Exportación (exportPdfButton y exportCsvButton se mantienen por ahora, pero exportCsv llamará a una función backend que podría necesitar ser diferente si es "todo el historial") ---
-        // ... (tu código de exportPdfButton y exportCsvButton se mantiene igual por ahora) ...
+                // --- Lógica de Exportación (exportPdfButton y exportCsvButton se mantienen por ahora, pero exportCsv llamará a una función backend que podría necesitar ser diferente si es "todo el historial") ---
+                // ... (tu código de exportPdfButton y exportCsvButton se mantiene igual por ahora) ...
 
 
-        // Inicialización y Burger menu (sin cambios)
-        const burger = document.querySelector('.navbar-burger');
-        const menu = document.querySelector('.navbar-menu');
-        if (burger && menu) { /* ... sin cambios ... */ }
-        console.log("Aplicación simplificada de generación de ideas inicializada.");
+                // Inicialización y Burger menu (sin cambios)
+                const burger = document.querySelector('.navbar-burger');
+                const menu = document.querySelector('.navbar-menu');
+                if (burger && menu) { /* ... sin cambios ... */ }
+                console.log("Aplicación simplificada de generación de ideas inicializada.");
     </script>
 </body>
 
