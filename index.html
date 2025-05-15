@@ -57,7 +57,41 @@
         <p style="margin-left: 10px;">Cargando...</p>
     </div>
 
-    <nav class="navbar" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <strong class="title is-4">Brain Storm</strong>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenuCore">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarMenuCore" class="navbar-menu">
+            <div class="navbar-start">
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a id="navRegisterButton" class="button is-primary"> <strong>Registrarse</strong>
+                        </a>
+                        <a id="navLoginButton" class="button is-light"> Iniciar Sesión
+                        </a>
+                        <button id="navHistoryButton" class="button is-link is-hidden"> <span class="icon"><i
+                                    class="fas fa-history"></i></span>
+                            <span>Historial</span>
+                        </button>
+                        <button id="navLogoutButton" class="button is-danger is-hidden"> <span class="icon"><i
+                                    class="fas fa-sign-out-alt"></i></span>
+                            <span>Cerrar Sesión</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </nav>
 
     <section id="authView" class="section">
