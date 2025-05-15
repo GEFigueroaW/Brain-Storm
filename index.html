@@ -345,7 +345,18 @@
             // --- Lógica de Autenticación (sin cambios) ---
             onAuthStateChanged(auth, updateUIForAuthState);
             // ... (todo el código de login, registro, google login, logout se mantiene igual) ...
-
+if (navLogoutButton) { // Buena práctica: verificar que el elemento existe
+            navLogoutButton.addEventListener('click', async () => {
+                try {
+                    await signOut(auth); // Llama a la función de Firebase para cerrar sesión
+                    console.log("Usuario cerró sesión exitosamente.");
+                    // updateUIForAuthState se llamará automáticamente gracias a onAuthStateChanged
+                } catch (error) {
+                    console.error("Error al cerrar sesión:", error);
+                    // showTemporaryMessage(algúnElementoParaMensajes, `Error al cerrar sesión: ${error.message}`, 'is-danger');
+                }
+            });
+        }
 
             // --- Lógica de la Aplicación Principal (MODIFICADA) ---
             // ELIMINADA la lógica de listeners para audienceTypeRadios, includeLocationCheckbox
