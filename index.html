@@ -227,20 +227,41 @@
         // const locationInput = document.getElementById('locationInput');
 
         const topicInput = document.getElementById('topicInput');
-        const toneSelect = document.getElementById('copyTypeSelect');
+        const copyTypeSelect = document.getElementById('copyTypeSelect');
+        const socialNetworksContainer = document.getElementById('socialNetworksContainer'); // NUEVO (para mensajes de error)
         const generateIdeasButton = document.getElementById('generateIdeasButton');
-
+        const loadLastSearchButton = document.getElementById('loadLastSearchButton'); // NUEVO
+        const exportUserHistoryCsvButton = document.getElementById('exportUserHistoryCsvButton'); // NUEVO
+        const topicSuggestions = document.getElementById('topicSuggestions'); // NUEVO (el <datalist>)
+        const formView = document.getElementById('formView'); // NUEVO
+        const resultsView = document.getElementById('resultsView'); // NUEVO
         const ideasResultsArea = document.getElementById('ideasResultsArea');
         const noResultsMessage = document.getElementById('noResultsMessage');
         const finalPhraseContainer = document.getElementById('finalPhraseContainer');
         const finalPhraseText = document.getElementById('finalPhraseText');
         const actionButtonsContainer = document.getElementById('actionButtonsContainer');
+        const backToFormButton = document.getElementById('backToFormButton'); // NUEVO
+        const exportPdfButton = document.getElementById('exportPdfButton'); // Ya existía
+        const timerContainer = document.getElementById('timerContainer'); // NUEVO
 
         // ... (selectores de historial y variables globales como currentUser se mantienen) ...
         let currentUser = null;
-        let currentViewingSessionId = null;
+        let currentViewingSessionId = null; // Para saber qué sesión se está viendo o se acaba de generar
+        let lastInputData = null; // Para "cargar última configuración" (NUEVO)
 
-
+        const loadingPhrases = [ // NUEVO para el indicador de carga
+            "Desatando la creatividad...",
+            "Buscando la chispa de inspiración...",
+            "Cocinando ideas frescas...",
+            "Conectando neuronas creativas...",
+            "Explorando el universo de las ideas...",
+            "Puliendo conceptos brillantes...",
+            "Tejiendo palabras que impactan...",
+            "Dando forma a tu próxima gran idea...",
+            "Afinando la estrategia de contenido...",
+            "Generando magia para tus redes..."
+    ];
+    let phrasesIntervalId = null; // NUEVO para el indicador de carga
         // --- Funciones Auxiliares (showLoading, showTemporaryMessage, updateUIForAuthState sin cambios mayores) ---
         function showLoading(show) { /* ... sin cambios ... */ }
         function showTemporaryMessage(element, message, bulmaClass = 'is-danger', duration = 4000) { /* ... sin cambios ... */ }
