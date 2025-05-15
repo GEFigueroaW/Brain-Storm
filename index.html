@@ -95,6 +95,83 @@
     </nav>
 
     <section id="authView" class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    <div id="loginBox">
+                        <h2 class="title is-3 has-text-centered">Iniciar Sesión</h2>
+                        <form id="loginForm" class="box">
+                            <div class="field">
+                                <label class="label" for="loginEmail">Correo Electrónico</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="email" id="loginEmail" placeholder="tu@correo.com" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="loginPassword">Contraseña</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="password" id="loginPassword" placeholder="********" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="loginError" class="has-text-danger mb-2"></div> <button type="submit" class="button is-primary is-fullwidth">Entrar</button>
+                        </form>
+                        <p class="has-text-centered mt-4">
+                            ¿No tienes cuenta? <a href="#" id="showRegisterLink">Regístrate aquí</a>
+                        </p>
+                    </div>
+
+                    <div id="registerBox" class="is-hidden">
+                        <h2 class="title is-3 has-text-centered">Crear Cuenta</h2>
+                        <form id="registerForm" class="box">
+                            <div class="field">
+                                <label class="label" for="registerName">Nombre (opcional)</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="text" id="registerName" placeholder="Tu Nombre">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="registerEmail">Correo Electrónico</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="email" id="registerEmail" placeholder="tu@correo.com" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="registerPassword">Contraseña</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="password" id="registerPassword" placeholder="********" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="registerError" class="has-text-danger mb-2"></div> <button type="submit" class="button is-success is-fullwidth">Crear Cuenta</button>
+                        </form>
+                        <p class="has-text-centered mt-4">
+                            ¿Ya tienes cuenta? <a href="#" id="showLoginLink">Inicia sesión aquí</a>
+                        </p>
+                    </div>
+
+                    <div class="divider">O</div>
+
+                    <button id="googleLoginButton" class="button is-danger is-fullwidth mt-4">
+                        <span class="icon"><i class="fab fa-google"></i></span>
+                        <span>Continuar con Google</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section id="appView" class="section is-hidden">
