@@ -173,332 +173,332 @@
                 </div>
             </div>
         </div>
-    
-    <div id="historyModal" class="modal">
-    </div>
 
-    <footer class="footer">
-    </footer>
+        <div id="historyModal" class="modal">
+        </div>
 
-    <script type="module">
-        // Importaciones de Firebase (sin cambios)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, serverTimestamp, collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; // Quité writeBatch ya que limitUserHistory usa admin SDK
-        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+        <footer class="footer">
+        </footer>
 
-
-        // Configuración de Firebase (sin cambios)
-        const firebaseConfig = {
-            apiKey: "AIzaSyA6MZwE3_4K6CU0JTDVBG_c5GCgX5I00VE",
-            authDomain: "brain-storm-8f0d8.firebaseapp.com",
-            projectId: "brain-storm-8f0d8",
-            storageBucket: "brain-storm-8f0d8.appspot.com",
-            messagingSenderId: "401208607043",
-            appId: "1:401208607043:web:6b4038ab14c9bee3beaff6"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const functions = getFunctions(app);
-
-        // Selectores del DOM (algunos ya no se necesitarán)
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const authView = document.getElementById('authView');
-        const appView = document.getElementById('appView');
-        const greeting = document.getElementById('greeting');
-        const navLoginButton = document.getElementById('navLoginButton');
-        const navRegisterButton = document.getElementById('navRegisterButton');
-        const navHistoryButton = document.getElementById('navHistoryButton');
-        const navLogoutButton = document.getElementById('navLogoutButton');
-        // ... (otros selectores como login, register, navbar buttons se mantienen)
-
-        // ELIMINADOS Selectores de Audiencia y Ubicación:
-        // const audienceTypeRadios = document.querySelectorAll('input[name="audienceType"]');
-        // const targetAudienceSection = document.getElementById('targetAudienceSection');
-        // const audienceGroupsContainer = document.getElementById('audienceGroupsContainer');
-        // const subAudienceCounter = document.getElementById('subAudienceCounter');
-        // const audienceError = document.getElementById('audienceError');
-        // const includeLocationCheckbox = document.getElementById('includeLocationCheckbox');
-        // const locationInputContainer = document.getElementById('locationInputContainer');
-        // const locationInput = document.getElementById('locationInput');
-
-        const topicInput = document.getElementById('topicInput');
-        const copyTypeSelect = document.getElementById('copyTypeSelect');
-        const socialNetworksContainer = document.getElementById('socialNetworksContainer'); // NUEVO (para mensajes de error)
-        const generateIdeasButton = document.getElementById('generateIdeasButton');
-        const loadLastSearchButton = document.getElementById('loadLastSearchButton'); // NUEVO
-        const exportUserHistoryCsvButton = document.getElementById('exportUserHistoryCsvButton'); // NUEVO
-        const topicSuggestions = document.getElementById('topicSuggestions'); // NUEVO (el <datalist>)
-        const formView = document.getElementById('formView'); // NUEVO
-        const resultsView = document.getElementById('resultsView'); // NUEVO
-        const ideasResultsArea = document.getElementById('ideasResultsArea');
-        const noResultsMessage = document.getElementById('noResultsMessage');
-        const finalPhraseContainer = document.getElementById('finalPhraseContainer');
-        const finalPhraseText = document.getElementById('finalPhraseText');
-        const actionButtonsContainer = document.getElementById('actionButtonsContainer');
-        const backToFormButton = document.getElementById('backToFormButton'); // NUEVO
-        const exportPdfButton = document.getElementById('exportPdfButton'); // Ya existía
-        const timerContainer = document.getElementById('timerContainer'); // NUEVO
-
-        // ... (selectores de historial y variables globales como currentUser se mantienen) ...
-        let currentUser = null;
-        let currentViewingSessionId = null; // Para saber qué sesión se está viendo o se acaba de generar
-        let lastInputData = null; // Para "cargar última configuración" (NUEVO)
-
-        const loadingPhrases = [ // NUEVO para el indicador de carga
-            "Desatando la creatividad...",
-            "Buscando la chispa de inspiración...",
-            "Cocinando ideas frescas...",
-            "Conectando neuronas creativas...",
-            "Explorando el universo de las ideas...",
-            "Puliendo conceptos brillantes...",
-            "Tejiendo palabras que impactan...",
-            "Dando forma a tu próxima gran idea...",
-            "Afinando la estrategia de contenido...",
-            "Generando magia para tus redes..."
-        ];
-        let phrasesIntervalId = null; // NUEVO para el indicador de carga
-        // --- Funciones Auxiliares (showLoading, showTemporaryMessage, updateUIForAuthState sin cambios mayores) ---
-        function showLoading(show) { /* ... sin cambios ... */ }
-        function showTemporaryMessage(element, message, bulmaClass = 'is-danger', duration = 4000) { /* ... sin cambios ... */ }
-        function updateUIForAuthState(user) { /* ... sin cambios, pero ahora llamará a clearSimplifiedGenerationForm ... */
-            currentUser = user;
-            if (user) {
-                authView.classList.add('is-hidden');
-                appView.classList.remove('is-hidden');
-                greeting.textContent = `¡Hola, ${user.displayName || user.email}!`;
-                navLoginButton.classList.add('is-hidden');
-                navRegisterButton.classList.add('is-hidden');
-                navHistoryButton.classList.remove('is-hidden');
-                navLogoutButton.classList.remove('is-hidden');
-                clearSimplifiedGenerationForm(); // <--- Usar la nueva función de limpiar
-                clearResultsArea();
-                currentViewingSessionId = null;
-            } else {
-                // ... (resto sin cambios)
-                authView.classList.remove('is-hidden');
-                appView.classList.add('is-hidden');
-                greeting.textContent = '¡Hola!';
-                navLoginButton.classList.remove('is-hidden');
-                navRegisterButton.classList.remove('is-hidden');
-                navHistoryButton.classList.add('is-hidden');
-                navLogoutButton.classList.add('is-hidden');
-                loginError.textContent = '';
-                registerError.textContent = '';
-                currentViewingSessionId = null;
-            }
-        }
-
-        function clearSimplifiedGenerationForm() {
-            topicInput.value = '';
-            copyTypeSelect.value = 'promocional'; // Valor por defecto del nuevo select de Tipo de Copy
-
-            // Limpiar todas las casillas de redes sociales
-            document.querySelectorAll('input[name="socialNetwork"]:checked').forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            // Opcional: podrías decidir si quieres que `lastInputData` se limpie aquí o no.
-            // Si quieres que se limpie para que "cargar última" no recuerde nada tras un logout/login:
-            // lastInputData = null;
-            // localStorage.removeItem('lastInputData');
-        }
-
-        function clearResultsArea() { /* ... sin cambios ... */ }
+        <script type="module">
+            // Importaciones de Firebase (sin cambios)
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+            import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+            import { getFirestore, doc, setDoc, getDoc, serverTimestamp, collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; // Quité writeBatch ya que limitUserHistory usa admin SDK
+            import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
 
-        // --- Lógica de Autenticación (sin cambios) ---
-        onAuthStateChanged(auth, updateUIForAuthState);
-        // ... (todo el código de login, registro, google login, logout se mantiene igual) ...
-
-
-        // --- Lógica de la Aplicación Principal (MODIFICADA) ---
-        // ELIMINADA la lógica de listeners para audienceTypeRadios, includeLocationCheckbox
-        // ELIMINADA la llamada a renderAudienceGroups
-
-generateIdeasButton.addEventListener('click', async () => {
-            if (!currentUser) {
-                showTemporaryMessage(noResultsMessage, "Debes iniciar sesión para generar ideas.");
-                return;
-            }
-
-            const topic = topicInput.value.trim();
-            const copyType = copyTypeSelect.value;
-
-            const selectedSocialNetworks = [];
-            document.querySelectorAll('input[name="socialNetwork"]:checked').forEach((checkbox) => {
-                selectedSocialNetworks.push(checkbox.value);
-            });
-
-            // Validaciones
-            if (!topic) {
-                showTemporaryMessage(topicInput.parentElement.parentElement, "El tema es obligatorio.", 'is-danger', 3000);
-                topicInput.focus();
-                return;
-            }
-            if (selectedSocialNetworks.length === 0) {
-                showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos una red social.", 'is-danger', 3000);
-                return;
-            }
-
-            // Guardar datos para "cargar última búsqueda"
-            lastInputData = {
-                topic: topic,
-                copyType: copyType,
-                socialNetworks: selectedSocialNetworks
+            // Configuración de Firebase (sin cambios)
+            const firebaseConfig = {
+                apiKey: "AIzaSyA6MZwE3_4K6CU0JTDVBG_c5GCgX5I00VE",
+                authDomain: "brain-storm-8f0d8.firebaseapp.com",
+                projectId: "brain-storm-8f0d8",
+                storageBucket: "brain-storm-8f0d8.appspot.com",
+                messagingSenderId: "401208607043",
+                appId: "1:401208607043:web:6b4038ab14c9bee3beaff6"
             };
-            localStorage.setItem('lastInputData', JSON.stringify(lastInputData));
 
-            // --- Preparación de UI para Carga ---
-            formView.classList.add('is-hidden');
-            resultsView.classList.remove('is-hidden');
-            ideasResultsArea.innerHTML = '';
-            finalPhraseContainer.classList.add('is-hidden');
-            actionButtonsContainer.classList.add('is-hidden');
-            noResultsMessage.classList.add('is-hidden');
-            timerContainer.innerHTML = ''; // Limpiar
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            const functions = getFunctions(app);
 
-            let currentPhraseIndex = 0;
-            timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
-            phrasesIntervalId = setInterval(() => {
-                currentPhraseIndex = (currentPhraseIndex + 1) % loadingPhrases.length;
-                const phraseElement = timerContainer.querySelector('p');
-                if (phraseElement) {
-                    phraseElement.classList.remove('animate__fadeIn');
-                    phraseElement.classList.add('animate__fadeOut');
-                    setTimeout(() => {
-                        if (timerContainer.contains(phraseElement)) { // Verificar si el elemento aún existe y es parte del DOM relevante
-                           phraseElement.textContent = loadingPhrases[currentPhraseIndex];
-                           phraseElement.classList.remove('animate__fadeOut');
-                           phraseElement.classList.add('animate__fadeIn');
-                        }
-                    }, 200);
-                } else if (phrasesIntervalId) { // Si el P ya no existe pero el intervalo sí, crearlo de nuevo (poco probable si el contenedor existe)
-                     timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
+            // Selectores del DOM (algunos ya no se necesitarán)
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const authView = document.getElementById('authView');
+            const appView = document.getElementById('appView');
+            const greeting = document.getElementById('greeting');
+            const navLoginButton = document.getElementById('navLoginButton');
+            const navRegisterButton = document.getElementById('navRegisterButton');
+            const navHistoryButton = document.getElementById('navHistoryButton');
+            const navLogoutButton = document.getElementById('navLogoutButton');
+            // ... (otros selectores como login, register, navbar buttons se mantienen)
+
+            // ELIMINADOS Selectores de Audiencia y Ubicación:
+            // const audienceTypeRadios = document.querySelectorAll('input[name="audienceType"]');
+            // const targetAudienceSection = document.getElementById('targetAudienceSection');
+            // const audienceGroupsContainer = document.getElementById('audienceGroupsContainer');
+            // const subAudienceCounter = document.getElementById('subAudienceCounter');
+            // const audienceError = document.getElementById('audienceError');
+            // const includeLocationCheckbox = document.getElementById('includeLocationCheckbox');
+            // const locationInputContainer = document.getElementById('locationInputContainer');
+            // const locationInput = document.getElementById('locationInput');
+
+            const topicInput = document.getElementById('topicInput');
+            const copyTypeSelect = document.getElementById('copyTypeSelect');
+            const socialNetworksContainer = document.getElementById('socialNetworksContainer'); // NUEVO (para mensajes de error)
+            const generateIdeasButton = document.getElementById('generateIdeasButton');
+            const loadLastSearchButton = document.getElementById('loadLastSearchButton'); // NUEVO
+            const exportUserHistoryCsvButton = document.getElementById('exportUserHistoryCsvButton'); // NUEVO
+            const topicSuggestions = document.getElementById('topicSuggestions'); // NUEVO (el <datalist>)
+            const formView = document.getElementById('formView'); // NUEVO
+            const resultsView = document.getElementById('resultsView'); // NUEVO
+            const ideasResultsArea = document.getElementById('ideasResultsArea');
+            const noResultsMessage = document.getElementById('noResultsMessage');
+            const finalPhraseContainer = document.getElementById('finalPhraseContainer');
+            const finalPhraseText = document.getElementById('finalPhraseText');
+            const actionButtonsContainer = document.getElementById('actionButtonsContainer');
+            const backToFormButton = document.getElementById('backToFormButton'); // NUEVO
+            const exportPdfButton = document.getElementById('exportPdfButton'); // Ya existía
+            const timerContainer = document.getElementById('timerContainer'); // NUEVO
+
+            // ... (selectores de historial y variables globales como currentUser se mantienen) ...
+            let currentUser = null;
+            let currentViewingSessionId = null; // Para saber qué sesión se está viendo o se acaba de generar
+            let lastInputData = null; // Para "cargar última configuración" (NUEVO)
+
+            const loadingPhrases = [ // NUEVO para el indicador de carga
+                "Desatando la creatividad...",
+                "Buscando la chispa de inspiración...",
+                "Cocinando ideas frescas...",
+                "Conectando neuronas creativas...",
+                "Explorando el universo de las ideas...",
+                "Puliendo conceptos brillantes...",
+                "Tejiendo palabras que impactan...",
+                "Dando forma a tu próxima gran idea...",
+                "Afinando la estrategia de contenido...",
+                "Generando magia para tus redes..."
+            ];
+            let phrasesIntervalId = null; // NUEVO para el indicador de carga
+            // --- Funciones Auxiliares (showLoading, showTemporaryMessage, updateUIForAuthState sin cambios mayores) ---
+            function showLoading(show) { /* ... sin cambios ... */ }
+            function showTemporaryMessage(element, message, bulmaClass = 'is-danger', duration = 4000) { /* ... sin cambios ... */ }
+            function updateUIForAuthState(user) { /* ... sin cambios, pero ahora llamará a clearSimplifiedGenerationForm ... */
+                currentUser = user;
+                if (user) {
+                    authView.classList.add('is-hidden');
+                    appView.classList.remove('is-hidden');
+                    greeting.textContent = `¡Hola, ${user.displayName || user.email}!`;
+                    navLoginButton.classList.add('is-hidden');
+                    navRegisterButton.classList.add('is-hidden');
+                    navHistoryButton.classList.remove('is-hidden');
+                    navLogoutButton.classList.remove('is-hidden');
+                    clearSimplifiedGenerationForm(); // <--- Usar la nueva función de limpiar
+                    clearResultsArea();
+                    currentViewingSessionId = null;
+                } else {
+                    // ... (resto sin cambios)
+                    authView.classList.remove('is-hidden');
+                    appView.classList.add('is-hidden');
+                    greeting.textContent = '¡Hola!';
+                    navLoginButton.classList.remove('is-hidden');
+                    navRegisterButton.classList.remove('is-hidden');
+                    navHistoryButton.classList.add('is-hidden');
+                    navLogoutButton.classList.add('is-hidden');
+                    loginError.textContent = '';
+                    registerError.textContent = '';
+                    currentViewingSessionId = null;
                 }
-            }, 3000);
+            }
 
-            showLoading(true); // Overlay con spinner
+            function clearSimplifiedGenerationForm() {
+                topicInput.value = '';
+                copyTypeSelect.value = 'promocional'; // Valor por defecto del nuevo select de Tipo de Copy
 
-            // --- Llamada a Firebase y Manejo de Resultados ---
-            try {
-                const generateIdeasFunction = httpsCallable(functions, 'generateIdeas');
-                const result = await generateIdeasFunction({
+                // Limpiar todas las casillas de redes sociales
+                document.querySelectorAll('input[name="socialNetwork"]:checked').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                // Opcional: podrías decidir si quieres que `lastInputData` se limpie aquí o no.
+                // Si quieres que se limpie para que "cargar última" no recuerde nada tras un logout/login:
+                // lastInputData = null;
+                // localStorage.removeItem('lastInputData');
+            }
+
+            function clearResultsArea() { /* ... sin cambios ... */ }
+
+
+            // --- Lógica de Autenticación (sin cambios) ---
+            onAuthStateChanged(auth, updateUIForAuthState);
+            // ... (todo el código de login, registro, google login, logout se mantiene igual) ...
+
+
+            // --- Lógica de la Aplicación Principal (MODIFICADA) ---
+            // ELIMINADA la lógica de listeners para audienceTypeRadios, includeLocationCheckbox
+            // ELIMINADA la llamada a renderAudienceGroups
+
+            generateIdeasButton.addEventListener('click', async () => {
+                if (!currentUser) {
+                    showTemporaryMessage(noResultsMessage, "Debes iniciar sesión para generar ideas.");
+                    return;
+                }
+
+                const topic = topicInput.value.trim();
+                const copyType = copyTypeSelect.value;
+
+                const selectedSocialNetworks = [];
+                document.querySelectorAll('input[name="socialNetwork"]:checked').forEach((checkbox) => {
+                    selectedSocialNetworks.push(checkbox.value);
+                });
+
+                // Validaciones
+                if (!topic) {
+                    showTemporaryMessage(topicInput.parentElement.parentElement, "El tema es obligatorio.", 'is-danger', 3000);
+                    topicInput.focus();
+                    return;
+                }
+                if (selectedSocialNetworks.length === 0) {
+                    showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos una red social.", 'is-danger', 3000);
+                    return;
+                }
+
+                // Guardar datos para "cargar última búsqueda"
+                lastInputData = {
                     topic: topic,
                     copyType: copyType,
                     socialNetworks: selectedSocialNetworks
-                });
+                };
+                localStorage.setItem('lastInputData', JSON.stringify(lastInputData));
 
-                if (result.data && result.data.success) {
-                    currentViewingSessionId = result.data.sessionId;
-                    displayGeneratedIdeas(result.data.ideas); // Esto limpiará el timerContainer
-                    displayFinalPhrase(result.data.finalPhrase);
-                    actionButtonsContainer.classList.remove('is-hidden');
-                    // noResultsMessage se maneja dentro de displayGeneratedIdeas
+                // --- Preparación de UI para Carga ---
+                formView.classList.add('is-hidden');
+                resultsView.classList.remove('is-hidden');
+                ideasResultsArea.innerHTML = '';
+                finalPhraseContainer.classList.add('is-hidden');
+                actionButtonsContainer.classList.add('is-hidden');
+                noResultsMessage.classList.add('is-hidden');
+                timerContainer.innerHTML = ''; // Limpiar
 
-                    // Guardar tema en el historial de autocompletado
-                    const currentTopicForStorage = topicInput.value.trim(); // Usar el valor actual, no el 'topic' de arriba que podría ser de una carga anterior
-                    if (currentTopicForStorage) {
-                       let recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
-                       if (!recentTopics.some(rt => rt.toLowerCase() === currentTopicForStorage.toLowerCase())) {
-                           recentTopics.unshift(currentTopicForStorage);
-                           recentTopics = recentTopics.slice(0, 10);
-                           localStorage.setItem('recentTopics', JSON.stringify(recentTopics));
-                       }
-                    }
-                    // FIN de Guardar tema
-
-                    if (result.data.message) {
-                        const ideasContainer = ideasResultsArea; // Asegúrate que este es el contenedor correcto
-                        let messageType = 'is-success';
-                        if (result.data.ideas && result.data.ideas.length < selectedSocialNetworks.length && result.data.ideas.length > 0) {
-                            messageType = 'is-warning';
-                        } else if (!result.data.ideas || result.data.ideas.length === 0) {
-                            messageType = 'is-danger';
-                        }
-
-                        const generationStatusMessage = document.createElement('div');
-                        generationStatusMessage.classList.add('notification', messageType, 'is-light', 'mt-4', 'generation-status-message');
-                        generationStatusMessage.textContent = result.data.message;
-
-                        if (ideasContainer.querySelector('.card')) {
-                            ideasContainer.prepend(generationStatusMessage);
-                        } else {
-                            // No limpiar si displayGeneratedIdeas ya puso un mensaje de "no se generaron ideas"
-                            if (!ideasContainer.querySelector('#noResultsMessage') && !ideasContainer.querySelector('.notification')) {
-                                ideasContainer.innerHTML = '';
+                let currentPhraseIndex = 0;
+                timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
+                phrasesIntervalId = setInterval(() => {
+                    currentPhraseIndex = (currentPhraseIndex + 1) % loadingPhrases.length;
+                    const phraseElement = timerContainer.querySelector('p');
+                    if (phraseElement) {
+                        phraseElement.classList.remove('animate__fadeIn');
+                        phraseElement.classList.add('animate__fadeOut');
+                        setTimeout(() => {
+                            if (timerContainer.contains(phraseElement)) { // Verificar si el elemento aún existe y es parte del DOM relevante
+                                phraseElement.textContent = loadingPhrases[currentPhraseIndex];
+                                phraseElement.classList.remove('animate__fadeOut');
+                                phraseElement.classList.add('animate__fadeIn');
                             }
-                            ideasContainer.appendChild(generationStatusMessage);
+                        }, 200);
+                    } else if (phrasesIntervalId) { // Si el P ya no existe pero el intervalo sí, crearlo de nuevo (poco probable si el contenedor existe)
+                        timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
+                    }
+                }, 3000);
+
+                showLoading(true); // Overlay con spinner
+
+                // --- Llamada a Firebase y Manejo de Resultados ---
+                try {
+                    const generateIdeasFunction = httpsCallable(functions, 'generateIdeas');
+                    const result = await generateIdeasFunction({
+                        topic: topic,
+                        copyType: copyType,
+                        socialNetworks: selectedSocialNetworks
+                    });
+
+                    if (result.data && result.data.success) {
+                        currentViewingSessionId = result.data.sessionId;
+                        displayGeneratedIdeas(result.data.ideas); // Esto limpiará el timerContainer
+                        displayFinalPhrase(result.data.finalPhrase);
+                        actionButtonsContainer.classList.remove('is-hidden');
+                        // noResultsMessage se maneja dentro de displayGeneratedIdeas
+
+                        // Guardar tema en el historial de autocompletado
+                        const currentTopicForStorage = topicInput.value.trim(); // Usar el valor actual, no el 'topic' de arriba que podría ser de una carga anterior
+                        if (currentTopicForStorage) {
+                            let recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
+                            if (!recentTopics.some(rt => rt.toLowerCase() === currentTopicForStorage.toLowerCase())) {
+                                recentTopics.unshift(currentTopicForStorage);
+                                recentTopics = recentTopics.slice(0, 10);
+                                localStorage.setItem('recentTopics', JSON.stringify(recentTopics));
+                            }
                         }
+                        // FIN de Guardar tema
+
+                        if (result.data.message) {
+                            const ideasContainer = ideasResultsArea; // Asegúrate que este es el contenedor correcto
+                            let messageType = 'is-success';
+                            if (result.data.ideas && result.data.ideas.length < selectedSocialNetworks.length && result.data.ideas.length > 0) {
+                                messageType = 'is-warning';
+                            } else if (!result.data.ideas || result.data.ideas.length === 0) {
+                                messageType = 'is-danger';
+                            }
+
+                            const generationStatusMessage = document.createElement('div');
+                            generationStatusMessage.classList.add('notification', messageType, 'is-light', 'mt-4', 'generation-status-message');
+                            generationStatusMessage.textContent = result.data.message;
+
+                            if (ideasContainer.querySelector('.card')) {
+                                ideasContainer.prepend(generationStatusMessage);
+                            } else {
+                                // No limpiar si displayGeneratedIdeas ya puso un mensaje de "no se generaron ideas"
+                                if (!ideasContainer.querySelector('#noResultsMessage') && !ideasContainer.querySelector('.notification')) {
+                                    ideasContainer.innerHTML = '';
+                                }
+                                ideasContainer.appendChild(generationStatusMessage);
+                            }
+                        }
+                    } else { // result.data.success es false o no hay result.data
+                        let errorMessageToShow = "No se pudieron generar las ideas (respuesta inesperada).";
+                        if (result.data && result.data.error) {
+                            errorMessageToShow = result.data.error;
+                        } else if (result.data && result.data.message) {
+                            errorMessageToShow = result.data.message;
+                        }
+                        ideasResultsArea.innerHTML = `<div class="notification is-danger">${errorMessageToShow}</div>`;
+                        if (timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga
+                        actionButtonsContainer.classList.remove('is-hidden'); // Mostrar "Nueva Generación"
                     }
-                } else { // result.data.success es false o no hay result.data
-                    let errorMessageToShow = "No se pudieron generar las ideas (respuesta inesperada).";
-                    if (result.data && result.data.error) {
-                        errorMessageToShow = result.data.error;
-                    } else if (result.data && result.data.message) {
-                        errorMessageToShow = result.data.message;
-                    }
-                    ideasResultsArea.innerHTML = `<div class="notification is-danger">${errorMessageToShow}</div>`;
-                    if(timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga
+                } catch (error) {
+                    console.error("Error al generar ideas:", error);
+                    ideasResultsArea.innerHTML = `<div class="notification is-danger">Error al generar ideas: ${error.message}</div>`;
+                    if (timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga
                     actionButtonsContainer.classList.remove('is-hidden'); // Mostrar "Nueva Generación"
+                } finally {
+                    showLoading(false);
+                    if (phrasesIntervalId) {
+                        clearInterval(phrasesIntervalId);
+                        phrasesIntervalId = null; // importante para evitar múltiples intervalos
+                    }
+                    // No limpiar timerContainer aquí si displayGeneratedIdeas o el error ya lo hacen
+                    // o si quieres que el último mensaje de error/éxito de ideasResultsArea sea lo principal.
                 }
-            } catch (error) {
-                console.error("Error al generar ideas:", error);
-                ideasResultsArea.innerHTML = `<div class="notification is-danger">Error al generar ideas: ${error.message}</div>`;
-                if(timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga
-                actionButtonsContainer.classList.remove('is-hidden'); // Mostrar "Nueva Generación"
-            } finally {
-                showLoading(false);
-                if (phrasesIntervalId) {
-                    clearInterval(phrasesIntervalId);
-                    phrasesIntervalId = null; // importante para evitar múltiples intervalos
+            });
+
+            // displayGeneratedIdeas y displayFinalPhrase (sin cambios en su lógica interna, pero displayGeneratedIdeas ya no mostrará ubicación)
+            function displayGeneratedIdeas(ideas) {
+                // Limpiar mensajes de estado de generación previos y el mensaje de "generando..." del timerContainer
+                const existingStatusMessages = ideasResultsArea.querySelectorAll('.generation-status-message');
+                existingStatusMessages.forEach(msg => msg.remove());
+                if (timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga/temporizador
+
+                if (!ideas || ideas.length === 0) {
+                    // Si NO hay ideas, pero SÍ hay un mensaje de estado (ej. "la IA no devolvió..."), no lo sobrescribas.
+                    if (!ideasResultsArea.querySelector('.generation-status-message') && !ideasResultsArea.querySelector('.notification')) {
+                        ideasResultsArea.innerHTML = '<p id="noResultsMessage" class="has-text-centered has-text-grey">No se generaron ideas esta vez. Intenta ajustar tus parámetros o tema.</p>';
+                        if (noResultsMessage) noResultsMessage.classList.remove('is-hidden');
+                    }
+                    actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones para "Nueva Generación" aunque no haya ideas
+                    return;
                 }
-                // No limpiar timerContainer aquí si displayGeneratedIdeas o el error ya lo hacen
-                // o si quieres que el último mensaje de error/éxito de ideasResultsArea sea lo principal.
-            }
-        });
 
-        // displayGeneratedIdeas y displayFinalPhrase (sin cambios en su lógica interna, pero displayGeneratedIdeas ya no mostrará ubicación)
-        function displayGeneratedIdeas(ideas) {
-            // Limpiar mensajes de estado de generación previos y el mensaje de "generando..." del timerContainer
-            const existingStatusMessages = ideasResultsArea.querySelectorAll('.generation-status-message');
-            existingStatusMessages.forEach(msg => msg.remove());
-            if (timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga/temporizador
+                // Si hay ideas, limpiar cualquier mensaje de "no resultados" o el de "generando"
+                ideasResultsArea.innerHTML = '';
+                if (noResultsMessage) noResultsMessage.classList.add('is-hidden');
 
-            if (!ideas || ideas.length === 0) {
-                // Si NO hay ideas, pero SÍ hay un mensaje de estado (ej. "la IA no devolvió..."), no lo sobrescribas.
-                if (!ideasResultsArea.querySelector('.generation-status-message') && !ideasResultsArea.querySelector('.notification')) {
-                    ideasResultsArea.innerHTML = '<p id="noResultsMessage" class="has-text-centered has-text-grey">No se generaron ideas esta vez. Intenta ajustar tus parámetros o tema.</p>';
-                    if (noResultsMessage) noResultsMessage.classList.remove('is-hidden');
-                }
-                actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones para "Nueva Generación" aunque no haya ideas
-                return;
-            }
+                ideas.forEach((idea, index) => {
+                    const card = document.createElement('div');
+                    card.classList.add('card', 'mb-4', 'animate__animated', 'animate__fadeInUp'); // mb-4 para separar tarjetas
+                    card.style.animationDelay = `${index * 0.1}s`;
 
-            // Si hay ideas, limpiar cualquier mensaje de "no resultados" o el de "generando"
-            ideasResultsArea.innerHTML = '';
-            if (noResultsMessage) noResultsMessage.classList.add('is-hidden');
+                    const header = document.createElement('header');
+                    header.classList.add('card-header');
 
-            ideas.forEach((idea, index) => {
-                const card = document.createElement('div');
-                card.classList.add('card', 'mb-4', 'animate__animated', 'animate__fadeInUp'); // mb-4 para separar tarjetas
-                card.style.animationDelay = `${index * 0.1}s`;
+                    const title = document.createElement('p');
+                    title.classList.add('card-header-title');
+                    // El backend ahora debería enviar 'redSocialTarget' en cada objeto 'idea'
+                    title.textContent = `Idea para: ${idea.redSocialTarget || 'Red Social Específica'}`;
+                    header.appendChild(title);
+                    card.appendChild(header);
 
-                const header = document.createElement('header');
-                header.classList.add('card-header');
-
-                const title = document.createElement('p');
-                title.classList.add('card-header-title');
-                // El backend ahora debería enviar 'redSocialTarget' en cada objeto 'idea'
-                title.textContent = `Idea para: ${idea.redSocialTarget || 'Red Social Específica'}`;
-                header.appendChild(title);
-                card.appendChild(header);
-
-                const contentDiv = document.createElement('div');
-                contentDiv.classList.add('card-content');
-                // El orden de los campos dentro del contenido cambia:
-                ccontentDiv.innerHTML = `
+                    const contentDiv = document.createElement('div');
+                    contentDiv.classList.add('card-content');
+                    // El orden de los campos dentro del contenido cambia:
+                    ccontentDiv.innerHTML = `
                     <div class="content">
                         <p><strong>Gancho Verbal Impactante:</strong><br><span class="math-inline">\{idea\.ganchoVerbal \|\| 'N/A'\}</p\>
 <p><strong>Texto o Copy:</strong><br>{idea.textoCopy || 'N/A'}</p>
@@ -513,141 +513,141 @@ generateIdeasButton.addEventListener('click', async () => {
  )</p><p><strong>FormatoVisualSugerido:</strong><br>{idea.formatoVisual || 'N/A'}</p>
 </div>
 `;
-                
-                card.appendChild(contentDiv);
-                ideasResultsArea.appendChild(card);
+
+                    card.appendChild(contentDiv);
+                    ideasResultsArea.appendChild(card);
+                });
+                actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones de "Nueva Generación", "Exportar PDF"
+            }
+
+            function displayFinalPhrase(phrase) { /* ... sin cambios ... */ }
+            backToFormButton.addEventListener('click', () => {
+                resultsView.classList.add('is-hidden'); // Ocultar la vista de resultados
+                if (timerContainer) timerContainer.innerHTML = ''; // Limpiar el contenedor de frases/timer
+                ideasResultsArea.innerHTML = ''; // Limpiar el área de ideas por si acaso
+                noResultsMessage.classList.remove('is-hidden'); // Mostrar el mensaje inicial
+                finalPhraseContainer.classList.add('is-hidden');
+                actionButtonsContainer.classList.add('is-hidden'); // Ocultar los botones de acción de resultados
+
+                formView.classList.remove('is-hidden');   // Mostrar la vista del formulario
+
+                clearSimplifiedGenerationForm(); // Limpiar los campos del formulario
+                currentViewingSessionId = null; // Resetear el ID de la sesión que se estaba viendo
+                topicInput.focus(); // Poner el cursor en el campo de tema
             });
-            actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones de "Nueva Generación", "Exportar PDF"
-        }
-        
-                function displayFinalPhrase(phrase) { /* ... sin cambios ... */ }
-                backToFormButton.addEventListener('click', () => {
-                    resultsView.classList.add('is-hidden'); // Ocultar la vista de resultados
-                    if (timerContainer) timerContainer.innerHTML = ''; // Limpiar el contenedor de frases/timer
-                    ideasResultsArea.innerHTML = ''; // Limpiar el área de ideas por si acaso
-                    noResultsMessage.classList.remove('is-hidden'); // Mostrar el mensaje inicial
-                    finalPhraseContainer.classList.add('is-hidden');
-                    actionButtonsContainer.classList.add('is-hidden'); // Ocultar los botones de acción de resultados
+            // Cargar datos al iniciar la app si existen en localStorage (esto puede ir cerca de donde defines `lastInputData`)
+            const storedLastInput = localStorage.getItem('lastInputData');
+            if (storedLastInput) {
+                lastInputData = JSON.parse(storedLastInput);
+            } else {
+                lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] }; // Inicializar con valores por defecto si no hay nada guardado
+            }
 
-                    formView.classList.remove('is-hidden');   // Mostrar la vista del formulario
+            loadLastSearchButton.addEventListener('click', () => {
+                // Siempre intenta leer la versión más reciente de localStorage por si se guardó en otra pestaña (poco probable aquí pero buena práctica)
+                const dataToLoad = JSON.parse(localStorage.getItem('lastInputData'));
 
-                    clearSimplifiedGenerationForm(); // Limpiar los campos del formulario
-                    currentViewingSessionId = null; // Resetear el ID de la sesión que se estaba viendo
-                    topicInput.focus(); // Poner el cursor en el campo de tema
-                });
-                // Cargar datos al iniciar la app si existen en localStorage (esto puede ir cerca de donde defines `lastInputData`)
-                const storedLastInput = localStorage.getItem('lastInputData');
-                if (storedLastInput) {
-                    lastInputData = JSON.parse(storedLastInput);
-                } else {
-                    lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] }; // Inicializar con valores por defecto si no hay nada guardado
-                }
+                if (dataToLoad && typeof dataToLoad === 'object') {
+                    topicInput.value = dataToLoad.topic || '';
+                    copyTypeSelect.value = dataToLoad.copyType || 'promocional';
 
-                loadLastSearchButton.addEventListener('click', () => {
-                    // Siempre intenta leer la versión más reciente de localStorage por si se guardó en otra pestaña (poco probable aquí pero buena práctica)
-                    const dataToLoad = JSON.parse(localStorage.getItem('lastInputData'));
-
-                    if (dataToLoad && typeof dataToLoad === 'object') {
-                        topicInput.value = dataToLoad.topic || '';
-                        copyTypeSelect.value = dataToLoad.copyType || 'promocional';
-
-                        // Limpiar checkboxes actuales antes de marcar los guardados
-                        document.querySelectorAll('input[name="socialNetwork"]').forEach(checkbox => checkbox.checked = false);
-                        if (dataToLoad.socialNetworks && Array.isArray(dataToLoad.socialNetworks)) {
-                            dataToLoad.socialNetworks.forEach(networkValue => {
-                                const checkbox = document.querySelector(`input[name = "socialNetwork"][value = "${networkValue}"]`);
-                                if (checkbox) {
-                                    checkbox.checked = true;
-                                }
-                            });
-                        }
-                        showTemporaryMessage(loadLastSearchButton.parentElement, "Última configuración cargada.", 'is-success', 2000);
-                    } else {
-                        showTemporaryMessage(loadLastSearchButton.parentElement, "No hay configuración previa guardada.", 'is-info', 2000);
-                    }
-                });
-                exportUserHistoryCsvButton.addEventListener('click', async () => {
-                    if (!currentUser) {
-                        showTemporaryMessage(exportUserHistoryCsvButton.parentElement, "Debes iniciar sesión para exportar.", 'is-danger', 3000);
-                        return;
-                    }
-                    showLoading(true); // Muestra el overlay general de carga
-                    try {
-                        const exportHistoryFunc = httpsCallable(functions, 'exportUserHistoryCsv'); // Llamará a la NUEVA función backend
-                        const result = await exportHistoryFunc();
-
-                        if (result.data && result.data.success && typeof result.data.csv === 'string') {
-                            if (result.data.csv.length > 0) { // Solo descargar si hay contenido
-                                const blob = new Blob(["\uFEFF" + result.data.csv], { type: 'text/csv;charset=utf-8;' }); // BOM para UTF-8 en Excel
-                                const link = document.createElement("a");
-                                const url = URL.createObjectURL(blob);
-                                const userPrefix = currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-zA-Z0-9]/g, "_") : currentUser.uid.substring(0, 5);
-                                link.setAttribute("href", url);
-                                link.setAttribute("download", `historial_ideas_${userPrefix}_${new Date().toISOString().slice(0, 10)}.csv`);
-                                document.body.appendChild(link);
-                                link.click();
-                                document.body.removeChild(link);
-                                URL.revokeObjectURL(url); // Liberar memoria
-                            } else {
-                                showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "No hay datos en el historial para exportar.", 'is-info', 3000);
+                    // Limpiar checkboxes actuales antes de marcar los guardados
+                    document.querySelectorAll('input[name="socialNetwork"]').forEach(checkbox => checkbox.checked = false);
+                    if (dataToLoad.socialNetworks && Array.isArray(dataToLoad.socialNetworks)) {
+                        dataToLoad.socialNetworks.forEach(networkValue => {
+                            const checkbox = document.querySelector(`input[name = "socialNetwork"][value = "${networkValue}"]`);
+                            if (checkbox) {
+                                checkbox.checked = true;
                             }
-                        } else {
-                            showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "Error al generar CSV del historial.", 'is-danger', 4000);
-                        }
-                    } catch (error) {
-                        console.error("Error al exportar historial CSV:", error);
-                        showTemporaryMessage(exportUserHistoryCsvButton.parentElement, `Error: ${error.message} `, 'is-danger', 4000);
-                    } finally {
-                        showLoading(false);
+                        });
                     }
-                });
-                function populateTopicSuggestions() {
-                    const recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
-                    topicSuggestions.innerHTML = ''; // Limpiar opciones previas
-                    recentTopics.forEach(topic => {
-                        const option = document.createElement('option');
-                        option.value = topic; // El texto que se autocompleta
-                        // option.textContent = topic; // Para algunos navegadores, si quieres que se muestre en la lista desplegable
-                        topicSuggestions.appendChild(option);
-                    });
+                    showTemporaryMessage(loadLastSearchButton.parentElement, "Última configuración cargada.", 'is-success', 2000);
+                } else {
+                    showTemporaryMessage(loadLastSearchButton.parentElement, "No hay configuración previa guardada.", 'is-info', 2000);
                 }
+            });
+            exportUserHistoryCsvButton.addEventListener('click', async () => {
+                if (!currentUser) {
+                    showTemporaryMessage(exportUserHistoryCsvButton.parentElement, "Debes iniciar sesión para exportar.", 'is-danger', 3000);
+                    return;
+                }
+                showLoading(true); // Muestra el overlay general de carga
+                try {
+                    const exportHistoryFunc = httpsCallable(functions, 'exportUserHistoryCsv'); // Llamará a la NUEVA función backend
+                    const result = await exportHistoryFunc();
 
-                // Llamar al cargar la página (después de que el DOM esté listo) y cuando el input reciba foco
-                document.addEventListener('DOMContentLoaded', () => {
-                    populateTopicSuggestions(); // Para la carga inicial
-
-                    // También, cargar lastInputData aquí es un buen lugar
-                    const storedLastInputOnLoad = localStorage.getItem('lastInputData');
-                    if (storedLastInputOnLoad) {
-                        lastInputData = JSON.parse(storedLastInputOnLoad);
+                    if (result.data && result.data.success && typeof result.data.csv === 'string') {
+                        if (result.data.csv.length > 0) { // Solo descargar si hay contenido
+                            const blob = new Blob(["\uFEFF" + result.data.csv], { type: 'text/csv;charset=utf-8;' }); // BOM para UTF-8 en Excel
+                            const link = document.createElement("a");
+                            const url = URL.createObjectURL(blob);
+                            const userPrefix = currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-zA-Z0-9]/g, "_") : currentUser.uid.substring(0, 5);
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", `historial_ideas_${userPrefix}_${new Date().toISOString().slice(0, 10)}.csv`);
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            URL.revokeObjectURL(url); // Liberar memoria
+                        } else {
+                            showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "No hay datos en el historial para exportar.", 'is-info', 3000);
+                        }
                     } else {
-                        // Si no hay nada, podrías querer inicializar lastInputData con valores por defecto
-                        lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] };
+                        showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "Error al generar CSV del historial.", 'is-danger', 4000);
                     }
+                } catch (error) {
+                    console.error("Error al exportar historial CSV:", error);
+                    showTemporaryMessage(exportUserHistoryCsvButton.parentElement, `Error: ${error.message} `, 'is-danger', 4000);
+                } finally {
+                    showLoading(false);
+                }
+            });
+            function populateTopicSuggestions() {
+                const recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
+                topicSuggestions.innerHTML = ''; // Limpiar opciones previas
+                recentTopics.forEach(topic => {
+                    const option = document.createElement('option');
+                    option.value = topic; // El texto que se autocompleta
+                    // option.textContent = topic; // Para algunos navegadores, si quieres que se muestre en la lista desplegable
+                    topicSuggestions.appendChild(option);
                 });
-                topicInput.addEventListener('focus', populateTopicSuggestions);
-                // ELIMINADO listener de refreshIdeasButton
+            }
 
-                // --- Lógica de Historial (MODIFICADA para no mostrar audiencia/ubicación) ---
-                navHistoryButton.addEventListener('click', async () => { /* ... (la llamada a getHistorySummary es igual) ... */ });
+            // Llamar al cargar la página (después de que el DOM esté listo) y cuando el input reciba foco
+            document.addEventListener('DOMContentLoaded', () => {
+                populateTopicSuggestions(); // Para la carga inicial
 
-                function renderHistoryList(historyItems) {
-                    historyListContainer.innerHTML = '';
-                    if (!historyItems || historyItems.length === 0) {
-                        historyListContainer.innerHTML = '<p class="has-text-centered">No tienes generaciones guardadas.</p>';
-                        return;
-                    }
-                    const list = document.createElement('div');
-                    list.classList.add('list', 'is-hoverable');
-                    historyItems.forEach(item => {
-                        const listItem = document.createElement('a');
-                        listItem.classList.add('list-item');
-                        listItem.dataset.sessionId = item.id;
-                        const timestampDate = item.timestamp && item.timestamp.seconds ? new Date(item.timestamp.seconds * 1000 + (item.timestamp.nanoseconds || 0) / 1000000) : null;
-                        const formattedTimestamp = timestampDate ? timestampDate.toLocaleString('es-ES') : 'Fecha desconocida';
+                // También, cargar lastInputData aquí es un buen lugar
+                const storedLastInputOnLoad = localStorage.getItem('lastInputData');
+                if (storedLastInputOnLoad) {
+                    lastInputData = JSON.parse(storedLastInputOnLoad);
+                } else {
+                    // Si no hay nada, podrías querer inicializar lastInputData con valores por defecto
+                    lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] };
+                }
+            });
+            topicInput.addEventListener('focus', populateTopicSuggestions);
+            // ELIMINADO listener de refreshIdeasButton
 
-                        // Mostrar solo los campos relevantes
-                        listItem.innerHTML = `
+            // --- Lógica de Historial (MODIFICADA para no mostrar audiencia/ubicación) ---
+            navHistoryButton.addEventListener('click', async () => { /* ... (la llamada a getHistorySummary es igual) ... */ });
+
+            function renderHistoryList(historyItems) {
+                historyListContainer.innerHTML = '';
+                if (!historyItems || historyItems.length === 0) {
+                    historyListContainer.innerHTML = '<p class="has-text-centered">No tienes generaciones guardadas.</p>';
+                    return;
+                }
+                const list = document.createElement('div');
+                list.classList.add('list', 'is-hoverable');
+                historyItems.forEach(item => {
+                    const listItem = document.createElement('a');
+                    listItem.classList.add('list-item');
+                    listItem.dataset.sessionId = item.id;
+                    const timestampDate = item.timestamp && item.timestamp.seconds ? new Date(item.timestamp.seconds * 1000 + (item.timestamp.nanoseconds || 0) / 1000000) : null;
+                    const formattedTimestamp = timestampDate ? timestampDate.toLocaleString('es-ES') : 'Fecha desconocida';
+
+                    // Mostrar solo los campos relevantes
+                    listItem.innerHTML = `
             < div class="list-item-content" >
                     <div class="list-item-title"><strong>Tema:</strong> ${item.topic || 'N/A'}</div>
                     <div class="list-item-description">
@@ -657,23 +657,23 @@ generateIdeasButton.addEventListener('click', async () => {
                     </div>
                 </div>
             `;
-                        listItem.addEventListener('click', () => { /* ... (lógica de selección sin cambios) ... */ });
-                        list.appendChild(listItem);
-                    });
-                    historyListContainer.appendChild(list);
-                }
-                // ... (closeHistoryModal, cancelHistoryModal, loadHistoryDetailsButton sin cambios en su lógica principal, pero loadHistoryDetailsButton ya no llenará campos de audiencia/ubicación)
+                    listItem.addEventListener('click', () => { /* ... (lógica de selección sin cambios) ... */ });
+                    list.appendChild(listItem);
+                });
+                historyListContainer.appendChild(list);
+            }
+            // ... (closeHistoryModal, cancelHistoryModal, loadHistoryDetailsButton sin cambios en su lógica principal, pero loadHistoryDetailsButton ya no llenará campos de audiencia/ubicación)
 
-                // --- Lógica de Exportación (exportPdfButton y exportCsvButton se mantienen por ahora, pero exportCsv llamará a una función backend que podría necesitar ser diferente si es "todo el historial") ---
-                // ... (tu código de exportPdfButton y exportCsvButton se mantiene igual por ahora) ...
+            // --- Lógica de Exportación (exportPdfButton y exportCsvButton se mantienen por ahora, pero exportCsv llamará a una función backend que podría necesitar ser diferente si es "todo el historial") ---
+            // ... (tu código de exportPdfButton y exportCsvButton se mantiene igual por ahora) ...
 
 
-                // Inicialización y Burger menu (sin cambios)
-                const burger = document.querySelector('.navbar-burger');
-                const menu = document.querySelector('.navbar-menu');
-                if (burger && menu) { /* ... sin cambios ... */ }
-                console.log("Aplicación simplificada de generación de ideas inicializada.");
-    </script>
+            // Inicialización y Burger menu (sin cambios)
+            const burger = document.querySelector('.navbar-burger');
+            const menu = document.querySelector('.navbar-menu');
+            if (burger && menu) { /* ... sin cambios ... */ }
+            console.log("Aplicación simplificada de generación de ideas inicializada.");
+        </script>
 </body>
 
 </html>
