@@ -348,7 +348,13 @@
                 // if (firstCheckbox) firstCheckbox.focus();
                 return;
             }
-
+            // Guardar datos para "cargar última búsqueda"
+            lastInputData = {
+                topic: topic,
+                copyType: copyType,
+                socialNetworks: selectedSocialNetworks
+            };
+            localStorage.setItem('lastInputData', JSON.stringify(lastInputData)); // Guardar en el almacenamiento local del navegador
             showLoading(true);
             // Limpiar mensajes de estado de generación anteriores
             const existingStatusMessages = ideasResultsArea.querySelectorAll('.generation-status-message');
