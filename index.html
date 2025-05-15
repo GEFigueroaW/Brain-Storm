@@ -173,7 +173,7 @@
                 </div>
             </div>
         </div>
-    </section> ```
+    </section> 
     Elimina el bloque duplicado de `finalPhraseContainer` que está fuera de lugar y los `div` extra que marqué como
     "ESTE PARECE EXTRA". El `finalPhraseContainer` correcto ya está *dentro* de `resultsView`.
     </div>
@@ -529,13 +529,13 @@
  )</p><p><strong>FormatoVisualSugerido:</strong><br>{idea.formatoVisual || 'N/A'}</p>
 </div>
 `;
-                ```
+                
                 card.appendChild(contentDiv);
                 ideasResultsArea.appendChild(card);
             });
             actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones de "Nueva Generación", "Exportar PDF"
         }
-        ```
+        
                 function displayFinalPhrase(phrase) { /* ... sin cambios ... */ }
                 backToFormButton.addEventListener('click', () => {
                     resultsView.classList.add('is-hidden'); // Ocultar la vista de resultados
