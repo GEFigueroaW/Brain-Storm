@@ -70,103 +70,104 @@
 
             <div class="columns">
                 <div class="column is-one-third">
-                    <div id="formView">  <div class="box">
-                        </div>
-                        <div class="box"> <div class="field mt-3">
-                        <button id="loadLastSearchButton" class="button is-text is-small is-fullwidth">Cargar última configuración</button>
-                    </div>
-                </div> <div class="field mt-3">
-                    <button id="exportUserHistoryCsvButton" class="button is-link is-outlined is-fullwidth">
-                        <span class="icon"><i class="fas fa-download"></i></span>
-                        <span>Exportar Últimas 50 Generaciones (CSV)</span>
-                    </button>
-                </div>
-                    </div> </div> <div class="column">
-                </div>
-        </div>
-                    <div class="field">
-                        <label class="label" for="topicInput">Tema o Palabra Clave Principal</label>
-                        <div class="control">
-                            <input class="input" list="topicSuggestions" type="text" id="topicInput" placeholder="Ej: Marketing Digital para Principiantes">
-                            <datalist id="topicSuggestions"></datalist> </div>
-                        <p class="coach-motivation">✨ ¡Sé preciso! Cuanto más preciso sea tu tema, más brillantes
-                            serán las ideas. ✨</p>
-                    </div>
+                    <div id="formView">
+                        <div class="box">
+                            <div class="field">
+                                <label class="label" for="topicInput">Tema o Palabra Clave Principal</label>
+                                <div class="control">
+                                    <input class="input" list="topicSuggestions" type="text" id="topicInput" placeholder="Ej: Marketing Digital para Principiantes">
+                                    <datalist id="topicSuggestions"></datalist>
+                                </div>
+                                <p class="coach-motivation">✨ ¡Sé preciso! Cuanto más preciso sea tu tema, más brillantes serán las ideas. ✨</p>
+                            </div>
 
-                    <div class="field">
-                        <label class="label" for="copyTypeSelect">Tipo de Copy / Post</label>
-                        <div class="control">
-                            <div class="select is-fullwidth">
-                                <select id="copyTypeSelect">
-                                    <option value="promocional" selected>Copy promocional</option>
-                                    <option value="informativo">Copy informativo</option>
-                                    <option value="emocional">Copy emocional</option>
-                                    <option value="cta">Copy con llamado a la acción (CTA)</option>
-                                    <option value="autoridad">Copy de autoridad o prueba social</option>
-                                    <option value="narrativo">Copy narrativo o storytelling</option>
-                                    <option value="urgencia">Copy de urgencia o escasez</option>
-                                </select>
+                            <div class="field">
+                                <label class="label" for="copyTypeSelect">Tipo de Copy / Post</label>
+                                <div class="control">
+                                    <div class="select is-fullwidth">
+                                        <select id="copyTypeSelect">
+                                            <option value="promocional" selected>Copy promocional</option>
+                                            <option value="informativo">Copy informativo</option>
+                                            <option value="emocional">Copy emocional</option>
+                                            <option value="cta">Copy con llamado a la acción (CTA)</option>
+                                            <option value="autoridad">Copy de autoridad o prueba social</option>
+                                            <option value="narrativo">Copy narrativo o storytelling</option>
+                                            <option value="urgencia">Copy de urgencia o escasez</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Redes Sociales (selecciona una o varias)</label>
+                                <div id="socialNetworksContainer" class="control">
+                                    <label class="checkbox mr-2 mb-2">
+                                        <input type="checkbox" name="socialNetwork" value="Instagram"> Instagram
+                                    </label>
+                                    <label class="checkbox mr-2 mb-2">
+                                        <input type="checkbox" name="socialNetwork" value="Facebook"> Facebook
+                                    </label>
+                                    <label class="checkbox mr-2 mb-2">
+                                        <input type="checkbox" name="socialNetwork" value="X / Twitter"> X / Twitter
+                                    </label>
+                                    <label class="checkbox mr-2 mb-2">
+                                        <input type="checkbox" name="socialNetwork" value="LinkedIn"> LinkedIn
+                                    </label>
+                                    <label class="checkbox mr-2 mb-2">
+                                        <input type="checkbox" name="socialNetwork" value="TikTok"> TikTok
+                                    </label>
+                                    <label class="checkbox mr-2 mb-2">
+                                        <input type="checkbox" name="socialNetwork" value="YouTube"> YouTube
+                                    </label>
+                                    <label class="checkbox mr-2 mb-2">
+                                        <input type="checkbox" name="socialNetwork" value="Google Ads"> Google Ads
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="field mt-5">
+                                <button id="generateIdeasButton"
+                                    class="button is-primary is-fullwidth is-large animate__animated animate__pulse animate__infinite">
+                                    <span class="icon"><i class="fas fa-lightbulb"></i></span>
+                                    <span>✨ ¡Generar Ideas! ✨</span>
+                                </button>
+                            </div>
+
+                            <div class="field mt-3">
+                                <button id="loadLastSearchButton" class="button is-text is-small is-fullwidth">Cargar última configuración</button>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Redes Sociales (selecciona una o varias)</label>
-                        <div id="socialNetworksContainer" class="control">
-                            <label class="checkbox mr-2 mb-2">
-                                <input type="checkbox" name="socialNetwork" value="Instagram"> Instagram
-                            </label>
-                            <label class="checkbox mr-2 mb-2">
-                                <input type="checkbox" name="socialNetwork" value="Facebook"> Facebook
-                            </label>
-                            <label class="checkbox mr-2 mb-2">
-                                <input type="checkbox" name="socialNetwork" value="X / Twitter"> X / Twitter
-                            </label>
-                            <label class="checkbox mr-2 mb-2">
-                                <input type="checkbox" name="socialNetwork" value="LinkedIn"> LinkedIn
-                            </label>
-                            <label class="checkbox mr-2 mb-2">
-                                <input type="checkbox" name="socialNetwork" value="TikTok"> TikTok
-                            </label>
-                            <label class="checkbox mr-2 mb-2">
-                                <input type="checkbox" name="socialNetwork" value="YouTube"> YouTube
-                            </label>
-                            <label class="checkbox mr-2 mb-2">
-                                <input type="checkbox" name="socialNetwork" value="Google Ads"> Google Ads
-                            </label>
-                        </div>
-                    </div>
-
-                        <div class="field mt-5">
-                            <button id="generateIdeasButton"
-                                class="button is-primary is-fullwidth is-large animate__animated animate__pulse animate__infinite">
-                                <span class="icon"><i class="fas fa-lightbulb"></i></span>
-                                <span>✨ ¡Generar Ideas! ✨</span>
+                        <div class="field mt-3">
+                            <button id="exportUserHistoryCsvButton" class="button is-link is-outlined is-fullwidth">
+                                <span class="icon"><i class="fas fa-download"></i></span>
+                                <span>Exportar Últimas 50 Generaciones (CSV)</span>
                             </button>
                         </div>
-                    </div>
-                </div>
-
-                <div id="resultsView" class="column"> <div id="actionButtonsContainer" class="mb-4 is-hidden has-text-right">
-                        ```
+                    </div> </div>
+                <div id="resultsView" class="column">
                     <div id="actionButtonsContainer" class="mb-4 is-hidden has-text-right">
-                 <button id="backToFormButton" class="button is-light mr-2">
-                    <span class="icon"><i class="fas fa-arrow-left"></i></span>
-                    <span>Nueva Generación</span>
-                </button>
-                <button id="exportPdfButton" class="button is-success mr-2">
-                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                    <span>Exportar a PDF</span>
-                </button>
+                        <button id="backToFormButton" class="button is-light mr-2">
+                           <span class="icon"><i class="fas fa-arrow-left"></i></span>
+                           <span>Nueva Generación</span>
+                       </button>
+                       <button id="exportPdfButton" class="button is-success mr-2">
+                           <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                           <span>Exportar a PDF</span>
+                       </button>
+                       </div>
+
+                   <div id="ideasResultsArea">
+                       <p id="noResultsMessage" class="has-text-centered has-text-grey">Completa los campos y haz clic en generar.</p>
+                   </div>
+
+                   <div id="finalPhraseContainer" class="is-hidden mt-4">
+                       <p id="finalPhraseText" class="has-text-centered is-italic"></p>
+                   </div>
+
+                    <div id="timerContainer" class="has-text-centered my-2"></div>
                 </div>
-                <div id="finalPhraseContainer" class="is-hidden mt-4">
-                <p id="finalPhraseText" class="has-text-centered is-italic"></p>
-            </div>
-             <div id="timerContainer" class="has-text-centered my-2"></div>
-                    <div id="ideasResultsArea">
-                        <p id="noResultsMessage" class="has-text-centered has-text-grey">Completa los campos y haz clic
-                            en generar.</p>
-                    </div>
+                </div>
+            ```
                     <div id="finalPhraseContainer" class="is-hidden">
                         <p id="finalPhraseText"></p>
                     </div>
