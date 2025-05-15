@@ -326,8 +326,12 @@
             }
 
             const topic = topicInput.value.trim();
-            const tone = toneSelect.value;
-            const maxWords = parseInt(maxWordsInput.value, 10);
+            const copyType = copyTypeSelect.value; // Obtener valor del nuevo selector
+
+            const selectedSocialNetworks = [];
+            document.querySelectorAll('input[name="socialNetwork"]:checked').forEach((checkbox) => {
+                selectedSocialNetworks.push(checkbox.value);
+            });
 
             // Validaciones simplificadas
             if (!topic) {
