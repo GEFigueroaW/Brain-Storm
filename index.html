@@ -335,13 +335,17 @@
 
             // Validaciones simplificadas
             if (!topic) {
-                showTemporaryMessage(topicInput.parentElement, "El tema es obligatorio.", 'is-danger', 3000); // Asumiendo que el <p> está fuera del control
+                showTemporaryMessage(topicInput.parentElement.parentElement, "El tema es obligatorio.", 'is-danger', 3000); // Ajustado para apuntar al div.field
                 topicInput.focus();
                 return;
             }
-            if (isNaN(maxWords) || maxWords < 50 || maxWords > 500) {
-                showTemporaryMessage(maxWordsInput.parentElement, "Máximo de palabras debe ser entre 50 y 500.", 'is-danger', 3000);
-                maxWordsInput.focus();
+            // YA NO HAY VALIDACIÓN PARA maxWords
+
+            if (selectedSocialNetworks.length === 0) {
+                showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos una red social.", 'is-danger', 3000); // Mensaje cerca del contenedor de checkboxes
+                // Podrías enfocar el primer checkbox si quisieras:
+                // const firstCheckbox = document.querySelector('input[name="socialNetwork"]');
+                // if (firstCheckbox) firstCheckbox.focus();
                 return;
             }
 
