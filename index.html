@@ -317,155 +317,146 @@
         // ELIMINADA la lógica de listeners para audienceTypeRadios, includeLocationCheckbox
         // ELIMINADA la llamada a renderAudienceGroups
 
-        generateIdeasButton.addEventListener('click', async () => {
+generateIdeasButton.addEventListener('click', async () => {
             if (!currentUser) {
                 showTemporaryMessage(noResultsMessage, "Debes iniciar sesión para generar ideas.");
                 return;
             }
 
             const topic = topicInput.value.trim();
-            const copyType = copyTypeSelect.value; // Obtener valor del nuevo selector
+            const copyType = copyTypeSelect.value;
 
             const selectedSocialNetworks = [];
             document.querySelectorAll('input[name="socialNetwork"]:checked').forEach((checkbox) => {
                 selectedSocialNetworks.push(checkbox.value);
             });
 
-            // Validaciones simplificadas
+            // Validaciones
             if (!topic) {
-                showTemporaryMessage(topicInput.parentElement.parentElement, "El tema es obligatorio.", 'is-danger', 3000); // Ajustado para apuntar al div.field
+                showTemporaryMessage(topicInput.parentElement.parentElement, "El tema es obligatorio.", 'is-danger', 3000);
                 topicInput.focus();
                 return;
             }
-            // YA NO HAY VALIDACIÓN PARA maxWords
-
             if (selectedSocialNetworks.length === 0) {
-                showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos una red social.", 'is-danger', 3000); // Mensaje cerca del contenedor de checkboxes
-                // Podrías enfocar el primer checkbox si quisieras:
-                // const firstCheckbox = document.querySelector('input[name="socialNetwork"]');
-                // if (firstCheckbox) firstCheckbox.focus();
+                showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos una red social.", 'is-danger', 3000);
                 return;
             }
+
             // Guardar datos para "cargar última búsqueda"
             lastInputData = {
                 topic: topic,
                 copyType: copyType,
                 socialNetworks: selectedSocialNetworks
             };
-            localStorage.setItem('lastInputData', JSON.stringify(lastInputData)); // Guardar en el almacenamiento local del navegador
-            // Simulación de página: Ocultar formulario y mostrar vista de resultados
+            localStorage.setItem('lastInputData', JSON.stringify(lastInputData));
+
+            // --- Preparación de UI para Carga ---
             formView.classList.add('is-hidden');
             resultsView.classList.remove('is-hidden');
-            // Opcional: Ajustar el ancho de la columna de resultados si es necesario
-            // resultsView.classList.remove('is-two-thirds'); // Si antes era más pequeña
-            // resultsView.classList.add('is-full'); // o la clase de Bulma que necesites para ancho completo
-
-            // Limpiar área de resultados y preparar para frases de carga
-            ideasResultsArea.innerHTML = ''; // Limpiar resultados anteriores
+            ideasResultsArea.innerHTML = '';
             finalPhraseContainer.classList.add('is-hidden');
-            actionButtonsContainer.classList.add('is-hidden'); // Botones de acción de resultados ocultos inicialmente
-            noResultsMessage.classList.add('is-hidden'); // Ocultar el mensaje "Completa los campos..."
+            actionButtonsContainer.classList.add('is-hidden');
+            noResultsMessage.classList.add('is-hidden');
+            timerContainer.innerHTML = ''; // Limpiar
 
-            // Mostrar Frases de Carga
-            timerContainer.innerHTML = ''; // Limpiar contenido previo del contenedor de frases
             let currentPhraseIndex = 0;
             timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
-
             phrasesIntervalId = setInterval(() => {
                 currentPhraseIndex = (currentPhraseIndex + 1) % loadingPhrases.length;
                 const phraseElement = timerContainer.querySelector('p');
                 if (phraseElement) {
-                    phraseElement.classList.remove('animate__fadeIn'); // Quitar para reiniciar animación
-                    phraseElement.classList.add('animate__fadeOut'); // Efecto de salida
-                    setTimeout(() => { // Esperar que termine el fadeOut
-                        phraseElement.textContent = loadingPhrases[currentPhraseIndex];
-                        phraseElement.classList.remove('animate__fadeOut');
-                        phraseElement.classList.add('animate__fadeIn'); // Efecto de entrada
-                    }, 200); // Debe coincidir con la duración de tu animación fadeOut si la defines en CSS
-                    // Guardar tema en el historial de autocompletado
-
-                    showLoading(true); // Esto muestra el overlay con el spinner (si aún lo quieres además de las frases)
-
-                    try {
-                        const generateIdeasFunction = httpsCallable(functions, 'generateIdeas');
-                        const result = await generateIdeasFunction({
-                            topic: topic,
-                            copyType: copyType, // Enviar el nuevo tipo de copy
-                            socialNetworks: selectedSocialNetworks // Enviar la lista de redes sociales
-                            // No se envían 'tone' ni 'maxWords'
-                        });
-
-                        // Manejo de la respuesta MODIFICADO (Punto 10)
-                        if (result.data && result.data.success) {
-                            currentViewingSessionId = result.data.sessionId;
-                            displayGeneratedIdeas(result.data.ideas); // Esta función ya debe estar preparada para mostrar lo que reciba
-                            displayFinalPhrase(result.data.finalPhrase);
-                            actionButtonsContainer.classList.remove('is-hidden');
-                            noResultsMessage.classList.add('is-hidden');
-                            const currentTopicForStorage = topicInput.value.trim();
-                            if (currentTopicForStorage) {
-                                let recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
-                                // Evitar duplicados (insensible a mayúsculas/minúsculas para la comparación, pero guarda el original)
-                                if (!recentTopics.some(rt => rt.toLowerCase() === currentTopicForStorage.toLowerCase())) {
-                                    recentTopics.unshift(currentTopicForStorage); // Añadir al principio
-                                    recentTopics = recentTopics.slice(0, 10); // Mantener solo los últimos 10
-                                    localStorage.setItem('recentTopics', JSON.stringify(recentTopics));
-                                    // No es estrictamente necesario llamar a populateTopicSuggestions() aquí,
-                                    // ya que se llama en el 'focus' del input.
-                                }
-                            }
-                        } else {
-                            timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
+                    phraseElement.classList.remove('animate__fadeIn');
+                    phraseElement.classList.add('animate__fadeOut');
+                    setTimeout(() => {
+                        if (timerContainer.contains(phraseElement)) { // Verificar si el elemento aún existe y es parte del DOM relevante
+                           phraseElement.textContent = loadingPhrases[currentPhraseIndex];
+                           phraseElement.classList.remove('animate__fadeOut');
+                           phraseElement.classList.add('animate__fadeIn');
                         }
-                    }, 3000); // Cambiar frase cada 3 segundos
-            if (result.data.message) {
-                const ideasContainer = ideasResultsArea;
-                let messageType = 'is-success';
-                // Comprobar si se generaron menos ideas de las esperadas (una por red social)
-                if (result.data.ideas && result.data.ideas.length < selectedSocialNetworks.length && result.data.ideas.length > 0) {
-                    messageType = 'is-warning';
-                } else if (!result.data.ideas || result.data.ideas.length === 0) {
-
-                    // Si la función backend ahora solo lanza error si ideas.length es 0, este caso no se dará aquí
-                    // sino en el catch. Pero por si acaso.
-                    messageType = 'is-danger';
+                    }, 200);
+                } else if (phrasesIntervalId) { // Si el P ya no existe pero el intervalo sí, crearlo de nuevo (poco probable si el contenedor existe)
+                     timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
                 }
+            }, 3000);
 
-                const generationStatusMessage = document.createElement('div');
-                generationStatusMessage.classList.add('notification', messageType, 'is-light', 'mt-4', 'generation-status-message');
-                generationStatusMessage.textContent = result.data.message;
+            showLoading(true); // Overlay con spinner
 
-                // Si hay tarjetas de ideas, poner el mensaje antes de la primera. Sino, reemplazar el contenido.
-                if (ideasContainer.querySelector('.card')) {
-                    ideasContainer.prepend(generationStatusMessage);
-                } else {
-                    ideasResultsArea.innerHTML = ''; // Limpiar "No se generaron ideas" si el mensaje lo reemplaza
-                    ideasResultsArea.appendChild(generationStatusMessage);
-                }
-            }
-        } else {
-            // Si success es false, o no hay data, usar el error o mensaje de la función
-            let errorMessageToShow = "No se pudieron generar las ideas.";
-            if(result.data && result.data.error) {
-            errorMessageToShow = result.data.error;
-        } else if (result.data && result.data.message) {
-            errorMessageToShow = result.data.message;
-        }
-        // El error HttpsError lanzado por la función se captura en el bloque catch.
-        // Este else sería para casos donde success:false pero no es un HttpsError.
-        ideasResultsArea.innerHTML = `<div class="notification is-danger">${errorMessageToShow}</div>`;
+            // --- Llamada a Firebase y Manejo de Resultados ---
+            try {
+                const generateIdeasFunction = httpsCallable(functions, 'generateIdeas');
+                const result = await generateIdeasFunction({
+                    topic: topic,
+                    copyType: copyType,
+                    socialNetworks: selectedSocialNetworks
+                });
+
+                if (result.data && result.data.success) {
+                    currentViewingSessionId = result.data.sessionId;
+                    displayGeneratedIdeas(result.data.ideas); // Esto limpiará el timerContainer
+                    displayFinalPhrase(result.data.finalPhrase);
+                    actionButtonsContainer.classList.remove('is-hidden');
+                    // noResultsMessage se maneja dentro de displayGeneratedIdeas
+
+                    // Guardar tema en el historial de autocompletado
+                    const currentTopicForStorage = topicInput.value.trim(); // Usar el valor actual, no el 'topic' de arriba que podría ser de una carga anterior
+                    if (currentTopicForStorage) {
+                       let recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
+                       if (!recentTopics.some(rt => rt.toLowerCase() === currentTopicForStorage.toLowerCase())) {
+                           recentTopics.unshift(currentTopicForStorage);
+                           recentTopics = recentTopics.slice(0, 10);
+                           localStorage.setItem('recentTopics', JSON.stringify(recentTopics));
+                       }
+                    }
+                    // FIN de Guardar tema
+
+                    if (result.data.message) {
+                        const ideasContainer = ideasResultsArea; // Asegúrate que este es el contenedor correcto
+                        let messageType = 'is-success';
+                        if (result.data.ideas && result.data.ideas.length < selectedSocialNetworks.length && result.data.ideas.length > 0) {
+                            messageType = 'is-warning';
+                        } else if (!result.data.ideas || result.data.ideas.length === 0) {
+                            messageType = 'is-danger';
+                        }
+
+                        const generationStatusMessage = document.createElement('div');
+                        generationStatusMessage.classList.add('notification', messageType, 'is-light', 'mt-4', 'generation-status-message');
+                        generationStatusMessage.textContent = result.data.message;
+
+                        if (ideasContainer.querySelector('.card')) {
+                            ideasContainer.prepend(generationStatusMessage);
+                        } else {
+                            // No limpiar si displayGeneratedIdeas ya puso un mensaje de "no se generaron ideas"
+                            if (!ideasContainer.querySelector('#noResultsMessage') && !ideasContainer.querySelector('.notification')) {
+                                ideasContainer.innerHTML = '';
+                            }
+                            ideasContainer.appendChild(generationStatusMessage);
+                        }
+                    }
+                } else { // result.data.success es false o no hay result.data
+                    let errorMessageToShow = "No se pudieron generar las ideas (respuesta inesperada).";
+                    if (result.data && result.data.error) {
+                        errorMessageToShow = result.data.error;
+                    } else if (result.data && result.data.message) {
+                        errorMessageToShow = result.data.message;
+                    }
+                    ideasResultsArea.innerHTML = `<div class="notification is-danger">${errorMessageToShow}</div>`;
+                    if(timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga
+                    actionButtonsContainer.classList.remove('is-hidden'); // Mostrar "Nueva Generación"
                 }
             } catch (error) {
-            console.error("Error al generar ideas:", error);
-            // El HttpsError de la función (ej. "La IA no devolvió ninguna idea...") vendrá aquí en error.message
-            ideasResultsArea.innerHTML = `<div class="notification is-danger">Error al generar ideas: ${error.message}</div>`;
-        } finally {
-            showLoading(false); // Ocultar el overlay con spinner
-            clearInterval(phrasesIntervalId); // DETENER el intervalo de las frases de carga
-            // Decidimos no limpiar timerContainer aquí para que los resultados o errores
-            // simplemente reemplacen el contenido de la página de forma natural.
-            // Si la generación es muy rápida, las frases apenas se verán.
-        }
+                console.error("Error al generar ideas:", error);
+                ideasResultsArea.innerHTML = `<div class="notification is-danger">Error al generar ideas: ${error.message}</div>`;
+                if(timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga
+                actionButtonsContainer.classList.remove('is-hidden'); // Mostrar "Nueva Generación"
+            } finally {
+                showLoading(false);
+                if (phrasesIntervalId) {
+                    clearInterval(phrasesIntervalId);
+                    phrasesIntervalId = null; // importante para evitar múltiples intervalos
+                }
+                // No limpiar timerContainer aquí si displayGeneratedIdeas o el error ya lo hacen
+                // o si quieres que el último mensaje de error/éxito de ideasResultsArea sea lo principal.
+            }
         });
 
         // displayGeneratedIdeas y displayFinalPhrase (sin cambios en su lógica interna, pero displayGeneratedIdeas ya no mostrará ubicación)
@@ -507,9 +498,9 @@
                 const contentDiv = document.createElement('div');
                 contentDiv.classList.add('card-content');
                 // El orden de los campos dentro del contenido cambia:
-                contentDiv.innerHTML = `
-                <div class="content">
-                    <p><strong>Gancho Verbal Impactante:</strong><br><span class="math-inline">\{idea\.ganchoVerbal \|\| 'N/A'\}</p\>
+                ccontentDiv.innerHTML = `
+                    <div class="content">
+                        <p><strong>Gancho Verbal Impactante:</strong><br><span class="math-inline">\{idea\.ganchoVerbal \|\| 'N/A'\}</p\>
 <p><strong>Texto o Copy:</strong><br>{idea.textoCopy || 'N/A'}</p>
 <p><strong>Hashtags:</strong><br>Array.isArray(idea.hashtags)?idea.hashtags.join( 
 ′
