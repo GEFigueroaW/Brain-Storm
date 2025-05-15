@@ -459,47 +459,65 @@
         });
 
         // displayGeneratedIdeas y displayFinalPhrase (sin cambios en su lógica interna, pero displayGeneratedIdeas ya no mostrará ubicación)
-        function displayGeneratedIdeas(ideas) {
-            // Limpiar mensajes de estado de generación previos antes de añadir nuevas ideas
-            const existingStatusMessages = ideasResultsArea.querySelectorAll('.generation-status-message');
-            existingStatusMessages.forEach(msg => msg.remove());
+function displayGeneratedIdeas(ideas) {
+        // Limpiar mensajes de estado de generación previos y el mensaje de "generando..." del timerContainer
+        const existingStatusMessages = ideasResultsArea.querySelectorAll('.generation-status-message');
+        existingStatusMessages.forEach(msg => msg.remove());
+        if(timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga/temporizador
 
-            if (!ideas || ideas.length === 0) { // Si no hay ideas, pero hubo un mensaje, no sobreescribir el mensaje.
-                if (!ideasResultsArea.querySelector('.generation-status-message')) {
-                    ideasResultsArea.innerHTML = '<p class="has-text-centered">No se generaron ideas. Intenta ajustar tus parámetros.</p>';
-                }
-                return;
+        if (!ideas || ideas.length === 0) {
+            // Si NO hay ideas, pero SÍ hay un mensaje de estado (ej. "la IA no devolvió..."), no lo sobrescribas.
+            if (!ideasResultsArea.querySelector('.generation-status-message') && !ideasResultsArea.querySelector('.notification')) {
+                ideasResultsArea.innerHTML = '<p id="noResultsMessage" class="has-text-centered has-text-grey">No se generaron ideas esta vez. Intenta ajustar tus parámetros o tema.</p>';
+                if(noResultsMessage) noResultsMessage.classList.remove('is-hidden');
             }
-            // Si hay ideas, limpiar cualquier mensaje de "no resultados" o el de "generando"
-            ideasResultsArea.innerHTML = '';
-
-
-            ideas.forEach((idea, index) => {
-                const card = document.createElement('div');
-                card.classList.add('card', 'animate__animated', 'animate__fadeInUp');
-                card.style.animationDelay = `${index * 0.1}s`;
-                const header = document.createElement('header');
-                header.classList.add('card-header');
-                const title = document.createElement('p');
-                title.classList.add('card-header-title');
-                title.textContent = `Idea ${index + 1}`;
-                header.appendChild(title);
-                card.appendChild(header);
-                const contentDiv = document.createElement('div');
-                contentDiv.classList.add('card-content');
-                contentDiv.innerHTML = `
-                    <div class="content">
-                        <p><strong>Texto o Copy:</strong></p>
-                        <p>${idea.textoCopy || 'N/A'}</p>
-                        <p><strong>Hashtags:</strong> ${Array.isArray(idea.hashtags) ? idea.hashtags.join(', ') : (idea.hashtags || 'N/A')}</p>
-                        <p><strong>Formato Visual Sugerido:</strong> ${idea.formatoVisual || 'N/A'}</p>
-                        <p><strong>Gancho Verbal Impactante:</strong> ${idea.ganchoVerbal || 'N/A'}</p>
-                        </div>
-                `;
-                card.appendChild(contentDiv);
-                ideasResultsArea.appendChild(card);
-            });
+            actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones para "Nueva Generación" aunque no haya ideas
+            return;
         }
+
+        // Si hay ideas, limpiar cualquier mensaje de "no resultados" o el de "generando"
+        ideasResultsArea.innerHTML = '';
+        if(noResultsMessage) noResultsMessage.classList.add('is-hidden');
+
+        ideas.forEach((idea, index) => {
+            const card = document.createElement('div');
+            card.classList.add('card', 'mb-4', 'animate__animated', 'animate__fadeInUp'); // mb-4 para separar tarjetas
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            const header = document.createElement('header');
+            header.classList.add('card-header');
+
+            const title = document.createElement('p');
+            title.classList.add('card-header-title');
+            // El backend ahora debería enviar 'redSocialTarget' en cada objeto 'idea'
+            title.textContent = `Idea para: ${idea.redSocialTarget || 'Red Social Específica'}`;
+            header.appendChild(title);
+            card.appendChild(header);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('card-content');
+            // El orden de los campos dentro del contenido cambia:
+            contentDiv.innerHTML = `
+                <div class="content">
+                    <p><strong>Gancho Verbal Impactante:</strong><br><span class="math-inline">\{idea\.ganchoVerbal \|\| 'N/A'\}</p\>
+<p><strong>Texto o Copy:</strong><br>{idea.textoCopy || 'N/A'}</p>
+<p><strong>Hashtags:</strong><br>Array.isArray(idea.hashtags)?idea.hashtags.join( 
+′
+ , 
+′
+ ):(idea.hashtags∣∣ 
+′
+ N/A 
+′
+ )</p><p><strong>FormatoVisualSugerido:</strong><br>{idea.formatoVisual || 'N/A'}</p>
+</div>
+`;
+card.appendChild(contentDiv);
+ideasResultsArea.appendChild(card);
+});
+actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones de "Nueva Generación", "Exportar PDF"
+}
+```
         function displayFinalPhrase(phrase) { /* ... sin cambios ... */ }
 
         // ELIMINADO listener de refreshIdeasButton
