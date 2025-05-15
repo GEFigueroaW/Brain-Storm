@@ -293,11 +293,19 @@
             }
         }
 
-        function clearSimplifiedGenerationForm() { // Nueva función para limpiar los campos simplificados
-            topicInput.value = '';
-            toneSelect.value = 'Neutral';
-            maxWordsInput.value = 100;
-        }
+        function clearSimplifiedGenerationForm() {
+        topicInput.value = '';
+        copyTypeSelect.value = 'promocional'; // Valor por defecto del nuevo select de Tipo de Copy
+
+        // Limpiar todas las casillas de redes sociales
+        document.querySelectorAll('input[name="socialNetwork"]:checked').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        // Opcional: podrías decidir si quieres que `lastInputData` se limpie aquí o no.
+        // Si quieres que se limpie para que "cargar última" no recuerde nada tras un logout/login:
+        // lastInputData = null;
+        // localStorage.removeItem('lastInputData');
+    }
 
         function clearResultsArea() { /* ... sin cambios ... */ }
 
