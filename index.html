@@ -703,25 +703,17 @@
           const contentDiv = document.createElement('div');
           contentDiv.classList.add('card-content');
           // El orden de los campos dentro del contenido cambia:
-          contentDiv.innerHTML = `
+          contentDiv.innerHTML = ` 
                     <div class="content">
-                        <p><strong>Gancho Verbal Impactante:</strong><br><span class="math-inline">\{idea\.ganchoVerbal \|\| 'N/A'\}</p\>
-<p><strong>Texto o Copy:</strong><br>{idea.textoCopy || 'N/A'}</p>
-<p><strong>Hashtags:</strong><br>Array.isArray(idea.hashtags)?idea.hashtags.join( 
-′
- , 
-′
- ):(idea.hashtags∣∣ 
-′
- N/A 
-′
- )</p><p><strong>FormatoVisualSugerido:</strong><br>{idea.formatoVisual || 'N/A'}</p>
-</div>
-`;
-
-          card.appendChild(contentDiv);
-          ideasResultsArea.appendChild(card);
-        });
+                        <p><strong>Gancho Verbal Impactante:</strong><br>${idea.ganchoVerbal || 'N/A'}</p>
+                        <p><strong>Texto o Copy:</strong><br>${idea.textoCopy || 'N/A'}</p>
+                        <p><strong>Hashtags:</strong><br>${Array.isArray(idea.hashtags) ? idea.hashtags.join(', ') : (idea.hashtags || 'N/A')}</p>
+                        <p><strong>Formato Visual Sugerido:</strong><br>${idea.formatoVisual || 'N/A'}</p>
+                    </div>
+                `; // <--- ¡COMILLA INVERTIDA DE CIERRE!
+                card.appendChild(contentDiv);
+                ideasResultsArea.appendChild(card);
+            });
         actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones de "Nueva Generación", "Exportar PDF"
       }
 
