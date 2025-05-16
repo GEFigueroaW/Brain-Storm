@@ -878,6 +878,37 @@
       const menu = document.querySelector('.navbar-menu');
       if (burger && menu) { /* ... sin cambios ... */ }
       console.log("Aplicación simplificada de generación de ideas inicializada.");
+      document.addEventListener('DOMContentLoaded', () => { // Asegura que el DOM esté cargado
+    const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+    if (burgers.length > 0) {
+        burgers.forEach(el => {
+            el.addEventListener('click', () => {
+                // Obtener el target del atributo 'data-target'
+                const target = el.dataset.target; // Debería ser 'navbarMenuCore'
+                const $target = document.getElementById(target); // El div del menú
+
+                // Alternar la clase 'is-active' en el burger y en el target del menú
+                el.classList.toggle('is-active');
+                if ($target) { // Verificar que $target no sea null
+                    $target.classList.toggle('is-active');
+                } else {
+                    console.warn('Burger target not found:', target);
+                }
+            });
+        });
+    }
+
+    // ... (Aquí también podrías poner populateTopicSuggestions() y la carga inicial de lastInputData
+    //      que ya tienes dentro de otro DOMContentLoaded si quieres unificar)
+    // populateTopicSuggestions();
+    // const storedLastInputOnLoad = localStorage.getItem('lastInputData');
+    // if (storedLastInputOnLoad) {
+    //     lastInputData = JSON.parse(storedLastInputOnLoad);
+    // } else {
+    //     lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] };
+    // }
+});
     </script>
 </body>
 
