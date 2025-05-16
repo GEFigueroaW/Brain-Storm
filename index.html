@@ -489,6 +489,9 @@
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             if (name.trim() !== '') {
               await updateProfile(userCredential.user, { displayName: name.trim() });
+              console.log("Perfil actualizado con displayName:", name.trim()); // Para depurar
+            } else {
+                console.log("No se proveyó nombre, displayName no se actualizó."); // Para depurar
             }
             // onAuthStateChanged se encargará de actualizar la UI y ocultar showLoading
           } catch (error) {
