@@ -491,7 +491,7 @@
               await updateProfile(userCredential.user, { displayName: name.trim() });
               console.log("Perfil actualizado con displayName:", name.trim()); // Para depurar
             } else {
-                console.log("No se proveyó nombre, displayName no se actualizó."); // Para depurar
+              console.log("No se proveyó nombre, displayName no se actualizó."); // Para depurar
             }
             // onAuthStateChanged se encargará de actualizar la UI y ocultar showLoading
           } catch (error) {
@@ -504,15 +504,16 @@
 
       if (googleLoginButton) {
         googleLoginButton.addEventListener('click', async () => {
-          const provider = new GoogleAuthProvider(); // Asegúrate de tener importado GoogleAuthProvider
+          const provider = new GoogleAuthProvider(); // Crear instancia del proveedor
           try {
             showLoading(true);
-            await signInWithPopup(auth, provider);
-            // onAuthStateChanged se encargará de actualizar la UI y ocultar showLoading
+            const result = await signInWithPopup(auth, provider); // Llamar a signInWithPopup
+            // const user = result.user; // Aquí tienes el usuario de Google
+            // onAuthStateChanged se encargará de la UI
           } catch (error) {
             console.error("Error con Google Sign-In:", error);
-            // Podrías mostrar este error en loginError o registerError
-            if (loginError) loginError.textContent = `Error con Google: ${error.message}`;
+            if (loginError) loginError.textContent = `Error con Google: ${error.code} - ${error.message}`; // Mostrar más detalles
+            if (timerContainer) timerContainer.innerHTML = ''; // Limpiar frases si se queda en authView
             showLoading(false);
           }
         });
