@@ -711,9 +711,9 @@
                         <p><strong>Formato Visual Sugerido:</strong><br>${idea.formatoVisual || 'N/A'}</p>
                     </div>
                 `; // <--- ¡COMILLA INVERTIDA DE CIERRE!
-                card.appendChild(contentDiv);
-                ideasResultsArea.appendChild(card);
-            });
+          card.appendChild(contentDiv);
+          ideasResultsArea.appendChild(card);
+        });
         actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones de "Nueva Generación", "Exportar PDF"
       }
 
@@ -870,37 +870,101 @@
       const menu = document.querySelector('.navbar-menu');
       if (burger && menu) { /* ... sin cambios ... */ }
       document.addEventListener('DOMContentLoaded', () => { // Asegura que el DOM esté cargado
-    const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+        const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 
-    if (burgers.length > 0) {
-        burgers.forEach(el => {
+        if (burgers.length > 0) {
+          burgers.forEach(el => {
             el.addEventListener('click', () => {
-                // Obtener el target del atributo 'data-target'
-                const target = el.dataset.target; // Debería ser 'navbarMenuCore'
-                const $target = document.getElementById(target); // El div del menú
+              // Obtener el target del atributo 'data-target'
+              const target = el.dataset.target; // Debería ser 'navbarMenuCore'
+              const $target = document.getElementById(target); // El div del menú
 
-                // Alternar la clase 'is-active' en el burger y en el target del menú
-                el.classList.toggle('is-active');
-                if ($target) { // Verificar que $target no sea null
-                    $target.classList.toggle('is-active');
-                } else {
-                    console.warn('Burger target not found:', target);
-                }
+              // Alternar la clase 'is-active' en el burger y en el target del menú
+              el.classList.toggle('is-active');
+              if ($target) { // Verificar que $target no sea null
+                $target.classList.toggle('is-active');
+              } else {
+                console.warn('Burger target not found:', target);
+              }
+            });
+          });
+        }
+
+        // ... (Aquí también podrías poner populateTopicSuggestions() y la carga inicial de lastInputData
+        //      que ya tienes dentro de otro DOMContentLoaded si quieres unificar)
+        // populateTopicSuggestions();
+        // const storedLastInputOnLoad = localStorage.getItem('lastInputData');
+        // if (storedLastInputOnLoad) {
+        //     lastInputData = JSON.parse(storedLastInputOnLoad);
+        // } else {
+        //     lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] };
+        // }
+      });
+      console.log("Aplicación simplificada de generación de ideas inicializada.");
+      // --- Lógica de Exportación a PDF ---
+      if (exportPdfButton && ideasResultsArea && actionButtonsContainer) { // Verifica que todos los elementos necesarios existan
+        exportPdfButton.addEventListener('click', () => {
+          // Verificar si hay algo que exportar en el área de resultados
+          if (!ideasResultsArea.querySelector('.card')) { // Busca si hay al menos una tarjeta de idea
+            showTemporaryMessage(actionButtonsContainer, "No hay ideas generadas para exportar a PDF.", 'is-warning', 3000);
+            return;
+          }
+
+          // Opcional: Mostrar un indicador de carga específico para PDF o usar el general
+          showLoading(true);
+
+          const elementToExport = ideasResultsArea; // El div que contiene todas las tarjetas
+
+          let filename = "brainstorm_ideas.pdf";
+          if (currentViewingSessionId) {
+            filename = `brainstorm_ideas_${currentViewingSessionId.substring(0, 8)}.pdf`;
+          } else if (topicInput && topicInput.value) {
+            try { // Añadir try-catch por si topicInput.value es algo inesperado
+              const topicName = topicInput.value.trim().replace(/\s+/g, '_').substring(0, 20);
+              filename = `brainstorm_${topicName}_${Date.now()}.pdf`;
+            } catch (e) {
+              console.warn("No se pudo generar nombre de archivo a partir del tema:", e);
+              filename = `brainstorm_ideas_${Date.now()}.pdf`;
+            }
+          } else {
+            filename = `brainstorm_ideas_${Date.now()}.pdf`;
+          }
+
+          const opt = {
+            margin: [0.5, 0.5, 0.5, 0.5], // arriba, derecha, abajo, izquierda en 'in'
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: {
+              scale: 2,
+              logging: false, // Poner a true para depurar
+              dpi: 192,
+              letterRendering: true,
+              useCORS: true
+            },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+          };
+
+          // Usar una promesa para manejar el final de la generación del PDF
+          html2pdf().from(elementToExport).set(opt).save()
+            .then(() => {
+              showLoading(false);
+              console.log("PDF exportado exitosamente.");
+              // showTemporaryMessage(actionButtonsContainer, "PDF exportado exitosamente.", 'is-success', 2000); // Opcional
+            })
+            .catch((err) => {
+              showLoading(false);
+              console.error("Error al generar PDF:", err);
+              showTemporaryMessage(actionButtonsContainer, "Error al generar el PDF. Revisa la consola para detalles.", 'is-danger', 4000);
             });
         });
-    }
-
-    // ... (Aquí también podrías poner populateTopicSuggestions() y la carga inicial de lastInputData
-    //      que ya tienes dentro de otro DOMContentLoaded si quieres unificar)
-    // populateTopicSuggestions();
-    // const storedLastInputOnLoad = localStorage.getItem('lastInputData');
-    // if (storedLastInputOnLoad) {
-    //     lastInputData = JSON.parse(storedLastInputOnLoad);
-    // } else {
-    //     lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] };
-    // }
-});
-      console.log("Aplicación simplificada de generación de ideas inicializada.");
+      } else {
+        // Estos logs solo aparecerán una vez al cargar la página si los elementos no se encuentran
+        if (!exportPdfButton) console.error("Error de configuración: Elemento con ID 'exportPdfButton' no encontrado en el HTML.");
+        if (!ideasResultsArea) console.error("Error de configuración: Elemento con ID 'ideasResultsArea' no encontrado en el HTML.");
+        if (!actionButtonsContainer) console.error("Error de configuración: Elemento con ID 'actionButtonsContainer' no encontrado en el HTML.");
+      }
+      // --- Fin Lógica de Exportación a PDF ---
     </script>
 </body>
 
