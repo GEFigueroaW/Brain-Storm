@@ -902,67 +902,98 @@
       });
       console.log("Aplicación simplificada de generación de ideas inicializada.");
       // --- Lógica de Exportación a PDF ---
-      if (exportPdfButton && ideasResultsArea && actionButtonsContainer) { // Verifica que todos los elementos necesarios existan
+      if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
         exportPdfButton.addEventListener('click', () => {
-          // Verificar si hay algo que exportar en el área de resultados
-          if (!ideasResultsArea.querySelector('.card')) { // Busca si hay al menos una tarjeta de idea
+          // 1. Verificar si hay ideas visibles (tarjetas) para exportar
+          const ideaCards = ideasResultsArea.querySelectorAll('.card');
+          if (ideaCards.length === 0) {
             showTemporaryMessage(actionButtonsContainer, "No hay ideas generadas para exportar a PDF.", 'is-warning', 3000);
             return;
           }
 
-          // Opcional: Mostrar un indicador de carga específico para PDF o usar el general
-          showLoading(true);
+          const originalButtonText = exportPdfButton.innerHTML;
+          exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
+          exportPdfButton.disabled = true;
 
-          const elementToExport = ideasResultsArea; // El div que contiene todas las tarjetas
+          // 2. Ocultar temporalmente el mensaje de estado si existe DENTRO de ideasResultsArea
+          //    y también el timerContainer si estuviera visible.
+          const statusMessage = ideasResultsArea.querySelector('.generation-status-message');
+          let statusMessageWasVisibleAndParentIsResultsArea = false;
+          if (statusMessage && statusMessage.parentNode === ideasResultsArea) {
+            if (getComputedStyle(statusMessage).display !== 'none') {
+              statusMessageWasVisibleAndParentIsResultsArea = true;
+              statusMessage.style.display = 'none';
+            }
+          }
+          const timerElement = document.getElementById('timerContainer'); // Asegúrate que exista o que no de error si es null
+          let timerWasVisible = false;
+          if (timerElement && getComputedStyle(timerElement).display !== 'none' && timerElement.innerHTML.trim() !== '') {
+            timerWasVisible = true;
+            timerElement.style.display = 'none';
+          }
 
-          let filename = "brainstorm_ideas.pdf";
-          if (currentViewingSessionId) {
-            filename = `brainstorm_ideas_${currentViewingSessionId.substring(0, 8)}.pdf`;
-          } else if (topicInput && topicInput.value) {
-            try { // Añadir try-catch por si topicInput.value es algo inesperado
-              const topicName = topicInput.value.trim().replace(/\s+/g, '_').substring(0, 20);
-              filename = `brainstorm_${topicName}_${Date.now()}.pdf`;
+
+          const elementToExport = ideasResultsArea;
+
+          let filename = `BrainStorm_Ideas_${Date.now()}.pdf`; // Default más genérico
+          if (topicInput && topicInput.value.trim() !== "") {
+            try {
+              const topicName = topicInput.value.trim().replace(/[^a-zA-Z0-9ÁÉÍÓÚáéíóúÑÑüÜ_]+/g, '_').substring(0, 30);
+              filename = `BrainStorm_${topicName}.pdf`;
             } catch (e) {
               console.warn("No se pudo generar nombre de archivo a partir del tema:", e);
-              filename = `brainstorm_ideas_${Date.now()}.pdf`;
             }
-          } else {
-            filename = `brainstorm_ideas_${Date.now()}.pdf`;
+          } else if (currentViewingSessionId) {
+            filename = `BrainStorm_Ideas_${currentViewingSessionId.substring(0, 8)}.pdf`;
           }
 
           const opt = {
-            margin: [0.5, 0.5, 0.5, 0.5], // arriba, derecha, abajo, izquierda en 'in'
+            margin: [0.6, 0.5, 0.8, 0.5], // Aumentado margen inferior para posible pie de página
             filename: filename,
-            image: { type: 'jpeg', quality: 0.95 },
+            image: { type: 'jpeg', quality: 0.95 }, // jpeg suele ser más ligero
             html2canvas: {
-              scale: 2,
-              logging: true, // Poner a true para depurar
-              dpi: 192,
+              scale: 1.5,       // Reducir un poco si 2 es demasiado
+              logging: true,   // ¡PONER A TRUE PARA DEPURAR!
+              dpi: 144,        // Reducir un poco si 192 es demasiado
               letterRendering: true,
-              useCORS: true
+              useCORS: true,
+              scrollY: 0,      // Capturar desde el inicio del scroll del elemento
+              // Intenta remover windowWidth y windowHeight si causan que el contenido se corte o sea muy pequeño
+              // windowWidth: elementToExport.scrollWidth, 
+              // windowHeight: elementToExport.scrollHeight
             },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            pagebreak: { mode: ['css', 'avoid-all'], before: '.card' } // Intentar que cada .card empiece en nueva página
           };
 
-          // Usar una promesa para manejar el final de la generación del PDF
-          html2pdf().from(elementToExport).set(opt).save()
-            .then(() => {
-              showLoading(false);
-              console.log("PDF exportado exitosamente.");
-              // showTemporaryMessage(actionButtonsContainer, "PDF exportado exitosamente.", 'is-success', 2000); // Opcional
-            })
-            .catch((err) => {
-              showLoading(false);
-              console.error("Error al generar PDF:", err);
-              showTemporaryMessage(actionButtonsContainer, "Error al generar el PDF. Revisa la consola para detalles.", 'is-danger', 4000);
-            });
+          console.log("Opciones para html2pdf:", opt);
+          console.log("Elemento a exportar:", elementToExport);
+
+          // Dar un pequeño respiro al navegador para renderizar antes de capturar
+          setTimeout(() => {
+            html2pdf().from(elementToExport).set(opt).toPdf().save() // Usar la cadena de promesas completa
+              .then(() => {
+                console.log("PDF guardado o proceso de guardado iniciado.");
+              })
+              .catch((err) => {
+                console.error("Error al generar PDF con html2pdf:", err);
+                showTemporaryMessage(actionButtonsContainer, "Error al generar el PDF. Revisa consola.", 'is-danger', 4000);
+              })
+              .finally(() => { // Se ejecuta después de then o catch
+                if (statusMessageWasVisibleAndParentIsResultsArea) statusMessage.style.display = '';
+                if (timerWasVisible && timerElement) timerElement.style.display = '';
+                exportPdfButton.innerHTML = originalButtonText;
+                exportPdfButton.disabled = false;
+                showLoading(false); // Ocultar el loading general si lo pusiste
+              });
+          }, 300); // 300ms de retraso, puedes ajustarlo
+
         });
       } else {
-        // Estos logs solo aparecerán una vez al cargar la página si los elementos no se encuentran
-        if (!exportPdfButton) console.error("Error de configuración: Elemento con ID 'exportPdfButton' no encontrado en el HTML.");
-        if (!ideasResultsArea) console.error("Error de configuración: Elemento con ID 'ideasResultsArea' no encontrado en el HTML.");
-        if (!actionButtonsContainer) console.error("Error de configuración: Elemento con ID 'actionButtonsContainer' no encontrado en el HTML.");
+        if (!exportPdfButton) console.warn("Advertencia: Elemento con ID 'exportPdfButton' no encontrado en el HTML durante la inicialización del script.");
+        if (!ideasResultsArea) console.warn("Advertencia: Elemento con ID 'ideasResultsArea' no encontrado en el HTML durante la inicialización del script.");
+        if (!actionButtonsContainer) console.warn("Advertencia: Elemento con ID 'actionButtonsContainer' no encontrado en el HTML durante la inicialización del script.");
+        if (typeof html2pdf === 'undefined') console.error("Error crítico: Librería html2pdf no está cargada.");
       }
       // --- Fin Lógica de Exportación a PDF ---
     </script>
