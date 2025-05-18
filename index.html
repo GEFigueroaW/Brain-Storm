@@ -881,11 +881,6 @@
         });
         historyListContainer.appendChild(list);
       }
-      // ... (closeHistoryModal, cancelHistoryModal, loadHistoryDetailsButton sin cambios en su lógica principal, pero loadHistoryDetailsButton ya no llenará campos de audiencia/ubicación)
-
-      // --- Lógica de Exportación (exportPdfButton y exportCsvButton se mantienen por ahora, pero exportCsv llamará a una función backend que podría necesitar ser diferente si es "todo el historial") ---
-      // ... (tu código de exportPdfButton y exportCsvButton se mantiene igual por ahora) ...
-
 
       // Inicialización y Burger menu (sin cambios)
       const burger = document.querySelector('.navbar-burger');
@@ -912,15 +907,6 @@
           });
         }
 
-        // ... (Aquí también podrías poner populateTopicSuggestions() y la carga inicial de lastInputData
-        //      que ya tienes dentro de otro DOMContentLoaded si quieres unificar)
-        // populateTopicSuggestions();
-        // const storedLastInputOnLoad = localStorage.getItem('lastInputData');
-        // if (storedLastInputOnLoad) {
-        //     lastInputData = JSON.parse(storedLastInputOnLoad);
-        // } else {
-        //     lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] };
-        // }
       });
       console.log("Aplicación simplificada de generación de ideas inicializada.");
       // --- Lógica de Exportación a PDF ---
