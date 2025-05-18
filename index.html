@@ -992,6 +992,8 @@
 
           // Dar un pequeño respiro al navegador para renderizar antes de capturar
           setTimeout(() => {
+            console.log("Elemento Scroll Width:", elementToExport.scrollWidth);
+            console.log("Elemento Scroll Height:", elementToExport.scrollHeight); 
             html2pdf().from(elementToExport).set(opt).toPdf().save() // Usar la cadena de promesas completa
               .then(() => {
                 console.log("PDF guardado o proceso de guardado iniciado.");
