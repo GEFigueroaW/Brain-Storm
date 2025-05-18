@@ -976,13 +976,12 @@
             html2canvas: {
               scale: 1.5,       // Reducir un poco si 2 es demasiado
               logging: true,   // ¡PONER A TRUE PARA DEPURAR!
-              dpi: 144,        // Reducir un poco si 192 es demasiado
+              dpi: 150,        // Reducir un poco si 192 es demasiado
               letterRendering: true,
               useCORS: true,
               scrollY: 0,      // Capturar desde el inicio del scroll del elemento
-              // Intenta remover windowWidth y windowHeight si causan que el contenido se corte o sea muy pequeño
-              // windowWidth: elementToExport.scrollWidth, 
-              // windowHeight: elementToExport.scrollHeight
+              windowWidth: elementToExport.scrollWidth, // Usar el ancho del contenido
+              windowHeight: elementToExport.scrollHeight // Usar el alto del contenido// Intenta remover windowWidth y windowHeight si causan que el contenido se corte o sea muy pequeño
             },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
             pagebreak: { mode: ['css', 'avoid-all'], before: '.card' } // Intentar que cada .card empiece en nueva página
