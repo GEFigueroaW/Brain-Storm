@@ -926,10 +926,9 @@
       // --- Lógica de Exportación a PDF ---
       if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
         exportPdfButton.addEventListener('click', () => {
-          // 1. Verificar si hay ideas visibles (tarjetas) para exportar
           const ideaCards = ideasResultsArea.querySelectorAll('.card');
           if (ideaCards.length === 0) {
-            showTemporaryMessage(actionButtonsContainer, "No hay ideas generadas para exportar a PDF.", 'is-warning', 3000);
+            showTemporaryMessage(actionButtonsContainer, "No hay ideas visibles para exportar a PDF.", 'is-warning', 3000);
             return;
           }
 
@@ -937,8 +936,6 @@
           exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
           exportPdfButton.disabled = true;
 
-          // 2. Ocultar temporalmente el mensaje de estado si existe DENTRO de ideasResultsArea
-          //    y también el timerContainer si estuviera visible.
           const statusMessage = ideasResultsArea.querySelector('.generation-status-message');
           let statusMessageWasVisibleAndParentIsResultsArea = false;
           if (statusMessage && statusMessage.parentNode === ideasResultsArea) {
@@ -947,54 +944,62 @@
               statusMessage.style.display = 'none';
             }
           }
-          const timerElement = document.getElementById('timerContainer'); // Asegúrate que exista o que no de error si es null
+          const timerElement = document.getElementById('timerContainer');
           let timerWasVisible = false;
           if (timerElement && getComputedStyle(timerElement).display !== 'none' && timerElement.innerHTML.trim() !== '') {
             timerWasVisible = true;
             timerElement.style.display = 'none';
           }
 
-
           const elementToExport = ideasResultsArea;
 
-          let filename = `BrainStorm_Ideas_${Date.now()}.pdf`; // Default más genérico
+          let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
           if (topicInput && topicInput.value.trim() !== "") {
             try {
               const topicName = topicInput.value.trim().replace(/[^a-zA-Z0-9ÁÉÍÓÚáéíóúÑÑüÜ_]+/g, '_').substring(0, 30);
               filename = `BrainStorm_${topicName}.pdf`;
-            } catch (e) {
-              console.warn("No se pudo generar nombre de archivo a partir del tema:", e);
-            }
+            } catch (e) { console.warn("No se pudo generar nombre de archivo a partir del tema:", e); }
           } else if (currentViewingSessionId) {
             filename = `BrainStorm_Ideas_${currentViewingSessionId.substring(0, 8)}.pdf`;
           }
 
+          // Clonar el elemento para no afectar la vista original con cambios de estilo temporales
+          const clone = elementToExport.cloneNode(true);
+          clone.style.width = elementToExport.scrollWidth + 'px'; // Forzar el ancho del clon
+          clone.style.height = elementToExport.scrollHeight + 'px'; // Forzar el alto del clon
+          document.body.appendChild(clone); // Añadirlo temporalmente al DOM (puede ser invisible)
+          clone.style.position = 'absolute'; // Posicionarlo fuera de la vista para que no moleste
+          clone.style.left = '-9999px';
+          clone.style.top = '-9999px';
+          clone.style.backgroundColor = 'white'; // Asegurar fondo blanco para el clon
+
+
           const opt = {
-            margin: [0.6, 0.5, 0.8, 0.5], // Aumentado margen inferior para posible pie de página
+            margin: [0.6, 0.5, 0.8, 0.5],
             filename: filename,
-            image: { type: 'jpeg', quality: 0.95 }, // jpeg suele ser más ligero
+            image: { type: 'jpeg', quality: 0.90 }, // Probar jpeg, bajar un poco calidad
             html2canvas: {
-              scale: 1.5,       // Reducir un poco si 2 es demasiado
-              logging: true,   // ¡PONER A TRUE PARA DEPURAR!
-              dpi: 150,        // Reducir un poco si 192 es demasiado
-              letterRendering: true,
+              scale: 1, // **PRUEBA CON ESCALA 1 PRIMERO**
+              logging: true,
+              dpi: 96, // **PRUEBA CON DPI MÁS BAJO**
+              letterRendering: false, // **PRUEBA DESACTIVANDO ESTO**
               useCORS: true,
-              scrollY: 0,      // Capturar desde el inicio del scroll del elemento
-              windowWidth: elementToExport.scrollWidth, // Usar el ancho del contenido
-              windowHeight: elementToExport.scrollHeight // Usar el alto del contenido// Intenta remover windowWidth y windowHeight si causan que el contenido se corte o sea muy pequeño
+              backgroundColor: '#ffffff', // Forzar fondo blanco
+              // scrollY: 0, // Ya no es necesario si exportamos el clon con su alto total
+              // windowWidth: clone.scrollWidth, // Usar dimensiones del clon
+              // windowHeight: clone.scrollHeight
             },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'avoid-all'], before: '.card' } // Intentar que cada .card empiece en nueva página
+            pagebreak: { mode: ['css', 'avoid-all'], before: '.card' }
           };
 
           console.log("Opciones para html2pdf:", opt);
-          console.log("Elemento a exportar:", elementToExport);
+          console.log("Elemento a exportar (clonado):", clone);
+          console.log("Dimensiones del clon: ", clone.scrollWidth, clone.scrollHeight);
 
-          // Dar un pequeño respiro al navegador para renderizar antes de capturar
+
           setTimeout(() => {
-            console.log("Elemento Scroll Width:", elementToExport.scrollWidth);
-            console.log("Elemento Scroll Height:", elementToExport.scrollHeight); 
-            html2pdf().from(elementToExport).set(opt).toPdf().save() // Usar la cadena de promesas completa
+            html2pdf().from(clone).set(opt).toPdf().save() // Usar el CLON
               .then(() => {
                 console.log("PDF guardado o proceso de guardado iniciado.");
               })
@@ -1002,22 +1007,17 @@
                 console.error("Error al generar PDF con html2pdf:", err);
                 showTemporaryMessage(actionButtonsContainer, "Error al generar el PDF. Revisa consola.", 'is-danger', 4000);
               })
-              .finally(() => { // Se ejecuta después de then o catch
+              .finally(() => {
                 if (statusMessageWasVisibleAndParentIsResultsArea) statusMessage.style.display = '';
                 if (timerWasVisible && timerElement) timerElement.style.display = '';
                 exportPdfButton.innerHTML = originalButtonText;
                 exportPdfButton.disabled = false;
-                showLoading(false); // Ocultar el loading general si lo pusiste
+                document.body.removeChild(clone); // Eliminar el clon del DOM
               });
-          }, 4000); // 300ms de retraso, puedes ajustarlo
+          }, 700); // Aumentar un poco más el timeout
 
         });
-      } else {
-        if (!exportPdfButton) console.warn("Advertencia: Elemento con ID 'exportPdfButton' no encontrado en el HTML durante la inicialización del script.");
-        if (!ideasResultsArea) console.warn("Advertencia: Elemento con ID 'ideasResultsArea' no encontrado en el HTML durante la inicialización del script.");
-        if (!actionButtonsContainer) console.warn("Advertencia: Elemento con ID 'actionButtonsContainer' no encontrado en el HTML durante la inicialización del script.");
-        if (typeof html2pdf === 'undefined') console.error("Error crítico: Librería html2pdf no está cargada.");
-      }
+      } else { /* ... logs de error de configuración ... */ }
       // --- Fin Lógica de Exportación a PDF ---
     </script>
 </body>
