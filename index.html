@@ -964,39 +964,41 @@
           }
 
           // Clonar el elemento para no afectar la vista original con cambios de estilo temporales
-          const clone = elementToExport.cloneNode(true);
-          clone.style.width = elementToExport.scrollWidth + 'px'; // Forzar el ancho del clon
-          clone.style.height = elementToExport.scrollHeight + 'px'; // Forzar el alto del clon
-          document.body.appendChild(clone); // Añadirlo temporalmente al DOM (puede ser invisible)
-          clone.style.position = 'absolute'; // Posicionarlo fuera de la vista para que no moleste
-          clone.style.left = '-9999px';
-          clone.style.top = '-9999px';
-          clone.style.backgroundColor = 'white'; // Asegurar fondo blanco para el clon
+         const clone = elementToExport.cloneNode(true);
+         clone.style.width = elementToExport.scrollWidth + 'px';
+         // Para la inspección, podrías comentar la altura fija o usar max-height:
+         // clone.style.height = elementToExport.scrollHeight + 'px';
+         clone.style.maxHeight = '80vh'; // Para que no ocupe toda la pantalla
+         clone.style.overflowY = 'auto';  // Para poder hacer scroll si es grande
 
+         document.body.appendChild(clone);
+         clone.style.position = 'fixed'; // Usa 'fixed' o 'absolute' visible
+         clone.style.left = '10px';
+         clone.style.top = '10px';
+         clone.style.zIndex = '10001'; // Asegúrate de que esté al frente
+         clone.style.border = '3px solid red'; // Para identificarlo fácilmente
+         clone.style.backgroundColor = 'white'; // Ya lo tienes
+
+         console.log("Clon añadido al body para inspección. ¿Se ve el contenido?");
+         console.log("Contenido HTML del clon:", clone.innerHTML.substring(0, 500)); // Muestra parte del HTML
 
           const opt = {
-            margin: [0.6, 0.5, 0.8, 0.5],
+            margin: 0.5, // o [0.5, 0.5, 0.5, 0.5]
             filename: filename,
-            image: { type: 'jpeg', quality: 0.90 }, // Probar jpeg, bajar un poco calidad
             html2canvas: {
-              scale: 1, // **PRUEBA CON ESCALA 1 PRIMERO**
               logging: true,
-              dpi: 96, // **PRUEBA CON DPI MÁS BAJO**
-              letterRendering: false, // **PRUEBA DESACTIVANDO ESTO**
               useCORS: true,
-              backgroundColor: '#ffffff', // Forzar fondo blanco
               // scrollY: 0, // Ya no es necesario si exportamos el clon con su alto total
               // windowWidth: clone.scrollWidth, // Usar dimensiones del clon
               // windowHeight: clone.scrollHeight
             },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'avoid-all'], before: '.card' }
           };
 
           console.log("Opciones para html2pdf:", opt);
           console.log("Elemento a exportar (clonado):", clone);
           console.log("Dimensiones del clon: ", clone.scrollWidth, clone.scrollHeight);
-
+          console.log('OffsetHeight del clon (forzar reflow):', clone.offsetHeight); // Leer una propiedad de dimensión
 
           setTimeout(() => {
             html2pdf().from(clone).set(opt).toPdf().save() // Usar el CLON
@@ -1014,7 +1016,7 @@
                 exportPdfButton.disabled = false;
                 document.body.removeChild(clone); // Eliminar el clon del DOM
               });
-          }, 4000); // Aumentar un poco más el timeout
+          }, 100); // Aumentar un poco más el timeout
 
         });
       } else { /* ... logs de error de configuración ... */ }
