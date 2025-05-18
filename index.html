@@ -910,103 +910,98 @@
       });
       console.log("Aplicación simplificada de generación de ideas inicializada.");
       // --- Lógica de Exportación a PDF ---
-      if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
-        exportPdfButton.addEventListener('click', () => {
-          const ideaCards = ideasResultsArea.querySelectorAll('.card');
-          if (ideaCards.length === 0) {
-            showTemporaryMessage(actionButtonsContainer, "No hay ideas visibles para exportar a PDF.", 'is-warning', 3000);
+if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
+    exportPdfButton.addEventListener('click', () => {
+        const ideaCards = ideasResultsArea.querySelectorAll('.card');
+        if (ideaCards.length === 0) {
+            // ... (código sin cambios)
             return;
-          }
+        }
 
-          const originalButtonText = exportPdfButton.innerHTML;
-          exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
-          exportPdfButton.disabled = true;
+        const originalButtonText = exportPdfButton.innerHTML;
+        // ... (código sin cambios) ...
 
-          const statusMessage = ideasResultsArea.querySelector('.generation-status-message');
-          let statusMessageWasVisibleAndParentIsResultsArea = false;
-          if (statusMessage && statusMessage.parentNode === ideasResultsArea) {
-            if (getComputedStyle(statusMessage).display !== 'none') {
-              statusMessageWasVisibleAndParentIsResultsArea = true;
-              statusMessage.style.display = 'none';
-            }
-          }
-          const timerElement = document.getElementById('timerContainer');
-          let timerWasVisible = false;
-          if (timerElement && getComputedStyle(timerElement).display !== 'none' && timerElement.innerHTML.trim() !== '') {
-            timerWasVisible = true;
-            timerElement.style.display = 'none';
-          }
+        const elementToExport = ideasResultsArea;
+        let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
+        // ... (código sin cambios para filename) ...
 
-          const elementToExport = ideasResultsArea;
+        // 1. Clonar el elemento
+        const clone = elementToExport.cloneNode(true);
 
-          let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
-          if (topicInput && topicInput.value.trim() !== "") {
-            try {
-              const topicName = topicInput.value.trim().replace(/[^a-zA-Z0-9ÁÉÍÓÚáéíóúÑÑüÜ_]+/g, '_').substring(0, 30);
-              filename = `BrainStorm_${topicName}.pdf`;
-            } catch (e) { console.warn("No se pudo generar nombre de archivo a partir del tema:", e); }
-          } else if (currentViewingSessionId) {
-            filename = `BrainStorm_Ideas_${currentViewingSessionId.substring(0, 8)}.pdf`;
-          }
+        // 2. Estilos INICIALES para el clon (para asegurar que las dimensiones se calculen bien)
+        //    Estos son diferentes de los de inspección visual.
+        //    Lo hacemos 'absolute' y fuera de pantalla para que no moleste,
+        //    pero con visibilidad para que el navegador calcule sus dimensiones.
+        clone.style.position = 'absolute';
+        clone.style.left = '-9999px'; // Fuera de pantalla
+        clone.style.top = '0px';
+        clone.style.visibility = 'hidden'; // Que no se vea, pero que ocupe espacio para cálculo
+        clone.style.display = 'block'; // Asegurar que sea un bloque
+        document.body.appendChild(clone); // Añadir al DOM para que se calculen los estilos y dimensiones
 
-          // Clonar el elemento para no afectar la vista original con cambios de estilo temporales
-         const clone = elementToExport.cloneNode(true);
-         clone.style.width = elementToExport.scrollWidth + 'px';
-         // Para la inspección, podrías comentar la altura fija o usar max-height:
-         // clone.style.height = elementToExport.scrollHeight + 'px';
-         clone.style.maxHeight = '80vh'; // Para que no ocupe toda la pantalla
-         clone.style.overflowY = 'auto';  // Para poder hacer scroll si es grande
+        // Forzar al navegador a calcular las dimensiones
+        // Es importante leer estas propiedades DESPUÉS de añadir al DOM
+        const cloneScrollWidth = clone.scrollWidth;
+        const cloneScrollHeight = clone.scrollHeight;
+        console.log('Dimensiones calculadas del clon (scrollWidth, scrollHeight):', cloneScrollWidth, cloneScrollHeight);
 
-         document.body.appendChild(clone);
-         clone.style.position = 'fixed'; // Usa 'fixed' o 'absolute' visible
-         clone.style.left = '10px';
-         clone.style.top = '10px';
-         clone.style.zIndex = '10001'; // Asegúrate de que esté al frente
-         clone.style.border = '3px solid red'; // Para identificarlo fácilmente
-         clone.style.backgroundColor = 'white'; // Ya lo tienes
+        // 3. ESTILOS FINALES PARA LA CAPTURA DE HTML2CANVAS
+        //    Ahora que tenemos las dimensiones, ajustamos para la captura.
+        clone.style.width = cloneScrollWidth + 'px';
+        clone.style.height = cloneScrollHeight + 'px';
+        clone.style.visibility = 'visible'; // Hacerlo "visible" para html2canvas (aunque esté fuera de pantalla)
+        // Quitamos maxHeight y overflow que eran para la inspección visual
+        clone.style.maxHeight = '';
+        clone.style.overflowY = '';
+        clone.style.backgroundColor = 'white'; // Mantener fondo blanco
 
-         console.log("Clon añadido al body para inspección. ¿Se ve el contenido?");
-         console.log("Contenido HTML del clon:", clone.innerHTML.substring(0, 500)); // Muestra parte del HTML
+        // Log del clon y sus dimensiones finales justo antes de la captura
+        console.log("Clon preparado para html2canvas. InnerHTML:", clone.innerHTML.substring(0, 500));
+        console.log("Estilo final del clon (width, height):", clone.style.width, clone.style.height);
 
-          const opt = {
-            margin: 0.5, // o [0.5, 0.5, 0.5, 0.5]
+
+        const opt = {
+            margin: 0.5,
             filename: filename,
             html2canvas: {
-              logging: true,
-              useCORS: true,
-              // scrollY: 0, // Ya no es necesario si exportamos el clon con su alto total
-              // windowWidth: clone.scrollWidth, // Usar dimensiones del clon
-              // windowHeight: clone.scrollHeight
+                logging: true,
+                useCORS: true,
+                // Intentemos darle explícitamente el ancho y alto
+                width: cloneScrollWidth,
+                height: cloneScrollHeight,
+                windowWidth: cloneScrollWidth, // Ayuda a html2canvas a definir el viewport
+                windowHeight: cloneScrollHeight, // Ayuda a html2canvas a definir el viewport
+                scale: 1, // Forzar escala 1
+                scrollY: -window.scrollY // Para asegurar que captura desde el inicio del elemento
             },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-          };
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
 
-          console.log("Opciones para html2pdf:", opt);
-          console.log("Elemento a exportar (clonado):", clone);
-          console.log("Dimensiones del clon: ", clone.scrollWidth, clone.scrollHeight);
-          console.log('OffsetHeight del clon (forzar reflow):', clone.offsetHeight); // Leer una propiedad de dimensión
+        console.log("Opciones para html2pdf:", opt);
 
-          setTimeout(() => {
-            html2pdf().from(clone).set(opt).toPdf().save() // Usar el CLON
-              .then(() => {
-                console.log("PDF guardado o proceso de guardado iniciado.");
-              })
-              .catch((err) => {
-                console.error("Error al generar PDF con html2pdf:", err);
-                showTemporaryMessage(actionButtonsContainer, "Error al generar el PDF. Revisa consola.", 'is-danger', 4000);
-              })
-              .finally(() => {
-                if (statusMessageWasVisibleAndParentIsResultsArea) statusMessage.style.display = '';
-                if (timerWasVisible && timerElement) timerElement.style.display = '';
-                exportPdfButton.innerHTML = originalButtonText;
-                exportPdfButton.disabled = false;
-                document.body.removeChild(clone); // Eliminar el clon del DOM
-              });
-          }, 100); // Aumentar un poco más el timeout
+        // Aumentar ligeramente el timeout para dar una mínima oportunidad de que todo se asiente
+        setTimeout(() => {
+            html2pdf().from(clone).set(opt).toPdf().save()
+                .then(() => {
+                    console.log("PDF guardado o proceso de guardado iniciado.");
+                })
+                .catch((err) => {
+                    console.error("Error al generar PDF con html2pdf:", err);
+                    showTemporaryMessage(actionButtonsContainer, "Error al generar el PDF. Revisa consola.", 'is-danger', 4000);
+                })
+                .finally(() => {
+                    if (statusMessageWasVisibleAndParentIsResultsArea) statusMessage.style.display = '';
+                    if (timerWasVisible && timerElement) timerElement.style.display = '';
+                    exportPdfButton.innerHTML = originalButtonText;
+                    exportPdfButton.disabled = false;
+                    document.body.removeChild(clone); // Eliminar el clon del DOM
+                });
+        }, 300); // Un poco más de tiempo, 300ms
 
-        });
-      } else { /* ... logs de error de configuración ... */ }
-      // --- Fin Lógica de Exportación a PDF ---
+    });
+} else {
+    // ... (logs de error de configuración sin cambios) ...
+}      // --- Fin Lógica de Exportación a PDF ---
     </script>
 </body>
 
