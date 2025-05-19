@@ -943,6 +943,35 @@
 
           const cloneScrollWidth = clone.scrollWidth;
           const cloneScrollHeight = clone.scrollHeight;
+          const firstCard = clone.querySelector('.card'); // Busca la primera tarjeta DENTRO DEL CLON
+          if (firstCard) {
+              const singleCardContainer = document.createElement('div');
+              // Usamos cloneScrollWidth para mantener el ancho que html2canvas espera
+              singleCardContainer.style.width = cloneScrollWidth + 'px'; 
+              singleCardContainer.style.padding = '20px'; // Espacio alrededor de la tarjeta
+              singleCardContainer.style.backgroundColor = 'white'; // Fondo blanco para el contenedor
+              
+              singleCardContainer.appendChild(firstCard.cloneNode(true)); // Añade una copia de la primera tarjeta
+
+              clone.innerHTML = ''; // Vacía el contenido actual del clon
+              clone.appendChild(singleCardContainer); // Añade solo el contenedor con la primera tarjeta
+
+              // RECALCULAMOS LAS DIMENSIONES DEL CLON AHORA QUE SOLO TIENE UNA TARJETA
+              // Esto es importante para que html2canvas procese el tamaño correcto
+              clone.style.height = 'auto'; // Dejar que la altura se ajuste al nuevo contenido
+              const newCloneScrollHeight = clone.scrollHeight;
+              clone.style.height = newCloneScrollHeight + 'px'; // Fijar la nueva altura
+
+              // Actualizamos las variables que usarán las opciones de html2canvas
+              canvasOptions.height = newCloneScrollHeight;
+              canvasOptions.windowHeight = newCloneScrollHeight;
+              // El ancho (width y windowWidth) en canvasOptions ya usa cloneScrollWidth, lo cual está bien.
+
+              console.log("CLON MODIFICADO: Ahora solo contiene la primera tarjeta.");
+              console.log("Nuevas dimensiones para html2canvas (width, height):", canvasOptions.width, canvasOptions.height);
+          } else {
+              console.log("No se encontró ninguna tarjeta '.card' en el clon.");
+          }
           console.log('Dimensiones calculadas del clon (scrollWidth, scrollHeight):', cloneScrollWidth, cloneScrollHeight);
 
           clone.style.width = cloneScrollWidth + 'px';
@@ -967,30 +996,7 @@
             scrollY: -window.scrollY,
             backgroundColor: '#ffffff' // Añadido explícitamente
           };
-const firstCard = clone.querySelector('.card');
-if (firstCard) {
-    // Crear un nuevo div que solo contendrá la primera tarjeta
-    const singleCardContainer = document.createElement('div');
-    singleCardContainer.style.width = cloneScrollWidth + 'px'; // Mantener el ancho para el layout
-    singleCardContainer.style.padding = '20px'; // Añadir un poco de espacio alrededor
-    singleCardContainer.style.backgroundColor = 'white';
-    singleCardContainer.appendChild(firstCard.cloneNode(true)); // Clonar la primera tarjeta en el nuevo contenedor
 
-    // Reemplazar el contenido del clon con este nuevo contenedor
-    clone.innerHTML = ''; // Vaciar el clon original
-    clone.appendChild(singleCardContainer); // Añadir solo la primera tarjeta
-
-    // Actualizar las dimensiones del clon para html2canvas si es necesario
-    // Podríamos recalcular cloneScrollHeight aquí basado en singleCardContainer,
-    // o dejar que html2canvas lo determine. Por ahora, vamos a ver cómo se comporta.
-    console.log("Modificado el clon para que solo contenga la primera tarjeta.");
-} else {
-    console.log("No se encontró ninguna tarjeta en el clon para la prueba de una sola tarjeta.");
-    // Considera cómo manejar esto, quizás no continuar si no hay tarjetas.
-}
-
-// Las opciones para html2canvas (canvasOptions) se mantienen igual
-// La llamada a window.html2canvas(clone, canvasOptions).then(...) se mantiene igual
           console.log("Opciones para html2canvas:", canvasOptions);
 
           setTimeout(() => {
