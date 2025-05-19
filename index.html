@@ -903,7 +903,7 @@
       console.log("Aplicación simplificada de generación de ideas inicializada.");
       // --- Lógica de Exportación a PDF ---
       if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
-          exportPdfButton.addEventListener('click', () => { // <--- LÍNEA CORREGIDA
+        exportPdfButton.addEventListener('click', () => { // <--- LÍNEA CORREGIDA
           const ideaCards = ideasResultsArea.querySelectorAll('.card');
           if (ideaCards.length === 0) {
             showTemporaryMessage(actionButtonsContainer, "No hay ideas visibles para exportar a PDF.", 'is-warning', 3000);
@@ -1000,7 +1000,6 @@
           console.log("Opciones para html2canvas:", canvasOptions);
 
           setTimeout(() => {
-            // ESTA ES LA PARTE IMPORTANTE PARA DEPURAR HTML2CANVAS:
             window.html2canvas(clone, canvasOptions).then(canvas => { // canvasOptions son las que definimos antes
               console.log('html2canvas exitoso, objeto canvas:', canvas);
               exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-image"></i></span><span>Mostrando Previsualización</span>';
@@ -1016,7 +1015,7 @@
               img.style.maxWidth = "350px";
               img.style.maxHeight = "70vh";
               img.style.overflowY = "auto";
-              img.style.backgroundColor = "pink";
+              img.style.backgroundColor = "pink"; // Para probar el fondo de la imagen
 
               const oldPreview = document.getElementById('canvasPreviewImg');
               if (oldPreview) {
@@ -1026,43 +1025,39 @@
               document.body.appendChild(img);
               console.log('Imagen del canvas añadida al body para inspección.');
 
+              // OPCIONAL: Si la imagen azul se ve bien, puedes descomentar la parte para generar el PDF desde este canvas.
+              /*
               const pdfOptions = {
-                margin: 0.5,
-                filename: filename, // El nombre de archivo que ya definiste
-                image: { type: 'jpeg', quality: 0.95 }, // Puedes probar 'png' si jpeg da problemas
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                  margin: 0.5,
+                  filename: filename,
+                  image: { type: 'jpeg', quality: 0.95 },
+                  jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
               };
               html2pdf().from(canvas).set(pdfOptions).toPdf().save().then(() => {
-                console.log("PDF (de una sola tarjeta) guardado desde el canvas.");
-                // Opcional: remover la imagen de preview si el PDF se guarda
-                // const previewImg = document.getElementById('canvasPreviewImg');
-                // if (previewImg) {
-                //     previewImg.remove();
-                // }
+                   console.log("PDF (de una sola tarjeta) guardado desde el canvas.");
+                   // const previewImg = document.getElementById('canvasPreviewImg');
+                   // if (previewImg) { previewImg.remove(); }
               }).catch(err => {
                 console.error("Error al generar PDF desde el canvas de una tarjeta:", err);
               });
-              // ----- FIN DE LA SECCIÓN A DESCOMENTAR -----
+              */
 
-            }).catch(err => {
-              // ...
-            }).finally(() => {
-              // ...
+            }).catch(err => { // Catch para la promesa de html2canvas
+              console.error("Error durante la llamada directa a html2canvas:", err);
+              showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización. Revisa consola.", 'is-danger', 4000);
+            }).finally(() => { // Finally para la promesa de html2canvas
+              exportPdfButton.innerHTML = originalButtonText;
+              exportPdfButton.disabled = false;
+              if (clone.parentNode) {
+                document.body.removeChild(clone);
+              }
+              // Aquí podrías decidir si quieres remover la imagen de preview (img) o dejarla
+              // const previewImg = document.getElementById('canvasPreviewImg');
+              // if (previewImg) { previewImg.remove(); }
             });
-
-          }).catch(err => {
-            console.error("Error durante la llamada directa a html2canvas:", err);
-            showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización. Revisa consola.", 'is-danger', 4000);
-          }).finally(() => {
-            exportPdfButton.innerHTML = originalButtonText; // O un texto de finalización
-            exportPdfButton.disabled = false;
-            if (clone.parentNode) {
-              document.body.removeChild(clone);
-            }
-            // Considera no remover la imagen de preview inmediatamente para poder inspeccionarla bien.
-          });
-        }, 300);
-      });
+            // ELIMINA EL .catch() Y .finally() QUE ESTABAN AQUÍ AFUERA
+          }, 300);
+        });
       }
     </script>
 </body>
