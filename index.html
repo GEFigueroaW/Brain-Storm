@@ -935,13 +935,14 @@
           const canvasOptions = {
             logging: true,
             useCORS: true,
-            width: cloneScrollWidth,   // Inicializa con el ancho del clon completo
-            height: cloneScrollHeight, // Inicializa con la altura del clon completo
+            width: cloneScrollWidth,
+            height: cloneScrollHeight, // O newCloneScrollHeight si es la tarjeta única
             windowWidth: cloneScrollWidth,
-            windowHeight: cloneScrollHeight,
+            windowHeight: cloneScrollHeight, // O newCloneScrollHeight
             scale: 1,
             scrollY: -window.scrollY,
-            backgroundColor: '#ffffff'
+            backgroundColor: '#ffffff',
+            removeContainer: false // <--- AÑADE ESTO TEMPORALMENTE
           };
 
           // -------- INICIO DEL CÓDIGO PARA AISLAR LA PRIMERA TARJETA --------
