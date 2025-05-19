@@ -1000,7 +1000,7 @@
           console.log("Opciones para html2canvas:", canvasOptions);
 
           setTimeout(() => {
-            window.html2canvas(clone, canvasOptions).then(canvas => { // canvasOptions son las que definimos antes
+            window.html2canvas(clone, canvasOptions).then(canvas => {
               console.log('html2canvas exitoso, objeto canvas:', canvas);
               exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-image"></i></span><span>Mostrando Previsualización</span>';
 
@@ -1015,7 +1015,7 @@
               img.style.maxWidth = "350px";
               img.style.maxHeight = "70vh";
               img.style.overflowY = "auto";
-              img.style.backgroundColor = "pink"; // Para probar el fondo de la imagen
+              img.style.backgroundColor = "pink"; // Fondo de la etiqueta img para depurar transparencia
 
               const oldPreview = document.getElementById('canvasPreviewImg');
               if (oldPreview) {
@@ -1025,7 +1025,7 @@
               document.body.appendChild(img);
               console.log('Imagen del canvas añadida al body para inspección.');
 
-              // OPCIONAL: Si la imagen azul se ve bien, puedes descomentar la parte para generar el PDF desde este canvas.
+              // ----- SECCIÓN PARA GENERAR PDF (actualmente comentada para depuración) -----
               /*
               const pdfOptions = {
                   margin: 0.5,
@@ -1041,21 +1041,29 @@
                 console.error("Error al generar PDF desde el canvas de una tarjeta:", err);
               });
               */
+              // ----- FIN DE LA SECCIÓN PARA GENERAR PDF -----
 
-            }).catch(err => { // Catch para la promesa de html2canvas
+            }).catch(err => { // ESTE ES EL .catch PARA LA PROMESA DE html2canvas
               console.error("Error durante la llamada directa a html2canvas:", err);
               showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización. Revisa consola.", 'is-danger', 4000);
-            }).finally(() => { // Finally para la promesa de html2canvas
+              // Es importante que el botón se restaure también en caso de error aquí
               exportPdfButton.innerHTML = originalButtonText;
               exportPdfButton.disabled = false;
-              if (clone.parentNode) {
+              if (clone.parentNode) { // Asegurarse de que el clon se remueva también en error
                 document.body.removeChild(clone);
               }
-              // Aquí podrías decidir si quieres remover la imagen de preview (img) o dejarla
-              // const previewImg = document.getElementById('canvasPreviewImg');
-              // if (previewImg) { previewImg.remove(); }
+            }).finally(() => { // ESTE ES EL .finally PARA LA PROMESA DE html2canvas
+              // El botón y el clon ya se manejan en .catch o se manejarían después del .save() del PDF
+              // Si no se genera el PDF inmediatamente, el botón se restaura aquí:
+              if (!document.querySelector('#canvasPreviewImg + .html2pdf__container')) { // Si no se está generando el PDF
+                exportPdfButton.innerHTML = originalButtonText;
+                exportPdfButton.disabled = false;
+              }
+              if (clone.parentNode) { // Doble chequeo por si acaso
+                document.body.removeChild(clone);
+              }
             });
-            // ELIMINA EL .catch() Y .finally() QUE ESTABAN AQUÍ AFUERA
+            // ***** ELIMINA EL BLOQUE .catch().finally() QUE ESTABA AQUÍ AFUERA *****
           }, 300);
         });
       }
