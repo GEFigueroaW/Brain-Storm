@@ -360,16 +360,6 @@
       const registerBox = document.getElementById('registerBox');
       // ... (otros selectores como login, register, navbar buttons se mantienen)
 
-      // ELIMINADOS Selectores de Audiencia y Ubicación:
-      // const audienceTypeRadios = document.querySelectorAll('input[name="audienceType"]');
-      // const targetAudienceSection = document.getElementById('targetAudienceSection');
-      // const audienceGroupsContainer = document.getElementById('audienceGroupsContainer');
-      // const subAudienceCounter = document.getElementById('subAudienceCounter');
-      // const audienceError = document.getElementById('audienceError');
-      // const includeLocationCheckbox = document.getElementById('includeLocationCheckbox');
-      // const locationInputContainer = document.getElementById('locationInputContainer');
-      // const locationInput = document.getElementById('locationInput');
-
       const topicInput = document.getElementById('topicInput');
       const copyTypeSelect = document.getElementById('copyTypeSelect');
       const socialNetworksContainer = document.getElementById('socialNetworksContainer'); // NUEVO (para mensajes de error)
@@ -982,7 +972,7 @@
 
           setTimeout(() => {
             // ESTA ES LA PARTE IMPORTANTE PARA DEPURAR HTML2CANVAS:
-            html2canvas(clone, canvasOptions).then(canvas => { // canvasOptions son las que definimos antes
+            window.html2canvas(clone, canvasOptions).then(canvas => { // canvasOptions son las que definimos antes
               console.log('html2canvas exitoso, objeto canvas:', canvas);
               exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-image"></i></span><span>Mostrando Previsualización</span>';
 
