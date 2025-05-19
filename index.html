@@ -903,7 +903,7 @@
       console.log("Aplicación simplificada de generación de ideas inicializada.");
       // --- Lógica de Exportación a PDF ---
       if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
-        exportPdfButton.addEventListener('click', () => {
+          exportPdfButton.addEventListener('click', () => { // <--- LÍNEA CORREGIDA
           const ideaCards = ideasResultsArea.querySelectorAll('.card');
           if (ideaCards.length === 0) {
             showTemporaryMessage(actionButtonsContainer, "No hay ideas visibles para exportar a PDF.", 'is-warning', 3000);
