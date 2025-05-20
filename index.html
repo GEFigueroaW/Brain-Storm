@@ -904,6 +904,21 @@
       // --- Lógica de Exportación a PDF ---
       if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
         exportPdfButton.addEventListener('click', () => {
+          const ideaCards = ideasResultsArea.querySelectorAll('.card');
+          if (ideaCards.length === 0) {
+            showTemporaryMessage(actionButtonsContainer, "No hay ideas visibles para exportar a PDF.", 'is-warning', 3000);
+            return;
+          }
+
+          const originalButtonText = exportPdfButton.innerHTML;
+          exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
+          exportPdfButton.disabled = true;
+
+          // ***** AQUÍ SE DEFINE elementToExport *****
+          const elementToExport = ideasResultsArea;
+          let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
+
+          const clone = elementToExport.cloneNode(true); // Y aquí se usa
           // ...
           const clone = elementToExport.cloneNode(true);
           clone.style.position = 'fixed'; // CAMBIO: Para que sea visible sobre el contenido
