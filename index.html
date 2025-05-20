@@ -1095,11 +1095,37 @@
               document.body.appendChild(img);
               console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY. ¿Cómo se ve ahora (nitidez, claridad, contenido)?');
 
-              // NO generaremos el PDF todavía
-              exportPdfButton.innerHTML = originalButtonText;
-              exportPdfButton.disabled = false;
-              // if (clone.parentNode) document.body.removeChild(clone); // No quitar el clon visible (naranja) todavía
-              alert("Previsualización generada. Revisa la imagen (borde verde) y el clon visible (borde naranja).");
+              // ***** AHORA GENERAMOS EL PDF *****
+              const pdfOptions = {
+                margin: 0.5,
+                filename: filename,
+                image: { type: 'jpeg', quality: 0.95 },
+                // html2canvas: {}, // Vacío o comentado, ya que proveemos el canvas
+                jsPDF: {
+                  unit: 'in',
+                  format: 'letter',
+                  orientation: 'portrait'
+                },
+                pagebreak: { mode: ['css', 'legacy'], before: '.card' }
+              };
+              console.log("Opciones para html2pdf:", JSON.parse(JSON.stringify(pdfOptions)));
+
+              html2pdf().from(canvas).set(pdfOptions).save() // IMPORTANTE: .from(canvas)
+                .then(() => {
+                  console.log("PDF guardado exitosamente.");
+                })
+                .catch(err => {
+                  console.error("Error al generar PDF con html2pdf:", err);
+                  showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
+                })
+                .finally(() => {
+                  exportPdfButton.innerHTML = originalButtonText;
+                  exportPdfButton.disabled = false;
+                  if (clone.parentNode) document.body.removeChild(clone); // Quitar el clon naranja
+                  // Si mantuviste la img de preview, quítala también:
+                  // const previewImg = document.getElementById('canvasPreviewImgDirect');
+                  // if (previewImg && previewImg.parentNode) previewImg.remove();
+                });
 
             }).catch(err => {
               console.error("Error en PREVISUALIZACIÓN con window.html2canvas:", err);
