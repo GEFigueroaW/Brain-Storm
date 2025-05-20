@@ -1057,23 +1057,7 @@
             // ... (puedes mantener el resto de tus logs de tarjetas aquí si los necesitas para depurar estilos) ...
             console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
             // ***** Generar Canvas con window.html2canvas para PREVISUALIZACIÓN *****
-            const canvasOptions = {
-              scale: 1,
-              dpi: 192
-              logging: true,
-              useCORS: true,
-              width: currentCloneWidth,
-              height: currentCloneHeight, // Incluye el padding
-              backgroundColor: '#FFFFFF',
-              foreignObjectRendering: true, // o false, prueba ambos
-              scrollX: 0,
-              scrollY: 0,
-              removeContainer: true, // o false
-              windowHeight: currentCloneHeight
-            };
-            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba E):", JSON.parse(JSON.stringify(canvasOptions)));
-
-            console.log('Exportación solo desde HTML activa.');
+            console.log('Exportación directa sin canvas.');
 
             }).catch(err => {
               console.error("Error en PREVISUALIZACIÓN con window.html2canvas:", err);
@@ -1085,8 +1069,8 @@
 
           }, 400); // Un poco más de tiempo por si los estilos !important tardan en aplicarse
 
-        });
-      }    </script>
+        };
+          </script>
 </body>
 
 </html>
