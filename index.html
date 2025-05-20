@@ -53,6 +53,7 @@ exportPdfButton.addEventListener('click', () => {
       console.error("❌ Error al generar el PDF:", err);
       showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
     }).finally(() => {
+      const originalButtonText = exportPdfButton.innerHTML;
       exportPdfButton.innerHTML = originalButtonText;
       exportPdfButton.disabled = false;
       if (clone.parentNode) document.body.removeChild(clone);
@@ -121,8 +122,9 @@ generateIdeasButton.addEventListener('click', async () => {
 
   try {
     const generateIdeas = httpsCallable(functions, 'generateIdeas');
-    const inputData = {
-      topic,
+    const topic = topicInput.value.trim();
+          const inputData = {
+            topic,
       copyType,
       socialNetworks: selectedSocialNetworks
     };
@@ -195,6 +197,7 @@ exportPdfButton.addEventListener('click', () => {
       console.error("❌ Error al generar el PDF:", err);
       showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
     }).finally(() => {
+      const originalButtonText = exportPdfButton.innerHTML;
       exportPdfButton.innerHTML = originalButtonText;
       exportPdfButton.disabled = false;
       if (clone.parentNode) document.body.removeChild(clone);
@@ -263,8 +266,9 @@ generateIdeasButton.addEventListener('click', async () => {
 
   try {
     const generateIdeas = httpsCallable(functions, 'generateIdeas');
-    const inputData = {
-      topic,
+    const topic = topicInput.value.trim();
+          const inputData = {
+            topic,
       copyType,
       socialNetworks: selectedSocialNetworks
     };
@@ -880,7 +884,8 @@ generateIdeasButton.addEventListener('click', async () => {
           console.error("Error al generar ideas:", error);
           console.log(error);
           showTemporaryMessage(actionButtonsContainer, "Ocurrió un error al generar ideas. Intenta de nuevo.", 'is-danger', 5000);
-          exportPdfButton.innerHTML = originalButtonText;
+          const originalButtonText = exportPdfButton.innerHTML;
+      exportPdfButton.innerHTML = originalButtonText;
           exportPdfButton.disabled = false;
         }
 
@@ -952,6 +957,7 @@ exportPdfButton.addEventListener('click', () => {
       console.error("❌ Error al generar el PDF:", err);
       showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
     }).finally(() => {
+      const originalButtonText = exportPdfButton.innerHTML;
       exportPdfButton.innerHTML = originalButtonText;
       exportPdfButton.disabled = false;
       if (clone.parentNode) document.body.removeChild(clone);
@@ -1020,8 +1026,9 @@ generateIdeasButton.addEventListener('click', async () => {
 
   try {
     const generateIdeas = httpsCallable(functions, 'generateIdeas');
-    const inputData = {
-      topic,
+    const topic = topicInput.value.trim();
+          const inputData = {
+            topic,
       copyType,
       socialNetworks: selectedSocialNetworks
     };
