@@ -1065,23 +1065,23 @@
 
               // --- INICIO PRUEBA C1 ---
               // PRUEBA C1.1: Comentar windowHeight. html2canvas debería usar 'height' para la "vista".
-              // windowHeight: currentCloneHeight, // Comenta esta línea PRIMERO
+              // windowHeight: currentCloneHeight, // ASEGÚRATE QUE ESTÉ COMENTADA
 
               // PRUEBA C1.2 (Si C1.1 no funciona): Poner windowHeight igual a height.
               // (Esto es lo que tenías, pero para ser sistemáticos). Si C1.1 no arregla el corte,
               // asegúrate de que la línea de arriba esté comentada Y la siguiente esté activa:
-              // windowHeight: currentCloneHeight,
+              // windowHeight: currentCloneHeight, // ASEGÚRATE QUE ESTÉ COMENTADA
 
-              // PRUEBA C1.3 (Si C1.2 no funciona): Poner windowHeight a un valor muy grande.
+              // PRUEBA C1.3 (Si C1.1 y C1.2 no funcionan): Poner windowHeight a un valor muy grande.
               // Si C1.1 y C1.2 no funcionan, comenta las dos de arriba y activa esta:
-              // windowHeight: 30000,
+              windowHeight: 30000, // <--- ACTIVA ESTA LÍNEA
               // --- FIN PRUEBA C1 ---
             };
-            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas:", JSON.parse(JSON.stringify(canvasOptions)));
+            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba C1.3):", JSON.parse(JSON.stringify(canvasOptions)));
 
             window.html2canvas(clone, canvasOptions).then(canvas => {
-              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY. ¿Se ven todas las tarjetas?');
-              alert("Previsualización generada (Prueba C1). Revisa la imagen (borde verde).");
+              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY. ¿Se ven todas las tarjetas AHORA?');
+              alert("Previsualización generada (Prueba C1.3). Revisa la imagen (borde verde).");
               const imgData = canvas.toDataURL('image/png');
               const img = document.createElement('img');
               img.src = imgData;
