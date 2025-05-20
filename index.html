@@ -1064,28 +1064,10 @@
               width: currentCloneWidth,
               height: currentCloneHeight, // Incluye el padding
               backgroundColor: '#FFFFFF',
-              windowHeight: currentCloneHeight, // Sincronizado con la altura total
-
-              // --- PRUEBA E ---
-              // Intenta estas combinaciones:
-
-              // E1: scrollX y scrollY (asegurar que empiece desde arriba)
-              // scrollX: 0,
-              // scrollY: 0,
-              // removeContainer: true, // Prueba con true
-
-              // E2: Si E1 no funciona, prueba con foreignObjectRendering
-              // foreignObjectRendering: true,
-              // scrollX: 0,
-              // scrollY: 0,
-              // removeContainer: true,
-
-              // E3: Combinación con y sin windowHeight explícito, pero con scrollX/Y
-               scrollX: 0, // <--- ACTIVA ESTAS TRES PARA EL PRIMER INTENTO DE E3
-               scrollY: 0, // <--- ACTIVA ESTAS TRES PARA EL PRIMER INTENTO DE E3
-               // windowHeight: comentada completamente // <--- ACTIVA ESTAS TRES. Poner windowHeight a 0 a veces fuerza a usar height.
-                               // O prueba comentando windowHeight completamente de nuevo (como en C1.1)
-                               // junto con scrollX:0, scrollY:0.
+              scrollX: 0,
+              scrollY: 0,
+              removeContainer: true, // o false, prueba ambos
+              windowHeight: currentCloneHeight // Volver a poner windowHeight sincronizado con height
             };
             console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba E):", JSON.parse(JSON.stringify(canvasOptions)));
 
