@@ -64,6 +64,93 @@ exportPdfButton.addEventListener('click', () => {
 
 });
 
+
+generateIdeasButton.addEventListener('click', async () => {
+  if (!currentUser) {
+    showTemporaryMessage(noResultsMessage, "Debes iniciar sesión para generar ideas.");
+    return;
+  }
+
+  const topic = topicInput.value.trim();
+  const copyType = copyTypeSelect.value;
+
+  const selectedSocialNetworks = [];
+  document.querySelectorAll('input[name="socialNetwork"]:checked').forEach((checkbox) => {
+    selectedSocialNetworks.push(checkbox.value);
+  });
+
+  if (!topic) {
+    showTemporaryMessage(topicInput.parentElement.parentElement, "El tema es obligatorio.", 'is-danger', 3000);
+    topicInput.focus();
+    return;
+  }
+  if (selectedSocialNetworks.length === 0) {
+    showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos una red social.", 'is-danger', 3000);
+    return;
+  }
+
+  lastInputData = {
+    topic: topic,
+    copyType: copyType,
+    socialNetworks: selectedSocialNetworks
+  };
+  localStorage.setItem('lastInputData', JSON.stringify(lastInputData));
+
+  formView.classList.add('is-hidden');
+  resultsView.classList.remove('is-hidden');
+  ideasResultsArea.innerHTML = '';
+  finalPhraseContainer.classList.add('is-hidden');
+  actionButtonsContainer.classList.add('is-hidden');
+  noResultsMessage.classList.add('is-hidden');
+  timerContainer.innerHTML = '';
+
+  let currentPhraseIndex = 0;
+  timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
+  phrasesIntervalId = setInterval(() => {
+    currentPhraseIndex = (currentPhraseIndex + 1) % loadingPhrases.length;
+    const phraseElement = timerContainer.querySelector('p');
+    if (phraseElement) {
+      phraseElement.classList.remove('animate__fadeIn');
+      phraseElement.classList.add('animate__fadeOut');
+      setTimeout(() => {
+        phraseElement.textContent = loadingPhrases[currentPhraseIndex];
+        phraseElement.classList.remove('animate__fadeOut');
+        phraseElement.classList.add('animate__fadeIn');
+      }, 300);
+    }
+  }, 4000);
+
+  try {
+    const generateIdeas = httpsCallable(functions, 'generateIdeas');
+    const inputData = {
+      topic,
+      copyType,
+      socialNetworks: selectedSocialNetworks
+    };
+    const response = await generateIdeas(inputData);
+    const generatedIdeas = response.data;
+
+    if (!Array.isArray(generatedIdeas) || generatedIdeas.length === 0) {
+      noResultsMessage.classList.remove("is-hidden");
+      actionButtonsContainer.classList.remove("is-hidden");
+      return;
+    }
+
+    renderIdeas(generatedIdeas);
+    finalPhraseContainer.classList.remove("is-hidden");
+    actionButtonsContainer.classList.remove("is-hidden");
+    clearInterval(phrasesIntervalId);
+    timerContainer.innerHTML = '';
+
+    saveIdeasToFirestore(inputData, generatedIdeas);
+  } catch (error) {
+    console.error("Error al generar ideas:", error);
+    showTemporaryMessage(actionButtonsContainer, "Ocurrió un error al generar ideas. Intenta de nuevo.", 'is-danger', 5000);
+    clearInterval(phrasesIntervalId);
+    timerContainer.innerHTML = '';
+  }
+});
+
 </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
 
@@ -118,6 +205,93 @@ exportPdfButton.addEventListener('click', () => {
   }, 100);
 });
 
+});
+
+
+generateIdeasButton.addEventListener('click', async () => {
+  if (!currentUser) {
+    showTemporaryMessage(noResultsMessage, "Debes iniciar sesión para generar ideas.");
+    return;
+  }
+
+  const topic = topicInput.value.trim();
+  const copyType = copyTypeSelect.value;
+
+  const selectedSocialNetworks = [];
+  document.querySelectorAll('input[name="socialNetwork"]:checked').forEach((checkbox) => {
+    selectedSocialNetworks.push(checkbox.value);
+  });
+
+  if (!topic) {
+    showTemporaryMessage(topicInput.parentElement.parentElement, "El tema es obligatorio.", 'is-danger', 3000);
+    topicInput.focus();
+    return;
+  }
+  if (selectedSocialNetworks.length === 0) {
+    showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos una red social.", 'is-danger', 3000);
+    return;
+  }
+
+  lastInputData = {
+    topic: topic,
+    copyType: copyType,
+    socialNetworks: selectedSocialNetworks
+  };
+  localStorage.setItem('lastInputData', JSON.stringify(lastInputData));
+
+  formView.classList.add('is-hidden');
+  resultsView.classList.remove('is-hidden');
+  ideasResultsArea.innerHTML = '';
+  finalPhraseContainer.classList.add('is-hidden');
+  actionButtonsContainer.classList.add('is-hidden');
+  noResultsMessage.classList.add('is-hidden');
+  timerContainer.innerHTML = '';
+
+  let currentPhraseIndex = 0;
+  timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
+  phrasesIntervalId = setInterval(() => {
+    currentPhraseIndex = (currentPhraseIndex + 1) % loadingPhrases.length;
+    const phraseElement = timerContainer.querySelector('p');
+    if (phraseElement) {
+      phraseElement.classList.remove('animate__fadeIn');
+      phraseElement.classList.add('animate__fadeOut');
+      setTimeout(() => {
+        phraseElement.textContent = loadingPhrases[currentPhraseIndex];
+        phraseElement.classList.remove('animate__fadeOut');
+        phraseElement.classList.add('animate__fadeIn');
+      }, 300);
+    }
+  }, 4000);
+
+  try {
+    const generateIdeas = httpsCallable(functions, 'generateIdeas');
+    const inputData = {
+      topic,
+      copyType,
+      socialNetworks: selectedSocialNetworks
+    };
+    const response = await generateIdeas(inputData);
+    const generatedIdeas = response.data;
+
+    if (!Array.isArray(generatedIdeas) || generatedIdeas.length === 0) {
+      noResultsMessage.classList.remove("is-hidden");
+      actionButtonsContainer.classList.remove("is-hidden");
+      return;
+    }
+
+    renderIdeas(generatedIdeas);
+    finalPhraseContainer.classList.remove("is-hidden");
+    actionButtonsContainer.classList.remove("is-hidden");
+    clearInterval(phrasesIntervalId);
+    timerContainer.innerHTML = '';
+
+    saveIdeasToFirestore(inputData, generatedIdeas);
+  } catch (error) {
+    console.error("Error al generar ideas:", error);
+    showTemporaryMessage(actionButtonsContainer, "Ocurrió un error al generar ideas. Intenta de nuevo.", 'is-danger', 5000);
+    clearInterval(phrasesIntervalId);
+    timerContainer.innerHTML = '';
+  }
 });
 
 </script>
@@ -789,6 +963,93 @@ exportPdfButton.addEventListener('click', () => {
   }, 100);
 });
 
+});
+
+
+generateIdeasButton.addEventListener('click', async () => {
+  if (!currentUser) {
+    showTemporaryMessage(noResultsMessage, "Debes iniciar sesión para generar ideas.");
+    return;
+  }
+
+  const topic = topicInput.value.trim();
+  const copyType = copyTypeSelect.value;
+
+  const selectedSocialNetworks = [];
+  document.querySelectorAll('input[name="socialNetwork"]:checked').forEach((checkbox) => {
+    selectedSocialNetworks.push(checkbox.value);
+  });
+
+  if (!topic) {
+    showTemporaryMessage(topicInput.parentElement.parentElement, "El tema es obligatorio.", 'is-danger', 3000);
+    topicInput.focus();
+    return;
+  }
+  if (selectedSocialNetworks.length === 0) {
+    showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos una red social.", 'is-danger', 3000);
+    return;
+  }
+
+  lastInputData = {
+    topic: topic,
+    copyType: copyType,
+    socialNetworks: selectedSocialNetworks
+  };
+  localStorage.setItem('lastInputData', JSON.stringify(lastInputData));
+
+  formView.classList.add('is-hidden');
+  resultsView.classList.remove('is-hidden');
+  ideasResultsArea.innerHTML = '';
+  finalPhraseContainer.classList.add('is-hidden');
+  actionButtonsContainer.classList.add('is-hidden');
+  noResultsMessage.classList.add('is-hidden');
+  timerContainer.innerHTML = '';
+
+  let currentPhraseIndex = 0;
+  timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
+  phrasesIntervalId = setInterval(() => {
+    currentPhraseIndex = (currentPhraseIndex + 1) % loadingPhrases.length;
+    const phraseElement = timerContainer.querySelector('p');
+    if (phraseElement) {
+      phraseElement.classList.remove('animate__fadeIn');
+      phraseElement.classList.add('animate__fadeOut');
+      setTimeout(() => {
+        phraseElement.textContent = loadingPhrases[currentPhraseIndex];
+        phraseElement.classList.remove('animate__fadeOut');
+        phraseElement.classList.add('animate__fadeIn');
+      }, 300);
+    }
+  }, 4000);
+
+  try {
+    const generateIdeas = httpsCallable(functions, 'generateIdeas');
+    const inputData = {
+      topic,
+      copyType,
+      socialNetworks: selectedSocialNetworks
+    };
+    const response = await generateIdeas(inputData);
+    const generatedIdeas = response.data;
+
+    if (!Array.isArray(generatedIdeas) || generatedIdeas.length === 0) {
+      noResultsMessage.classList.remove("is-hidden");
+      actionButtonsContainer.classList.remove("is-hidden");
+      return;
+    }
+
+    renderIdeas(generatedIdeas);
+    finalPhraseContainer.classList.remove("is-hidden");
+    actionButtonsContainer.classList.remove("is-hidden");
+    clearInterval(phrasesIntervalId);
+    timerContainer.innerHTML = '';
+
+    saveIdeasToFirestore(inputData, generatedIdeas);
+  } catch (error) {
+    console.error("Error al generar ideas:", error);
+    showTemporaryMessage(actionButtonsContainer, "Ocurrió un error al generar ideas. Intenta de nuevo.", 'is-danger', 5000);
+    clearInterval(phrasesIntervalId);
+    timerContainer.innerHTML = '';
+  }
 });
 
 </script>
