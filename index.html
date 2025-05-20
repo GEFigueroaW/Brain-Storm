@@ -919,153 +919,140 @@
 
           const clone = elementToExport.cloneNode(true);
           clone.style.position = 'absolute';
-          clone.style.left = '-9999px';
+          clone.style.left = '-9999px'; // Fuera de la pantalla
           clone.style.top = '0px';
-          clone.style.display = 'block';
-          clone.style.backgroundColor = 'white'; // Fondo blanco para el clon
+          clone.style.display = 'block'; // Importante para que tenga dimensiones
 
-          // --- INICIO: Forzar un ancho razonable y aplicar estilos para el ajuste de texto ---
-          const desiredPdfContentWidthPx = 750;
+          // --- INICIO: Aplicar estilos y ancho al clon ---
+          const desiredPdfContentWidthPx = 750; // Ancho deseado para el contenido en el PDF
           clone.style.width = desiredPdfContentWidthPx + 'px';
-          // clone.style.padding = '10px'; // Quitar padding temporalmente para simplificar
+          clone.style.backgroundColor = 'white'; // Fondo blanco explícito para el clon
+          clone.style.padding = '15px'; // Un poco de padding general
           clone.style.boxSizing = 'border-box';
-          clone.style.backgroundColor = 'white'; // Asegurar fondo blanco del clon
 
-          // **RESETEO DE ESTILOS DRÁSTICO PARA EL CLON (TEMPORAL)**
-          clone.style.all = 'initial'; // Intenta resetear todos los estilos heredados
-          clone.style.fontFamily = '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'; // Re-aplicar fuente base
-          clone.style.color = '#333'; // Re-aplicar color de texto base
-          clone.style.display = 'block'; // Re-aplicar display
-          clone.style.width = desiredPdfContentWidthPx + 'px'; // Re-aplicar ancho
-          clone.style.backgroundColor = 'white'; // Re-aplicar fondo
-
-          const allElementsInClone = clone.querySelectorAll('*');
-          allElementsInClone.forEach(el => {
-            el.style.all = 'revert'; // Revierte a los estilos del user-agent, quitando Bulma y tus estilos
-            // Puedes re-aplicar selectivamente estilos MUY básicos aquí si es necesario
-            el.style.display = 'block'; // Forzar block para un flujo simple
-            el.style.width = 'auto'; // Dejar que el ancho se ajuste al padre o al contenido
-            el.style.maxWidth = '100%'; // Prevenir desbordamiento
-            el.style.margin = '5px 0';
-            el.style.padding = '2px';
-            el.style.border = '1px dotted #ccc'; // Para ver los bordes de cada elemento
-            el.style.backgroundColor = 'transparent'; // Asegurar que no haya fondos extraños
-            el.style.color = '#000'; // Texto negro básico
+          // Reseteo de estilos más suave y específico (si el anterior era demasiado drástico)
+          // O puedes mantener el reseteo drástico si sospechas de Bulma fuertemente
+          const elementsToStyle = clone.querySelectorAll('*');
+          elementsToStyle.forEach(el => {
+            // Aplicar estilos para asegurar el ajuste de texto y visibilidad
             el.style.wordWrap = 'break-word';
             el.style.overflowWrap = 'break-word';
             el.style.whiteSpace = 'normal';
+            // Evitar que los estilos de Bulma oculten elementos en el clon
+            if (window.getComputedStyle(el).display === 'none') {
+              el.style.display = 'block'; // O el display original que debería tener
+            }
+            if (window.getComputedStyle(el).visibility === 'hidden') {
+              el.style.visibility = 'visible';
+            }
           });
 
-          // Aplicar estilos específicos a las tarjetas y su contenido después del reseteo
           clone.querySelectorAll('.card').forEach(card => {
-            card.style.border = '1px solid black';
-            card.style.marginBottom = '10px';
-            card.style.backgroundColor = 'white';
+            card.style.border = '1px solid #eee'; // Borde sutil para las tarjetas
+            card.style.marginBottom = '15px';
+            card.style.padding = '10px';
+            card.style.backgroundColor = 'white'; // Fondo blanco para cada tarjeta
+            // Asegurar que las tarjetas ocupen el ancho disponible si no están en columnas complejas
+            card.style.width = '100%';
+            card.style.boxSizing = 'border-box';
           });
           clone.querySelectorAll('.card-header-title').forEach(el => {
             el.style.fontWeight = 'bold';
-            el.style.fontSize = '1.2em';
+            el.style.fontSize = '1.1em';
+            el.style.color = '#333';
           });
           clone.querySelectorAll('.card .content p, .card .content strong').forEach(el => {
-            // Ya deberían tener word-wrap del bucle anterior, pero podemos ser explícitos
             el.style.fontSize = '1em';
+            el.style.color = '#363636';
+            el.style.lineHeight = '1.5';
           });
-          // --- FIN: Forzar ancho y estilos de texto ---
+          // --- FIN: Aplicar estilos y ancho al clon ---
 
           document.body.appendChild(clone);
-          // Recalcular scrollHeight DESPUÉS de fijar el ancho y añadir al DOM
-          let cloneScrollHeight = clone.scrollHeight;
-          let cloneScrollWidth = clone.scrollWidth; // Debería ser cercano a desiredPdfContentWidthPx
 
-          console.log(`Dimensiones del clon DESPUÉS de forzar ancho (scrollWidth, scrollHeight): ${cloneScrollWidth}, ${cloneScrollHeight}`);
-
-          const canvasOptions = {
-            logging: true, // Habilitar para más detalles durante la depuración
-            useCORS: true,
-            width: cloneScrollWidth, // Usar el ancho real del clon (que forzamos)
-            height: cloneScrollHeight,
-            // windowWidth: cloneScrollWidth, // A veces no es necesario si width y height están bien definidos
-            // windowHeight: cloneScrollHeight,
-            scale: 2, // Aumentar la escala aquí para MEJOR CALIDAD en el canvas inicial.
-            scrollY: 0,
-            backgroundColor: '#ffffff',
-          };
-
-          console.log("Opciones para html2canvas:", canvasOptions);
-          console.log("Estilo final del clon (width, height):", clone.style.width, clone.style.height);
-          console.log("--- DEBUG CLON ANTES DE HTML2CANVAS ---");
-          console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
-          console.log("Dimensiones calculadas del Clon (offsetWidth, offsetHeight):", clone.offsetWidth, clone.offsetHeight);
-          console.log("Dimensiones de scroll del Clon (scrollWidth, scrollHeight):", clone.scrollWidth, clone.scrollHeight);
-
-          const cardsInClone = clone.querySelectorAll('.card');
-          console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon.`);
-
-          cardsInClone.forEach((card, index) => {
-            console.log(`--- Tarjeta Clonada ${index + 1} ---`);
-            const cardStyles = window.getComputedStyle(card);
-            console.log(`Tarjeta ${index + 1} - Ancho computado: ${cardStyles.width}, Alto computado: ${cardStyles.height}`);
-            console.log(`Tarjeta ${index + 1} - display: ${cardStyles.display}, position: ${cardStyles.position}, overflow: ${cardStyles.overflow}`);
-
-            const textElements = card.querySelectorAll('.content p, .content strong, .card-header-title');
-            textElements.forEach((textEl, textIndex) => {
-              const textStyles = window.getComputedStyle(textEl);
-              console.log(`  Texto ${textIndex + 1} en Tarjeta ${index + 1} ("${textEl.textContent.substring(0, 30)}...")`);
-              console.log(`  Estilos de Texto - wordWrap: ${textStyles.wordWrap}, overflowWrap: ${textStyles.overflowWrap}, whiteSpace: ${textStyles.whiteSpace}, color: ${textStyles.color}`);
-              console.log(`  Ancho del elemento de texto: ${textEl.offsetWidth}px, Alto: ${textEl.offsetHeight}px`);
-            });
-          });
-          console.log("--- FIN DEBUG CLON ---");
-          // OPCIÓN ALTERNATIVA: Dejar que html2pdf.js maneje html2canvas
-          // Comenta la llamada a window.html2canvas(clone, canvasOptions)...
-          // Y modifica pdfOptions así:
-
-          /*
+          // *** CAMBIO CRUCIAL: Usar setTimeout para permitir que el navegador calcule dimensiones ***
           setTimeout(() => {
-              // COMENTA DESDE AQUÍ
-              // window.html2canvas(clone, canvasOptions).then(canvas => {
-              //    console.log('html2canvas exitoso, dimensiones del canvas generado:', canvas.width, 'x', canvas.height);
-              //    exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-image"></i></span><span>Previsualizando...</span>';
-              //    ...
-              //    const imgData = canvas.toDataURL('image/png');
-              //    ...
-              //    document.body.appendChild(img); // Ya no tendrías esta preview directa
-              // HASTA AQUÍ (antes de const pdfOptions)
-              // });
-          */
+            // Ahora leemos las dimensiones DESPUÉS de que el clon ha estado en el DOM y los estilos aplicados
+            let cloneScrollHeight = clone.scrollHeight;
+            let cloneScrollWidth = clone.scrollWidth;
 
-          const pdfOptions = {
-            margin: 0.5,
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.92 },
-            html2canvas: { // AHORA html2pdf.js usará estas opciones para llamar a html2canvas
-              scale: 2, // Escala para buena calidad
-              logging: true,
-              useCORS: true,
-              width: clone.scrollWidth, // Ancho del clon preparado
-              height: clone.scrollHeight, // Alto del clon preparado
-              backgroundColor: '#ffffff',
-              // Puedes añadir otras opciones de html2canvas aquí si es necesario
-              // por ejemplo, windowWidth: clone.scrollWidth,
-            },
-            jsPDF: {
-              unit: 'in',
-              format: 'letter',
-              orientation: 'portrait'
-            },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: '.card' }
-          };
+            console.log(`Dimensiones del clon DENTRO DEL TIMEOUT (scrollWidth, scrollHeight): ${cloneScrollWidth}, ${cloneScrollHeight}`);
 
-          console.log("Opciones para html2pdf (con html2canvas interno):", pdfOptions);
+            // Verificar si las dimensiones siguen siendo 0, y si es así, intentar con offsetWidth/Height
+            if (cloneScrollWidth === 0 || cloneScrollHeight === 0) {
+              console.warn("scrollWidth/Height son 0, intentando con offsetWidth/Height");
+              cloneScrollWidth = clone.offsetWidth;
+              cloneScrollHeight = clone.offsetHeight;
+              console.log(`Dimensiones del clon con offset (offsetWidth, offsetHeight): ${cloneScrollWidth}, ${cloneScrollHeight}`);
+            }
 
-          // Ahora llamas a .from(clone) en lugar de .from(canvas)
-          html2pdf().from(clone).set(pdfOptions).save()
-            .then(() => { /* ... */ })
-            .catch(err => { /* ... */ })
-            .finally(() => { /* ... */ });
+            // Si las dimensiones siguen siendo 0, no podemos continuar
+            if (cloneScrollWidth === 0 || cloneScrollHeight === 0) {
+              console.error("Las dimensiones del clon son 0. No se puede generar el PDF.");
+              showTemporaryMessage(actionButtonsContainer, "Error: No se pudieron calcular las dimensiones del contenido para el PDF.", 'is-danger', 5000);
+              if (clone.parentNode) {
+                document.body.removeChild(clone);
+              }
+              exportPdfButton.innerHTML = originalButtonText;
+              exportPdfButton.disabled = false;
+              return; // Salir de la función
+            }
 
-          // El setTimeout podría seguir siendo útil para asegurar que el clon esté listo en el DOM
-          // }, 350); // Aumenté un poco el timeout
+
+            // --- DEBUG CLON ANTES DE HTML2CANVAS (dentro del timeout) ---
+            console.log("--- DEBUG CLON ANTES DE HTML2CANVAS (DENTRO DEL TIMEOUT) ---");
+            console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
+            console.log("Dimensiones calculadas del Clon (offsetWidth, offsetHeight):", clone.offsetWidth, clone.offsetHeight);
+            console.log("Dimensiones de scroll del Clon (scrollWidth, scrollHeight):", clone.scrollWidth, clone.scrollHeight);
+            const cardsInClone = clone.querySelectorAll('.card');
+            console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon (dentro del timeout).`);
+            // ... (puedes mantener el resto de tus logs de tarjetas si quieres) ...
+            console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
+
+
+            const pdfOptions = {
+              margin: 0.5,
+              filename: filename,
+              image: { type: 'jpeg', quality: 0.95 }, // Aumenté un poco la calidad
+              html2canvas: {
+                scale: 2, // Buena calidad
+                logging: true,
+                useCORS: true,
+                // IMPORTANTE: html2canvas usará el width/height del elemento si no se especifican aquí,
+                // o podemos ser explícitos con las dimensiones calculadas.
+                width: cloneScrollWidth,
+                height: cloneScrollHeight,
+                backgroundColor: '#ffffff', // Fondo blanco explícito para el canvas
+                // Asegurarse de que capture todo el contenido verticalmente
+                windowHeight: cloneScrollHeight
+              },
+              jsPDF: {
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait'
+              },
+              pagebreak: { mode: ['css', 'legacy'], before: '.card' } // Simplifiqué un poco el modo
+            };
+
+            console.log("Opciones para html2pdf (con html2canvas interno):", pdfOptions);
+
+            html2pdf().from(clone).set(pdfOptions).save()
+              .then(() => {
+                console.log("PDF guardado exitosamente.");
+              }).catch(err => {
+                console.error("Error al generar PDF con html2pdf:", err);
+                showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
+              }).finally(() => {
+                exportPdfButton.innerHTML = originalButtonText;
+                exportPdfButton.disabled = false;
+                if (clone.parentNode) {
+                  document.body.removeChild(clone);
+                }
+                // const previewImg = document.getElementById('canvasPreviewImg'); // Ya no creamos esta preview en este flujo
+                // if (previewImg) previewImg.remove();
+              });
+          }, 100); // Un timeout pequeño, puedes ajustarlo (ej. 50, 100, o incluso 0 a veces funciona)
+
         });
       }
     </script>
