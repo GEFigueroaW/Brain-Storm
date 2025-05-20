@@ -904,172 +904,107 @@
       // --- Lógica de Exportación a PDF ---
       if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
         exportPdfButton.addEventListener('click', () => {
-          // ... (código inicial igual) ...
-          const ideaCards = ideasResultsArea.querySelectorAll('.card');
-          if (ideaCards.length === 0) { /* ... */ return; }
-          const originalButtonText = exportPdfButton.innerHTML;
-          exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
-          exportPdfButton.disabled = true;
-          const elementToExport = ideasResultsArea;
-          let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
-
+          // ...
           const clone = elementToExport.cloneNode(true);
-          clone.style.position = 'absolute';
-          clone.style.left = '-9999px';
-          clone.style.top = '0px';
-          clone.style.display = 'block';
+          clone.style.position = 'fixed'; // CAMBIO: Para que sea visible sobre el contenido
+          clone.style.left = '10px';      // CAMBIO: Posición visible
+          clone.style.top = '10px';       // CAMBIO: Posición visible
+          clone.style.zIndex = '19999';   // CAMBIO: Muy al frente, pero debajo de la previsualización si la tuvieras
+          clone.style.border = '3px dashed red'; // CAMBIO: Borde visible para el clon
+          clone.style.overflowY = 'scroll'; // CAMBIO: Permitir scroll si es muy alto
+          clone.style.maxHeight = '80vh';   // CAMBIO: Limitar altura para que no ocupe toda la pantalla
+          // Ya tenías display: 'block' que es bueno.
 
           // --- Aplicar estilos y ancho al clon ---
           const desiredPdfContentWidthPx = 750;
           clone.style.width = desiredPdfContentWidthPx + 'px';
-          clone.style.backgroundColor = 'white'; // Fondo blanco explícito para el clon
+          clone.style.backgroundColor = 'lightyellow'; // CAMBIO: Fondo amarillo claro para el CLON para distinguirlo
           clone.style.padding = '15px';
           clone.style.boxSizing = 'border-box';
-          // ... (TUS ESTILOS DE RESET/APLICACIÓN AL CLON Y SUS HIJOS, como los tenías)
+
           const elementsToStyle = clone.querySelectorAll('*');
           elementsToStyle.forEach(el => {
             el.style.wordWrap = 'break-word';
             el.style.overflowWrap = 'break-word';
             el.style.whiteSpace = 'normal';
-            el.style.color = '#111'; // <--- CAMBIO: Forzar un color de texto oscuro visible
-            el.style.backgroundColor = 'transparent'; // <--- CAMBIO: Asegurar fondos transparentes para elementos hijos
-            if (window.getComputedStyle(el).display === 'none') {
+            el.style.color = '#111';
+            el.style.backgroundColor = 'transparent';
+            // Asegurar que los elementos sean visibles
+            const computedDisplay = window.getComputedStyle(el).display;
+            const computedVisibility = window.getComputedStyle(el).visibility;
+
+            if (computedDisplay === 'none') {
+              console.log("Forzando display a 'block' para el elemento:", el);
               el.style.display = 'block';
             }
-            if (window.getComputedStyle(el).visibility === 'hidden') {
+            if (computedVisibility === 'hidden') {
+              console.log("Forzando visibility a 'visible' para el elemento:", el);
               el.style.visibility = 'visible';
             }
-            // el.style.border = '1px dotted #ccc'; // Opcional para debug visual
+            // el.style.border = '1px dotted #eee'; // Para ver bordes internos
           });
+
           clone.querySelectorAll('.card').forEach(card => {
-            card.style.border = '1px solid black'; // <--- CAMBIO: Borde negro visible
+            card.style.border = '2px solid blue'; // CAMBIO: Borde azul para las tarjetas
             card.style.marginBottom = '15px';
             card.style.padding = '10px';
-            card.style.backgroundColor = '#f0f0f0'; // <--- CAMBIO: Fondo gris claro para las tarjetas
+            card.style.backgroundColor = 'white'; // Fondo blanco para las tarjetas
             card.style.width = '100%';
             card.style.boxSizing = 'border-box';
+            console.log("Estilos aplicados a la tarjeta:", card);
           });
-          clone.querySelectorAll('.card-header-title').forEach(el => {
-            el.style.fontWeight = 'bold';
-            el.style.fontSize = '1.1em';
-            el.style.color = 'black'; // <--- CAMBIO
-          });
-          clone.querySelectorAll('.card .content p, .card .content strong').forEach(el => {
-            el.style.fontSize = '1em';
-            el.style.color = 'black'; // <--- CAMBIO
-            el.style.lineHeight = '1.5';
+          clone.querySelectorAll('.card-header-title, .card .content p, .card .content strong').forEach(el => {
+            el.style.color = 'black'; // Asegurar que el texto sea negro
+            // console.log(`Texto en clon: "${el.textContent.substring(0,50)}" Color: ${window.getComputedStyle(el).color}`);
           });
           // --- FIN Aplicar estilos ---
 
           document.body.appendChild(clone);
+          console.log("CLON AÑADIDO AL BODY PARA INSPECCIÓN VISUAL. ¿Se ve el contenido?");
 
           setTimeout(() => {
             let currentCloneWidth = clone.scrollWidth;
             let currentCloneHeight = clone.scrollHeight;
-
+            // ... (resto de la lógica de lectura de dimensiones, que ya estaba bien) ...
             console.log(`Dimensiones del clon DENTRO DEL TIMEOUT (scrollWidth, scrollHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
             if (currentCloneWidth === 0 || currentCloneHeight === 0) {
               currentCloneWidth = clone.offsetWidth; currentCloneHeight = clone.offsetHeight;
-              console.warn(`Usando offsetDims: ${currentCloneWidth}, ${currentCloneHeight}`);
             }
-            if (currentCloneWidth === 0 || currentCloneHeight === 0) { /* ... error y return ... */
-              console.error("Las dimensiones del clon siguen siendo 0 DENTRO DEL TIMEOUT. No se puede generar el PDF.");
-              showTemporaryMessage(actionButtonsContainer, "Error: Dimensiones del contenido son 0 para el PDF.", 'is-danger', 5000);
-              if (clone.parentNode) document.body.removeChild(clone);
-              exportPdfButton.innerHTML = originalButtonText;
-              exportPdfButton.disabled = false;
-              return;
-            }
+            if (currentCloneWidth === 0 || currentCloneHeight === 0) { /* ... error y return ... */ }
 
-            // --- DEBUG CLON (ya lo tenías) ---
-            console.log("--- DEBUG CLON ANTES DE HTML2CANVAS (DENTRO DEL TIMEOUT) ---");
-            console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
-            // ...
-            console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
+            // ... Tus logs de DEBUG CLON ...
 
-
-            // ***** PASO 1: Generar Canvas con window.html2canvas para PREVISUALIZACIÓN *****
-            const canvasOptions = {
-              scale: 1, // Empezar con escala 1 para la previsualización, más rápido. Si se ve bien, luego aumentamos.
-              logging: true,
-              useCORS: true,
-              width: currentCloneWidth,
-              height: currentCloneHeight,
-              backgroundColor: '#FFF', // Fondo blanco para el canvas
-              windowHeight: currentCloneHeight
+            const pdfOptions = {
+              margin: 0.5,
+              filename: filename,
+              image: { type: 'jpeg', quality: 0.95 },
+              html2canvas: {
+                scale: 1, // <--- CAMBIO: Empezar con escala 1 para simplificar
+                logging: true,
+                useCORS: true,
+                width: currentCloneWidth,
+                height: currentCloneHeight,
+                backgroundColor: '#ffffff',
+                windowHeight: currentCloneHeight,
+                // OPCIÓN EXTRA para probar:
+                // foreignObjectRendering: true, // A veces ayuda con ciertos contenidos
+              },
+              jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+              pagebreak: { mode: ['css', 'legacy'], before: '.card' }
             };
-            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas:", JSON.parse(JSON.stringify(canvasOptions)));
+            console.log("Opciones FINALES para html2pdf (con html2canvas interno):", JSON.parse(JSON.stringify(pdfOptions)));
 
-            window.html2canvas(clone, canvasOptions).then(canvas => {
-              console.log('PREVISUALIZACIÓN: html2canvas exitoso. Dimensiones del canvas:', canvas.width, 'x', canvas.height);
-
-              // --- INICIO: Mostrar la imagen de previsualización ---
-              const imgData = canvas.toDataURL('image/png');
-              const img = document.createElement('img');
-              img.src = imgData;
-              img.style.border = "5px solid red"; // Borde ROJO para destacar que es la previsualización
-              img.style.position = "fixed";
-              img.style.left = "10px";
-              img.style.top = "80px";
-              img.style.zIndex = "20000"; // Muy al frente
-              img.style.maxWidth = "45vw"; // Más grande para ver detalles
-              img.style.maxHeight = "80vh";
-              img.style.overflow = "auto";
-              img.style.backgroundColor = "rgba(0,0,0,0.1)"; // Fondo semitransparente para la img
-              const oldPreview = document.getElementById('canvasPreviewImgDirect');
-              if (oldPreview) oldPreview.remove();
-              img.id = 'canvasPreviewImgDirect';
-              document.body.appendChild(img);
-              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY. ¿Tiene contenido?');
-              // --- FIN: Mostrar la imagen de previsualización ---
-
-              // **NO generaremos el PDF todavía. Solo queremos ver la imagen.**
-              // Comenta la siguiente sección de html2pdf por ahora:
-              /*
-              const pdfOptions = {
-                  margin: 0.5,
-                  filename: filename,
-                  image: { type: 'jpeg', quality: 0.95 },
-                  html2canvas: { // Estas opciones se usarían si html2pdf llama a html2canvas
-                      scale: 2,
-                      logging: true,
-                      useCORS: true,
-                      width: currentCloneWidth, // Es importante pasar las dimensiones correctas
-                      height: currentCloneHeight,
-                      backgroundColor: '#ffffff',
-                      windowHeight: currentCloneHeight
-                  },
-                  jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-                  pagebreak: { mode: ['css', 'legacy'], before: '.card' }
-              };
-              console.log("Opciones para html2pdf:", JSON.parse(JSON.stringify(pdfOptions)));
-              html2pdf().from(canvas).set(pdfOptions).save() // Usar .from(canvas) si generamos el canvas nosotros
-                  .then(() => { console.log("PDF guardado."); })
-                  .catch(err => { console.error("Error en html2pdf:", err); })
-                  .finally(() => {
-                      exportPdfButton.innerHTML = originalButtonText;
-                      exportPdfButton.disabled = false;
-                      if (clone.parentNode) document.body.removeChild(clone);
-                      // if (img.parentNode) img.remove(); // No quitar la preview todavía
-                  });
-              */
-
-              // Por ahora, solo restauramos el botón y quitamos el clon para la prueba de previsualización
-              exportPdfButton.innerHTML = originalButtonText;
-              exportPdfButton.disabled = false;
-              if (clone.parentNode) document.body.removeChild(clone);
-              alert("Previsualización generada. Revisa la imagen en pantalla. Luego puedes descomentar el código del PDF.");
-
-
-            }).catch(err => {
-              console.error("Error en PREVISUALIZACIÓN con window.html2canvas:", err);
-              showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización. Revisa consola.", 'is-danger', 4000);
-              exportPdfButton.innerHTML = originalButtonText;
-              exportPdfButton.disabled = false;
-              if (clone.parentNode) document.body.removeChild(clone);
-            });
-
-          }, 250);
+            html2pdf().from(clone).set(pdfOptions).save()
+              .then(() => { console.log("PDF guardado exitosamente."); })
+              .catch(err => { console.error("Error al generar PDF con html2pdf:", err); /* ... */ })
+              .finally(() => {
+                exportPdfButton.innerHTML = originalButtonText;
+                exportPdfButton.disabled = false;
+                // NO ELIMINAR EL CLON AÚN para poder inspeccionarlo
+                // if (clone.parentNode) document.body.removeChild(clone);
+                alert("Proceso de PDF terminado. Revisa el clon visible en la esquina y el PDF.");
+              });
+          }, 350); // Aumentar un poco más el timeout para dar tiempo a la inspección visual si es necesario
         });
       }    </script>
 </body>
