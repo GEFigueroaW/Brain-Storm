@@ -9,8 +9,112 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js">
+
+exportPdfButton.addEventListener('click', () => {
+  const originalButtonText = exportPdfButton.innerHTML;
+  exportPdfButton.innerHTML = "Generando PDF...";
+  exportPdfButton.disabled = true;
+
+  const clone = ideasResultsArea.cloneNode(true);
+  clone.style.backgroundColor = "white";
+  clone.style.padding = "40px";
+  clone.style.width = "100%";
+  clone.style.maxWidth = "800px";
+  clone.style.margin = "0 auto";
+
+  clone.classList.add("pdf-export-preview");
+
+  document.body.appendChild(clone);
+
+  setTimeout(() => {
+    console.log("Exportando PDF desde HTML directamente...");
+
+    html2pdf().from(clone).set({
+      margin: 0.5,
+      filename: `ideas_generadas_${new Date().toISOString().split("T")[0]}.pdf`,
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true
+      },
+      jsPDF: {
+        unit: 'in',
+        format: 'letter',
+        orientation: 'portrait'
+      },
+      pagebreak: {
+        mode: ['css', 'legacy'],
+        before: '.card'
+      }
+    }).save().then(() => {
+      console.log("✅ PDF generado correctamente.");
+    }).catch(err => {
+      console.error("❌ Error al generar el PDF:", err);
+      showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
+    }).finally(() => {
+      exportPdfButton.innerHTML = originalButtonText;
+      exportPdfButton.disabled = false;
+      if (clone.parentNode) document.body.removeChild(clone);
+    });
+
+  }, 100);
+});
+
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+
+exportPdfButton.addEventListener('click', () => {
+  const originalButtonText = exportPdfButton.innerHTML;
+  exportPdfButton.innerHTML = "Generando PDF...";
+  exportPdfButton.disabled = true;
+
+  const clone = ideasResultsArea.cloneNode(true);
+  clone.style.backgroundColor = "white";
+  clone.style.padding = "40px";
+  clone.style.width = "100%";
+  clone.style.maxWidth = "800px";
+  clone.style.margin = "0 auto";
+
+  clone.classList.add("pdf-export-preview");
+
+  document.body.appendChild(clone);
+
+  setTimeout(() => {
+    console.log("Exportando PDF desde HTML directamente...");
+
+    html2pdf().from(clone).set({
+      margin: 0.5,
+      filename: `ideas_generadas_${new Date().toISOString().split("T")[0]}.pdf`,
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true
+      },
+      jsPDF: {
+        unit: 'in',
+        format: 'letter',
+        orientation: 'portrait'
+      },
+      pagebreak: {
+        mode: ['css', 'legacy'],
+        before: '.card'
+      }
+    }).save().then(() => {
+      console.log("✅ PDF generado correctamente.");
+    }).catch(err => {
+      console.error("❌ Error al generar el PDF:", err);
+      showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
+    }).finally(() => {
+      exportPdfButton.innerHTML = originalButtonText;
+      exportPdfButton.disabled = false;
+      if (clone.parentNode) document.body.removeChild(clone);
+    });
+
+  }, 100);
+});
+
+</script>
 
   <style>
     /* Estilos personalizados (los mismos que antes, mantenlos) */
@@ -587,66 +691,63 @@
             phraseElement.classList.remove('animate__fadeIn');
             phraseElement.classList.add('animate__fadeOut');
             
-setTimeout(() => {
-  console.log("Añadiendo padding-bottom al clon antes de medir dimensiones...");
-  clone.style.paddingBottom = '1500px !important';
-  let currentCloneWidth = clone.scrollWidth;
-  let currentCloneHeight = clone.scrollHeight;
-
-  console.log(`Dimensiones del clon DENTRO DEL TIMEOUT con padding-bottom (scrollWidth, scrollHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
-  if (currentCloneWidth === 0 || currentCloneHeight === 0) {
-    console.warn("scrollWidth/Height son 0 DENTRO DEL TIMEOUT, intentando con offsetWidth/Height");
-    currentCloneWidth = clone.offsetWidth;
-    currentCloneHeight = clone.offsetHeight;
-    console.log(`Dimensiones del clon con offset DENTRO DEL TIMEOUT (offsetWidth, offsetHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
-  }
-
-  if (currentCloneWidth === 0 || currentCloneHeight === 0) {
-    console.error("Las dimensiones del clon siguen siendo 0 DENTRO DEL TIMEOUT. No se puede generar el PDF.");
-    return;
-  }
-
-  console.log("--- DEBUG CLON ANTES DE HTML2PDF (DENTRO DEL TIMEOUT) ---");
-  console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
-  console.log("Dimensiones calculadas del Clon (offsetWidth, offsetHeight):", clone.offsetWidth, clone.offsetHeight);
-  console.log("Dimensiones de scroll del Clon (scrollWidth, scrollHeight):", clone.scrollWidth, clone.scrollHeight);
-  const cardsInClone = clone.querySelectorAll('.card');
-  console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon (dentro del timeout).`);
-  console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
-
-  html2pdf().from(clone).set({
-    margin: 0.5,
-    filename: filename,
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true
-    },
-    jsPDF: {
-      unit: 'in',
-      format: 'letter',
-      orientation: 'portrait'
-    },
-    pagebreak: {
-      mode: ['css', 'legacy'],
-      before: '.card'
-    }
-  }).save().then(() => {
-    console.log("PDF generado correctamente.");
-  }).catch(err => {
-    console.error("Error al generar el PDF:", err);
-    showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
-  }).finally(() => {
-    exportPdfButton.innerHTML = originalButtonText;
-    exportPdfButton.disabled = false;
-    if (clone.parentNode) document.body.removeChild(clone);
-  });
-
-}, 200);
+console.log('Exportación lista para usarse cuando se haga clic en el botón PDF.');
 
 
         });
-      }    </script>
+      }    
+
+exportPdfButton.addEventListener('click', () => {
+  const originalButtonText = exportPdfButton.innerHTML;
+  exportPdfButton.innerHTML = "Generando PDF...";
+  exportPdfButton.disabled = true;
+
+  const clone = ideasResultsArea.cloneNode(true);
+  clone.style.backgroundColor = "white";
+  clone.style.padding = "40px";
+  clone.style.width = "100%";
+  clone.style.maxWidth = "800px";
+  clone.style.margin = "0 auto";
+
+  clone.classList.add("pdf-export-preview");
+
+  document.body.appendChild(clone);
+
+  setTimeout(() => {
+    console.log("Exportando PDF desde HTML directamente...");
+
+    html2pdf().from(clone).set({
+      margin: 0.5,
+      filename: `ideas_generadas_${new Date().toISOString().split("T")[0]}.pdf`,
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true
+      },
+      jsPDF: {
+        unit: 'in',
+        format: 'letter',
+        orientation: 'portrait'
+      },
+      pagebreak: {
+        mode: ['css', 'legacy'],
+        before: '.card'
+      }
+    }).save().then(() => {
+      console.log("✅ PDF generado correctamente.");
+    }).catch(err => {
+      console.error("❌ Error al generar el PDF:", err);
+      showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
+    }).finally(() => {
+      exportPdfButton.innerHTML = originalButtonText;
+      exportPdfButton.disabled = false;
+      if (clone.parentNode) document.body.removeChild(clone);
+    });
+
+  }, 100);
+});
+
+</script>
 </body>
 
 </html>
