@@ -684,6 +684,10 @@ exportPdfButton.addEventListener('click', () => {
         finalPhraseContainer.classList.add('is-hidden');
         actionButtonsContainer.classList.add('is-hidden');
         noResultsMessage.classList.add('is-hidden');
+
+        timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[0]}</p>`;
+        actionButtonsContainer.classList.remove('is-hidden');
+
         timerContainer.innerHTML = ''; // Limpiar
 
         let currentPhraseIndex = 0;
