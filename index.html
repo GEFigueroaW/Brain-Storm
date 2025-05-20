@@ -1111,7 +1111,7 @@
               };
               console.log("Opciones para html2pdf:", JSON.parse(JSON.stringify(pdfOptions)));
 
-              html2pdf().from(clone).set(pdfOptions).save() // IMPORTANTE: .from(canvas)
+              html2pdf().from(canvas).set(pdfOptions).save() // IMPORTANTE: .from(canvas)
                 .then(() => {
                   console.log("PDF guardado exitosamente.");
                 })
