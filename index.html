@@ -925,24 +925,54 @@
           clone.style.backgroundColor = 'white'; // Fondo blanco para el clon
 
           // --- INICIO: Forzar un ancho razonable y aplicar estilos para el ajuste de texto ---
-          const pdfPageWidthPx = 792; // Ancho de página A4/Letter en px (ej: 8.25in * 96dpi), ajusta según necesidad
-          // Para Letter (8.5in) con márgenes de 0.5in: 7.5in * 96dpi = 720px. Usemos 750px por ahora.
           const desiredPdfContentWidthPx = 750;
           clone.style.width = desiredPdfContentWidthPx + 'px';
-          clone.style.padding = '10px'; // Añadir un pequeño padding si es necesario para que el contenido no pegue a los bordes
+          // clone.style.padding = '10px'; // Quitar padding temporalmente para simplificar
           clone.style.boxSizing = 'border-box';
+          clone.style.backgroundColor = 'white'; // Asegurar fondo blanco del clon
 
-          // Aplicar estilos para el ajuste de texto a los elementos relevantes dentro del clon
-          clone.querySelectorAll('.card .content p, .card .content strong, .card-header-title').forEach(el => {
+          // **RESETEO DE ESTILOS DRÁSTICO PARA EL CLON (TEMPORAL)**
+          clone.style.all = 'initial'; // Intenta resetear todos los estilos heredados
+          clone.style.fontFamily = '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'; // Re-aplicar fuente base
+          clone.style.color = '#333'; // Re-aplicar color de texto base
+          clone.style.display = 'block'; // Re-aplicar display
+          clone.style.width = desiredPdfContentWidthPx + 'px'; // Re-aplicar ancho
+          clone.style.backgroundColor = 'white'; // Re-aplicar fondo
+
+          const allElementsInClone = clone.querySelectorAll('*');
+          allElementsInClone.forEach(el => {
+            el.style.all = 'revert'; // Revierte a los estilos del user-agent, quitando Bulma y tus estilos
+            // Puedes re-aplicar selectivamente estilos MUY básicos aquí si es necesario
+            el.style.display = 'block'; // Forzar block para un flujo simple
+            el.style.width = 'auto'; // Dejar que el ancho se ajuste al padre o al contenido
+            el.style.maxWidth = '100%'; // Prevenir desbordamiento
+            el.style.margin = '5px 0';
+            el.style.padding = '2px';
+            el.style.border = '1px dotted #ccc'; // Para ver los bordes de cada elemento
+            el.style.backgroundColor = 'transparent'; // Asegurar que no haya fondos extraños
+            el.style.color = '#000'; // Texto negro básico
             el.style.wordWrap = 'break-word';
             el.style.overflowWrap = 'break-word';
             el.style.whiteSpace = 'normal';
-            // Considera también si el texto es muy largo y necesitas 'hyphens: auto;' (con prefijos de navegador)
+          });
+
+          // Aplicar estilos específicos a las tarjetas y su contenido después del reseteo
+          clone.querySelectorAll('.card').forEach(card => {
+            card.style.border = '1px solid black';
+            card.style.marginBottom = '10px';
+            card.style.backgroundColor = 'white';
+          });
+          clone.querySelectorAll('.card-header-title').forEach(el => {
+            el.style.fontWeight = 'bold';
+            el.style.fontSize = '1.2em';
+          });
+          clone.querySelectorAll('.card .content p, .card .content strong').forEach(el => {
+            // Ya deberían tener word-wrap del bucle anterior, pero podemos ser explícitos
+            el.style.fontSize = '1em';
           });
           // --- FIN: Forzar ancho y estilos de texto ---
 
-          document.body.appendChild(clone); // Añadir al DOM DESPUÉS de aplicar el ancho para que calcule bien la altura
-
+          document.body.appendChild(clone);
           // Recalcular scrollHeight DESPUÉS de fijar el ancho y añadir al DOM
           let cloneScrollHeight = clone.scrollHeight;
           let cloneScrollWidth = clone.scrollWidth; // Debería ser cercano a desiredPdfContentWidthPx
