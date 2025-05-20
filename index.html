@@ -677,6 +677,29 @@ exportPdfButton.addEventListener('click', () => {
         };
         localStorage.setItem('lastInputData', JSON.stringify(lastInputData));
 
+        try {
+          const generatedIdeas = await generateIdeas(inputData);
+
+          if (!Array.isArray(generatedIdeas) || generatedIdeas.length === 0) {
+            noResultsMessage.classList.remove("is-hidden");
+            actionButtonsContainer.classList.remove("is-hidden");
+            return;
+          }
+
+          renderIdeas(generatedIdeas);
+          finalPhraseContainer.classList.remove("is-hidden");
+          actionButtonsContainer.classList.remove("is-hidden");
+
+          // Guardar en Firestore
+          saveIdeasToFirestore(inputData, generatedIdeas);
+        } catch (error) {
+          console.error("Error al generar ideas:", error);
+          showTemporaryMessage(actionButtonsContainer, "Ocurrió un error al generar ideas. Intenta de nuevo.", 'is-danger', 5000);
+          exportPdfButton.innerHTML = originalButtonText;
+          exportPdfButton.disabled = false;
+        }
+
+
         // --- Preparación de UI para Carga ---
         formView.classList.add('is-hidden');
         resultsView.classList.remove('is-hidden');
