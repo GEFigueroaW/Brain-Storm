@@ -1016,75 +1016,56 @@
             });
           });
           console.log("--- FIN DEBUG CLON ---");
+          // OPCIÓN ALTERNATIVA: Dejar que html2pdf.js maneje html2canvas
+          // Comenta la llamada a window.html2canvas(clone, canvasOptions)...
+          // Y modifica pdfOptions así:
+
+          /*
           setTimeout(() => {
-            window.html2canvas(clone, canvasOptions).then(canvas => {
-              console.log('html2canvas exitoso, dimensiones del canvas generado:', canvas.width, 'x', canvas.height);
-              exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-image"></i></span><span>Previsualizando...</span>';
+              // COMENTA DESDE AQUÍ
+              // window.html2canvas(clone, canvasOptions).then(canvas => {
+              //    console.log('html2canvas exitoso, dimensiones del canvas generado:', canvas.width, 'x', canvas.height);
+              //    exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-image"></i></span><span>Previsualizando...</span>';
+              //    ...
+              //    const imgData = canvas.toDataURL('image/png');
+              //    ...
+              //    document.body.appendChild(img); // Ya no tendrías esta preview directa
+              // HASTA AQUÍ (antes de const pdfOptions)
+              // });
+          */
 
-              const imgData = canvas.toDataURL('image/png');
-              const img = document.createElement('img');
-              img.src = imgData;
-              img.style.border = "5px solid green"; // Cambié a verde para ver si se actualiza
-              img.style.position = "fixed";
-              img.style.left = "20px";
-              img.style.top = "100px"; // Un poco más abajo
-              img.style.zIndex = "10002";
-              img.style.maxWidth = "90vw"; // Que ocupe buena parte del ancho para verla bien
-              img.style.maxHeight = "70vh";
-              img.style.overflow = "auto"; // Scroll si es muy grande
-              img.style.backgroundColor = "lightyellow"; // Fondo de la img para distinguirla
+          const pdfOptions = {
+            margin: 0.5,
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.92 },
+            html2canvas: { // AHORA html2pdf.js usará estas opciones para llamar a html2canvas
+              scale: 2, // Escala para buena calidad
+              logging: true,
+              useCORS: true,
+              width: clone.scrollWidth, // Ancho del clon preparado
+              height: clone.scrollHeight, // Alto del clon preparado
+              backgroundColor: '#ffffff',
+              // Puedes añadir otras opciones de html2canvas aquí si es necesario
+              // por ejemplo, windowWidth: clone.scrollWidth,
+            },
+            jsPDF: {
+              unit: 'in',
+              format: 'letter',
+              orientation: 'portrait'
+            },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: '.card' }
+          };
 
-              const oldPreview = document.getElementById('canvasPreviewImg');
-              if (oldPreview) oldPreview.remove();
-              img.id = 'canvasPreviewImg';
-              document.body.appendChild(img);
-              console.log('Imagen del canvas (PREVISUALIZACIÓN) añadida al body. Verifica su apariencia (fondo, ajuste de texto, todas las tarjetas).');
+          console.log("Opciones para html2pdf (con html2canvas interno):", pdfOptions);
 
-              const pdfOptions = {
-                margin: 0.5, // en pulgadas
-                filename: filename,
-                image: { type: 'jpeg', quality: 0.92 }, // JPEG más pequeño
-                // IMPORTANTE: Si pasamos un canvas a .from(), NO necesitamos las opciones html2canvas aquí,
-                // o si las pasamos, deben ser mínimas y no conflictivas.
-                // html2canvas: {}, // Prueba con un objeto vacío o sin esta propiedad
-                jsPDF: {
-                  unit: 'in',
-                  format: 'letter',
-                  orientation: 'portrait'
-                },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: '.card' }
-              };
+          // Ahora llamas a .from(clone) en lugar de .from(canvas)
+          html2pdf().from(clone).set(pdfOptions).save()
+            .then(() => { /* ... */ })
+            .catch(err => { /* ... */ })
+            .finally(() => { /* ... */ });
 
-              console.log("Opciones para html2pdf:", pdfOptions);
-
-              html2pdf().from(canvas).set(pdfOptions).save()
-                .then(() => {
-                  console.log("PDF guardado exitosamente.");
-                }).catch(err => {
-                  console.error("Error al generar PDF desde el canvas con html2pdf:", err);
-                  showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
-                }).finally(() => {
-                  exportPdfButton.innerHTML = originalButtonText;
-                  exportPdfButton.disabled = false;
-                  if (clone.parentNode) {
-                    document.body.removeChild(clone);
-                  }
-                  const previewImg = document.getElementById('canvasPreviewImg');
-                  // if (previewImg) previewImg.remove(); // Comenta esto para poder ver la preview final
-                });
-
-            }).catch(err => {
-              console.error("Error en html2canvas:", err);
-              showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización (html2canvas). Revisa consola.", 'is-danger', 4000);
-              exportPdfButton.innerHTML = originalButtonText;
-              exportPdfButton.disabled = false;
-              if (clone.parentNode) {
-                document.body.removeChild(clone);
-              }
-              const previewImg = document.getElementById('canvasPreviewImg');
-              // if (previewImg) previewImg.remove(); // Comenta esto
-            });
-          }, 350); // Aumenté un poco el timeout
+          // El setTimeout podría seguir siendo útil para asegurar que el clon esté listo en el DOM
+          // }, 350); // Aumenté un poco el timeout
         });
       }
     </script>
