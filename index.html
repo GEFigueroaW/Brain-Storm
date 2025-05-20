@@ -1064,10 +1064,11 @@
               width: currentCloneWidth,
               height: currentCloneHeight, // Incluye el padding
               backgroundColor: '#FFFFFF',
+              foreignObjectRendering: true, // o false, prueba ambos
               scrollX: 0,
               scrollY: 0,
-              removeContainer: true, // o false, prueba ambos
-              windowHeight: currentCloneHeight // Volver a poner windowHeight sincronizado con height
+              removeContainer: true, // o false
+              windowHeight: currentCloneHeight
             };
             console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba E):", JSON.parse(JSON.stringify(canvasOptions)));
 
