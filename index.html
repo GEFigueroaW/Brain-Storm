@@ -963,7 +963,29 @@
 
           console.log("Opciones para html2canvas:", canvasOptions);
           console.log("Estilo final del clon (width, height):", clone.style.width, clone.style.height);
+          console.log("--- DEBUG CLON ANTES DE HTML2CANVAS ---");
+          console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
+          console.log("Dimensiones calculadas del Clon (offsetWidth, offsetHeight):", clone.offsetWidth, clone.offsetHeight);
+          console.log("Dimensiones de scroll del Clon (scrollWidth, scrollHeight):", clone.scrollWidth, clone.scrollHeight);
 
+          const cardsInClone = clone.querySelectorAll('.card');
+          console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon.`);
+
+          cardsInClone.forEach((card, index) => {
+            console.log(`--- Tarjeta Clonada ${index + 1} ---`);
+            const cardStyles = window.getComputedStyle(card);
+            console.log(`Tarjeta ${index + 1} - Ancho computado: ${cardStyles.width}, Alto computado: ${cardStyles.height}`);
+            console.log(`Tarjeta ${index + 1} - display: ${cardStyles.display}, position: ${cardStyles.position}, overflow: ${cardStyles.overflow}`);
+
+            const textElements = card.querySelectorAll('.content p, .content strong, .card-header-title');
+            textElements.forEach((textEl, textIndex) => {
+              const textStyles = window.getComputedStyle(textEl);
+              console.log(`  Texto ${textIndex + 1} en Tarjeta ${index + 1} ("${textEl.textContent.substring(0, 30)}...")`);
+              console.log(`  Estilos de Texto - wordWrap: ${textStyles.wordWrap}, overflowWrap: ${textStyles.overflowWrap}, whiteSpace: ${textStyles.whiteSpace}, color: ${textStyles.color}`);
+              console.log(`  Ancho del elemento de texto: ${textEl.offsetWidth}px, Alto: ${textEl.offsetHeight}px`);
+            });
+          });
+          console.log("--- FIN DEBUG CLON ---");
           setTimeout(() => {
             window.html2canvas(clone, canvasOptions).then(canvas => {
               console.log('html2canvas exitoso, dimensiones del canvas generado:', canvas.width, 'x', canvas.height);
