@@ -1025,10 +1025,16 @@
           console.log("CLON AÑADIDO AL BODY PARA INSPECCIÓN VISUAL. ¿Se ve el contenido y los colores?");
 
           setTimeout(() => {
-            let currentCloneWidth = clone.scrollWidth;
-            let currentCloneHeight = clone.scrollHeight;
+            // ***** INICIO PRUEBA C3: Añadir padding-bottom al clon *****
+            console.log("Añadiendo padding-bottom al clon antes de medir dimensiones...");
+            clone.style.paddingBottom = '500px !important'; // Un padding inferior considerable
+            // ***** FIN PRUEBA C3 *****
 
-            console.log(`Dimensiones del clon DENTRO DEL TIMEOUT (scrollWidth, scrollHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
+            let currentCloneWidth = clone.scrollWidth;
+            let currentCloneHeight = clone.scrollHeight; // Esta lectura AHORA incluirá el padding
+
+            console.log(`Dimensiones del clon DENTRO DEL TIMEOUT con padding-bottom (scrollWidth, scrollHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
+            // ... (el resto del código de fallback a offsetWidth/Height y el chequeo de dimensiones 0 igual) ...
             if (currentCloneWidth === 0 || currentCloneHeight === 0) {
               console.warn("scrollWidth/Height son 0 DENTRO DEL TIMEOUT, intentando con offsetWidth/Height");
               currentCloneWidth = clone.offsetWidth;
@@ -1038,13 +1044,9 @@
 
             if (currentCloneWidth === 0 || currentCloneHeight === 0) {
               console.error("Las dimensiones del clon siguen siendo 0 DENTRO DEL TIMEOUT. No se puede generar el PDF.");
-              showTemporaryMessage(actionButtonsContainer, "Error: Dimensiones del contenido son 0 para el PDF.", 'is-danger', 5000);
-              if (clone.parentNode) document.body.removeChild(clone);
-              exportPdfButton.innerHTML = originalButtonText;
-              exportPdfButton.disabled = false;
+              // ... (código de error y return)
               return;
             }
-
             // --- DEBUG CLON ANTES DE HTML2CANVAS (dentro del timeout) ---
             console.log("--- DEBUG CLON ANTES DE HTML2CANVAS (DENTRO DEL TIMEOUT) ---");
             console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
@@ -1060,28 +1062,15 @@
               logging: true,
               useCORS: true,
               width: currentCloneWidth,
-              height: currentCloneHeight, // Usar explícitamente la altura del scroll del clon.
+              height: currentCloneHeight, // Usar la altura que AHORA incluye el padding
               backgroundColor: '#FFFFFF',
-
-              // --- INICIO PRUEBA C1 ---
-              // PRUEBA C1.1: Comentar windowHeight. html2canvas debería usar 'height' para la "vista".
-              // windowHeight: currentCloneHeight, // ASEGÚRATE QUE ESTÉ COMENTADA
-
-              // PRUEBA C1.2 (Si C1.1 no funciona): Poner windowHeight igual a height.
-              // (Esto es lo que tenías, pero para ser sistemáticos). Si C1.1 no arregla el corte,
-              // asegúrate de que la línea de arriba esté comentada Y la siguiente esté activa:
-              // windowHeight: currentCloneHeight, // ASEGÚRATE QUE ESTÉ COMENTADA
-
-              // PRUEBA C1.3 (Si C1.1 y C1.2 no funcionan): Poner windowHeight a un valor muy grande.
-              // Si C1.1 y C1.2 no funcionan, comenta las dos de arriba y activa esta:
-              windowHeight: 30000, // <--- ACTIVA ESTA LÍNEA
-              // --- FIN PRUEBA C1 ---
+              windowHeight: currentCloneHeight, // Volver a esta configuración estándar
             };
-            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba C1.3):", JSON.parse(JSON.stringify(canvasOptions)));
+            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba C3):", JSON.parse(JSON.stringify(canvasOptions)));
 
             window.html2canvas(clone, canvasOptions).then(canvas => {
-              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY. ¿Se ven todas las tarjetas AHORA?');
-              alert("Previsualización generada (Prueba C1.3). Revisa la imagen (borde verde).");
+              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY. ¿Se ven todas las tarjetas AHORA con padding?');
+              alert("Previsualización generada (Prueba C3 - padding). Revisa la imagen (borde verde).");
               const imgData = canvas.toDataURL('image/png');
               const img = document.createElement('img');
               img.src = imgData;
