@@ -447,7 +447,7 @@ exportPdfButton.addEventListener('click', () => {
       const auth = getAuth(app);
 
 const functions = getFunctions(app, 'us-central1');
-const generateIdeas = httpsCallable(functions, 'generateIdeas');
+
 
       const db = getFirestore(app);
       const functions = getFunctions(app);
@@ -648,7 +648,9 @@ const generateIdeas = httpsCallable(functions, 'generateIdeas');
       // ELIMINADA la lógica de listeners para audienceTypeRadios, includeLocationCheckbox
       // ELIMINADA la llamada a renderAudienceGroups
 
-      generateIdeasButton.addEventListener('click', async () => {
+      const generateIdeas = httpsCallable(functions, 'generateIdeas');
+
+generateIdeasButton.addEventListener('click', async () => {
         if (!currentUser) {
           showTemporaryMessage(noResultsMessage, "Debes iniciar sesión para generar ideas.");
           return;
