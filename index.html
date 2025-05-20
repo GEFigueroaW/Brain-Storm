@@ -1056,18 +1056,32 @@
             console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
             // ***** Generar Canvas con window.html2canvas para PREVISUALIZACIÓN *****
             const canvasOptions = {
-              scale: 2, // Mconst canvasOptions = {antenemos 2 para buena calidad
+              scale: 2,
               logging: true,
               useCORS: true,
               width: currentCloneWidth,
-              height: currentCloneHeight,
-              backgroundColor: '#FFFFFF', // Fondo del CANVAS blanco
-              windowHeight: currentCloneHeight,
+              height: currentCloneHeight, // Usar explícitamente la altura del scroll del clon.
+              backgroundColor: '#FFFFFF',
+
+              // --- INICIO PRUEBA C1 ---
+              // PRUEBA C1.1: Comentar windowHeight. html2canvas debería usar 'height' para la "vista".
+              // windowHeight: currentCloneHeight, // Comenta esta línea PRIMERO
+
+              // PRUEBA C1.2 (Si C1.1 no funciona): Poner windowHeight igual a height.
+              // (Esto es lo que tenías, pero para ser sistemáticos). Si C1.1 no arregla el corte,
+              // asegúrate de que la línea de arriba esté comentada Y la siguiente esté activa:
+              // windowHeight: currentCloneHeight,
+
+              // PRUEBA C1.3 (Si C1.2 no funciona): Poner windowHeight a un valor muy grande.
+              // Si C1.1 y C1.2 no funcionan, comenta las dos de arriba y activa esta:
+              // windowHeight: 30000,
+              // --- FIN PRUEBA C1 ---
             };
-            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (clon simple):", JSON.parse(JSON.stringify(canvasOptions)));
+            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas:", JSON.parse(JSON.stringify(canvasOptions)));
 
             window.html2canvas(clone, canvasOptions).then(canvas => {
-              console.log('PREVISUALIZACIÓN: html2canvas exitoso. Dimensiones del canvas:', canvas.width, 'x', canvas.height);
+              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY. ¿Se ven todas las tarjetas?');
+              alert("Previsualización generada (Prueba C1). Revisa la imagen (borde verde).");
               const imgData = canvas.toDataURL('image/png');
               const img = document.createElement('img');
               img.src = imgData;
