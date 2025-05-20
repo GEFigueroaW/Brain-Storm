@@ -911,127 +911,117 @@
           }
 
           const originalButtonText = exportPdfButton.innerHTML;
-          exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando Previsualización...</span>';
+          exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
           exportPdfButton.disabled = true;
 
-          // ... (código para statusMessage y timerElement sin cambios) ...
-
-          const elementToExport = ideasResultsArea; // Correcto
+          const elementToExport = ideasResultsArea;
           let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
 
           const clone = elementToExport.cloneNode(true);
           clone.style.position = 'absolute';
-          clone.style.left = '-9999px'; // Para que no se vea mientras se procesa
+          clone.style.left = '-9999px';
           clone.style.top = '0px';
-          clone.style.display = 'block'; // Asegurar que tenga dimensiones
-          clone.style.backgroundColor = 'white'; // Fondo base del clon
-          document.body.appendChild(clone);
+          clone.style.display = 'block';
+          clone.style.backgroundColor = 'white'; // Fondo blanco para el clon
 
-          // Medir el clon CON TODAS LAS TARJETAS
-          let cloneScrollWidth = clone.scrollWidth;
+          // --- INICIO: Forzar un ancho razonable y aplicar estilos para el ajuste de texto ---
+          const pdfPageWidthPx = 792; // Ancho de página A4/Letter en px (ej: 8.25in * 96dpi), ajusta según necesidad
+          // Para Letter (8.5in) con márgenes de 0.5in: 7.5in * 96dpi = 720px. Usemos 750px por ahora.
+          const desiredPdfContentWidthPx = 750;
+          clone.style.width = desiredPdfContentWidthPx + 'px';
+          clone.style.padding = '10px'; // Añadir un pequeño padding si es necesario para que el contenido no pegue a los bordes
+          clone.style.boxSizing = 'border-box';
+
+          // Aplicar estilos para el ajuste de texto a los elementos relevantes dentro del clon
+          clone.querySelectorAll('.card .content p, .card .content strong, .card-header-title').forEach(el => {
+            el.style.wordWrap = 'break-word';
+            el.style.overflowWrap = 'break-word';
+            el.style.whiteSpace = 'normal';
+            // Considera también si el texto es muy largo y necesitas 'hyphens: auto;' (con prefijos de navegador)
+          });
+          // --- FIN: Forzar ancho y estilos de texto ---
+
+          document.body.appendChild(clone); // Añadir al DOM DESPUÉS de aplicar el ancho para que calcule bien la altura
+
+          // Recalcular scrollHeight DESPUÉS de fijar el ancho y añadir al DOM
           let cloneScrollHeight = clone.scrollHeight;
+          let cloneScrollWidth = clone.scrollWidth; // Debería ser cercano a desiredPdfContentWidthPx
 
-          console.log('Dimensiones INICIALES del clon con TODAS las tarjetas (scrollWidth, scrollHeight):', cloneScrollWidth, cloneScrollHeight);
+          console.log(`Dimensiones del clon DESPUÉS de forzar ancho (scrollWidth, scrollHeight): ${cloneScrollWidth}, ${cloneScrollHeight}`);
 
-          // Opciones para html2canvas
           const canvasOptions = {
-            logging: false, // Puedes ponerlo en true para más detalles en consola durante la depuración
-            useCORS: true, // Si tuvieras imágenes de otros dominios
-            width: cloneScrollWidth,
+            logging: true, // Habilitar para más detalles durante la depuración
+            useCORS: true,
+            width: cloneScrollWidth, // Usar el ancho real del clon (que forzamos)
             height: cloneScrollHeight,
-            windowWidth: cloneScrollWidth,
-            windowHeight: cloneScrollHeight,
-            scale: 1, // Empezar con escala 1. Se puede aumentar para mejor resolución, pero aumenta tamaño.
-            scrollY: 0, // -window.scrollY no es necesario si el clon está posicionado fuera de pantalla.
-            backgroundColor: '#ffffff', // Fondo del canvas en sí.
-            // removeContainer: false, // Útil para depuración, coméntalo para producción
+            // windowWidth: cloneScrollWidth, // A veces no es necesario si width y height están bien definidos
+            // windowHeight: cloneScrollHeight,
+            scale: 2, // Aumentar la escala aquí para MEJOR CALIDAD en el canvas inicial.
+            scrollY: 0,
+            backgroundColor: '#ffffff',
           };
 
-          // -------- ELIMINA O COMENTA ESTE BLOQUE ENTERO --------
-          /*
-          const firstCard = clone.querySelector('.card');
-          if (firstCard) {
-              // ...toda la lógica para aislar la primera tarjeta...
-              // Esto ya no lo queremos si vamos a exportar todo.
-          }
-          */
-          // -------- FIN DEL BLOQUE A ELIMINAR/COMENTAR --------
-
-          // Aplicar estilos finales al clon para asegurar que html2canvas lo vea bien.
-          // Estas dimensiones deben ser las que quieres que tenga la "foto"
-          clone.style.width = cloneScrollWidth + 'px';
-          clone.style.height = cloneScrollHeight + 'px';
-          // Es importante que el clon no tenga desbordamientos ocultos si quieres capturar todo el contenido.
-          clone.style.overflow = 'visible'; // O 'auto' si quieres que capture el scroll interno si lo hubiera.
-
-          console.log("Clon preparado para html2canvas (TODAS LAS TARJETAS). InnerHTML:", clone.innerHTML.substring(0, 500));
+          console.log("Opciones para html2canvas:", canvasOptions);
           console.log("Estilo final del clon (width, height):", clone.style.width, clone.style.height);
-          console.log("Opciones FINALES para html2canvas:", canvasOptions);
 
-          setTimeout(() => { // Un pequeño delay a veces ayuda a que los estilos se asienten en el clon
+          setTimeout(() => {
             window.html2canvas(clone, canvasOptions).then(canvas => {
-              console.log('html2canvas exitoso, objeto canvas:', canvas);
-              exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-image"></i></span><span>Mostrando Previsualización</span>';
+              console.log('html2canvas exitoso, dimensiones del canvas generado:', canvas.width, 'x', canvas.height);
+              exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-image"></i></span><span>Previsualizando...</span>';
 
-              // --- INICIO: Código de Previsualización (mantenlo para depurar) ---
               const imgData = canvas.toDataURL('image/png');
               const img = document.createElement('img');
               img.src = imgData;
-              img.style.border = "5px solid blue";
+              img.style.border = "5px solid green"; // Cambié a verde para ver si se actualiza
               img.style.position = "fixed";
               img.style.left = "20px";
-              img.style.top = "80px"; // Un poco más abajo para no tapar el navbar
+              img.style.top = "100px"; // Un poco más abajo
               img.style.zIndex = "10002";
-              img.style.maxWidth = "350px"; // Para que no ocupe toda la pantalla
+              img.style.maxWidth = "90vw"; // Que ocupe buena parte del ancho para verla bien
               img.style.maxHeight = "70vh";
-              img.style.overflowY = "auto";
-              img.style.backgroundColor = "lightgray"; // Fondo de la etiqueta img para distinguirla
+              img.style.overflow = "auto"; // Scroll si es muy grande
+              img.style.backgroundColor = "lightyellow"; // Fondo de la img para distinguirla
 
               const oldPreview = document.getElementById('canvasPreviewImg');
-              if (oldPreview) {
-                oldPreview.remove();
-              }
+              if (oldPreview) oldPreview.remove();
               img.id = 'canvasPreviewImg';
               document.body.appendChild(img);
-              console.log('Imagen del canvas añadida al body para inspección. Revisa cómo se ve esta imagen.');
-              // --- FIN: Código de Previsualización ---
+              console.log('Imagen del canvas (PREVISUALIZACIÓN) añadida al body. Verifica su apariencia (fondo, ajuste de texto, todas las tarjetas).');
 
               const pdfOptions = {
-                margin: 0.5, // Márgenes en pulgadas (para 'letter')
+                margin: 0.5, // en pulgadas
                 filename: filename,
-                image: { type: 'jpeg', quality: 0.95 }, // JPEG suele ser más pequeño
-                html2canvas: {
-                  scale: 2, // Puedes probar a escalar aquí también, o en canvasOptions.scale
-                  logging: true,
-                  useCORS: true,
-                  backgroundColor: null, // Para que use el del canvasOptions si está definido
-                },
+                image: { type: 'jpeg', quality: 0.92 }, // JPEG más pequeño
+                // IMPORTANTE: Si pasamos un canvas a .from(), NO necesitamos las opciones html2canvas aquí,
+                // o si las pasamos, deben ser mínimas y no conflictivas.
+                // html2canvas: {}, // Prueba con un objeto vacío o sin esta propiedad
                 jsPDF: {
                   unit: 'in',
-                  format: 'letter', // Tamaño carta (8.5 x 11 pulgadas)
-                  orientation: 'portrait' // 'landscape' para horizontal
+                  format: 'letter',
+                  orientation: 'portrait'
                 },
-                // Para el manejo de páginas si el contenido es muy largo:
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: '.card' } // Intenta evitar romper DENTRO de una tarjeta.
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: '.card' }
               };
+
+              console.log("Opciones para html2pdf:", pdfOptions);
 
               html2pdf().from(canvas).set(pdfOptions).save()
                 .then(() => {
-                  console.log("PDF guardado desde el canvas.");
-                  // const previewImg = document.getElementById('canvasPreviewImg');
-                  // if (previewImg) { previewImg.remove(); } // Quita esto para poder ver la preview mientras pruebas
+                  console.log("PDF guardado exitosamente.");
                 }).catch(err => {
-                  console.error("Error al generar PDF desde el canvas:", err);
+                  console.error("Error al generar PDF desde el canvas con html2pdf:", err);
                   showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
                 }).finally(() => {
-                  exportPdfButton.innerHTML = originalButtonText; // Restaura el texto original del botón
+                  exportPdfButton.innerHTML = originalButtonText;
                   exportPdfButton.disabled = false;
                   if (clone.parentNode) {
                     document.body.removeChild(clone);
                   }
+                  const previewImg = document.getElementById('canvasPreviewImg');
+                  // if (previewImg) previewImg.remove(); // Comenta esto para poder ver la preview final
                 });
 
-            }).catch(err => { // Catch para html2canvas
+            }).catch(err => {
               console.error("Error en html2canvas:", err);
               showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización (html2canvas). Revisa consola.", 'is-danger', 4000);
               exportPdfButton.innerHTML = originalButtonText;
@@ -1039,8 +1029,10 @@
               if (clone.parentNode) {
                 document.body.removeChild(clone);
               }
+              const previewImg = document.getElementById('canvasPreviewImg');
+              // if (previewImg) previewImg.remove(); // Comenta esto
             });
-          }, 300); // Fin del setTimeout
+          }, 350); // Aumenté un poco el timeout
         });
       }
     </script>
