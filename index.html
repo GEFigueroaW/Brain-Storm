@@ -914,15 +914,17 @@
           exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
           exportPdfButton.disabled = true;
 
-          // ***** AQUÍ SE DEFINE elementToExport *****
+          // ***** ASEGÚRATE DE QUE ESTA LÍNEA ESTÉ AQUÍ Y SEA LA ÚNICA DEFINICIÓN INICIAL DE elementToExport *****
           const elementToExport = ideasResultsArea;
           let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
 
-          const clone = elementToExport.cloneNode(true); // Y aquí se usa
-          // ...
+          // ***** Y LUEGO, LA PRIMERA CREACIÓN DEL CLON DEBE USAR ESTA VARIABLE *****
           const clone = elementToExport.cloneNode(true);
+
+          // Después de esta línea, sigue tu código para estilizar el clon:
           clone.style.position = 'fixed'; // CAMBIO: Para que sea visible sobre el contenido
           clone.style.left = '10px';      // CAMBIO: Posición visible
+
           clone.style.top = '10px';       // CAMBIO: Posición visible
           clone.style.zIndex = '19999';   // CAMBIO: Muy al frente, pero debajo de la previsualización si la tuvieras
           clone.style.border = '3px dashed red'; // CAMBIO: Borde visible para el clon
