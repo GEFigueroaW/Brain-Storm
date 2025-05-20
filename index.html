@@ -1054,42 +1054,9 @@
             console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon (dentro del timeout).`);
             // ... (puedes mantener el resto de tus logs de tarjetas aquí si los necesitas para depurar estilos) ...
             console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
-            // ***** INICIO: SIMPLIFICACIÓN EXTREMA DEL CONTENIDO DEL CLON (Temporal) *****
-            console.log("Simplificando contenido del clon para prueba de html2canvas...");
-            clone.innerHTML = ''; // Vaciar el clon original
-            clone.style.padding = '0px'; // Quitar padding para esta prueba simple
-            clone.style.backgroundColor = 'lightblue !important'; // Fondo claro para el clon simplificado
-            clone.style.height = currentCloneHeight + 'px'; // Mantener la altura calculada
-            clone.style.width = currentCloneWidth + 'px'; // Mantener el ancho calculado
-
-            const testDiv = document.createElement('div');
-            testDiv.style.width = '100%';
-            testDiv.style.height = '300px'; // Una altura fija para el primer elemento
-            testDiv.style.backgroundColor = 'pink !important';
-            testDiv.style.color = 'black !important';
-            testDiv.style.fontSize = '24px !important';
-            testDiv.style.textAlign = 'center';
-            testDiv.style.paddingTop = '50px';
-            testDiv.innerHTML = 'PRUEBA HTML2CANVAS - DIV 1';
-            clone.appendChild(testDiv);
-
-            const testDiv2 = document.createElement('div');
-            testDiv2.style.width = '80%';
-            testDiv2.style.margin = '20px auto';
-            testDiv2.style.height = '300px'; // Otra altura fija
-            testDiv2.style.backgroundColor = 'lightgreen !important';
-            testDiv2.style.color = 'black !important';
-            testDiv2.style.fontSize = '20px !important';
-            testDiv2.style.textAlign = 'center';
-            testDiv2.style.paddingTop = '50px';
-            testDiv2.innerHTML = 'PRUEBA HTML2CANVAS - DIV 2<br>Esto debería ocupar espacio.';
-            clone.appendChild(testDiv2);
-            console.log("Contenido del clon reemplazado por divs de prueba.");
-            // ***** FIN: SIMPLIFICACIÓN EXTREMA DEL CONTENIDO DEL CLON *****
-
             // ***** Generar Canvas con window.html2canvas para PREVISUALIZACIÓN *****
             const canvasOptions = {
-              scale: 2, // Mantenemos 2 para buena calidad
+              scale: 2, // Mconst canvasOptions = {antenemos 2 para buena calidad
               logging: true,
               useCORS: true,
               width: currentCloneWidth,
