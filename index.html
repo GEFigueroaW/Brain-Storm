@@ -901,59 +901,45 @@
 
       });
       console.log("Aplicación simplificada de generación de ideas inicializada.");
-      // --- Lógica de Exportación a PDF ---
+            // --- Lógica de Exportación a PDF ---
       if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
         exportPdfButton.addEventListener('click', () => {
           const ideaCards = ideasResultsArea.querySelectorAll('.card');
-          if (ideaCards.length === 0) {
-            showTemporaryMessage(actionButtonsContainer, "No hay ideas visibles para exportar a PDF.", 'is-warning', 3000);
-            return;
-          }
+          if (ideaCards.length === 0) { /* ... */ return; }
 
           const originalButtonText = exportPdfButton.innerHTML;
           exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
           exportPdfButton.disabled = true;
 
-          const elementToExport = ideasResultsArea; // Asegúrate que esta línea esté y sea correcta.
+          const elementToExport = ideasResultsArea;
           let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
 
           const clone = elementToExport.cloneNode(true);
 
-          // --- Aplicar estilos y ancho al clon ---
+          // --- Estilos del Clon (mantén los que mejor funcionaron para la apariencia) ---
           const desiredPdfContentWidthPx = 750;
           clone.style.width = desiredPdfContentWidthPx + 'px';
           clone.style.backgroundColor = 'white !important';
-          clone.style.padding = '15px';
+          clone.style.padding = '15px'; // Padding para que el contenido no pegue a los bordes
           clone.style.boxSizing = 'border-box';
           clone.style.color = 'black !important';
-          clone.style.webkitTextFillColor = 'black !important';
           clone.style.fontFamily = '"Arial", "Helvetica", sans-serif !important';
 
-          // Quitar clases de Bulma que puedan interferir y resetear estilos de forma general
           const allElementsInClone = clone.querySelectorAll('*');
           allElementsInClone.forEach(el => {
-            // Guardar el contenido de texto si es un nodo de texto directo para algunos elementos
-            let originalText = '';
-            if (el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
-              originalText = el.childNodes[0].nodeValue;
-            }
-
-            el.style.all = 'revert'; // Intenta revertir a los estilos del navegador base
-
-            // Re-aplicar estilos esenciales para el flujo y visibilidad
-            el.style.display = 'block !important'; // Forzar block para la mayoría, simplifica layout
+            el.style.all = 'revert';
+            el.style.display = 'block !important';
             el.style.position = 'static !important';
             el.style.float = 'none !important';
-            el.style.width = 'auto !important'; // Dejar que el contenido determine el ancho o el padre
+            el.style.width = 'auto !important';
             el.style.maxWidth = '100% !important';
-            el.style.margin = '0 !important'; // Resetear márgenes
-            el.style.padding = '0 !important'; // Resetear paddings
-            el.style.border = 'none !important'; // Sin bordes internos por defecto
+            el.style.margin = '0 !important';
+            el.style.padding = '0 !important';
+            el.style.border = 'none !important';
             el.style.fontFamily = '"Arial", "Helvetica", sans-serif !important';
-            el.style.fontSize = '14px !important'; // Tamaño base
+            el.style.fontSize = '14px !important';
             el.style.lineHeight = '1.4 !important';
             el.style.color = 'black !important';
-            el.style.webkitTextFillColor = 'black !important';
             el.style.backgroundColor = 'transparent !important';
             el.style.opacity = '1 !important';
             el.style.visibility = 'visible !important';
@@ -961,185 +947,74 @@
             el.style.boxShadow = 'none !important';
             el.style.transform = 'none !important';
             el.style.filter = 'none !important';
-
-            // Si guardamos texto, re-aplicarlo (algunos el.style.all pueden borrarlo)
-            if (originalText && el.childNodes.length === 0) {
-              el.appendChild(document.createTextNode(originalText));
-            }
           });
-
-          // Estilos más específicos para la estructura de la tarjeta, intentando ser simples
           clone.querySelectorAll('.card').forEach(card => {
-            card.style.display = 'block !important';
             card.style.marginBottom = '20px !important';
             card.style.padding = '15px !important';
             card.style.border = '1px solid #aaaaaa !important';
-            card.style.backgroundColor = '#fdfdfd !important'; // Fondo de tarjeta casi blanco
+            card.style.backgroundColor = '#fdfdfd !important';
           });
+          clone.querySelectorAll('.card-header').forEach(header => { /* ... estilos ... */ });
+          clone.querySelectorAll('.card-header-title').forEach(title => { /* ... estilos ... */ });
+          clone.querySelectorAll('.card-content').forEach(content => { /* ... estilos ... */ });
+          clone.querySelectorAll('.card .content p').forEach(p => { /* ... estilos ... */ });
+          clone.querySelectorAll('.card .content strong').forEach(strong => { /* ... estilos ... */ });
+          // --- FIN Estilos del Clon ---
 
-          clone.querySelectorAll('.card-header').forEach(header => {
-            header.style.display = 'block !important';
-            header.style.padding = '5px 0 !important';
-            header.style.borderBottom = '1px solid #dddddd !important';
-            header.style.marginBottom = '10px !important';
-          });
-
-          clone.querySelectorAll('.card-header-title').forEach(title => {
-            title.style.display = 'block !important';
-            title.style.fontSize = '18px !important';
-            title.style.fontWeight = 'bold !important';
-            title.style.color = 'black !important';
-            title.style.padding = '0 !important';
-          });
-
-          clone.querySelectorAll('.card-content').forEach(content => {
-            content.style.display = 'block !important';
-            content.style.padding = '0 !important';
-          });
-
-          clone.querySelectorAll('.card .content p').forEach(p => { // Nota: Bulma usa una clase .content
-            p.style.display = 'block !important';
-            p.style.fontSize = '14px !important';
-            p.style.lineHeight = '1.5 !important';
-            p.style.color = 'black !important';
-            p.style.marginBottom = '10px !important';
-            p.style.padding = '0 !important';
-          });
-
-          clone.querySelectorAll('.card .content strong').forEach(strong => {
-            strong.style.fontWeight = 'bold !important';
-            strong.style.color = 'black !important';
-          });
-          // --- FIN Aplicar estilos ---
-          // Hacer visible el clon en el DOM para inspección
-          clone.style.position = 'fixed';
-          clone.style.left = '10px';
-          clone.style.top = '10px';
-          clone.style.zIndex = '19999';
-          clone.style.border = '3px dashed orange'; // Borde naranja para esta prueba del clon visible
-          clone.style.overflowY = 'scroll';
-          clone.style.maxHeight = '80vh';
-          clone.style.backgroundColor = 'rgba(200, 200, 200, 0.5)'; // Fondo semitransparente para el clon en sí
+          // NO hacemos visible el clon con position:fixed esta vez.
+          // Lo añadimos al body temporalmente de forma más "normal"
+          clone.style.position = 'absolute'; // O 'relative'
+          clone.style.left = '0px';
+          clone.style.top = '0px';
+          clone.style.zIndex = '-1'; // Para que no se vea encima del contenido normal
+          clone.style.visibility = 'hidden'; // Otra forma de ocultarlo visualmente pero mantenerlo en layout
 
           document.body.appendChild(clone);
-          console.log("CLON AÑADIDO AL BODY PARA INSPECCIÓN VISUAL. ¿Se ve el contenido y los colores?");
 
           setTimeout(() => {
-            // ***** INICIO PRUEBA C3: Añadir padding-bottom al clon *****
-            console.log("Añadiendo padding-bottom al clon antes de medir dimensiones...");
-            clone.style.paddingBottom = '1500px !important'; // Un padding inferior considerable
-            // ***** FIN PRUEBA C3 *****
+            const originalBodyHeight = document.body.style.height;
+            const originalBodyOverflow = document.body.style.overflow;
 
-            let currentCloneWidth = clone.scrollWidth;
-            let currentCloneHeight = clone.scrollHeight; // Esta lectura AHORA incluirá el padding
+            let cloneActualHeight = clone.scrollHeight; // Altura del contenido del clon
 
-            console.log(`Dimensiones del clon DENTRO DEL TIMEOUT con padding-bottom (scrollWidth, scrollHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
-            // ... (el resto del código de fallback a offsetWidth/Height y el chequeo de dimensiones 0 igual) ...
-            if (currentCloneWidth === 0 || currentCloneHeight === 0) {
-              console.warn("scrollWidth/Height son 0 DENTRO DEL TIMEOUT, intentando con offsetWidth/Height");
-              currentCloneWidth = clone.offsetWidth;
-              currentCloneHeight = clone.offsetHeight;
-              console.log(`Dimensiones del clon con offset DENTRO DEL TIMEOUT (offsetWidth, offsetHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
-            }
+            console.log(`Altura del clon (scrollHeight): ${cloneActualHeight}px`);
 
-            if (currentCloneWidth === 0 || currentCloneHeight === 0) {
-              console.error("Las dimensiones del clon siguen siendo 0 DENTRO DEL TIMEOUT. No se puede generar el PDF.");
-              // ... (código de error y return)
-              return;
-            }
-            // --- DEBUG CLON ANTES DE HTML2CANVAS (dentro del timeout) ---
-            console.log("--- DEBUG CLON ANTES DE HTML2CANVAS (DENTRO DEL TIMEOUT) ---");
-            console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
-            console.log("Dimensiones calculadas del Clon (offsetWidth, offsetHeight):", clone.offsetWidth, clone.offsetHeight); // Estas son del clon visible
-            console.log("Dimensiones de scroll del Clon (scrollWidth, scrollHeight):", clone.scrollWidth, clone.scrollHeight); // Estas también
-            const cardsInClone = clone.querySelectorAll('.card');
-            console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon (dentro del timeout).`);
-            // ... (puedes mantener el resto de tus logs de tarjetas aquí si los necesitas para depurar estilos) ...
-            console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
-            // ***** Generar Canvas con window.html2canvas para PREVISUALIZACIÓN *****
-            const canvasOptions = {
-              scale: 1,
-              dpi: 192
-              logging: true,
-              useCORS: true,
-              width: currentCloneWidth,
-              height: currentCloneHeight, // Incluye el padding
-              backgroundColor: '#FFFFFF',
-              foreignObjectRendering: true, // o false, prueba ambos
-              scrollX: 0,
-              scrollY: 0,
-              removeContainer: true, // o false
-              windowHeight: currentCloneHeight
+            // Ajustar el body temporalmente
+            document.body.style.height = cloneActualHeight + 'px';
+            document.body.style.overflow = 'hidden'; // Evitar scrollbars en el body durante la captura
+
+            const pdfOptions = {
+              margin: 0.5,
+              filename: filename,
+              image: { type: 'jpeg', quality: 0.95 },
+              html2canvas: {
+                scale: 2, // Buena calidad
+                logging: true,
+                useCORS: true,
+                // Quitar width y height explícitos aquí, html2canvas debería tomarlo del elemento 'clone'
+                // width: cloneActualWidth, // NO NECESARIO SI CAPTURAMOS EL CLON DIRECTAMENTE
+                // height: cloneActualHeight, // NO NECESARIO
+                backgroundColor: '#ffffff',
+                // windowHeight: cloneActualHeight, // También es menos necesario si el body tiene la altura correcta
+                scrollY: -window.scrollY // Para capturar desde la parte superior
+              },
+              jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+              pagebreak: { mode: 'css', before: '.card', avoid: '.card' } // Modos de pagebreak
             };
-            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba E):", JSON.parse(JSON.stringify(canvasOptions)));
+            console.log("Opciones para html2pdf:", JSON.parse(JSON.stringify(pdfOptions)));
 
-            window.html2canvas(clone, canvasOptions).then(canvas => {
-              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY (Prueba E). ¿Todas las tarjetas?');
-              alert("Previsualización generada (Prueba E). Revisa la imagen (borde verde).");
-              const imgData = canvas.toDataURL('image/png');
-              const img = document.createElement('img');
-              img.src = imgData;
-              img.style.border = "5px solid green"; // Borde verde para la imagen generada
-              img.style.position = "fixed";
-              img.style.left = "50%"; // Posicionar la imagen de preview más al centro/derecha
-              img.style.top = "80px";
-              img.style.transform = "translateX(-50%)";
-              img.style.zIndex = "20000";
-              img.style.maxWidth = "45vw";
-              img.style.maxHeight = "80vh";
-              img.style.overflow = "auto";
-              img.style.backgroundColor = "rgba(0,0,0,0.1)"; // Fondo semitransparente para la img
-
-              const oldPreview = document.getElementById('canvasPreviewImgDirect');
-              if (oldPreview) oldPreview.remove();
-              img.id = 'canvasPreviewImgDirect';
-              document.body.appendChild(img);
-              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY. ¿Cómo se ve ahora (nitidez, claridad, contenido)?');
-
-              // ***** AHORA GENERAMOS EL PDF *****
-              const pdfOptions = {
-                margin: 0.5,
-                filename: filename,
-                image: { type: 'jpeg', quality: 0.95 },
-                // html2canvas: {}, // Vacío o comentado, ya que proveemos el canvas
-                jsPDF: {
-                  unit: 'in',
-                  format: 'letter',
-                  orientation: 'portrait'
-                },
-                pagebreak: { mode: ['css', 'legacy'], before: '.card' }
-              };
-              console.log("Opciones para html2pdf:", JSON.parse(JSON.stringify(pdfOptions)));
-
-              html2pdf().from(canvas).set(pdfOptions).save() // IMPORTANTE: .from(canvas)
-                .then(() => {
-                  console.log("PDF guardado exitosamente.");
-                })
-                .catch(err => {
-                  console.error("Error al generar PDF con html2pdf:", err);
-                  showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
-                })
-                .finally(() => {
-                  exportPdfButton.innerHTML = originalButtonText;
-                  exportPdfButton.disabled = false;
-                  if (clone.parentNode) document.body.removeChild(clone); // Quitar el clon naranja
-                  // Si mantuviste la img de preview, quítala también:
-                  // const previewImg = document.getElementById('canvasPreviewImgDirect');
-                  // if (previewImg && previewImg.parentNode) previewImg.remove();
-                });
-
-            }).catch(err => {
-              console.error("Error en PREVISUALIZACIÓN con window.html2canvas:", err);
-              showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización. Revisa consola.", 'is-danger', 4000);
-              exportPdfButton.innerHTML = originalButtonText;
-              exportPdfButton.disabled = false;
-              if (clone.parentNode) document.body.removeChild(clone); // Si hay error, quitar el clon visible
-            });
-
-          }, 400); // Un poco más de tiempo por si los estilos !important tardan en aplicarse
-
+            html2pdf().from(clone).set(pdfOptions).save()
+              .then(() => { console.log("PDF guardado exitosamente."); })
+              .catch(err => { console.error("Error al generar PDF:", err); })
+              .finally(() => {
+                exportPdfButton.innerHTML = originalButtonText;
+                exportPdfButton.disabled = false;
+                if (clone.parentNode) document.body.removeChild(clone);
+                // Restaurar estilos del body
+                document.body.style.height = originalBodyHeight;
+                document.body.style.overflow = originalBodyOverflow;
+                console.log("Estilos del body restaurados.");
+              });
+          }, 250); // Delay para asegurar que el clon esté completamente renderizado
         });
-      }    </script>
-</body>
-
-</html>
+      }
