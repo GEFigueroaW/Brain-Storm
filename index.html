@@ -698,6 +698,7 @@ generateIdeasButton.addEventListener('click', async () => {
           saveIdeasToFirestore(inputData, generatedIdeas);
         } catch (error) {
           console.error("Error al generar ideas:", error);
+          console.log(error);
           showTemporaryMessage(actionButtonsContainer, "Ocurrió un error al generar ideas. Intenta de nuevo.", 'is-danger', 5000);
           exportPdfButton.innerHTML = originalButtonText;
           exportPdfButton.disabled = false;
