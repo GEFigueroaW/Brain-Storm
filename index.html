@@ -1027,7 +1027,7 @@
           setTimeout(() => {
             // ***** INICIO PRUEBA C3: Añadir padding-bottom al clon *****
             console.log("Añadiendo padding-bottom al clon antes de medir dimensiones...");
-            clone.style.paddingBottom = '500px !important'; // Un padding inferior considerable
+            clone.style.paddingBottom = '1500px !important'; // Un padding inferior considerable
             // ***** FIN PRUEBA C3 *****
 
             let currentCloneWidth = clone.scrollWidth;
@@ -1065,6 +1065,7 @@
               height: currentCloneHeight, // Usar la altura que AHORA incluye el padding
               backgroundColor: '#FFFFFF',
               windowHeight: currentCloneHeight, // Volver a esta configuración estándar
+              removeContainer: true // Prueba con true primero. Si no hay cambio, prueba con false.
             };
             console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba C3):", JSON.parse(JSON.stringify(canvasOptions)));
 
