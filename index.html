@@ -904,6 +904,7 @@
       // --- Lógica de Exportación a PDF ---
       if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
         exportPdfButton.addEventListener('click', () => {
+          // ... (código inicial igual: validación, originalButtonText, elementToExport, filename) ...
           const ideaCards = ideasResultsArea.querySelectorAll('.card');
           if (ideaCards.length === 0) {
             showTemporaryMessage(actionButtonsContainer, "No hay ideas visibles para exportar a PDF.", 'is-warning', 3000);
@@ -919,40 +920,34 @@
 
           const clone = elementToExport.cloneNode(true);
           clone.style.position = 'absolute';
-          clone.style.left = '-9999px'; // Fuera de la pantalla
+          clone.style.left = '-9999px';
           clone.style.top = '0px';
-          clone.style.display = 'block'; // Importante para que tenga dimensiones
+          clone.style.display = 'block';
 
-          // --- INICIO: Aplicar estilos y ancho al clon ---
-          const desiredPdfContentWidthPx = 750; // Ancho deseado para el contenido en el PDF
+          // --- Aplicar estilos y ancho al clon ---
+          const desiredPdfContentWidthPx = 750;
           clone.style.width = desiredPdfContentWidthPx + 'px';
-          clone.style.backgroundColor = 'white'; // Fondo blanco explícito para el clon
-          clone.style.padding = '15px'; // Un poco de padding general
+          clone.style.backgroundColor = 'white';
+          clone.style.padding = '15px';
           clone.style.boxSizing = 'border-box';
 
-          // Reseteo de estilos más suave y específico (si el anterior era demasiado drástico)
-          // O puedes mantener el reseteo drástico si sospechas de Bulma fuertemente
           const elementsToStyle = clone.querySelectorAll('*');
           elementsToStyle.forEach(el => {
-            // Aplicar estilos para asegurar el ajuste de texto y visibilidad
             el.style.wordWrap = 'break-word';
             el.style.overflowWrap = 'break-word';
             el.style.whiteSpace = 'normal';
-            // Evitar que los estilos de Bulma oculten elementos en el clon
             if (window.getComputedStyle(el).display === 'none') {
-              el.style.display = 'block'; // O el display original que debería tener
+              el.style.display = 'block';
             }
             if (window.getComputedStyle(el).visibility === 'hidden') {
               el.style.visibility = 'visible';
             }
           });
-
           clone.querySelectorAll('.card').forEach(card => {
-            card.style.border = '1px solid #eee'; // Borde sutil para las tarjetas
+            card.style.border = '1px solid #eee';
             card.style.marginBottom = '15px';
             card.style.padding = '10px';
-            card.style.backgroundColor = 'white'; // Fondo blanco para cada tarjeta
-            // Asegurar que las tarjetas ocupen el ancho disponible si no están en columnas complejas
+            card.style.backgroundColor = 'white';
             card.style.width = '100%';
             card.style.boxSizing = 'border-box';
           });
@@ -966,75 +961,63 @@
             el.style.color = '#363636';
             el.style.lineHeight = '1.5';
           });
-          // --- FIN: Aplicar estilos y ancho al clon ---
+          // --- FIN Aplicar estilos ---
 
           document.body.appendChild(clone);
 
-          // *** CAMBIO CRUCIAL: Usar setTimeout para permitir que el navegador calcule dimensiones ***
+          // *** setTimeout para permitir que el navegador calcule dimensiones ***
           setTimeout(() => {
-            // Ahora leemos las dimensiones DESPUÉS de que el clon ha estado en el DOM y los estilos aplicados
-            let cloneScrollHeight = clone.scrollHeight;
-            let cloneScrollWidth = clone.scrollWidth;
+            // ***** LEER DIMENSIONES AQUÍ, DENTRO DEL TIMEOUT *****
+            let currentCloneWidth = clone.scrollWidth;
+            let currentCloneHeight = clone.scrollHeight;
 
-            console.log(`Dimensiones del clon DENTRO DEL TIMEOUT (scrollWidth, scrollHeight): ${cloneScrollWidth}, ${cloneScrollHeight}`);
+            console.log(`Dimensiones del clon DENTRO DEL TIMEOUT (scrollWidth, scrollHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
 
-            // Verificar si las dimensiones siguen siendo 0, y si es así, intentar con offsetWidth/Height
-            if (cloneScrollWidth === 0 || cloneScrollHeight === 0) {
-              console.warn("scrollWidth/Height son 0, intentando con offsetWidth/Height");
-              cloneScrollWidth = clone.offsetWidth;
-              cloneScrollHeight = clone.offsetHeight;
-              console.log(`Dimensiones del clon con offset (offsetWidth, offsetHeight): ${cloneScrollWidth}, ${cloneScrollHeight}`);
+            if (currentCloneWidth === 0 || currentCloneHeight === 0) {
+              console.warn("scrollWidth/Height son 0 DENTRO DEL TIMEOUT, intentando con offsetWidth/Height");
+              currentCloneWidth = clone.offsetWidth;
+              currentCloneHeight = clone.offsetHeight;
+              console.log(`Dimensiones del clon con offset DENTRO DEL TIMEOUT (offsetWidth, offsetHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
             }
 
-            // Si las dimensiones siguen siendo 0, no podemos continuar
-            if (cloneScrollWidth === 0 || cloneScrollHeight === 0) {
-              console.error("Las dimensiones del clon son 0. No se puede generar el PDF.");
-              showTemporaryMessage(actionButtonsContainer, "Error: No se pudieron calcular las dimensiones del contenido para el PDF.", 'is-danger', 5000);
-              if (clone.parentNode) {
-                document.body.removeChild(clone);
-              }
+            if (currentCloneWidth === 0 || currentCloneHeight === 0) {
+              console.error("Las dimensiones del clon siguen siendo 0 DENTRO DEL TIMEOUT. No se puede generar el PDF.");
+              showTemporaryMessage(actionButtonsContainer, "Error: Dimensiones del contenido son 0 para el PDF.", 'is-danger', 5000);
+              if (clone.parentNode) document.body.removeChild(clone);
               exportPdfButton.innerHTML = originalButtonText;
               exportPdfButton.disabled = false;
-              return; // Salir de la función
+              return;
             }
 
-
             // --- DEBUG CLON ANTES DE HTML2CANVAS (dentro del timeout) ---
+            // (Estos logs ya los tenías, asegúrate que usen currentCloneWidth y currentCloneHeight si es relevante)
             console.log("--- DEBUG CLON ANTES DE HTML2CANVAS (DENTRO DEL TIMEOUT) ---");
-            console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
-            console.log("Dimensiones calculadas del Clon (offsetWidth, offsetHeight):", clone.offsetWidth, clone.offsetHeight);
-            console.log("Dimensiones de scroll del Clon (scrollWidth, scrollHeight):", clone.scrollWidth, clone.scrollHeight);
-            const cardsInClone = clone.querySelectorAll('.card');
-            console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon (dentro del timeout).`);
-            // ... (puedes mantener el resto de tus logs de tarjetas si quieres) ...
+            // ... tus logs de tarjeta ...
             console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
-
 
             const pdfOptions = {
               margin: 0.5,
               filename: filename,
-              image: { type: 'jpeg', quality: 0.95 }, // Aumenté un poco la calidad
+              image: { type: 'jpeg', quality: 0.95 },
               html2canvas: {
-                scale: 2, // Buena calidad
+                scale: 2,
                 logging: true,
                 useCORS: true,
-                // IMPORTANTE: html2canvas usará el width/height del elemento si no se especifican aquí,
-                // o podemos ser explícitos con las dimensiones calculadas.
-                width: cloneScrollWidth,
-                height: cloneScrollHeight,
-                backgroundColor: '#ffffff', // Fondo blanco explícito para el canvas
-                // Asegurarse de que capture todo el contenido verticalmente
-                windowHeight: cloneScrollHeight
+                // ***** USAR LAS DIMENSIONES LEÍDAS DENTRO DEL TIMEOUT *****
+                width: currentCloneWidth,
+                height: currentCloneHeight,
+                backgroundColor: '#ffffff',
+                windowHeight: currentCloneHeight // Para asegurar captura completa
               },
               jsPDF: {
                 unit: 'in',
                 format: 'letter',
                 orientation: 'portrait'
               },
-              pagebreak: { mode: ['css', 'legacy'], before: '.card' } // Simplifiqué un poco el modo
+              pagebreak: { mode: ['css', 'legacy'], before: '.card' }
             };
 
-            console.log("Opciones para html2pdf (con html2canvas interno):", pdfOptions);
+            console.log("Opciones FINALES para html2pdf (con html2canvas interno):", JSON.parse(JSON.stringify(pdfOptions))); // Clonar para log completo
 
             html2pdf().from(clone).set(pdfOptions).save()
               .then(() => {
@@ -1045,17 +1028,12 @@
               }).finally(() => {
                 exportPdfButton.innerHTML = originalButtonText;
                 exportPdfButton.disabled = false;
-                if (clone.parentNode) {
-                  document.body.removeChild(clone);
-                }
-                // const previewImg = document.getElementById('canvasPreviewImg'); // Ya no creamos esta preview en este flujo
-                // if (previewImg) previewImg.remove();
+                if (clone.parentNode) document.body.removeChild(clone);
               });
-          }, 100); // Un timeout pequeño, puedes ajustarlo (ej. 50, 100, o incluso 0 a veces funciona)
+          }, 250); // Incrementé ligeramente el timeout, puedes probar con 100, 250, 500.
 
         });
-      }
-    </script>
+      }    </script>
 </body>
 
 </html>
