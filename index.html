@@ -922,56 +922,64 @@
           // --- Aplicar estilos y ancho al clon ---
           const desiredPdfContentWidthPx = 750;
           clone.style.width = desiredPdfContentWidthPx + 'px';
-          clone.style.backgroundColor = 'white !important'; // Fondo blanco explícito para el clon, con !important
-          clone.style.padding = '15px';
-          clone.style.boxSizing = 'border-box';
-          clone.style.color = 'black !important'; // Forzar color de texto en el propio clon
-          clone.style.webkitTextFillColor = 'black !important';
+          clone.style.backgroundColor = 'white !important'; // MANTENER
+          clone.style.color = '#000000 !important';         // MANTENER NEGRO
+          clone.style.webkitTextFillColor = '#000000 !important'; // MANTENER NEGRO
 
           const elementsToStyle = clone.querySelectorAll('*');
           elementsToStyle.forEach(el => {
-            el.style.fontFamily = '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important'; // Forzar fuente
+            el.style.fontFamily = '"Arial", "Helvetica", sans-serif !important'; // Probar con fuentes MUY básicas
             el.style.wordWrap = 'break-word';
             el.style.overflowWrap = 'break-word';
             el.style.whiteSpace = 'normal';
-            el.style.color = 'black !important';
-            el.style.webkitTextFillColor = 'black !important';
+            el.style.color = '#000000 !important';             // MANTENER NEGRO
+            el.style.webkitTextFillColor = '#000000 !important'; // MANTENER NEGRO
             el.style.opacity = '1 !important';
             el.style.visibility = 'visible !important';
-            el.style.backgroundColor = 'transparent !important'; // Fondos internos transparentes
-            el.style.textShadow = 'none !important'; // Quitar sombras de texto
-            el.style.boxShadow = 'none !important'; // Quitar sombras de caja
-            // el.style.border = 'none !important'; // Considera quitar todos los bordes internos temporalmente
+            el.style.backgroundColor = 'transparent !important'; // MANTENER
+            el.style.textShadow = 'none !important';
+            el.style.boxShadow = 'none !important';
+            el.style.border = 'none !important'; // <--- CAMBIO: Quitar todos los bordes internos
 
             const computedStyle = window.getComputedStyle(el);
             if (computedStyle.display === 'none') {
               el.style.display = 'block !important';
             }
-            // Forzar que no haya transformaciones que puedan confundir a html2canvas
             el.style.transform = 'none !important';
+            el.style.filter = 'none !important'; // <--- CAMBIO: Quitar filtros CSS
+            el.style.position = 'static !important'; // <--- CAMBIO DRÁSTICO: Forzar position static
+            el.style.float = 'none !important'; // <--- CAMBIO DRÁSTICO: Quitar floats
           });
 
           clone.querySelectorAll('.card').forEach(card => {
-            card.style.border = '1px solid #333 !important'; // Borde más oscuro y !important
-            card.style.marginBottom = '15px';
+            card.style.display = 'block !important'; // <--- CAMBIO
+            card.style.position = 'relative !important'; // <--- CAMBIO: O static, pero block es más importante
+            card.style.border = '1px solid #cccccc !important'; // Un borde gris claro visible
+            card.style.marginBottom = '10px';
             card.style.padding = '10px';
-            card.style.backgroundColor = 'white !important'; // Fondo de tarjeta explícitamente blanco
+            card.style.backgroundColor = 'white !important'; // MANTENER BLANCO SÓLIDO
             card.style.width = '100%';
             card.style.boxSizing = 'border-box';
             card.style.opacity = '1 !important';
             card.style.visibility = 'visible !important';
-            card.style.overflow = 'visible !important'; // Asegurar que el contenido no se corte
+            card.style.overflow = 'visible !important';
+          });
+          clone.querySelectorAll('.card-header, .card-content, .content').forEach(container => {
+            container.style.display = 'block !important'; // <--- CAMBIO
+            container.style.position = 'static !important'; // <--- CAMBIO
+            container.style.backgroundColor = 'transparent !important'; // <--- CAMBIO
           });
           clone.querySelectorAll('.card-header-title, .card .content p, .card .content strong').forEach(el => {
-            el.style.fontWeight = 'normal !important'; // Probar con normal y luego con bold
-            el.style.fontSize = '16px !important'; // Tamaño de fuente explícito y más grande
+            el.style.display = 'block !important'; // <--- CAMBIO
+            el.style.position = 'relative !important'; // <--- CAMBIO: O static
+            el.style.fontWeight = 'bold !important'; // <--- CAMBIO: Hacerlo bold para que sea más grueso
+            el.style.fontSize = '16px !important';
             el.style.color = '#000000 !important';
             el.style.webkitTextFillColor = '#000000 !important';
-            el.style.lineHeight = '1.6 !important';
-            el.style.backgroundColor = 'transparent !important'; // Asegurar que no haya fondo en el texto mismo
+            el.style.lineHeight = '1.5 !important'; // Un poco menos apretado
+            el.style.backgroundColor = 'transparent !important';
           });
           // --- FIN Aplicar estilos ---
-
           // Hacer visible el clon en el DOM para inspección
           clone.style.position = 'fixed';
           clone.style.left = '10px';
@@ -1019,18 +1027,18 @@
 
             // ***** Generar Canvas con window.html2canvas para PREVISUALIZACIÓN *****
             const canvasOptions = {
-              scale: 2, // Aumentar la escala a 2 para mejorar la nitidez y posible claridad
+              scale: 2,
               logging: true,
               useCORS: true,
               width: currentCloneWidth,
               height: currentCloneHeight,
-              backgroundColor: '#FFFFFF', // Fondo blanco explícito para el canvas
+              backgroundColor: '#DDDDDD', // <--- CAMBIO: Fondo del CANVAS gris MUY CLARO
               windowHeight: currentCloneHeight,
-              // Intenta añadir estas opciones una por una si sigue el problema de claridad/contenido:
+              // Prueba estas opciones adicionales si lo anterior no es suficiente:
               // removeContainer: true,
-              // imageTimeout: 0,
-              // foreignObjectRendering: false, // o true
-              // ignoreElements: (element) => false
+              // foreignObjectRendering: true, // A menudo es más útil ponerlo en false si hay problemas
+              // scrollX: 0, // Asegurar que no haya scroll horizontal
+              // scrollY: 0  // Asegurar que no haya scroll vertical
             };
             console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas:", JSON.parse(JSON.stringify(canvasOptions)));
 
