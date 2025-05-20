@@ -916,97 +916,76 @@
 
           // ... (código para statusMessage y timerElement sin cambios) ...
 
-          const elementToExport = ideasResultsArea;
+          const elementToExport = ideasResultsArea; // Correcto
           let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
 
           const clone = elementToExport.cloneNode(true);
           clone.style.position = 'absolute';
-          clone.style.left = '-9999px';
+          clone.style.left = '-9999px'; // Para que no se vea mientras se procesa
           clone.style.top = '0px';
-          clone.style.display = 'block';
+          clone.style.display = 'block'; // Asegurar que tenga dimensiones
+          clone.style.backgroundColor = 'white'; // Fondo base del clon
           document.body.appendChild(clone);
 
+          // Medir el clon CON TODAS LAS TARJETAS
           let cloneScrollWidth = clone.scrollWidth;
-          let cloneScrollHeight = clone.scrollHeight; // Altura inicial del clon completo
+          let cloneScrollHeight = clone.scrollHeight;
 
-          console.log('Dimensiones INICIALES calculadas del clon (scrollWidth, scrollHeight):', cloneScrollWidth, cloneScrollHeight);
+          console.log('Dimensiones INICIALES del clon con TODAS las tarjetas (scrollWidth, scrollHeight):', cloneScrollWidth, cloneScrollHeight);
 
-          // ***** DEFINE canvasOptions AQUÍ, ANTES DE USARLO *****
+          // Opciones para html2canvas
           const canvasOptions = {
-            logging: true,
-            useCORS: true,
+            logging: false, // Puedes ponerlo en true para más detalles en consola durante la depuración
+            useCORS: true, // Si tuvieras imágenes de otros dominios
             width: cloneScrollWidth,
-            height: cloneScrollHeight, // O newCloneScrollHeight si es la tarjeta única
+            height: cloneScrollHeight,
             windowWidth: cloneScrollWidth,
-            windowHeight: cloneScrollHeight, // O newCloneScrollHeight
-            scale: 1,
-            scrollY: -window.scrollY,
-            backgroundColor: '#ffffff',
-            removeContainer: false // <--- AÑADE ESTO TEMPORALMENTE
+            windowHeight: cloneScrollHeight,
+            scale: 1, // Empezar con escala 1. Se puede aumentar para mejor resolución, pero aumenta tamaño.
+            scrollY: 0, // -window.scrollY no es necesario si el clon está posicionado fuera de pantalla.
+            backgroundColor: '#ffffff', // Fondo del canvas en sí.
+            // removeContainer: false, // Útil para depuración, coméntalo para producción
           };
 
-          // -------- INICIO DEL CÓDIGO PARA AISLAR LA PRIMERA TARJETA --------
+          // -------- ELIMINA O COMENTA ESTE BLOQUE ENTERO --------
+          /*
           const firstCard = clone.querySelector('.card');
           if (firstCard) {
-            const singleCardContainer = document.createElement('div');
-            singleCardContainer.style.width = cloneScrollWidth + 'px';
-            singleCardContainer.style.padding = '20px';
-            singleCardContainer.style.backgroundColor = 'white';
-            singleCardContainer.appendChild(firstCard.cloneNode(true));
-
-            clone.innerHTML = '';
-            clone.appendChild(singleCardContainer);
-
-            clone.style.height = 'auto';
-            const newCloneScrollHeight = clone.scrollHeight; // Altura del clon con solo la tarjeta
-
-            // Actualizamos las OPCIONES DEL CANVAS para que reflejen la tarjeta única
-            canvasOptions.height = newCloneScrollHeight;       // AHORA ESTO ES SEGURO
-            canvasOptions.windowHeight = newCloneScrollHeight; // AHORA ESTO ES SEGURO
-
-            // Actualizamos el estilo del CLON para que coincida con lo que html2canvas usará
-            clone.style.height = newCloneScrollHeight + 'px';
-            // El ancho del clon (clone.style.width) ya está como cloneScrollWidth
-
-            console.log("CLON MODIFICADO: Ahora solo contiene la primera tarjeta.");
-            console.log("Nuevas dimensiones para html2canvas (width, height):", canvasOptions.width, canvasOptions.height);
-          } else {
-            console.log("No se encontró ninguna tarjeta '.card' en el clon.");
-            // Si no hay tarjeta, el clon mantiene sus dimensiones originales (del área de resultados completa)
-            // y canvasOptions también usará esas dimensiones originales.
-            clone.style.width = cloneScrollWidth + 'px';
-            clone.style.height = cloneScrollHeight + 'px';
+              // ...toda la lógica para aislar la primera tarjeta...
+              // Esto ya no lo queremos si vamos a exportar todo.
           }
-          // -------- FIN DEL CÓDIGO PARA AISLAR LA PRIMERA TARJETA --------
+          */
+          // -------- FIN DEL BLOQUE A ELIMINAR/COMENTAR --------
 
-          // Aplicar estilos finales al clon. Algunos ya están, pero para asegurar:
-          clone.style.width = canvasOptions.width + 'px'; // Ancho que usará html2canvas
-          clone.style.height = canvasOptions.height + 'px'; // Alto que usará html2canvas
-          clone.style.maxHeight = '';
-          clone.style.overflowY = '';
-          clone.style.backgroundColor = 'white';
+          // Aplicar estilos finales al clon para asegurar que html2canvas lo vea bien.
+          // Estas dimensiones deben ser las que quieres que tenga la "foto"
+          clone.style.width = cloneScrollWidth + 'px';
+          clone.style.height = cloneScrollHeight + 'px';
+          // Es importante que el clon no tenga desbordamientos ocultos si quieres capturar todo el contenido.
+          clone.style.overflow = 'visible'; // O 'auto' si quieres que capture el scroll interno si lo hubiera.
 
-          console.log("Clon preparado para html2canvas. InnerHTML:", clone.innerHTML.substring(0, 500));
+          console.log("Clon preparado para html2canvas (TODAS LAS TARJETAS). InnerHTML:", clone.innerHTML.substring(0, 500));
           console.log("Estilo final del clon (width, height):", clone.style.width, clone.style.height);
           console.log("Opciones FINALES para html2canvas:", canvasOptions);
 
-          setTimeout(() => {
+          setTimeout(() => { // Un pequeño delay a veces ayuda a que los estilos se asienten en el clon
             window.html2canvas(clone, canvasOptions).then(canvas => {
               console.log('html2canvas exitoso, objeto canvas:', canvas);
               exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-image"></i></span><span>Mostrando Previsualización</span>';
 
+              // --- INICIO: Código de Previsualización (mantenlo para depurar) ---
               const imgData = canvas.toDataURL('image/png');
               const img = document.createElement('img');
               img.src = imgData;
               img.style.border = "5px solid blue";
               img.style.position = "fixed";
               img.style.left = "20px";
-              img.style.top = "20px";
+              img.style.top = "80px"; // Un poco más abajo para no tapar el navbar
               img.style.zIndex = "10002";
-              img.style.maxWidth = "350px";
+              img.style.maxWidth = "350px"; // Para que no ocupe toda la pantalla
               img.style.maxHeight = "70vh";
               img.style.overflowY = "auto";
-              img.style.backgroundColor = "pink"; // PRUEBA: Fondo de la etiqueta img
+              img.style.backgroundColor = "lightgray"; // Fondo de la etiqueta img para distinguirla
 
               const oldPreview = document.getElementById('canvasPreviewImg');
               if (oldPreview) {
@@ -1014,45 +993,54 @@
               }
               img.id = 'canvasPreviewImg';
               document.body.appendChild(img);
-              console.log('Imagen del canvas añadida al body para inspección.');
+              console.log('Imagen del canvas añadida al body para inspección. Revisa cómo se ve esta imagen.');
+              // --- FIN: Código de Previsualización ---
+
               const pdfOptions = {
-                margin: 0.5,
-                filename: filename, // El nombre de archivo que ya definiste
-                image: { type: 'jpeg', quality: 0.95 }, // Puedes probar 'png'
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                margin: 0.5, // Márgenes en pulgadas (para 'letter')
+                filename: filename,
+                image: { type: 'jpeg', quality: 0.95 }, // JPEG suele ser más pequeño
+                html2canvas: {
+                  scale: 2, // Puedes probar a escalar aquí también, o en canvasOptions.scale
+                  logging: true,
+                  useCORS: true,
+                  backgroundColor: null, // Para que use el del canvasOptions si está definido
+                },
+                jsPDF: {
+                  unit: 'in',
+                  format: 'letter', // Tamaño carta (8.5 x 11 pulgadas)
+                  orientation: 'portrait' // 'landscape' para horizontal
+                },
+                // Para el manejo de páginas si el contenido es muy largo:
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: '.card' } // Intenta evitar romper DENTRO de una tarjeta.
               };
-              html2pdf().from(canvas).set(pdfOptions).toPdf().save().then(() => { // Asegúrate que html2pdf() esté disponible globalmente o usa window.html2pdf() si es necesario.
-                console.log("PDF (de una sola tarjeta) guardado desde el canvas.");
-                const previewImg = document.getElementById('canvasPreviewImg');
-                if (previewImg) { // Opcional: remover la imagen de preview si el PDF se guarda
-                  previewImg.remove();
-                }
-              }).catch(err => {
-                console.error("Error al generar PDF desde el canvas de una tarjeta:", err);
-              });
-              showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización. Revisa consola.", 'is-danger', 4000);
-              // Restaurar aquí si hay error ANTES de que el finally general se ejecute
-              exportPdfButton.innerHTML = originalButtonText; // Asegúrate que originalButtonText sea accesible
+
+              html2pdf().from(canvas).set(pdfOptions).save()
+                .then(() => {
+                  console.log("PDF guardado desde el canvas.");
+                  // const previewImg = document.getElementById('canvasPreviewImg');
+                  // if (previewImg) { previewImg.remove(); } // Quita esto para poder ver la preview mientras pruebas
+                }).catch(err => {
+                  console.error("Error al generar PDF desde el canvas:", err);
+                  showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
+                }).finally(() => {
+                  exportPdfButton.innerHTML = originalButtonText; // Restaura el texto original del botón
+                  exportPdfButton.disabled = false;
+                  if (clone.parentNode) {
+                    document.body.removeChild(clone);
+                  }
+                });
+
+            }).catch(err => { // Catch para html2canvas
+              console.error("Error en html2canvas:", err);
+              showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización (html2canvas). Revisa consola.", 'is-danger', 4000);
+              exportPdfButton.innerHTML = originalButtonText;
               exportPdfButton.disabled = false;
               if (clone.parentNode) {
                 document.body.removeChild(clone);
               }
-            })
-              .finally(() => {
-                // Esta lógica es para restaurar el botón si la promesa de html2canvas se completó (con éxito o error manejado)
-                // y no se procedió a generar el PDF (que es el estado actual de depuración).
-                // Si la generación de PDF estuviera activa, el .finally de html2pdf() se encargaría.
-                exportPdfButton.innerHTML = originalButtonText; // Asegúrate que originalButtonText sea accesible
-                exportPdfButton.disabled = false;
-
-                if (clone.parentNode) {
-                  document.body.removeChild(clone);
-                }
-                // Opcional: remover la imagen de preview después de un tiempo o manualmente
-                // const previewImg = document.getElementById('canvasPreviewImg');
-                // if (previewImg) { /* previewImg.remove(); */ }
-              });
-          }, 300);
+            });
+          }, 300); // Fin del setTimeout
         });
       }
     </script>
