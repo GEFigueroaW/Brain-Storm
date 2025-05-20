@@ -1059,7 +1059,6 @@
             // ***** Generar Canvas con window.html2canvas para PREVISUALIZACIÓN *****
             const canvasOptions = {
               scale: 1,
-              dpi: 192
               logging: true,
               useCORS: true,
               width: currentCloneWidth,
@@ -1111,11 +1110,29 @@
               };
               console.log("Opciones para html2pdf:", JSON.parse(JSON.stringify(pdfOptions)));
 
-              html2pdf().from(canvas).set(pdfOptions).save() // IMPORTANTE: .from(canvas)
-                .then(() => {
-                  console.log("PDF guardado exitosamente.");
-                })
-                .catch(err => {
+              
+html2pdf().from(clone).set({
+  margin: 0.5,
+  filename: filename,
+  image: { type: 'jpeg', quality: 0.95 },
+  html2canvas: {
+    scale: 2,
+    useCORS: true,
+    scrollX: 0,
+    scrollY: 0
+  },
+  jsPDF: {
+    unit: 'in',
+    format: 'letter',
+    orientation: 'portrait'
+  },
+  pagebreak: {
+    mode: ['css', 'legacy'],
+    before: '.card'
+  }
+}).save().then(() => {
+  console.log("PDF generado correctamente con múltiples tarjetas.");
+}).catch(err => {
                   console.error("Error al generar PDF con html2pdf:", err);
                   showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
                 })
