@@ -13,6 +13,7 @@
 
 exportPdfButton.addEventListener('click', () => {
   const originalButtonText = exportPdfButton.innerHTML;
+  const originalButtonText = exportPdfButton.innerHTML;
   exportPdfButton.innerHTML = "Generando PDF...";
   exportPdfButton.disabled = true;
 
@@ -67,6 +68,7 @@ exportPdfButton.addEventListener('click', () => {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
 
 exportPdfButton.addEventListener('click', () => {
+  const originalButtonText = exportPdfButton.innerHTML;
   const originalButtonText = exportPdfButton.innerHTML;
   exportPdfButton.innerHTML = "Generando PDF...";
   exportPdfButton.disabled = true;
@@ -681,7 +683,13 @@ generateIdeasButton.addEventListener('click', async () => {
         };
         localStorage.setItem('lastInputData', JSON.stringify(lastInputData));
 
+        
         try {
+          const inputData = {
+            keyword: keywordInput.value.trim(),
+            copyType: copyType,
+            socialNetworks: selectedSocialNetworks
+          };
           const generatedIdeas = await generateIdeas(inputData);
 
           if (!Array.isArray(generatedIdeas) || generatedIdeas.length === 0) {
@@ -731,6 +739,7 @@ console.log('Exportación lista para usarse cuando se haga clic en el botón PDF
           }
         }, 4000);
 exportPdfButton.addEventListener('click', () => {
+  const originalButtonText = exportPdfButton.innerHTML;
   const originalButtonText = exportPdfButton.innerHTML;
   exportPdfButton.innerHTML = "Generando PDF...";
   exportPdfButton.disabled = true;
