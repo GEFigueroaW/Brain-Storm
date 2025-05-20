@@ -586,480 +586,64 @@
           if (phraseElement) {
             phraseElement.classList.remove('animate__fadeIn');
             phraseElement.classList.add('animate__fadeOut');
-            setTimeout(() => {
-              if (timerContainer.contains(phraseElement)) { // Verificar si el elemento aún existe y es parte del DOM relevante
-                phraseElement.textContent = loadingPhrases[currentPhraseIndex];
-                phraseElement.classList.remove('animate__fadeOut');
-                phraseElement.classList.add('animate__fadeIn');
-              }
-            }, 200);
-          } else if (phrasesIntervalId) { // Si el P ya no existe pero el intervalo sí, crearlo de nuevo (poco probable si el contenedor existe)
-            timerContainer.innerHTML = `<p class="has-text-info animate__animated animate__fadeIn">${loadingPhrases[currentPhraseIndex]}</p>`;
-          }
-        }, 3000);
+            
+setTimeout(() => {
+  console.log("Añadiendo padding-bottom al clon antes de medir dimensiones...");
+  clone.style.paddingBottom = '1500px !important';
+  let currentCloneWidth = clone.scrollWidth;
+  let currentCloneHeight = clone.scrollHeight;
 
-        showLoading(true); // Overlay con spinner
+  console.log(`Dimensiones del clon DENTRO DEL TIMEOUT con padding-bottom (scrollWidth, scrollHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
+  if (currentCloneWidth === 0 || currentCloneHeight === 0) {
+    console.warn("scrollWidth/Height son 0 DENTRO DEL TIMEOUT, intentando con offsetWidth/Height");
+    currentCloneWidth = clone.offsetWidth;
+    currentCloneHeight = clone.offsetHeight;
+    console.log(`Dimensiones del clon con offset DENTRO DEL TIMEOUT (offsetWidth, offsetHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
+  }
 
-        // --- Llamada a Firebase y Manejo de Resultados ---
-        try {
-          const generateIdeasFunction = httpsCallable(functions, 'generateIdeas');
-          const result = await generateIdeasFunction({
-            topic: topic,
-            copyType: copyType,
-            socialNetworks: selectedSocialNetworks
-          });
+  if (currentCloneWidth === 0 || currentCloneHeight === 0) {
+    console.error("Las dimensiones del clon siguen siendo 0 DENTRO DEL TIMEOUT. No se puede generar el PDF.");
+    return;
+  }
 
-          if (result.data && result.data.success) {
-            currentViewingSessionId = result.data.sessionId;
-            displayGeneratedIdeas(result.data.ideas); // Esto limpiará el timerContainer
-            displayFinalPhrase(result.data.finalPhrase);
-            actionButtonsContainer.classList.remove('is-hidden');
-            // noResultsMessage se maneja dentro de displayGeneratedIdeas
+  console.log("--- DEBUG CLON ANTES DE HTML2PDF (DENTRO DEL TIMEOUT) ---");
+  console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
+  console.log("Dimensiones calculadas del Clon (offsetWidth, offsetHeight):", clone.offsetWidth, clone.offsetHeight);
+  console.log("Dimensiones de scroll del Clon (scrollWidth, scrollHeight):", clone.scrollWidth, clone.scrollHeight);
+  const cardsInClone = clone.querySelectorAll('.card');
+  console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon (dentro del timeout).`);
+  console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
 
-            // Guardar tema en el historial de autocompletado
-            const currentTopicForStorage = topicInput.value.trim(); // Usar el valor actual, no el 'topic' de arriba que podría ser de una carga anterior
-            if (currentTopicForStorage) {
-              let recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
-              if (!recentTopics.some(rt => rt.toLowerCase() === currentTopicForStorage.toLowerCase())) {
-                recentTopics.unshift(currentTopicForStorage);
-                recentTopics = recentTopics.slice(0, 10);
-                localStorage.setItem('recentTopics', JSON.stringify(recentTopics));
-              }
-            }
-            // FIN de Guardar tema
+  html2pdf().from(clone).set({
+    margin: 0.5,
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true
+    },
+    jsPDF: {
+      unit: 'in',
+      format: 'letter',
+      orientation: 'portrait'
+    },
+    pagebreak: {
+      mode: ['css', 'legacy'],
+      before: '.card'
+    }
+  }).save().then(() => {
+    console.log("PDF generado correctamente.");
+  }).catch(err => {
+    console.error("Error al generar el PDF:", err);
+    showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa consola.", 'is-danger', 4000);
+  }).finally(() => {
+    exportPdfButton.innerHTML = originalButtonText;
+    exportPdfButton.disabled = false;
+    if (clone.parentNode) document.body.removeChild(clone);
+  });
 
-            if (result.data.message) {
-              const ideasContainer = ideasResultsArea; // Asegúrate que este es el contenedor correcto
-              let messageType = 'is-success';
-              if (result.data.ideas && result.data.ideas.length < selectedSocialNetworks.length && result.data.ideas.length > 0) {
-                messageType = 'is-warning';
-              } else if (!result.data.ideas || result.data.ideas.length === 0) {
-                messageType = 'is-danger';
-              }
+}, 200);
 
-              const generationStatusMessage = document.createElement('div');
-              generationStatusMessage.classList.add('notification', messageType, 'is-light', 'mt-4', 'generation-status-message');
-              generationStatusMessage.textContent = result.data.message;
-
-              if (ideasContainer.querySelector('.card')) {
-                ideasContainer.prepend(generationStatusMessage);
-              } else {
-                // No limpiar si displayGeneratedIdeas ya puso un mensaje de "no se generaron ideas"
-                if (!ideasContainer.querySelector('#noResultsMessage') && !ideasContainer.querySelector('.notification')) {
-                  ideasContainer.innerHTML = '';
-                }
-                ideasContainer.appendChild(generationStatusMessage);
-              }
-            }
-          } else { // result.data.success es false o no hay result.data
-            let errorMessageToShow = "No se pudieron generar las ideas (respuesta inesperada).";
-            if (result.data && result.data.error) {
-              errorMessageToShow = result.data.error;
-            } else if (result.data && result.data.message) {
-              errorMessageToShow = result.data.message;
-            }
-            ideasResultsArea.innerHTML = `<div class="notification is-danger">${errorMessageToShow}</div>`;
-            if (timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga
-            actionButtonsContainer.classList.remove('is-hidden'); // Mostrar "Nueva Generación"
-          }
-        } catch (error) {
-          console.error("Error al generar ideas:", error);
-          ideasResultsArea.innerHTML = `<div class="notification is-danger">Error al generar ideas: ${error.message}</div>`;
-          if (timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga
-          actionButtonsContainer.classList.remove('is-hidden'); // Mostrar "Nueva Generación"
-        } finally {
-          showLoading(false);
-          if (phrasesIntervalId) {
-            clearInterval(phrasesIntervalId);
-            phrasesIntervalId = null; // importante para evitar múltiples intervalos
-          }
-          // No limpiar timerContainer aquí si displayGeneratedIdeas o el error ya lo hacen
-          // o si quieres que el último mensaje de error/éxito de ideasResultsArea sea lo principal.
-        }
-      });
-
-      // displayGeneratedIdeas y displayFinalPhrase (sin cambios en su lógica interna, pero displayGeneratedIdeas ya no mostrará ubicación)
-      function displayGeneratedIdeas(ideas) {
-        // Limpiar mensajes de estado de generación previos y el mensaje de "generando..." del timerContainer
-        const existingStatusMessages = ideasResultsArea.querySelectorAll('.generation-status-message');
-        existingStatusMessages.forEach(msg => msg.remove());
-        if (timerContainer) timerContainer.innerHTML = ''; // Limpiar frases de carga/temporizador
-
-        if (!ideas || ideas.length === 0) {
-          // Si NO hay ideas, pero SÍ hay un mensaje de estado (ej. "la IA no devolvió..."), no lo sobrescribas.
-          if (!ideasResultsArea.querySelector('.generation-status-message') && !ideasResultsArea.querySelector('.notification')) {
-            ideasResultsArea.innerHTML = '<p id="noResultsMessage" class="has-text-centered has-text-grey">No se generaron ideas esta vez. Intenta ajustar tus parámetros o tema.</p>';
-            if (noResultsMessage) noResultsMessage.classList.remove('is-hidden');
-          }
-          actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones para "Nueva Generación" aunque no haya ideas
-          return;
-        }
-
-        // Si hay ideas, limpiar cualquier mensaje de "no resultados" o el de "generando"
-        ideasResultsArea.innerHTML = '';
-        if (noResultsMessage) noResultsMessage.classList.add('is-hidden');
-
-        ideas.forEach((idea, index) => {
-          const card = document.createElement('div');
-          card.classList.add('card', 'mb-4', 'animate__animated', 'animate__fadeInUp'); // mb-4 para separar tarjetas
-          card.style.animationDelay = `${index * 0.1}s`;
-
-          const header = document.createElement('header');
-          header.classList.add('card-header');
-
-          const title = document.createElement('p');
-          title.classList.add('card-header-title');
-          // El backend ahora debería enviar 'redSocialTarget' en cada objeto 'idea'
-          title.textContent = `Idea para: ${idea.redSocialTarget || 'Red Social Específica'}`;
-          header.appendChild(title);
-          card.appendChild(header);
-
-          const contentDiv = document.createElement('div');
-          contentDiv.classList.add('card-content');
-          // El orden de los campos dentro del contenido cambia:
-          contentDiv.innerHTML = ` 
-                    <div class="content">
-                        <p><strong>Gancho Verbal Impactante:</strong><br>${idea.ganchoVerbal || 'N/A'}</p>
-                        <p><strong>Texto o Copy:</strong><br>${idea.textoCopy || 'N/A'}</p>
-                        <p><strong>Hashtags:</strong><br>${Array.isArray(idea.hashtags) ? idea.hashtags.join(', ') : (idea.hashtags || 'N/A')}</p>
-                        <p><strong>Formato Visual Sugerido:</strong><br>${idea.formatoVisual || 'N/A'}</p>
-                    </div>
-                `; // <--- ¡COMILLA INVERTIDA DE CIERRE!
-          card.appendChild(contentDiv);
-          ideasResultsArea.appendChild(card);
-        });
-        actionButtonsContainer.classList.remove('is-hidden'); // Mostrar botones de "Nueva Generación", "Exportar PDF"
-      }
-
-      function displayFinalPhrase(phrase) { /* ... sin cambios ... */ }
-      backToFormButton.addEventListener('click', () => {
-        resultsView.classList.add('is-hidden'); // Ocultar la vista de resultados
-        if (timerContainer) timerContainer.innerHTML = ''; // Limpiar el contenedor de frases/timer
-        ideasResultsArea.innerHTML = ''; // Limpiar el área de ideas por si acaso
-        noResultsMessage.classList.remove('is-hidden'); // Mostrar el mensaje inicial
-        finalPhraseContainer.classList.add('is-hidden');
-        actionButtonsContainer.classList.add('is-hidden'); // Ocultar los botones de acción de resultados
-
-        formView.classList.remove('is-hidden');   // Mostrar la vista del formulario
-
-        clearSimplifiedGenerationForm(); // Limpiar los campos del formulario
-        currentViewingSessionId = null; // Resetear el ID de la sesión que se estaba viendo
-        topicInput.focus(); // Poner el cursor en el campo de tema
-      });
-      // Cargar datos al iniciar la app si existen en localStorage (esto puede ir cerca de donde defines `lastInputData`)
-      const storedLastInput = localStorage.getItem('lastInputData');
-      if (storedLastInput) {
-        lastInputData = JSON.parse(storedLastInput);
-      } else {
-        lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] }; // Inicializar con valores por defecto si no hay nada guardado
-      }
-
-      loadLastSearchButton.addEventListener('click', () => {
-        // Siempre intenta leer la versión más reciente de localStorage por si se guardó en otra pestaña (poco probable aquí pero buena práctica)
-        const dataToLoad = JSON.parse(localStorage.getItem('lastInputData'));
-
-        if (dataToLoad && typeof dataToLoad === 'object') {
-          topicInput.value = dataToLoad.topic || '';
-          copyTypeSelect.value = dataToLoad.copyType || 'promocional';
-
-          // Limpiar checkboxes actuales antes de marcar los guardados
-          document.querySelectorAll('input[name="socialNetwork"]').forEach(checkbox => checkbox.checked = false);
-          if (dataToLoad.socialNetworks && Array.isArray(dataToLoad.socialNetworks)) {
-            dataToLoad.socialNetworks.forEach(networkValue => {
-              const checkbox = document.querySelector(`input[name = "socialNetwork"][value = "${networkValue}"]`);
-              if (checkbox) {
-                checkbox.checked = true;
-              }
-            });
-          }
-          showTemporaryMessage(loadLastSearchButton.parentElement, "Última configuración cargada.", 'is-success', 2000);
-        } else {
-          showTemporaryMessage(loadLastSearchButton.parentElement, "No hay configuración previa guardada.", 'is-info', 2000);
-        }
-      });
-      exportUserHistoryCsvButton.addEventListener('click', async () => {
-        if (!currentUser) {
-          showTemporaryMessage(exportUserHistoryCsvButton.parentElement, "Debes iniciar sesión para exportar.", 'is-danger', 3000);
-          return;
-        }
-        showLoading(true); // Muestra el overlay general de carga
-        try {
-          const exportHistoryFunc = httpsCallable(functions, 'exportUserHistoryCsv'); // Llamará a la NUEVA función backend
-          const result = await exportHistoryFunc();
-
-          if (result.data && result.data.success && typeof result.data.csv === 'string') {
-            if (result.data.csv.length > 0) { // Solo descargar si hay contenido
-              const blob = new Blob(["\uFEFF" + result.data.csv], { type: 'text/csv;charset=utf-8;' }); // BOM para UTF-8 en Excel
-              const link = document.createElement("a");
-              const url = URL.createObjectURL(blob);
-              const userPrefix = currentUser.email ? currentUser.email.split('@')[0].replace(/[^a-zA-Z0-9]/g, "_") : currentUser.uid.substring(0, 5);
-              link.setAttribute("href", url);
-              link.setAttribute("download", `historial_ideas_${userPrefix}_${new Date().toISOString().slice(0, 10)}.csv`);
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              URL.revokeObjectURL(url); // Liberar memoria
-            } else {
-              showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "No hay datos en el historial para exportar.", 'is-info', 3000);
-            }
-          } else {
-            showTemporaryMessage(exportUserHistoryCsvButton.parentElement, result.data.message || "Error al generar CSV del historial.", 'is-danger', 4000);
-          }
-        } catch (error) {
-          console.error("Error al exportar historial CSV:", error);
-          showTemporaryMessage(exportUserHistoryCsvButton.parentElement, `Error: ${error.message} `, 'is-danger', 4000);
-        } finally {
-          showLoading(false);
-        }
-      });
-      function populateTopicSuggestions() {
-        const recentTopics = JSON.parse(localStorage.getItem('recentTopics')) || [];
-        topicSuggestions.innerHTML = ''; // Limpiar opciones previas
-        recentTopics.forEach(topic => {
-          const option = document.createElement('option');
-          option.value = topic; // El texto que se autocompleta
-          // option.textContent = topic; // Para algunos navegadores, si quieres que se muestre en la lista desplegable
-          topicSuggestions.appendChild(option);
-        });
-      }
-
-      // Llamar al cargar la página (después de que el DOM esté listo) y cuando el input reciba foco
-      document.addEventListener('DOMContentLoaded', () => {
-        populateTopicSuggestions(); // Para la carga inicial
-
-        // También, cargar lastInputData aquí es un buen lugar
-        const storedLastInputOnLoad = localStorage.getItem('lastInputData');
-        if (storedLastInputOnLoad) {
-          lastInputData = JSON.parse(storedLastInputOnLoad);
-        } else {
-          // Si no hay nada, podrías querer inicializar lastInputData con valores por defecto
-          lastInputData = { topic: '', copyType: 'promocional', socialNetworks: [] };
-        }
-      });
-      topicInput.addEventListener('focus', populateTopicSuggestions);
-      // ELIMINADO listener de refreshIdeasButton
-
-      // --- Lógica de Historial (MODIFICADA para no mostrar audiencia/ubicación) ---
-      navHistoryButton.addEventListener('click', async () => { /* ... (la llamada a getHistorySummary es igual) ... */ });
-
-      function renderHistoryList(historyItems) {
-        historyListContainer.innerHTML = '';
-        if (!historyItems || historyItems.length === 0) {
-          historyListContainer.innerHTML = '<p class="has-text-centered">No tienes generaciones guardadas.</p>';
-          return;
-        }
-        const list = document.createElement('div');
-        list.classList.add('list', 'is-hoverable');
-        historyItems.forEach(item => {
-          const listItem = document.createElement('a');
-          listItem.classList.add('list-item');
-          listItem.dataset.sessionId = item.id;
-          const timestampDate = item.timestamp && item.timestamp.seconds ? new Date(item.timestamp.seconds * 1000 + (item.timestamp.nanoseconds || 0) / 1000000) : null;
-          const formattedTimestamp = timestampDate ? timestampDate.toLocaleString('es-ES') : 'Fecha desconocida';
-
-          // Mostrar solo los campos relevantes
-          listItem.innerHTML = `
-            <div class="list-item-content">
-                    <div class="list-item-title"><strong>Tema:</strong> ${item.topic || 'N/A'}</div>
-                    <div class="list-item-description">
-                        <small><strong>Fecha:</strong> ${formattedTimestamp}</small><br>
-                        <small><strong>Tipo de Copy:</strong> ${item.copyType || 'N/A'}</small><br>
-                        <small><strong>Redes Solicitadas:</strong> ${item.socialNetworks && Array.isArray(item.socialNetworks) ? item.socialNetworks.join(', ') : 'N/A'}</small>
-                    </div>
-                </div>
-            `;
-          listItem.addEventListener('click', () => { /* ... (lógica de selección sin cambios) ... */ });
-          list.appendChild(listItem);
-        });
-        historyListContainer.appendChild(list);
-      }
-
-      // Inicialización y Burger menu (sin cambios)
-      const burger = document.querySelector('.navbar-burger');
-      const menu = document.querySelector('.navbar-menu');
-      if (burger && menu) { /* ... sin cambios ... */ }
-      document.addEventListener('DOMContentLoaded', () => { // Asegura que el DOM esté cargado
-        const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-        if (burgers.length > 0) {
-          burgers.forEach(el => {
-            el.addEventListener('click', () => {
-              // Obtener el target del atributo 'data-target'
-              const target = el.dataset.target; // Debería ser 'navbarMenuCore'
-              const $target = document.getElementById(target); // El div del menú
-
-              // Alternar la clase 'is-active' en el burger y en el target del menú
-              el.classList.toggle('is-active');
-              if ($target) { // Verificar que $target no sea null
-                $target.classList.toggle('is-active');
-              } else {
-                console.warn('Burger target not found:', target);
-              }
-            });
-          });
-        }
-
-      });
-      console.log("Aplicación simplificada de generación de ideas inicializada.");
-      // --- Lógica de Exportación a PDF ---
-      if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
-        exportPdfButton.addEventListener('click', () => {
-          const ideaCards = ideasResultsArea.querySelectorAll('.card');
-          if (ideaCards.length === 0) {
-            showTemporaryMessage(actionButtonsContainer, "No hay ideas visibles para exportar a PDF.", 'is-warning', 3000);
-            return;
-          }
-
-          const originalButtonText = exportPdfButton.innerHTML;
-          exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
-          exportPdfButton.disabled = true;
-
-          const elementToExport = ideasResultsArea; // Asegúrate que esta línea esté y sea correcta.
-          let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
-
-          const clone = elementToExport.cloneNode(true);
-
-          // --- Aplicar estilos y ancho al clon ---
-          const desiredPdfContentWidthPx = 750;
-          clone.style.width = desiredPdfContentWidthPx + 'px';
-          clone.style.backgroundColor = 'white !important';
-          clone.style.padding = '15px';
-          clone.style.boxSizing = 'border-box';
-          clone.style.color = 'black !important';
-          clone.style.webkitTextFillColor = 'black !important';
-          clone.style.fontFamily = '"Arial", "Helvetica", sans-serif !important';
-
-          // Quitar clases de Bulma que puedan interferir y resetear estilos de forma general
-          const allElementsInClone = clone.querySelectorAll('*');
-          allElementsInClone.forEach(el => {
-            // Guardar el contenido de texto si es un nodo de texto directo para algunos elementos
-            let originalText = '';
-            if (el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
-              originalText = el.childNodes[0].nodeValue;
-            }
-
-            el.style.all = 'revert'; // Intenta revertir a los estilos del navegador base
-
-            // Re-aplicar estilos esenciales para el flujo y visibilidad
-            el.style.display = 'block !important'; // Forzar block para la mayoría, simplifica layout
-            el.style.position = 'static !important';
-            el.style.float = 'none !important';
-            el.style.width = 'auto !important'; // Dejar que el contenido determine el ancho o el padre
-            el.style.maxWidth = '100% !important';
-            el.style.margin = '0 !important'; // Resetear márgenes
-            el.style.padding = '0 !important'; // Resetear paddings
-            el.style.border = 'none !important'; // Sin bordes internos por defecto
-            el.style.fontFamily = '"Arial", "Helvetica", sans-serif !important';
-            el.style.fontSize = '14px !important'; // Tamaño base
-            el.style.lineHeight = '1.4 !important';
-            el.style.color = 'black !important';
-            el.style.webkitTextFillColor = 'black !important';
-            el.style.backgroundColor = 'transparent !important';
-            el.style.opacity = '1 !important';
-            el.style.visibility = 'visible !important';
-            el.style.textShadow = 'none !important';
-            el.style.boxShadow = 'none !important';
-            el.style.transform = 'none !important';
-            el.style.filter = 'none !important';
-
-            // Si guardamos texto, re-aplicarlo (algunos el.style.all pueden borrarlo)
-            if (originalText && el.childNodes.length === 0) {
-              el.appendChild(document.createTextNode(originalText));
-            }
-          });
-
-          // Estilos más específicos para la estructura de la tarjeta, intentando ser simples
-          clone.querySelectorAll('.card').forEach(card => {
-            card.style.display = 'block !important';
-            card.style.marginBottom = '20px !important';
-            card.style.padding = '15px !important';
-            card.style.border = '1px solid #aaaaaa !important';
-            card.style.backgroundColor = '#fdfdfd !important'; // Fondo de tarjeta casi blanco
-          });
-
-          clone.querySelectorAll('.card-header').forEach(header => {
-            header.style.display = 'block !important';
-            header.style.padding = '5px 0 !important';
-            header.style.borderBottom = '1px solid #dddddd !important';
-            header.style.marginBottom = '10px !important';
-          });
-
-          clone.querySelectorAll('.card-header-title').forEach(title => {
-            title.style.display = 'block !important';
-            title.style.fontSize = '18px !important';
-            title.style.fontWeight = 'bold !important';
-            title.style.color = 'black !important';
-            title.style.padding = '0 !important';
-          });
-
-          clone.querySelectorAll('.card-content').forEach(content => {
-            content.style.display = 'block !important';
-            content.style.padding = '0 !important';
-          });
-
-          clone.querySelectorAll('.card .content p').forEach(p => { // Nota: Bulma usa una clase .content
-            p.style.display = 'block !important';
-            p.style.fontSize = '14px !important';
-            p.style.lineHeight = '1.5 !important';
-            p.style.color = 'black !important';
-            p.style.marginBottom = '10px !important';
-            p.style.padding = '0 !important';
-          });
-
-          clone.querySelectorAll('.card .content strong').forEach(strong => {
-            strong.style.fontWeight = 'bold !important';
-            strong.style.color = 'black !important';
-          });
-          // --- FIN Aplicar estilos ---
-          // Hacer visible el clon en el DOM para inspección
-          clone.style.position = 'fixed';
-          clone.style.left = '10px';
-          clone.style.top = '10px';
-          clone.style.zIndex = '19999';
-          clone.style.border = '3px dashed orange'; // Borde naranja para esta prueba del clon visible
-          clone.style.overflowY = 'scroll';
-          clone.style.maxHeight = '80vh';
-          clone.style.backgroundColor = 'rgba(200, 200, 200, 0.5)'; // Fondo semitransparente para el clon en sí
-
-          document.body.appendChild(clone);
-          console.log("CLON AÑADIDO AL BODY PARA INSPECCIÓN VISUAL. ¿Se ve el contenido y los colores?");
-
-          setTimeout(() => {
-            // ***** INICIO PRUEBA C3: Añadir padding-bottom al clon *****
-            console.log("Añadiendo padding-bottom al clon antes de medir dimensiones...");
-            clone.style.paddingBottom = '1500px !important'; // Un padding inferior considerable
-            // ***** FIN PRUEBA C3 *****
-
-            let currentCloneWidth = clone.scrollWidth;
-            let currentCloneHeight = clone.scrollHeight; // Esta lectura AHORA incluirá el padding
-
-            console.log(`Dimensiones del clon DENTRO DEL TIMEOUT con padding-bottom (scrollWidth, scrollHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
-            // ... (el resto del código de fallback a offsetWidth/Height y el chequeo de dimensiones 0 igual) ...
-            if (currentCloneWidth === 0 || currentCloneHeight === 0) {
-              console.warn("scrollWidth/Height son 0 DENTRO DEL TIMEOUT, intentando con offsetWidth/Height");
-              currentCloneWidth = clone.offsetWidth;
-              currentCloneHeight = clone.offsetHeight;
-              console.log(`Dimensiones del clon con offset DENTRO DEL TIMEOUT (offsetWidth, offsetHeight): ${currentCloneWidth}, ${currentCloneHeight}`);
-            }
-
-            if (currentCloneWidth === 0 || currentCloneHeight === 0) {
-              console.error("Las dimensiones del clon siguen siendo 0 DENTRO DEL TIMEOUT. No se puede generar el PDF.");
-              // ... (código de error y return)
-              return;
-            }
-            // --- DEBUG CLON ANTES DE HTML2CANVAS (dentro del timeout) ---
-            console.log("--- DEBUG CLON ANTES DE HTML2CANVAS (DENTRO DEL TIMEOUT) ---");
-            console.log("Estilo del Clon (width, height, bgColor):", clone.style.width, clone.style.height, clone.style.backgroundColor);
-            console.log("Dimensiones calculadas del Clon (offsetWidth, offsetHeight):", clone.offsetWidth, clone.offsetHeight); // Estas son del clon visible
-            console.log("Dimensiones de scroll del Clon (scrollWidth, scrollHeight):", clone.scrollWidth, clone.scrollHeight); // Estas también
-            const cardsInClone = clone.querySelectorAll('.card');
-            console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon (dentro del timeout).`);
-            // ... (puedes mantener el resto de tus logs de tarjetas aquí si los necesitas para depurar estilos) ...
-            console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
-            // ***** Generar Canvas con window.html2canvas para PREVISUALIZACIÓN *****
-            console.log('Exportación directa sin canvas.');
-
-           }, 100); // o el tiempo que tengas
 
         });
       }    </script>
