@@ -1027,7 +1027,7 @@
           setTimeout(() => {
             // ***** INICIO PRUEBA C3: Añadir padding-bottom al clon *****
             console.log("Añadiendo padding-bottom al clon antes de medir dimensiones...");
-            clone.style.paddingBottom = '1500px !important'; // Un padding inferior considerable
+            clone.style.paddingBottom = '500px !important'; // Un padding inferior considerable
             // ***** FIN PRUEBA C3 *****
 
             let currentCloneWidth = clone.scrollWidth;
@@ -1062,16 +1062,36 @@
               logging: true,
               useCORS: true,
               width: currentCloneWidth,
-              height: currentCloneHeight, // Usar la altura que AHORA incluye el padding
+              height: currentCloneHeight, // Incluye el padding
               backgroundColor: '#FFFFFF',
-              windowHeight: currentCloneHeight, // Volver a esta configuración estándar
-              removeContainer: false // Prueba con true primero. Si no hay cambio, prueba con false.
+              windowHeight: currentCloneHeight, // Sincronizado con la altura total
+
+              // --- PRUEBA E ---
+              // Intenta estas combinaciones:
+
+              // E1: scrollX y scrollY (asegurar que empiece desde arriba)
+              // scrollX: 0,
+              // scrollY: 0,
+              // removeContainer: true, // Prueba con true
+
+              // E2: Si E1 no funciona, prueba con foreignObjectRendering
+              // foreignObjectRendering: true,
+              // scrollX: 0,
+              // scrollY: 0,
+              // removeContainer: true,
+
+              // E3: Combinación con y sin windowHeight explícito, pero con scrollX/Y
+               scrollX: 0, // <--- ACTIVA ESTAS TRES PARA EL PRIMER INTENTO DE E3
+               scrollY: 0, // <--- ACTIVA ESTAS TRES PARA EL PRIMER INTENTO DE E3
+               windowHeight: 0, // <--- ACTIVA ESTAS TRES. Poner windowHeight a 0 a veces fuerza a usar height.
+                               // O prueba comentando windowHeight completamente de nuevo (como en C1.1)
+                               // junto con scrollX:0, scrollY:0.
             };
-            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba C3):", JSON.parse(JSON.stringify(canvasOptions)));
+            console.log("Opciones para PREVISUALIZACIÓN con window.html2canvas (Prueba E):", JSON.parse(JSON.stringify(canvasOptions)));
 
             window.html2canvas(clone, canvasOptions).then(canvas => {
-              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY. ¿Se ven todas las tarjetas AHORA con padding?');
-              alert("Previsualización generada (Prueba C3 - padding). Revisa la imagen (borde verde).");
+              console.log('IMAGEN DE PREVISUALIZACIÓN DIRECTA AÑADIDA AL BODY (Prueba E). ¿Todas las tarjetas?');
+              alert("Previsualización generada (Prueba E). Revisa la imagen (borde verde).");
               const imgData = canvas.toDataURL('image/png');
               const img = document.createElement('img');
               img.src = imgData;
