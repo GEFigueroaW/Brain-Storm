@@ -222,7 +222,15 @@ a<!DOCTYPE html>
                 <div class="control">
                   <div class="select is-fullwidth">
                     <select id="copyTypeSelect">
-                      <option value="promocional" selected>Copy promocional</option>
+                      <option value="promocional" selected>Promocional</option>
+<option value="informativo">Informativo</option>
+<option value="emocional">Emocional</option>
+<option value="cta">Llamado a la acción (CTA)</option>
+<option value="autoridad">Autoridad o prueba social</option>
+<option value="narrativo">Narrativo o storytelling</option>
+<option value="urgencia">Urgencia o escasez</option>
+<option value="tecnico">Técnico o profesional</option>
+<option value="branding">Posicionamiento o branding</option>
                       <option value="informativo">Copy informativo</option>
                       <option value="emocional">Copy emocional</option>
                       <option value="cta">Copy con llamado a la acción (CTA)</option>
@@ -257,6 +265,19 @@ a<!DOCTYPE html>
                   </label>
                   <label class="checkbox mr-2 mb-2">
                     <input type="checkbox" name="socialNetwork" value="Google Ads"> Google Ads
+                  </label>
+                </div>
+              </div>
+              <div class="field mt-4">
+                <label class="label">Modo de generación</label>
+                <div class="control">
+                  <label class="radio">
+                    <input type="radio" name="generationMode" value="multiple" checked>
+                    Generar una idea por cada red social (mínimo 2)
+                  </label>
+                  <label class="radio ml-4">
+                    <input type="radio" name="generationMode" value="single">
+                    Generar 3 ideas para una sola red social
                   </label>
                 </div>
               </div>
@@ -549,6 +570,18 @@ a<!DOCTYPE html>
           topicInput.focus();
           return;
         }
+        
+        const generationMode = document.querySelector('input[name="generationMode"]:checked')?.value;
+
+        if (generationMode === 'multiple' && selectedSocialNetworks.length < 2) {
+          showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos dos redes sociales.", 'is-danger', 3000);
+          return;
+        }
+        if (generationMode === 'single' && selectedSocialNetworks.length !== 1) {
+          showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar una sola red social para este modo.", 'is-danger', 3000);
+          return;
+        }
+
         if (selectedSocialNetworks.length === 0) {
           showTemporaryMessage(socialNetworksContainer.parentElement, "Debes seleccionar al menos una red social.", 'is-danger', 3000);
           return;
@@ -558,7 +591,8 @@ a<!DOCTYPE html>
         lastInputData = {
           topic: topic,
           copyType: copyType,
-          socialNetworks: selectedSocialNetworks
+          socialNetworks: selectedSocialNetworks,
+            generationMode: generationMode
         };
         localStorage.setItem('lastInputData', JSON.stringify(lastInputData));
 
@@ -599,7 +633,8 @@ a<!DOCTYPE html>
           const result = await generateIdeasFunction({
             topic: topic,
             copyType: copyType,
-            socialNetworks: selectedSocialNetworks
+            socialNetworks: selectedSocialNetworks,
+            generationMode: generationMode
           });
 
           if (result.data && result.data.success) {
