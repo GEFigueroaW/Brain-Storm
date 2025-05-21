@@ -72,20 +72,6 @@
       background-color: white;
       /* O el color de fondo de tu appView si es diferente */
     }
-@media print {
-    body * {
-        visibility: hidden;
-    }
-    #ideasResultsArea, #ideasResultsArea * {
-        visibility: visible;
-    }
-    #ideasResultsArea {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100% !important;
-    }
-}
   </style>
 </head>
 
@@ -1069,39 +1055,19 @@
             const cardsInClone = clone.querySelectorAll('.card');
             console.log(`Encontradas ${cardsInClone.length} tarjetas en el clon (dentro del timeout).`);
             // ... (puedes mantener el resto de tus logs de tarjetas aquí si los necesitas para depurar estilos) ...
- html2pdf()
-        .set({
-            margin: [15, 15],
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { 
-                scale: 2,
-                logging: true,
-                useCORS: true,
-                scrollY: 0 // Evitar desplazamiento
-            },
-            jsPDF: { 
-                unit: 'mm', 
-                format: 'a4', 
-                orientation: 'portrait' 
-            }
-        })
-        .from(clone)
-        .save()
-        .then(() => {
-            document.body.removeChild(clone); // Limpiar el clon
-            exportPdfButton.innerHTML = originalButtonText;
-            exportPdfButton.disabled = false;
-        })
-        .catch((err) => {
-            console.error("Error al generar PDF:", err);
-            showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa la consola.", 'is-danger', 4000);
-            document.body.removeChild(clone);
-            exportPdfButton.innerHTML = originalButtonText;
-            exportPdfButton.disabled = false;
-        });
+            console.log("--- FIN DEBUG CLON (DENTRO DEL TIMEOUT) ---");
+            // ***** Generar Canvas con window.html2canvas para PREVISUALIZACIÓN *****
+            console.log('Exportación directa sin canvas.');
 
-}, 500); // Pequeño retraso para renderizado
+            }).catch(err => {
+              console.error("Error en PREVISUALIZACIÓN con window.html2canvas:", err);
+              showTemporaryMessage(actionButtonsContainer, "Error al generar previsualización. Revisa consola.", 'is-danger', 4000);
+              exportPdfButton.innerHTML = originalButtonText;
+              exportPdfButton.disabled = false;
+              if (clone.parentNode) document.body.removeChild(clone); // Si hay error, quitar el clon visible
+            });
+
+        });
       }    </script>
 </body>
 
