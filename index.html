@@ -1078,7 +1078,7 @@
                 scale: 2,
                 logging: true,
                 useCORS: true,
-                scrollY: 0 
+                scrollY: 0 // Evitar desplazamiento
             },
             jsPDF: { 
                 unit: 'mm', 
@@ -1089,19 +1089,19 @@
         .from(clone)
         .save()
         .then(() => {
-            document.body.removeChild(clone);
+            document.body.removeChild(clone); // Limpiar el clon
             exportPdfButton.innerHTML = originalButtonText;
             exportPdfButton.disabled = false;
         })
         .catch((err) => {
             console.error("Error al generar PDF:", err);
-            showTemporaryMessage(actionButtonsContainer, "Error al generar PDF", 'is-danger', 3000);
+            showTemporaryMessage(actionButtonsContainer, "Error al generar PDF. Revisa la consola.", 'is-danger', 4000);
             document.body.removeChild(clone);
             exportPdfButton.innerHTML = originalButtonText;
             exportPdfButton.disabled = false;
         });
 
-}, 500); // <--- ¡EL .catch DEBE ESTAR DENTRO DEL setTimeout Y NO ENCADENADO A ÉL!
+}, 500); // Pequeño retraso para renderizado
       }    </script>
 </body>
 
