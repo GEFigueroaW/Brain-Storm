@@ -924,71 +924,7 @@
       });
       console.log("Aplicación simplificada de generación de ideas inicializada.");
       // --- Lógica de Exportación a PDF ---
-      if (exportPdfButton && ideasResultsArea && actionButtonsContainer && typeof html2pdf !== 'undefined') {
-        exportPdfButton.addEventListener('click', () => {
-          const ideaCards = ideasResultsArea.querySelectorAll('.card');
-          if (ideaCards.length === 0) {
-            showTemporaryMessage(actionButtonsContainer, "No hay ideas visibles para exportar a PDF.", 'is-warning', 3000);
-            return;
-          }
-
-          const originalButtonText = exportPdfButton.innerHTML;
-          exportPdfButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Generando PDF...</span>';
-          exportPdfButton.disabled = true;
-
-          const elementToExport = ideasResultsArea; // Asegúrate que esta línea esté y sea correcta.
-          let filename = `BrainStorm_Ideas_${Date.now()}.pdf`;
-
-          const clone = elementToExport.cloneNode(true);
-
-          // --- Aplicar estilos y ancho al clon ---
-          const desiredPdfContentWidthPx = 750;
-          clone.style.width = desiredPdfContentWidthPx + 'px';
-          clone.style.backgroundColor = 'white !important';
-          clone.style.padding = '15px';
-          clone.style.boxSizing = 'border-box';
-          clone.style.color = 'black !important';
-          clone.style.webkitTextFillColor = 'black !important';
-          clone.style.fontFamily = '"Arial", "Helvetica", sans-serif !important';
-
-          // Quitar clases de Bulma que puedan interferir y resetear estilos de forma general
-          const allElementsInClone = clone.querySelectorAll('*');
-          allElementsInClone.forEach(el => {
-            // Guardar el contenido de texto si es un nodo de texto directo para algunos elementos
-            let originalText = '';
-            if (el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
-              originalText = el.childNodes[0].nodeValue;
-            }
-
-            el.style.all = 'revert'; // Intenta revertir a los estilos del navegador base
-
-            // Re-aplicar estilos esenciales para el flujo y visibilidad
-            el.style.display = 'block !important'; // Forzar block para la mayoría, simplifica layout
-            el.style.position = 'static !important';
-            el.style.float = 'none !important';
-            el.style.width = 'auto !important'; // Dejar que el contenido determine el ancho o el padre
-            el.style.maxWidth = '100% !important';
-            el.style.margin = '0 !important'; // Resetear márgenes
-            el.style.padding = '0 !important'; // Resetear paddings
-            el.style.border = 'none !important'; // Sin bordes internos por defecto
-            el.style.fontFamily = '"Arial", "Helvetica", sans-serif !important';
-            el.style.fontSize = '14px !important'; // Tamaño base
-            el.style.lineHeight = '1.4 !important';
-            el.style.color = 'black !important';
-            el.style.webkitTextFillColor = 'black !important';
-            el.style.backgroundColor = 'transparent !important';
-            el.style.opacity = '1 !important';
-            el.style.visibility = 'visible !important';
-            el.style.textShadow = 'none !important';
-            el.style.boxShadow = 'none !important';
-            el.style.transform = 'none !important';
-            el.style.filter = 'none !important';
-
-            // Si guardamos texto, re-aplicarlo (algunos el.style.all pueden borrarlo)
-            if (originalText && el.childNodes.length === 0) {
-              el.appendChild(document.createTextNode(originalText));
-            }
-          });
+      
 
           // Estilos más específicos para la estructura de la tarjeta, intentando ser simples
           clone.querySelectorAll('.card').forEach(card => {
@@ -1092,16 +1028,7 @@
         });
       }    
 
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener("change", () => {
-      const mode = document.querySelector('input[name="generationMode"]:checked')?.value;
-      if (mode === "single" && checkbox.checked) {
-        checkboxes.forEach(cb => {
-          if (cb !== checkbox) cb.checked = false;
-        });
-      }
-    });
-  });
+  
 });
 
 </script>
@@ -1125,16 +1052,7 @@
       radio.addEventListener("change", forceSingleCheckbox);
     });
 
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", function () {
-        const mode = document.querySelector('input[name="generationMode"]:checked')?.value;
-        if (mode === "single" && checkbox.checked) {
-          checkboxes.forEach(cb => {
-            if (cb !== checkbox) cb.checked = false;
-          });
-        }
-      });
-    });
+    
   });
 </script>
 
