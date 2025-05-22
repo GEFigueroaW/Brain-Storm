@@ -1087,8 +1087,38 @@
     });
   });
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const radios = document.querySelectorAll('input[name="generationMode"]');
+    const checkboxes = document.querySelectorAll('input[name="socialNetwork"]');
+
+    function forceSingleCheckbox() {
+      const mode = document.querySelector('input[name="generationMode"]:checked')?.value;
+      if (mode === "single") {
+        const checked = [...checkboxes].filter(cb => cb.checked);
+        if (checked.length > 1) {
+          checked.slice(1).forEach(cb => cb.checked = false);
+        }
+      }
+    }
+
+    radios.forEach(radio => {
+      radio.addEventListener("change", forceSingleCheckbox);
+    });
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener("change", function () {
+        const mode = document.querySelector('input[name="generationMode"]:checked')?.value;
+        if (mode === "single" && checkbox.checked) {
+          checkboxes.forEach(cb => {
+            if (cb !== checkbox) cb.checked = false;
+          });
+        }
+      });
+    });
+  });
+</script>
 </body>
-
-
 
 </html>
