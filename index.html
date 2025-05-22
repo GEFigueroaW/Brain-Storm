@@ -628,11 +628,10 @@
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        topic,
-        copyType,
-        socialNetworks: selectedSocialNetworks,
-        generationMode
-      })
+      palabraClave: topic,
+      tipoContenido: copyType,
+      redesSeleccionadas: selectedSocialNetworks
+})  
     });
     const result = await response.json();
           if (result.data && result.data.success) {
