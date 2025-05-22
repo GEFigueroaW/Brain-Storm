@@ -635,13 +635,6 @@
       })
     });
     const result = await response.json();
-          const result = await generateIdeasFunction({
-            topic: topic,
-            copyType: copyType,
-            socialNetworks: selectedSocialNetworks,
-            generationMode: generationMode
-          });
-
           if (result.data && result.data.success) {
             currentViewingSessionId = result.data.sessionId;
             displayGeneratedIdeas(result.ideas); // Esto limpiará el timerContainer
