@@ -630,8 +630,9 @@
       body: JSON.stringify({
       palabraClave: topic,
       tipoContenido: copyType,
-      redesSeleccionadas: selectedSocialNetworks
-})  
+      redesSeleccionadas: selectedSocialNetworks,
+      modo: generationMode // esta línea es la clave que faltaba
+})
     });
     const result = await response.json();
           if (result.data && result.data.success) {
