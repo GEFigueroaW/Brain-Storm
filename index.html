@@ -962,6 +962,35 @@
 
 
 
+<script>
+
+async function generarIdeas(topic, copyType, selectedNetworks, mode) {
+  const url = "https://us-central1-brain-storm-8f0d8.cloudfunctions.net/generateIdeas";
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      topic,
+      copyType,
+      selectedNetworks,
+      mode,
+    }),
+  });
+
+  if (!response.ok) throw new Error("Respuesta inesperada");
+
+  const data = await response.json();
+
+  if (!data.ideas || !Array.isArray(data.ideas)) {
+    throw new Error("Formato de respuesta no válido");
+  }
+
+  return data.ideas;
+}
+
+</script>
 </body>
 
 </html>
