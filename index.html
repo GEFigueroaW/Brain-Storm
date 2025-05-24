@@ -1,72 +1,79 @@
+<!-- index.html: FeedFlow - Frontend para Brain-Storm (Firebase Config Real Integrado) -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FeedFlow</title>
-  <!-- Bulma, Animate.css, Font Awesome -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeedFlow - Brain Storm</title>
+  <!-- Bulma CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <!-- Animate.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background: linear-gradient(135deg, #6a0dad, #f9d29d); font-family: 'Segoe UI', sans-serif; }
-    .footer { font-size: 0.8rem; padding: 1rem; text-align: center; background-color: #f5f5f5; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #6a0dad, #00d4ff);
+      color: #fff;
+      min-height: 100vh;
+    }
+    .footer {
+      font-size: 0.8rem;
+      padding: 1rem;
+      text-align: center;
+      background-color: #f5f5f5;
+      color: #222;
+    }
     .hidden { display: none !important; }
-    .ad-banner { display: none; background: #fde68a; padding: 1rem; text-align: center; font-weight: bold; }
   </style>
 </head>
 <body>
-  <section class="hero is-primary is-bold">
+  <section class="hero is-bold is-primary">
     <div class="hero-body">
       <div class="container has-text-centered">
-        <img src="assets/logo.svg" alt="FeedFlow Logo" style="max-height: 80px;" />
-        <h1 class="title">FeedFlow</h1>
-        <p class="subtitle">Donde el scroll se convierte en arte 🎨</p>
+        <h1 class="title is-3 animate__animated animate__fadeInDown">Iniciar Sesión</h1>
       </div>
     </div>
   </section>
 
-  <!-- Vista de Login/Registro -->
-  <section id="auth-view" class="section">
-    <div class="container">
-      <h2 class="title">Iniciar Sesión</h2>
-      <div class="buttons">
-        <button class="button is-danger" id="google-login"><i class="fab fa-google"></i> Iniciar con Google</button>
-      </div>
-      <div class="field">
-        <label class="label">Correo electrónico</label>
-        <div class="control has-icons-left">
-          <input class="input" type="email" id="login-email" placeholder="ejemplo@correo.com">
-          <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">Contraseña</label>
-        <div class="control has-icons-left">
-          <input class="input" type="password" id="login-pass" placeholder="********">
-          <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
-        </div>
-      </div>
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-primary" id="email-login">Acceder</button>
-        </div>
-        <div class="control">
-          <a href="#" id="show-reset">¿Has olvidado tu contraseña?</a>
-        </div>
-      </div>
-      <p class="mt-4">¿No tienes cuenta? <a href="#" id="show-register">Crear una cuenta</a></p>
+  <section id="auth-view" class="section animate__animated animate__fadeIn" style="max-width: 500px; margin: auto;">
+    <div class="field">
+      <button class="button is-danger is-fullwidth" id="google-login">
+        <span class="icon"><i class="fab fa-google"></i></span>
+        <span>Iniciar con Google</span>
+      </button>
     </div>
+    <div class="field">
+      <label class="label">Correo electrónico</label>
+      <div class="control has-icons-left">
+        <input class="input" type="email" id="login-email" placeholder="Correo electrónico">
+        <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Contraseña</label>
+      <div class="control has-icons-left">
+        <input class="input" type="password" id="login-pass" placeholder="Contraseña">
+        <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+      </div>
+    </div>
+    <div class="field is-grouped is-grouped-right">
+      <p class="control">
+        <button class="button is-success" id="email-login">Acceder</button>
+      </p>
+    </div>
+    <p><a href="#" id="show-reset">¿Has olvidado tu contraseña?</a></p>
+    <p class="mt-2">¿No tienes cuenta? <a href="#" id="show-register">Crear una cuenta</a></p>
   </section>
 
-  <!-- Vista Configuración -->
   <section id="config-view" class="section hidden">
     <div class="container">
-      <h2 class="title">Configuración de Ideas</h2>
+      <h2 class="title is-4">Configuración de Ideas</h2>
       <div class="field">
         <label class="label">Palabra Clave</label>
         <div class="control">
-          <input class="input" type="text" id="input-topic" placeholder="Ej. ventas digitales">
+          <input class="input" type="text" id="input-topic" placeholder="Ej. marketing emocional">
         </div>
       </div>
       <div class="field">
@@ -92,108 +99,129 @@
           <button class="button is-link" id="generate-ideas">✨ ¡Generar Ideas! ✨</button>
         </div>
       </div>
-      <p id="gen-count-info" class="has-text-grey mt-2 mb-4">Cargando contador...</p>
-      <div class="ad-banner" id="ad-placeholder">Espacio para Anuncio</div>
     </div>
   </section>
 
-  <!-- Vista Resultados -->
   <section id="results-view" class="section hidden">
     <div class="container">
-      <h2 class="title">Resultados</h2>
+      <h2 class="title is-4">Resultados</h2>
       <div id="results-content"></div>
       <button class="button is-light mt-4" id="back-button">Nueva Búsqueda</button>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <p>Este contenido es generado por IA. El usuario es responsable de verificar su uso adecuado y legal.</p>
   </footer>
-</body>
-<!-- index.html - Parte 2: Firebase, lógica de autenticación y generación -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-  import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-functions.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
-    authDomain: "brain-storm-8f0d8.firebaseapp.com",
-    databaseURL: "https://brain-storm-8f0d8-default-rtdb.firebaseio.com",
-    projectId: "brain-storm-8f0d8",
-    storageBucket: "brain-storm-8f0d8.firebasestorage.app",
-    messagingSenderId: "401208607043",
-    appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
-  };
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-functions.js";
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const functions = getFunctions(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
+      authDomain: "brain-storm-8f0d8.firebaseapp.com",
+      databaseURL: "https://brain-storm-8f0d8-default-rtdb.firebaseio.com",
+      projectId: "brain-storm-8f0d8",
+      storageBucket: "brain-storm-8f0d8.firebasestorage.app",
+      messagingSenderId: "401208607043",
+      appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+    };
 
-  const authView = document.getElementById("auth-view");
-  const configView = document.getElementById("config-view");
-  const resultsView = document.getElementById("results-view");
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const functions = getFunctions(app);
 
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      authView.classList.add("hidden");
+    const authView = document.getElementById("auth-view");
+    const configView = document.getElementById("config-view");
+    const resultsView = document.getElementById("results-view");
+    const resultsContent = document.getElementById("results-content");
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        authView.classList.add("hidden");
+        configView.classList.remove("hidden");
+      } else {
+        authView.classList.remove("hidden");
+        configView.classList.add("hidden");
+        resultsView.classList.add("hidden");
+      }
+    });
+
+    document.getElementById("google-login").addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, new GoogleAuthProvider());
+      } catch (e) {
+        alert("Error con Google: " + e.message);
+      }
+    });
+
+    document.getElementById("email-login").addEventListener("click", async () => {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-pass").value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (e) {
+        alert("Error de inicio: " + e.message);
+      }
+    });
+
+    document.getElementById("generate-ideas").addEventListener("click", async () => {
+      const topic = document.getElementById("input-topic").value;
+      const copyType = document.getElementById("input-type").value;
+      const platform = document.getElementById("input-network").value;
+
+      if (!topic || !copyType || !platform) return alert("Completa todos los campos.");
+
+      const call = httpsCallable(functions, "generateIdeas");
+      try {
+        const res = await call({
+          topic,
+          copyType,
+          socialMediaPlatforms: [platform],
+          generationMode: "single-platform",
+          language: "es",
+          currentSessionId: "frontend-solo"
+        });
+
+        renderIdeas(res.data.ideas, res.data.finalPhrase);
+
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
+
+    document.getElementById("back-button").addEventListener("click", () => {
+      resultsView.classList.add("hidden");
       configView.classList.remove("hidden");
-      resultsView.classList.add("hidden");
-      document.getElementById("gen-count-info").innerText = "Tienes 3 ideas disponibles esta semana."; // Placeholder
-    } else {
-      authView.classList.remove("hidden");
-      configView.classList.add("hidden");
-      resultsView.classList.add("hidden");
-    }
-  });
+    });
 
-  document.getElementById("google-login").addEventListener("click", async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-    } catch (e) {
-      alert("Error con Google Sign-In: " + e.message);
-    }
-  });
-
-  document.getElementById("email-login").addEventListener("click", async () => {
-    const email = document.getElementById("login-email").value;
-    const pass = document.getElementById("login-pass").value;
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-    } catch (e) {
-      alert("Error al iniciar sesión: " + e.message);
-    }
-  });
-
-  document.getElementById("generate-ideas").addEventListener("click", async () => {
-    const topic = document.getElementById("input-topic").value.trim();
-    const type = document.getElementById("input-type").value;
-    const network = document.getElementById("input-network").value;
-
-    if (!topic || !type || !network) return alert("Completa todos los campos");
-
-    const user = auth.currentUser;
-    if (!user) return alert("No estás autenticado");
-
-    const generate = httpsCallable(functions, "generateIdeas");
-    try {
-      const res = await generate({ topic, copyType: type, socialMediaPlatforms: [network], generationMode: "single-platform", language: "es", currentSessionId: "browser-session-1" });
+    function renderIdeas(ideasArray, finalPhrase) {
+      resultsContent.innerHTML = "";
+      ideasArray.forEach((idea, i) => {
+        const box = document.createElement("div");
+        box.className = "box";
+        box.innerHTML = `
+          <p><strong>✨ Idea ${i + 1}</strong></p>
+          <p><strong>Gancho:</strong> ${idea.gancho}</p>
+          <p><strong>Ángulo:</strong> ${idea.narrativa}</p>
+          <p><strong>Post:</strong> ${idea.post}</p>
+          <p><strong>Hashtags:</strong> ${idea.hashtags}</p>
+          <p><strong>Visual:</strong> ${idea.visual}</p>
+          <p><strong>CTA:</strong> ${idea.cta}</p>
+        `;
+        resultsContent.appendChild(box);
+      });
+      if (finalPhrase) {
+        const phrase = document.createElement("blockquote");
+        phrase.className = "mt-5 has-text-centered has-text-grey";
+        phrase.textContent = finalPhrase;
+        resultsContent.appendChild(phrase);
+      }
       configView.classList.add("hidden");
       resultsView.classList.remove("hidden");
-      document.getElementById("results-content").innerText = res.data.ideas[0] || "Resultado generado";
-    } catch (err) {
-      alert("Error al generar idea: " + err.message);
     }
-  });
-
-  document.getElementById("back-button").addEventListener("click", () => {
-    resultsView.classList.add("hidden");
-    configView.classList.remove("hidden");
-  });
-</script>
-
+  </script>
+</body>
 </html>
