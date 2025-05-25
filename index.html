@@ -1341,19 +1341,19 @@
                     case 'auth-title': element.textContent = t(element.querySelector('#login-form') ? 'auth-title-login' : 'auth-title-signup');
                         break;
 
-                    case 'toggle-auth-text': element.innerHTML = element.querySelector('#login-form') ? `$ {
+                    case 'toggle-auth-text': element.innerHTML = element.querySelector('#login-form') ? `${
                     t('toggle-auth-text-signup')
                 }
 
-                <a id="show-signup-form-link" >$ {
+                <a id="show-signup-form-link" >${
                     t('show-signup-form-link')
                 }
 
-                </a>` : `$ {
+                </a>` : `${
                     t('toggle-auth-text-login')
                 }
 
-                <a id="show-login-form-link" >$ {
+                <a id="show-login-form-link" >${
                     t('show-login-form-link')
                 }
 
@@ -1362,11 +1362,11 @@
                     case 'language-selector-display': element.textContent = t('language-selector-display');
                         break;
 
-                    case 'disclaimer-text': element.innerHTML = t('disclaimer-text').replace('Términos y Condiciones', `<a href="#" id="terms-link" >$ {
+                    case 'disclaimer-text': element.innerHTML = t('disclaimer-text').replace('Términos y Condiciones', `<a href="#" id="terms-link" >${
                         t('terms-link')
                     }
 
-                    </a>`).replace('Política de Privacidad', `<a href="#" id="privacy-link" >$ {
+                    </a>`).replace('Política de Privacidad', `<a href="#" id="privacy-link" >${
                         t('privacy-link')
                     }
 
@@ -1389,7 +1389,7 @@
                     // Don't translate empty option
                     const translatedText = t('copy-type-' + originalValue.toLowerCase().replace(/[^a-z0-9]/g, '_'));
 
-                    option.textContent = translatedText + (option.classList.contains('premium-option') ? ` $ {
+                    option.textContent = translatedText + (option.classList.contains('premium-option') ? ` ${
                         t('premium-tag')
                     }
 
@@ -1438,15 +1438,15 @@
         function updateGenerationsRemainingDisplay(remaining, limit) {
             const generationsRemainingElem = document.getElementById('generations-remaining-text');
 
-            generationsRemainingElem.textContent = `$ {
+            generationsRemainingElem.textContent = `${
         t('generations-remaining-prefix')
     }
 
-    $ {
+    ${
         remaining
     }
 
-    $ {
+    ${
         t('generations-remaining-suffix')
     }
 
