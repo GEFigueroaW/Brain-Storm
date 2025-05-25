@@ -21,6 +21,7 @@
             align-items: center;
             color: #333;
         }
+
         .section {
             background-color: #fff;
             padding: 2.5rem;
@@ -31,6 +32,7 @@
             margin: 20px auto;
             text-align: center;
         }
+
         .navbar {
             background-color: #4b0082;
             /* Morado oscuro para navbar */
@@ -39,22 +41,27 @@
             top: 0;
             z-index: 1000;
         }
+
         .navbar-brand .navbar-item img {
             max-height: 40px;
             /* Ajusta según el tamaño de tu logo */
         }
+
         .navbar-item.is-hoverable .navbar-dropdown {
             background-color: #4b0082;
             /* Fondo del dropdown de idioma */
         }
+
         .navbar-item.is-hoverable .navbar-dropdown .navbar-item {
             color: #ffd700;
             /* Texto dorado en dropdown */
         }
+
         .navbar-item.is-hoverable .navbar-dropdown .navbar-item:hover {
             background-color: #6a0dad;
             /* Morado más claro al pasar el ratón */
         }
+
         .button.is-primary {
             background-color: #ffd700;
             /* Dorado para botones principales */
@@ -64,26 +71,31 @@
             font-weight: bold;
             transition: all 0.3s ease;
         }
+
         .button.is-primary:hover {
             background-color: #e0b000;
             /* Dorado más oscuro al pasar el ratón */
             border-color: #e0b000;
             transform: translateY(-2px);
         }
+
         .button.is-light {
             background-color: #f0f0f0;
             color: #4b0082;
             border-color: #ccc;
         }
+
         .button.is-light:hover {
             background-color: #e8e8e8;
         }
+
         .input,
         .textarea,
         .select select {
             border-color: #4b0082;
             /* Borde morado */
         }
+
         .input:focus,
         .textarea:focus,
         .select select:focus {
@@ -97,22 +109,26 @@
             /* Borde dorado para checkboxes */
             background-color: #ffd700;
         }
+
         .title,
         .subtitle {
             color: #4b0082;
             /* Títulos morados */
             font-weight: bold;
         }
+
         .help {
             color: #6a0dad;
             /* Texto de ayuda morado claro */
             font-style: italic;
         }
+
         .field label {
             color: #4b0082;
             /* Labels de campos morados */
             font-weight: bold;
         }
+
         /* Estilos específicos para vistas */
         #auth-view {
             display: flex;
@@ -122,6 +138,7 @@
             min-height: 100vh;
             text-align: center;
         }
+
         #auth-view .box {
             width: 90%;
             max-width: 450px;
@@ -130,12 +147,15 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         #auth-view .control.has-icons-left .input {
             padding-left: 2.25em;
         }
+
         #auth-view .control.has-icons-left .icon.is-left {
             left: 0.75em;
         }
+
         #auth-view .divider {
             display: flex;
             align-items: center;
@@ -143,18 +163,22 @@
             color: #999;
             margin: 1rem 0;
         }
+
         #auth-view .divider::before,
         #auth-view .divider::after {
             content: '';
             flex: 1;
             border-bottom: 1px solid #ddd;
         }
+
         #auth-view .divider:not(:empty)::before {
             margin-right: .25em;
         }
+
         #auth-view .divider:not(:empty)::after {
             margin-left: .25em;
         }
+
         #config-view,
         #results-view,
         #admin-history-view,
@@ -164,41 +188,50 @@
             padding-top: 52px;
             /* Espacio para el navbar */
         }
+
         #config-view .select,
         #config-view .control {
             width: 100%;
         }
+
         #config-view .select:not(.is-multiple)::after {
             border-color: #ffd700;
         }
+
         /* Estilos del indicador de carga mejorado */
         #loading-overlay {
             background-color: rgba(0, 0, 0, 0.7);
             z-index: 9999;
             /* Asegura que esté encima de todo */
         }
+
         #loading-overlay .modal-background {
             background-color: transparent;
             /* El color ya lo da el overlay */
         }
+
         #loading-overlay .progress {
             margin: 0 auto 20px auto;
             height: 12px;
             /* Barra más delgada */
             border-radius: 50px;
         }
+
         #loading-overlay .progress::-webkit-progress-bar {
             background-color: #6a0dad;
             border-radius: 50px;
         }
+
         #loading-overlay .progress::-webkit-progress-value {
             background-color: #ffd700;
             border-radius: 50px;
         }
+
         #loading-overlay .progress::-moz-progress-bar {
             background-color: #ffd700;
             border-radius: 50px;
         }
+
         #loading-overlay #loading-phrase {
             color: #ffd700 !important;
             /* Dorado brillante para la frase */
@@ -206,6 +239,7 @@
             font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
+
         /* Estilos para el Formato Visual Sugerido borroso */
         .blurred-visual-format {
             filter: blur(5px);
@@ -217,6 +251,7 @@
             /* Evita que se pueda seleccionar el texto */
             position: relative;
         }
+
         .blur-overlay-message {
             position: absolute;
             top: 0;
@@ -239,9 +274,11 @@
             z-index: 1;
             /* Asegura que el mensaje esté sobre el blur */
         }
+
         .blur-overlay-message:hover {
             opacity: 0.9;
-       }
+        }
+
         /* Footer */
         footer {
             margin-top: auto;
@@ -254,54 +291,66 @@
             width: 100%;
             font-size: 0.85rem;
         }
+
         footer a {
             color: #ffd700;
             text-decoration: underline;
         }
+
         footer a:hover {
             color: #e0b000;
         }
+
         /* Clases de utilidad */
         .is-hidden {
             display: none !important;
         }
+
         .has-premium-tag {
             font-weight: bold;
             color: #ffd700;
             /* Dorado para el tag Premium */
             margin-left: 5px;
         }
+
         .premium-locked-option {
             opacity: 0.5;
             /* Elementos inhabilitados */
             cursor: not-allowed;
             pointer-events: none;
         }
+
         .premium-locked-option .tag {
             background-color: #ffd700;
             color: #4b0082;
             margin-left: 5px;
         }
+
         /* Responsive adjustments */
         @media screen and (max-width: 768px) {
             .section {
                 padding: 1.5rem;
                 margin: 10px auto;
             }
+
             .title {
                 font-size: 1.75rem;
             }
+
             .subtitle {
                 font-size: 1.25rem;
             }
+
             .navbar-menu {
                 box-shadow: none;
             }
+
             .navbar-item.is-hoverable .navbar-dropdown {
                 background-color: #4b0082;
                 left: 0;
                 right: 0;
             }
+
             .navbar-item.is-hoverable .navbar-dropdown .navbar-item {
                 padding-left: 1.5rem;
             }
