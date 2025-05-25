@@ -1,14 +1,13 @@
-< !DOCTYPE html>
-    <htmllang="es">
-
-        <head><metacharset="UTF-8"><metaname="viewport"content="width=device-width,initial-scale=1.0">
-                    <title>FeedFlow</title>
-                    <linkrel="stylesheet"href="https: //cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-                        <linkrel="stylesheet"href="https:
-                            //cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-                            <linkrel="stylesheet"href="https:
-                                //cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-                                <style>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeedFlow</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
                                     /* Estilos personalizados para FeedFlow */
                                     body {
                                         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1564,851 +1563,853 @@
                     return 'ordenador';
                 }
 
-            // Referencias a elementos de la UI de autenticación
-            const authView = document.getElementById('auth-view');
-            const loginForm = document.getElementById('login-form');
-            const signupFormContainer = document.getElementById('signup-form-container'); // Modal de registro
-            const signupForm = document.getElementById('signup-form');
-            const passwordResetModal = document.getElementById('password-reset-modal');
-            const passwordResetForm = document.getElementById('password-reset-form');
+                // Referencias a elementos de la UI de autenticación
+                const authView = document.getElementById('auth-view');
+                const loginForm = document.getElementById('login-form');
+                const signupFormContainer = document.getElementById('signup-form-container'); // Modal de registro
+                const signupForm = document.getElementById('signup-form');
+                const passwordResetModal = document.getElementById('password-reset-modal');
+                const passwordResetForm = document.getElementById('password-reset-form');
 
-            // Botones y enlaces de autenticación
-            const showSignupFormLink = document.getElementById('show-signup-form-link');
-            const showLoginFormLink = document.getElementById('show-login-form-link');
-            const closeSignupModalBtn = document.getElementById('close-signup-modal');
-            const forgotPasswordLink = document.getElementById('forgot-password-link');
-            const closeResetModalBtn = document.getElementById('close-reset-modal');
-            const googleLoginBtn = document.getElementById('google-login-btn');
-            const logoutBtn = document.getElementById('logout-btn');
+                // Botones y enlaces de autenticación
+                const showSignupFormLink = document.getElementById('show-signup-form-link');
+                const showLoginFormLink = document.getElementById('show-login-form-link');
+                const closeSignupModalBtn = document.getElementById('close-signup-modal');
+                const forgotPasswordLink = document.getElementById('forgot-password-link');
+                const closeResetModalBtn = document.getElementById('close-reset-modal');
+                const googleLoginBtn = document.getElementById('google-login-btn');
+                const logoutBtn = document.getElementById('logout-btn');
 
-            // Inputs de autenticación
-            const loginEmailInput = document.getElementById('login-email-input');
-            const loginPasswordInput = document.getElementById('login-password-input');
-            const signupEmailInput = document.getElementById('signup-email-input');
-            const signupConfirmEmailInput = document.getElementById('signup-confirm-email-input');
-            const signupPasswordInput = document.getElementById('signup-password-input');
-            const signupConfirmPasswordInput = document.getElementById('signup-confirm-password-input');
-            const signupNameInput = document.getElementById('signup-name-input');
-            const signupLastnameInput = document.getElementById('signup-lastname-input');
-            const signupUsernameInput = document.getElementById('signup-username-input');
-            const termsCheckbox = document.getElementById('terms-checkbox');
-            const resetEmailInput = document.getElementById('reset-email-input');
+                // Inputs de autenticación
+                const loginEmailInput = document.getElementById('login-email-input');
+                const loginPasswordInput = document.getElementById('login-password-input');
+                const signupEmailInput = document.getElementById('signup-email-input');
+                const signupConfirmEmailInput = document.getElementById('signup-confirm-email-input');
+                const signupPasswordInput = document.getElementById('signup-password-input');
+                const signupConfirmPasswordInput = document.getElementById('signup-confirm-password-input');
+                const signupNameInput = document.getElementById('signup-name-input');
+                const signupLastnameInput = document.getElementById('signup-lastname-input');
+                const signupUsernameInput = document.getElementById('signup-username-input');
+                const termsCheckbox = document.getElementById('terms-checkbox');
+                const resetEmailInput = document.getElementById('reset-email-input');
 
-            // Mensajes de error/info
-            const loginErrorMsg = document.getElementById('login-error-msg'); // Asumiendo que tendrás un span/div para
-            esto
-            const signupErrorMsg = document.getElementById('signup-error-msg'); // Asumiendo que tendrás un span/div
+                // Mensajes de error/info
+                const loginErrorMsg = document.getElementById('login-error-msg'); // Asumiendo que tendrás un span/div para
+                esto
+                const signupErrorMsg = document.getElementById('signup-error-msg'); // Asumiendo que tendrás un span/div
             para esto
-            const resetPasswordInfo = document.getElementById('reset-password-info');
+                const resetPasswordInfo = document.getElementById('reset-password-info');
 
             // --- Lógica de Manejo de Vistas de Autenticación ---
             // Asumiendo que hay un div o span con id="auth-title" que cambia entre "Iniciar Sesión" y "Crear una
             Cuenta"
-            const authTitle = document.getElementById('auth-title');
+                const authTitle = document.getElementById('auth-title');
 
-            if (showSignupFormLink) {
-            showSignupFormLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            loginForm.style.display = 'none'; // Oculta el formulario de login
-            signupFormContainer.classList.add('is-active'); // Muestra el modal de registro
-            authTitle.textContent = t('auth-title-signup'); // Actualiza el título
-            document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-login')} <a
+                if (showSignupFormLink) {
+                    showSignupFormLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        loginForm.style.display = 'none'; // Oculta el formulario de login
+                        signupFormContainer.classList.add('is-active'); // Muestra el modal de registro
+                        authTitle.textContent = t('auth-title-signup'); // Actualiza el título
+                        document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-login')} <a
                 id="show-login-form-link">${t('show-login-form-link')}</a>`;
-            document.getElementById('show-login-form-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            signupFormContainer.classList.remove('is-active');
-            loginForm.style.display = 'block';
-            authTitle.textContent = t('auth-title-login');
-            document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-signup')} <a
+                        document.getElementById('show-login-form-link').addEventListener('click', (e) => {
+                            e.preventDefault();
+                            signupFormContainer.classList.remove('is-active');
+                            loginForm.style.display = 'block';
+                            authTitle.textContent = t('auth-title-login');
+                            document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-signup')} <a
                 id="show-signup-form-link">${t('show-signup-form-link')}</a>`;
-            document.getElementById('show-signup-form-link').addEventListener('click', arguments.callee); // Re-attach
-            listener
-            });
-            });
-            }
-
-            if (closeSignupModalBtn) {
-            closeSignupModalBtn.addEventListener('click', () => {
-            signupFormContainer.classList.remove('is-active');
-            loginForm.style.display = 'block';
-            authTitle.textContent = t('auth-title-login');
-            document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-signup')} <a
-                id="show-signup-form-link">${t('show-signup-form-link')}</a>`;
-            document.getElementById('show-signup-form-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            signupFormContainer.classList.add('is-active');
-            authTitle.textContent = t('auth-title-signup');
-            document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-login')} <a
-                id="show-login-form-link">${t('show-login-form-link')}</a>`;
-            document.getElementById('show-login-form-link').addEventListener('click', arguments.callee);
-            });
-            });
-            }
-
-            // --- Lógica de Autenticación ---
-
-            // Función para registrar la sesión activa en Firestore
-            const registerUserSessionCallable = functions.httpsCallable('registerUserSession');
-            async function registerCurrentSession(userId) {
-            try {
-            if (!currentSessionId) {
-            currentSessionId = generateUUID();
-            localStorage.setItem('currentSessionId', currentSessionId);
-            }
-            if (!currentDeviceId) { // Should be generated in Bloque 5, but good to have fallback
-            currentDeviceId = generateUUID();
-            localStorage.setItem('deviceId', currentDeviceId);
-            }
-            const deviceType = getDeviceType();
-
-            await registerUserSessionCallable({ sessionId: currentSessionId, deviceId: currentDeviceId, deviceType:
-            deviceType });
-            console.log('Sesión registrada y dispositivo actualizado en Firestore.');
-            } catch (error) {
-            console.error('Error al registrar la sesión o dispositivo:', error);
-            // Si falla el registro de sesión, no es crítico para el login pero puede afectar validaciones futuras
-            }
-            }
-
-
-            // Listener de cambio de estado de autenticación de Firebase
-            auth.onAuthStateChanged(async (user) => {
-            currentUserId = user ? user.uid : null;
-            const authenticatedElements = document.getElementById('auth-buttons-authenticated');
-            const unauthenticatedElements = document.getElementById('auth-buttons-unauthenticated');
-            const premiumButtonAuthenticated = document.getElementById('premium-button-authenticated');
-            const logoutButtonAuthenticated = document.getElementById('logout-button-authenticated');
-            const adminButtonsAuthenticated = document.getElementById('admin-buttons-authenticated');
-
-            if (user) {
-            // Usuario autenticado
-            console.log('Usuario autenticado:', user.email);
-
-            // Registrar la sesión actual
-            await registerCurrentSession(user.uid);
-
-            // Obtener datos de usuario (nombre, premium, admin, etc.)
-            const userDoc = await db.collection('users').doc(user.uid).get();
-            let userName = user.email;
-            let isPremium = false;
-            let isPremiumUntil = null;
-            let userIsAdmin = false; // Por defecto no es admin
-            let generationCredits = 0;
-            let payPerGeneration = false;
-
-            if (userDoc.exists) {
-            const userData = userDoc.data();
-            if (userData.nombreDeUsuario) { // Prefer username if set
-            userName = userData.nombreDeUsuario;
-            } else if (userData.name) { // Fallback to Google name
-            userName = userData.name.split(' ')[0]; // Only first name
-            } else if (user.displayName) { // Fallback to Firebase displayName
-            userName = user.displayName.split(' ')[0];
-            } else if (user.email) { // Fallback to email part before @
-            userName = user.email.split('@')[0];
-            }
-
-            isPremium = userData.isPremium || false;
-            isPremiumUntil = userData.premiumUntil ? userData.premiumUntil.toDate() : null; // Convert timestamp to Date
-            object
-            generationCredits = userData.generationCredits || 0;
-            payPerGeneration = userData.payPerGeneration || false;
-            currentLang = userData.languagePreference || currentLang; // Load user's language preference
-            localStorage.setItem('languagePreference', currentLang); // Store preference locally
-            }
-
-            // Verificar si es administrador
-            const adminDoc = await db.collection('admins').doc(user.uid).get();
-            if (adminDoc.exists) {
-            userIsAdmin = true;
-            }
-
-            // Obtener configuración global (Premium para todos, promoción)
-            const appConfigDoc = await db.collection('appConfig').doc('global').get();
-            const appConfig = appConfigDoc.exists ? appConfigDoc.data() : {};
-            const isPremiumGlobalActive = appConfig.isPremiumGlobalActive || false;
-            const isLaunchPromoActive = appConfig.isLaunchPromoActive || false;
-            const premiumGlobalEndDate = appConfig.premiumGlobalEndDate ? appConfig.premiumGlobalEndDate.toDate() :
-            null;
-
-            // Actualizar UI de Navbar y Vistas
-            authenticatedElements.style.display = 'flex';
-            premiumButtonAuthenticated.style.display = 'block'; // Show Premium button initially
-            logoutButtonAuthenticated.style.display = 'block';
-            unauthenticatedElements.style.display = 'none';
-
-            if (userIsAdmin) {
-            adminButtonsAuthenticated.style.display = 'flex'; // Show admin buttons
-            } else {
-            adminButtonsAuthenticated.style.display = 'none';
-            }
-
-            // Mensaje de bienvenida personalizado
-            document.getElementById('welcome-message').textContent = t('welcome-message-prefix') + userName + '!';
-            applyTranslations(); // Re-apply translations for all dynamic content based on loaded language
-            applyPremiumUI(isPremium, isPremiumGlobalActive, isLaunchPromoActive); // Apply premium UI rules
-
-            showView('config-view'); // Mostrar la vista principal de configuración
-            } else {
-            // Usuario no autenticado
-            console.log('Usuario no autenticado.');
-            currentUserId = null;
-            unauthenticatedElements.style.display = 'flex';
-            authenticatedElements.style.display = 'none';
-            premiumButtonAuthenticated.style.display = 'none';
-            logoutButtonAuthenticated.style.display = 'none';
-            adminButtonsAuthenticated.style.display = 'none';
-            applyTranslations(); // Apply translations for auth view
-            showView('auth-view'); // Mostrar la vista de login/registro
-            }
-            });
-
-
-            // --- Manejo de Login ---
-            loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading(t('loading-phrase-login')); // Mensaje de carga para login
-            clearErrors('login-error-msg'); // Limpia errores previos
-
-            const email = loginEmailInput.value;
-            const password = loginPasswordInput.value;
-
-            try {
-            await auth.signInWithEmailAndPassword(email, password);
-            // onAuthStateChanged se encargará de mostrar la vista de configuración
-            } catch (error) {
-            console.error("Error al iniciar sesión:", error.code, error.message);
-            hideLoading();
-            let errorMessageKey = 'error-auth-generic';
-            switch (error.code) {
-            case 'auth/invalid-email':
-            case 'auth/user-not-found':
-            errorMessageKey = 'error-auth-invalid-email';
-            break;
-            case 'auth/wrong-password':
-            errorMessageKey = 'error-auth-wrong-password';
-            break;
-            case 'auth/network-request-failed':
-            errorMessageKey = 'error-auth-network-request-failed';
-            break;
-            case 'auth/too-many-requests':
-            errorMessageKey = 'error-auth-too-many-requests';
-            break;
-            }
-            displayError(errorMessageKey, 'login-error-msg');
-            }
-            });
-
-            // --- Manejo de Registro ---
-            signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading(t('loading-phrase-signup')); // Mensaje de carga para registro
-            clearErrors('signup-error-msg'); // Limpia errores previos
-
-            const email = signupEmailInput.value;
-            const confirmEmail = signupConfirmEmailInput.value;
-            const password = signupPasswordInput.value;
-            const confirmPassword = signupConfirmPasswordInput.value;
-            const name = signupNameInput.value;
-            const lastname = signupLastnameInput.value;
-            const username = signupUsernameInput.value;
-            const termsAgreed = termsCheckbox.checked;
-
-            if (email !== confirmEmail) {
-            displayError('error-auth-invalid-email', 'signup-error-msg'); // Reutilizando key, debería ser "emails no
-            coinciden"
-            hideLoading();
-            return;
-            }
-            if (password !== confirmPassword) {
-            displayError('error-auth-wrong-password', 'signup-error-msg'); // Reutilizando key, debería ser "contraseñas
-            no coinciden"
-            hideLoading();
-            return;
-            }
-            if (!termsAgreed) {
-            displayError('error-form-validation', 'signup-error-msg'); // O un mensaje más específico
-            hideLoading();
-            return;
-            }
-
-            try {
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            await db.collection('users').doc(userCredential.user.uid).set({
-            email: email,
-            name: name, // Usar 'name' como nombre de pila
-            lastname: lastname,
-            nombreDeUsuario: username, // Almacenar el nombre de usuario específico
-            createdAt: serverTimestamp,
-            languagePreference: currentLang,
-            isPremium: false, // Por defecto no premium
-            generationCredits: 0,
-            payPerGeneration: false // Por defecto no pago por generación
-            });
-            // onAuthStateChanged se encargará de mostrar la vista de configuración
-            console.log('Usuario registrado y datos guardados:', userCredential.user.uid);
-            alert(t('success-signup')); // Mensaje de éxito
-
-            } catch (error) {
-            console.error("Error al registrar usuario:", error.code, error.message);
-            hideLoading();
-            let errorMessageKey = 'error-auth-generic';
-            switch (error.code) {
-            case 'auth/email-already-in-use':
-            errorMessageKey = 'error-auth-email-already-in-use';
-            break;
-            case 'auth/weak-password':
-            errorMessageKey = 'error-auth-weak-password';
-            break;
-            case 'auth/invalid-email':
-            errorMessageKey = 'error-auth-invalid-email';
-            break;
-            case 'auth/network-request-failed':
-            errorMessageKey = 'error-auth-network-request-failed';
-            break;
-            }
-            displayError(errorMessageKey, 'signup-error-msg');
-            }
-            });
-
-            // --- Manejo de Login con Google ---
-            googleLoginBtn.addEventListener('click', async () => {
-            showLoading(t('loading-phrase-google-login')); // Mensaje de carga para Google Login
-            clearErrors('login-error-msg'); // Limpia errores previos
-
-            const provider = new firebase.auth.GoogleAuthProvider();
-            try {
-            const result = await auth.signInWithPopup(provider);
-            const user = result.user;
-
-            // Guardar/Actualizar usuario en Firestore si es la primera vez o si se actualiza info
-            const userDocRef = db.collection('users').doc(user.uid);
-            await userDocRef.set({
-            email: user.email,
-            name: user.displayName || '', // Nombre de Google
-            // No hay apellido ni nombre de usuario directo de Google, se puede pedir después
-            createdAt: serverTimestamp,
-            languagePreference: currentLang, // Asignar el idioma actual al nuevo usuario
-            isPremium: false,
-            generationCredits: 0,
-            payPerGeneration: false
-            }, { merge: true }); // Usar merge para no sobrescribir datos existentes
-
-            // onAuthStateChanged se encargará del resto
-            } catch (error) {
-            console.error("Error al iniciar sesión con Google:", error.code, error.message);
-            hideLoading();
-            if (error.code === 'auth/popup-closed-by-user') {
-            displayError('error-auth-generic', 'login-error-msg'); // O un mensaje más específico
-            } else if (error.code === 'auth/network-request-failed') {
-            displayError('error-auth-network-request-failed', 'login-error-msg');
-            } else {
-            displayError('error-auth-generic', 'login-error-msg');
-            }
-            }
-            });
-
-            // --- Manejo de Recuperación de Contraseña ---
-            forgotPasswordLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            passwordResetModal.classList.add('is-active'); // Muestra el modal
-            clearErrors('reset-password-info'); // Limpia mensajes previos
-            resetPasswordInfo.textContent = ''; // Limpia el texto de info
-            });
-
-            closeResetModalBtn.addEventListener('click', () => {
-            passwordResetModal.classList.remove('is-active'); // Cierra el modal
-            });
-
-            passwordResetForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading(t('loading-phrase-sending-reset')); // Mensaje de carga
-            clearErrors('reset-password-info'); // Limpia mensajes previos
-
-            const email = resetEmailInput.value;
-            try {
-            await auth.sendPasswordResetEmail(email);
-            resetPasswordInfo.textContent = t('reset-password-info-sent');
-            resetPasswordInfo.style.color = 'green';
-            alert(t('success-password-reset'));
-            } catch (error) {
-            console.error("Error al enviar enlace de restablecimiento:", error.code, error.message);
-            resetPasswordInfo.textContent = t('reset-password-info-error');
-            resetPasswordInfo.style.color = 'red';
-            } finally {
-            hideLoading();
-            }
-            });
-
-            // --- Manejo de Cierre de Sesión ---
-            logoutBtn.addEventListener('click', async () => {
-            try {
-            await auth.signOut();
-            // onAuthStateChanged se encargará de redirigir a la vista de login
-            // No se necesita llamar a hideLoading aquí porque onAuthStateChanged
-            // se encargará de la transición y estado de carga.
-            } catch (error) {
-            console.error("Error al cerrar sesión:", error);
-            // Podrías mostrar un mensaje de error si el cierre de sesión falla
-            displayError('error-auth-generic', 'navbar-error-msg'); // Asumiendo un elemento para errores en navbar
-            }
-            });
-
-            // --- Manejo del selector de idioma en Navbar ---
-            const languageSelector = document.querySelector('.navbar-item.has-dropdown');
-            if (languageSelector) {
-            languageSelector.querySelectorAll('.navbar-dropdown .navbar-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-            const lang = e.target.dataset.lang;
-            if (lang && translations[lang]) {
-            currentLang = lang;
-            localStorage.setItem('languagePreference', lang);
-            applyTranslations(); // Apply new language to all UI elements
-            // Optionally save to Firestore user profile if authenticated
-            if (currentUserId) {
-            db.collection('users').doc(currentUserId).update({
-            languagePreference: lang
-            }).catch(err => console.error("Error al guardar preferencia de idioma:", err));
-            }
-            }
-            });
-            });
-            }
-// --- Lógica de Carga de Datos de Usuario y Configuración de App al iniciar sesión ---
-
-        // Esta función se ejecutará cuando el usuario inicie sesión o se cargue la página si ya está autenticado.
-        // Es una parte del listener onAuthStateChanged
-        async function loadUserDataAndConfig(user) {
-            let userName = user.email; // Default to email
-            let isPremium = false;
-            let userIsAdmin = false;
-            let generationCredits = 0;
-            let payPerGeneration = false;
-            let isPremiumGlobalActive = false;
-            let isLaunchPromoActive = false;
-            let premiumGlobalEndDate = null;
-
-            try {
-                // 1. Obtener datos del usuario (desde users collection)
-                const userDocRef = db.collection('users').doc(user.uid);
-                const userDoc = await userDocRef.get();
-
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    // Determinar el nombre a mostrar
-                    if (userData.nombreDeUsuario) { // Prefer username if set by direct registration
-                        userName = userData.nombreDeUsuario;
-                    } else if (userData.name) { // Fallback to Google name if from Google Auth
-                        userName = userData.name.split(' ')[0]; // Only first name
-                    } else if (user.displayName) { // Fallback to Firebase displayName
-                        userName = user.displayName.split(' ')[0];
-                    } else if (user.email) { // Final fallback to email part before @
-                        userName = user.email.split('@')[0];
-                    }
-
-                    // Cargar preferencias y estados Premium individuales
-                    isPremium = userData.isPremium || false;
-                    isPremiumUntil = userData.premiumUntil ? userData.premiumUntil.toDate() : null;
-                    generationCredits = userData.generationCredits || 0;
-                    payPerGeneration = userData.payPerGeneration || false;
-                    currentLang = userData.languagePreference || currentLang; // Load user's language preference
-                    localStorage.setItem('languagePreference', currentLang); // Persist language locally
-                } else {
-                    // Si el documento de usuario no existe (ej. nuevo registro con Google antes de setearlo),
-                    // se puede crear o actualizar aquí.
-                    // Ya está manejado en auth.onAuthStateChanged en Bloque 6, pero este es un fallback.
-                    userName = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
-                }
-
-                // 2. Verificar si es administrador
-                const adminDoc = await db.collection('admins').doc(user.uid).get();
-                if (adminDoc.exists) {
-                    userIsAdmin = true;
-                }
-
-                // 3. Obtener configuración global de la aplicación (Premium para todos, promoción)
-                const appConfigDoc = await db.collection('appConfig').doc('global').get();
-                const appConfig = appConfigDoc.exists ? appConfigDoc.data() : {};
-                isPremiumGlobalActive = appConfig.isPremiumGlobalActive || false;
-                isLaunchPromoActive = appConfig.isLaunchPromoActive || false;
-                premiumGlobalEndDate = appConfig.premiumGlobalEndDate ? appConfig.premiumGlobalEndDate.toDate() : null;
-
-                // 4. Actualizar la UI (Navbar, Mensaje de Bienvenida, Reglas Premium)
-                document.getElementById('welcome-message').textContent = t('welcome-message-prefix') + userName + '!';
-
-                const authenticatedElements = document.getElementById('auth-buttons-authenticated');
-                const unauthenticatedElements = document.getElementById('auth-buttons-unauthenticated');
-                const premiumButtonAuthenticated = document.getElementById('premium-button-authenticated');
-                const logoutButtonAuthenticated = document.getElementById('logout-button-authenticated');
-                const adminButtonsAuthenticated = document.getElementById('admin-buttons-authenticated');
-                
-                authenticatedElements.style.display = 'flex';
-                logoutButtonAuthenticated.style.display = 'block';
-                unauthenticatedElements.style.display = 'none';
-
-                if (userIsAdmin) {
-                    adminButtonsAuthenticated.style.display = 'flex';
-                } else {
-                    adminButtonsAuthenticated.style.display = 'none';
-                }
-
-                // Aplica las traducciones primero para que los textos sean correctos
-                applyTranslations();
-
-                // Luego aplica las reglas de UI Premium que pueden habilitar/deshabilitar elementos
-                applyPremiumUI(isPremium, isPremiumGlobalActive, isLaunchPromoActive);
-
-                // Finalmente, decide la visibilidad del botón Premium en Navbar
-                if (isPremium) { // Si el usuario es individualmente Premium, ocultar "Obtener Premium"
-                    premiumButtonAuthenticated.style.display = 'none';
-                } else if (isLaunchPromoActive && !isPremiumGlobalActive) { // Si hay promo activa pero no global
-                    document.getElementById('get-premium-btn').textContent = t('promo-active-get-premium'); // Asumiendo esta traducción existe
-                    premiumButtonAuthenticated.style.display = 'block';
-                } else if (isPremiumGlobalActive) { // Si Premium está globalmente activo, ocultar "Obtener Premium"
-                    document.getElementById('get-premium-btn').textContent = t('premium-active-for-all'); // Asumiendo esta traducción existe
-                    premiumButtonAuthenticated.style.display = 'none';
-                } else { // Si no es premium ni hay promo/global activo, mostrar "Obtener Premium"
-                    document.getElementById('get-premium-btn').textContent = t('get-premium-btn');
-                    premiumButtonAuthenticated.style.display = 'block';
-                }
-
-                showView('config-view'); // Mostrar la vista principal de configuración
-
-            } catch (error) {
-                console.error("Error al cargar datos de usuario o configuración:", error);
-                // Si hay un error crítico al cargar la configuración, forzar cierre de sesión
-                auth.signOut();
-                displayError('error-generic', 'login-error-msg');
-            }
-        }
-
-        // Modificación del listener auth.onAuthStateChanged del Bloque 6 para llamar a loadUserDataAndConfig
-        // NOTA: Esta sección sobrescribe o modifica una parte del Bloque 6, así que asegúrate de que esté fusionada correctamente
-        auth.onAuthStateChanged(async (user) => {
-            currentUserId = user ? user.uid : null;
-            if (user) {
-                // Usuario autenticado
-                console.log('Usuario autenticado:', user.email);
-                
-                // 1. Registrar la sesión actual y obtener deviceType
-                await registerCurrentSession(user.uid);
-
-                // 2. Cargar y aplicar los datos del usuario y la configuración de la app
-                await loadUserDataAndConfig(user); // Llama a la nueva función
-            } else {
-                // Usuario no autenticado
-                console.log('Usuario no autenticado.');
-                currentUserId = null;
-                document.getElementById('auth-buttons-unauthenticated').style.display = 'flex';
-                document.getElementById('auth-buttons-authenticated').style.display = 'none';
-                document.getElementById('premium-button-authenticated').style.display = 'none';
-                document.getElementById('logout-button-authenticated').style.display = 'none';
-                document.getElementById('admin-buttons-authenticated').style.display = 'none';
-                applyTranslations(); // Apply translations for auth view
-                showView('auth-view'); // Mostrar la vista de login/registro
-            }
-        });
-        // --- Lógica de Funcionalidad de Configuración de Ideas ---
-
-        // Referencias a elementos de la UI de configuración
-        const topicInput = document.getElementById('topic-input');
-        const copyTypeSelect = document.getElementById('copy-type-select');
-        const socialMediaSelect = document.getElementById('social-media-select');
-        const generateIdeasBtn = document.getElementById('generate-ideas-btn');
-        const loadLastInputsBtn = document.getElementById('load-last-inputs-btn');
-        const generationsRemainingText = document.getElementById('generations-remaining-text');
-
-        // Función para aplicar las reglas de UI Premium (habilitar/deshabilitar opciones, ocultar anuncios, etc.)
-        // Esta función ahora será más robusta para manejar los estados definidos por el prompt.
-        async function applyPremiumUI(isUserPremium, isGlobalPremiumActive, isLaunchPromoActive) {
-            const isEffectivelyPremium = isUserPremium || isGlobalPremiumActive || isLaunchPromoActive;
-
-            // --- Lógica de Publicidad ---
-            document.querySelectorAll('.ad-space').forEach(adSpace => {
-                // Anuncios SI se muestran si:
-                // - El usuario NO es premium individual Y
-                // - El Premium global NO está activo Y
-                // - La promoción de lanzamiento NO está activa
-                // O (durante la promoción de lanzamiento, los anuncios SÍ se muestran, a menos que el usuario sea Premium individual)
-                if ((!isUserPremium && !isGlobalPremiumActive && !isLaunchPromoActive) || (isLaunchPromoActive && !isUserPremium)) {
-                    adSpace.style.display = 'block'; // Mostrar anuncios
-                } else {
-                    adSpace.style.display = 'none'; // Ocultar anuncios
-                }
-            });
-
-            // --- Lógica del botón "Obtener Premium" en Navbar ---
-            const getPremiumBtn = document.getElementById('get-premium-btn');
-            if (getPremiumBtn) {
-                if (isUserPremium) { // Si el usuario es individualmente Premium, ocultar "Obtener Premium"
-                    getPremiumBtn.style.display = 'none';
-                } else if (isLaunchPromoActive) { // Si hay promoción de lanzamiento
-                    getPremiumBtn.textContent = t('promo-active-get-premium') || "¡Promoción Activa!"; // Usar clave de traducción o texto por defecto
-                    getPremiumBtn.style.display = 'block';
-                } else if (isGlobalPremiumActive) { // Si Premium está globalmente activo (sin promo específica)
-                    getPremiumBtn.textContent = t('premium-active-for-all') || "Premium Activo para Todos"; // Usar clave de traducción
-                    getPremiumBtn.style.display = 'none'; // Ocultar, ya está activo
-                } else { // Si no es Premium ni hay promo/global activo, mostrar botón normal
-                    getPremiumBtn.textContent = t('get-premium-btn');
-                    getPremiumBtn.style.display = 'block';
-                }
-            }
-
-            // --- Lógica de Habilitación/Inhabilitación de Opciones en Config View ---
-            // 1. Tipos de Copy
-            if (copyTypeSelect) {
-                copyTypeSelect.querySelectorAll('option').forEach(option => {
-                    const optionValue = option.value;
-                    // Los tipos de copy gratuitos son: Informativo, Emocional, Técnico o profesional
-                    const freeCopyTypes = ["Informativo", "Emocional", "Técnico o profesional"];
-
-                    if (!isEffectivelyPremium && !freeCopyTypes.includes(optionValue)) {
-                        option.classList.add('premium-locked-option');
-                        option.setAttribute('disabled', 'true');
-                        if (!option.querySelector('.tag')) { // Add tag if not present
-                            const tag = document.createElement('span');
-                            tag.classList.add('tag', 'is-small');
-                            tag.textContent = t('feature-premium-label');
-                            option.appendChild(tag);
-                        }
-                    } else {
-                        option.classList.remove('premium-locked-option');
-                        option.removeAttribute('disabled');
-                        if (option.querySelector('.tag')) option.querySelector('.tag').remove(); // Remove premium tag if active
-                    }
-                });
-            }
-
-            // 2. Redes Sociales
-            if (socialMediaSelect) {
-                socialMediaSelect.querySelectorAll('option').forEach(option => {
-                    const optionValue = option.value;
-                    // 'Facebook' es la única red social gratuita
-                    if (!isEffectivelyPremium && optionValue !== 'Facebook') {
-                        option.classList.add('premium-locked-option');
-                        option.setAttribute('disabled', 'true');
-                        if (!option.querySelector('.tag')) { // Add tag if not present
-                            const tag = document.createElement('span');
-                            tag.classList.add('tag', 'is-small');
-                            tag.textContent = t('feature-premium-label');
-                            option.appendChild(tag);
-                        }
-                    } else {
-                        option.classList.remove('premium-locked-option');
-                        option.removeAttribute('disabled');
-                        if (option.querySelector('.tag')) option.querySelector('.tag').remove(); // Remove premium tag if active
-                    }
-                });
-            }
-
-            // 3. Visualización de Generaciones Restantes (para no-Premium efectivo)
-            if (generationsRemainingText) {
-                if (isEffectivelyPremium) {
-                    generationsRemainingText.style.display = 'none'; // Ocultar para usuarios Premium efectivos
-                } else {
-                    // El contador real se actualizará desde el backend, solo asegurar que esté visible
-                    generationsRemainingText.style.display = 'block'; 
-                }
-            }
-
-            // --- Lógica para el Formato Visual Sugerido Borroso en Results View ---
-            // Esto se manejará en la función que renderiza los resultados (Bloque 10),
-            // pero la función `applyPremiumUI` puede pre-configurar variables o estados si es necesario.
-        }
-
-        // --- Lógica para Cargar Última Información Capturada ---
-        loadLastInputsBtn.addEventListener('click', () => {
-            const lastTopic = localStorage.getItem('lastTopic');
-            const lastCopyType = localStorage.getItem('lastCopyType');
-            const lastSocialMedia = localStorage.getItem('lastSocialMedia');
-            const lastGenerationMode = localStorage.getItem('lastGenerationMode');
-
-            if (lastTopic) {
-                topicInput.value = lastTopic;
-            }
-            if (lastCopyType) {
-                copyTypeSelect.value = lastCopyType;
-            }
-            if (lastSocialMedia) {
-                try {
-                    const selectedOptions = JSON.parse(lastSocialMedia);
-                    // Deseleccionar todo primero
-                    Array.from(socialMediaSelect.options).forEach(option => option.selected = false);
-                    // Luego seleccionar las guardadas
-                    selectedOptions.forEach(value => {
-                        const option = socialMediaSelect.querySelector(`option[value="${value}"]`);
-                        if (option) option.selected = true;
+                            document.getElementById('show-signup-form-link').addEventListener('click', arguments.callee); // Re-attach
+                            listener
+                        });
                     });
-                } catch (e) {
-                    console.error("Error al parsear lastSocialMedia de localStorage:", e);
                 }
-            }
-            if (lastGenerationMode) {
-                const radio = document.querySelector(`input[name="generation_mode"][value="${lastGenerationMode}"]`);
-                if (radio) radio.checked = true;
-            }
-            alert(t('load-last-inputs-success') || 'Información cargada.'); // Asumiendo que habrá una clave de traducción
-        });
 
-        // Guardar inputs al cambiar (para "Última Información Capturada")
-        topicInput.addEventListener('input', () => localStorage.setItem('lastTopic', topicInput.value));
-        copyTypeSelect.addEventListener('change', () => localStorage.setItem('lastCopyType', copyTypeSelect.value));
-        socialMediaSelect.addEventListener('change', () => {
-            const selectedValues = Array.from(socialMediaSelect.selectedOptions).map(option => option.value);
-            localStorage.setItem('lastSocialMedia', JSON.stringify(selectedValues));
-        });
-        document.querySelectorAll('input[name="generation_mode"]').forEach(radio => {
-            radio.addEventListener('change', () => localStorage.setItem('lastGenerationMode', radio.value));
-        });
-        // --- Lógica JavaScript - Llamada a la Generación de Ideas ---
+                if (closeSignupModalBtn) {
+                    closeSignupModalBtn.addEventListener('click', () => {
+                        signupFormContainer.classList.remove('is-active');
+                        loginForm.style.display = 'block';
+                        authTitle.textContent = t('auth-title-login');
+                        document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-signup')} <a
+                id="show-signup-form-link">${t('show-signup-form-link')}</a>`;
+                        document.getElementById('show-signup-form-link').addEventListener('click', (e) => {
+                            e.preventDefault();
+                            loginForm.style.display = 'none';
+                            signupFormContainer.classList.add('is-active');
+                            authTitle.textContent = t('auth-title-signup');
+                            document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-login')} <a
+                id="show-login-form-link">${t('show-login-form-link')}</a>`;
+                            document.getElementById('show-login-form-link').addEventListener('click', arguments.callee);
+                        });
+                    });
+                }
 
-        const generateIdeasCallable = functions.httpsCallable('generateIdeas');
+                // --- Lógica de Autenticación ---
 
-        generateIdeasBtn.addEventListener('click', async () => {
-            clearErrors('topic-error-msg'); // Asumiendo un span/div para este error
-            clearErrors('copy-type-error-msg'); // Asumiendo un span/div para este error
-            clearErrors('social-media-error-msg'); // Asumiendo un span/div para este error
-            clearErrors('general-generation-error-msg'); // Asumiendo un span/div para errores generales
+                // Función para registrar la sesión activa en Firestore
+                const registerUserSessionCallable = functions.httpsCallable('registerUserSession');
+                async function registerCurrentSession(userId) {
+                    try {
+                        if (!currentSessionId) {
+                            currentSessionId = generateUUID();
+                            localStorage.setItem('currentSessionId', currentSessionId);
+                        }
+                        if (!currentDeviceId) { // Should be generated in Bloque 5, but good to have fallback
+                            currentDeviceId = generateUUID();
+                            localStorage.setItem('deviceId', currentDeviceId);
+                        }
+                        const deviceType = getDeviceType();
 
-            const topic = topicInput.value.trim();
-            const copyType = copyTypeSelect.value;
-            const selectedSocialMedia = Array.from(socialMediaSelect.selectedOptions).map(option => option.value);
-            const generationMode = document.querySelector('input[name="generation_mode"]:checked').value;
+                        await registerUserSessionCallable({
+                            sessionId: currentSessionId, deviceId: currentDeviceId, deviceType:
+                                deviceType
+                        });
+                        console.log('Sesión registrada y dispositivo actualizado en Firestore.');
+                    } catch (error) {
+                        console.error('Error al registrar la sesión o dispositivo:', error);
+                        // Si falla el registro de sesión, no es crítico para el login pero puede afectar validaciones futuras
+                    }
+                }
 
-            // --- Validación Frontend ---
-            if (!topic) {
-                displayError('error-form-validation', 'topic-error-msg'); // "Por favor, completa el tema."
-                return;
-            }
-            if (!copyType) {
-                displayError('error-form-validation', 'copy-type-error-msg'); // "Por favor, selecciona un tipo de copy."
-                return;
-            }
-            if (selectedSocialMedia.length === 0) {
-                displayError('error-form-validation', 'social-media-error-msg'); // "Por favor, selecciona al menos una red social."
-                return;
-            }
-            if (generationMode === 'single-platform' && selectedSocialMedia.length !== 1) {
-                displayError('error-form-validation', 'social-media-error-msg'); // "Para el modo de 3 ideas, selecciona solo una red social."
-                return;
-            }
-            if (generationMode === 'multi-platform' && selectedSocialMedia.length < 2) {
-                displayError('error-form-validation', 'social-media-error-msg'); // "Para el modo multi-plataforma, selecciona al menos 2 redes sociales."
-                return;
-            }
-            
-            // --- Lógica de Habilitación/Inhabilitación (Refuerzo de validación del Frontend) ---
-            // Simular obtención de estado premium para validación local antes de llamar al backend
-            // El estado real se obtiene en onAuthStateChanged y se pasa a applyPremiumUI
-            const userDoc = await db.collection('users').doc(currentUserId).get();
-            const userData = userDoc.exists ? userDoc.data() : {};
-            const isUserPremium = userData.isPremium || false;
-            const appConfigDoc = await db.collection('appConfig').doc('global').get();
-            const appConfig = appConfigDoc.exists ? appConfigDoc.data() : {};
-            const isPremiumGlobalActive = appConfig.isPremiumGlobalActive || false;
-            const isLaunchPromoActive = appConfig.isLaunchPromoActive || false;
-            const isEffectivelyPremium = isUserPremium || isGlobalPremiumActive || isLaunchPromoActive;
 
-            // Validar redes sociales para usuarios no Premium
-            if (!isEffectivelyPremium && selectedSocialMedia.length > 1) {
-                displayError('error-facebook-only', 'social-media-error-msg');
-                return;
-            }
-            if (!isEffectivelyPremium && selectedSocialMedia[0] !== 'Facebook') {
-                 displayError('error-facebook-only', 'social-media-error-msg');
-                 return;
-            }
+                // Listener de cambio de estado de autenticación de Firebase
+                auth.onAuthStateChanged(async (user) => {
+                    currentUserId = user ? user.uid : null;
+                    const authenticatedElements = document.getElementById('auth-buttons-authenticated');
+                    const unauthenticatedElements = document.getElementById('auth-buttons-unauthenticated');
+                    const premiumButtonAuthenticated = document.getElementById('premium-button-authenticated');
+                    const logoutButtonAuthenticated = document.getElementById('logout-button-authenticated');
+                    const adminButtonsAuthenticated = document.getElementById('admin-buttons-authenticated');
 
-            // Validar tipos de copy para usuarios no Premium
-            const freeCopyTypes = ["Informativo", "Emocional", "Técnico o profesional"];
-            if (!isEffectivelyPremium && !freeCopyTypes.includes(copyType)) {
-                displayError('error-copy-type-limited', 'copy-type-error-msg');
-                return;
-            }
+                    if (user) {
+                        // Usuario autenticado
+                        console.log('Usuario autenticado:', user.email);
 
-            // --- Preparar llamada al Backend ---
-            showLoading(t('loading-phrase-generic')); // Mostrar indicador de carga mejorado
+                        // Registrar la sesión actual
+                        await registerCurrentSession(user.uid);
 
-            try {
-                const response = await generateIdeasCallable({
-                    topic: topic,
-                    copyType: copyType,
-                    socialMediaPlatforms: selectedSocialMedia,
-                    generationMode: generationMode,
-                    language: currentLang,
-                    currentSessionId: currentSessionId // Pasamos el ID de sesión para validación de sesión única
+                        // Obtener datos de usuario (nombre, premium, admin, etc.)
+                        const userDoc = await db.collection('users').doc(user.uid).get();
+                        let userName = user.email;
+                        let isPremium = false;
+                        let isPremiumUntil = null;
+                        let userIsAdmin = false; // Por defecto no es admin
+                        let generationCredits = 0;
+                        let payPerGeneration = false;
+
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            if (userData.nombreDeUsuario) { // Prefer username if set
+                                userName = userData.nombreDeUsuario;
+                            } else if (userData.name) { // Fallback to Google name
+                                userName = userData.name.split(' ')[0]; // Only first name
+                            } else if (user.displayName) { // Fallback to Firebase displayName
+                                userName = user.displayName.split(' ')[0];
+                            } else if (user.email) { // Fallback to email part before @
+                                userName = user.email.split('@')[0];
+                            }
+
+                            isPremium = userData.isPremium || false;
+                            isPremiumUntil = userData.premiumUntil ? userData.premiumUntil.toDate() : null; // Convert timestamp to Date
+                            object
+                            generationCredits = userData.generationCredits || 0;
+                            payPerGeneration = userData.payPerGeneration || false;
+                            currentLang = userData.languagePreference || currentLang; // Load user's language preference
+                            localStorage.setItem('languagePreference', currentLang); // Store preference locally
+                        }
+
+                        // Verificar si es administrador
+                        const adminDoc = await db.collection('admins').doc(user.uid).get();
+                        if (adminDoc.exists) {
+                            userIsAdmin = true;
+                        }
+
+                        // Obtener configuración global (Premium para todos, promoción)
+                        const appConfigDoc = await db.collection('appConfig').doc('global').get();
+                        const appConfig = appConfigDoc.exists ? appConfigDoc.data() : {};
+                        const isPremiumGlobalActive = appConfig.isPremiumGlobalActive || false;
+                        const isLaunchPromoActive = appConfig.isLaunchPromoActive || false;
+                        const premiumGlobalEndDate = appConfig.premiumGlobalEndDate ? appConfig.premiumGlobalEndDate.toDate() :
+                            null;
+
+                        // Actualizar UI de Navbar y Vistas
+                        authenticatedElements.style.display = 'flex';
+                        premiumButtonAuthenticated.style.display = 'block'; // Show Premium button initially
+                        logoutButtonAuthenticated.style.display = 'block';
+                        unauthenticatedElements.style.display = 'none';
+
+                        if (userIsAdmin) {
+                            adminButtonsAuthenticated.style.display = 'flex'; // Show admin buttons
+                        } else {
+                            adminButtonsAuthenticated.style.display = 'none';
+                        }
+
+                        // Mensaje de bienvenida personalizado
+                        document.getElementById('welcome-message').textContent = t('welcome-message-prefix') + userName + '!';
+                        applyTranslations(); // Re-apply translations for all dynamic content based on loaded language
+                        applyPremiumUI(isPremium, isPremiumGlobalActive, isLaunchPromoActive); // Apply premium UI rules
+
+                        showView('config-view'); // Mostrar la vista principal de configuración
+                    } else {
+                        // Usuario no autenticado
+                        console.log('Usuario no autenticado.');
+                        currentUserId = null;
+                        unauthenticatedElements.style.display = 'flex';
+                        authenticatedElements.style.display = 'none';
+                        premiumButtonAuthenticated.style.display = 'none';
+                        logoutButtonAuthenticated.style.display = 'none';
+                        adminButtonsAuthenticated.style.display = 'none';
+                        applyTranslations(); // Apply translations for auth view
+                        showView('auth-view'); // Mostrar la vista de login/registro
+                    }
                 });
 
-                hideLoading();
 
-                if (response.data.success) {
-                    renderIdeas(response.data.ideas, response.data.finalPhrase, !isEffectivelyPremium); // Pasar si es efectivamente premium para blur
-                    showView('results-view'); // Mostrar la vista de resultados
-                    // Opcional: Actualizar contador de generaciones restantes si no es premium
-                    if (!isEffectivelyPremium) {
-                        // El backend ya habrá decrementado el contador, aquí podríamos volver a pedir el estado
-                        // o asumir que se ha restado 1 y actualizar la UI si tenemos el contador en frontend
-                        // Por simplicidad, onAuthStateChanged re-cargará los datos de usuario y actualizará el contador
-                        // cuando la vista se vuelva a config-view.
+                // --- Manejo de Login ---
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    showLoading(t('loading-phrase-login')); // Mensaje de carga para login
+                    clearErrors('login-error-msg'); // Limpia errores previos
+
+                    const email = loginEmailInput.value;
+                    const password = loginPasswordInput.value;
+
+                    try {
+                        await auth.signInWithEmailAndPassword(email, password);
+                        // onAuthStateChanged se encargará de mostrar la vista de configuración
+                    } catch (error) {
+                        console.error("Error al iniciar sesión:", error.code, error.message);
+                        hideLoading();
+                        let errorMessageKey = 'error-auth-generic';
+                        switch (error.code) {
+                            case 'auth/invalid-email':
+                            case 'auth/user-not-found':
+                                errorMessageKey = 'error-auth-invalid-email';
+                                break;
+                            case 'auth/wrong-password':
+                                errorMessageKey = 'error-auth-wrong-password';
+                                break;
+                            case 'auth/network-request-failed':
+                                errorMessageKey = 'error-auth-network-request-failed';
+                                break;
+                            case 'auth/too-many-requests':
+                                errorMessageKey = 'error-auth-too-many-requests';
+                                break;
+                        }
+                        displayError(errorMessageKey, 'login-error-msg');
                     }
-                } else {
-                    displayError(response.data.messageKey || 'error-generic', 'general-generation-error-msg');
+                });
+
+                // --- Manejo de Registro ---
+                signupForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    showLoading(t('loading-phrase-signup')); // Mensaje de carga para registro
+                    clearErrors('signup-error-msg'); // Limpia errores previos
+
+                    const email = signupEmailInput.value;
+                    const confirmEmail = signupConfirmEmailInput.value;
+                    const password = signupPasswordInput.value;
+                    const confirmPassword = signupConfirmPasswordInput.value;
+                    const name = signupNameInput.value;
+                    const lastname = signupLastnameInput.value;
+                    const username = signupUsernameInput.value;
+                    const termsAgreed = termsCheckbox.checked;
+
+                    if (email !== confirmEmail) {
+                        displayError('error-auth-invalid-email', 'signup-error-msg'); // Reutilizando key, debería ser "emails no
+            coinciden"
+                        hideLoading();
+                        return;
+                    }
+                    if (password !== confirmPassword) {
+                        displayError('error-auth-wrong-password', 'signup-error-msg'); // Reutilizando key, debería ser "contraseñas
+            no coinciden"
+                        hideLoading();
+                        return;
+                    }
+                    if (!termsAgreed) {
+                        displayError('error-form-validation', 'signup-error-msg'); // O un mensaje más específico
+                        hideLoading();
+                        return;
+                    }
+
+                    try {
+                        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                        await db.collection('users').doc(userCredential.user.uid).set({
+                            email: email,
+                            name: name, // Usar 'name' como nombre de pila
+                            lastname: lastname,
+                            nombreDeUsuario: username, // Almacenar el nombre de usuario específico
+                            createdAt: serverTimestamp,
+                            languagePreference: currentLang,
+                            isPremium: false, // Por defecto no premium
+                            generationCredits: 0,
+                            payPerGeneration: false // Por defecto no pago por generación
+                        });
+                        // onAuthStateChanged se encargará de mostrar la vista de configuración
+                        console.log('Usuario registrado y datos guardados:', userCredential.user.uid);
+                        alert(t('success-signup')); // Mensaje de éxito
+
+                    } catch (error) {
+                        console.error("Error al registrar usuario:", error.code, error.message);
+                        hideLoading();
+                        let errorMessageKey = 'error-auth-generic';
+                        switch (error.code) {
+                            case 'auth/email-already-in-use':
+                                errorMessageKey = 'error-auth-email-already-in-use';
+                                break;
+                            case 'auth/weak-password':
+                                errorMessageKey = 'error-auth-weak-password';
+                                break;
+                            case 'auth/invalid-email':
+                                errorMessageKey = 'error-auth-invalid-email';
+                                break;
+                            case 'auth/network-request-failed':
+                                errorMessageKey = 'error-auth-network-request-failed';
+                                break;
+                        }
+                        displayError(errorMessageKey, 'signup-error-msg');
+                    }
+                });
+
+                // --- Manejo de Login con Google ---
+                googleLoginBtn.addEventListener('click', async () => {
+                    showLoading(t('loading-phrase-google-login')); // Mensaje de carga para Google Login
+                    clearErrors('login-error-msg'); // Limpia errores previos
+
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    try {
+                        const result = await auth.signInWithPopup(provider);
+                        const user = result.user;
+
+                        // Guardar/Actualizar usuario en Firestore si es la primera vez o si se actualiza info
+                        const userDocRef = db.collection('users').doc(user.uid);
+                        await userDocRef.set({
+                            email: user.email,
+                            name: user.displayName || '', // Nombre de Google
+                            // No hay apellido ni nombre de usuario directo de Google, se puede pedir después
+                            createdAt: serverTimestamp,
+                            languagePreference: currentLang, // Asignar el idioma actual al nuevo usuario
+                            isPremium: false,
+                            generationCredits: 0,
+                            payPerGeneration: false
+                        }, { merge: true }); // Usar merge para no sobrescribir datos existentes
+
+                        // onAuthStateChanged se encargará del resto
+                    } catch (error) {
+                        console.error("Error al iniciar sesión con Google:", error.code, error.message);
+                        hideLoading();
+                        if (error.code === 'auth/popup-closed-by-user') {
+                            displayError('error-auth-generic', 'login-error-msg'); // O un mensaje más específico
+                        } else if (error.code === 'auth/network-request-failed') {
+                            displayError('error-auth-network-request-failed', 'login-error-msg');
+                        } else {
+                            displayError('error-auth-generic', 'login-error-msg');
+                        }
+                    }
+                });
+
+                // --- Manejo de Recuperación de Contraseña ---
+                forgotPasswordLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    passwordResetModal.classList.add('is-active'); // Muestra el modal
+                    clearErrors('reset-password-info'); // Limpia mensajes previos
+                    resetPasswordInfo.textContent = ''; // Limpia el texto de info
+                });
+
+                closeResetModalBtn.addEventListener('click', () => {
+                    passwordResetModal.classList.remove('is-active'); // Cierra el modal
+                });
+
+                passwordResetForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    showLoading(t('loading-phrase-sending-reset')); // Mensaje de carga
+                    clearErrors('reset-password-info'); // Limpia mensajes previos
+
+                    const email = resetEmailInput.value;
+                    try {
+                        await auth.sendPasswordResetEmail(email);
+                        resetPasswordInfo.textContent = t('reset-password-info-sent');
+                        resetPasswordInfo.style.color = 'green';
+                        alert(t('success-password-reset'));
+                    } catch (error) {
+                        console.error("Error al enviar enlace de restablecimiento:", error.code, error.message);
+                        resetPasswordInfo.textContent = t('reset-password-info-error');
+                        resetPasswordInfo.style.color = 'red';
+                    } finally {
+                        hideLoading();
+                    }
+                });
+
+                // --- Manejo de Cierre de Sesión ---
+                logoutBtn.addEventListener('click', async () => {
+                    try {
+                        await auth.signOut();
+                        // onAuthStateChanged se encargará de redirigir a la vista de login
+                        // No se necesita llamar a hideLoading aquí porque onAuthStateChanged
+                        // se encargará de la transición y estado de carga.
+                    } catch (error) {
+                        console.error("Error al cerrar sesión:", error);
+                        // Podrías mostrar un mensaje de error si el cierre de sesión falla
+                        displayError('error-auth-generic', 'navbar-error-msg'); // Asumiendo un elemento para errores en navbar
+                    }
+                });
+
+                // --- Manejo del selector de idioma en Navbar ---
+                const languageSelector = document.querySelector('.navbar-item.has-dropdown');
+                if (languageSelector) {
+                    languageSelector.querySelectorAll('.navbar-dropdown .navbar-item').forEach(item => {
+                        item.addEventListener('click', (e) => {
+                            const lang = e.target.dataset.lang;
+                            if (lang && translations[lang]) {
+                                currentLang = lang;
+                                localStorage.setItem('languagePreference', lang);
+                                applyTranslations(); // Apply new language to all UI elements
+                                // Optionally save to Firestore user profile if authenticated
+                                if (currentUserId) {
+                                    db.collection('users').doc(currentUserId).update({
+                                        languagePreference: lang
+                                    }).catch(err => console.error("Error al guardar preferencia de idioma:", err));
+                                }
+                            }
+                        });
+                    });
                 }
-            } catch (error) {
-                hideLoading();
-                console.error("Error al llamar a generateIdeas:", error.code, error.message, error.details);
-                let errorMessageKey = 'error-generic';
-                // Mapear códigos de error de CallableFunctionError
-                switch (error.code) {
-                    case 'resource-exhausted':
-                        errorMessageKey = 'error-generation-limit';
-                        break;
-                    case 'permission-denied': // Puede ser por la sesión inválida o acceso a premium
-                    case 'unauthenticated':
-                        errorMessageKey = 'error-session-invalid';
-                        auth.signOut(); // Forzar cierre de sesión en Frontend
-                        break;
-                    case 'invalid-argument': // Por ejemplo, si se violan las reglas de copia o red social
-                        if (error.message.includes('Facebook')) errorMessageKey = 'error-facebook-only';
-                        else if (error.message.includes('copy type')) errorMessageKey = 'error-copy-type-limited';
-                        else errorMessageKey = 'error-form-validation';
-                        break;
-                    case 'failed-precondition': // Faltan créditos
-                         errorMessageKey = 'error-not-enough-credits';
-                         break;
-                    case 'unavailable': // Error de API de Deepseek
-                        errorMessageKey = 'error-api-deepseek';
-                        break;
-                    default:
-                        errorMessageKey = 'error-generic';
-                        break;
+                // --- Lógica de Carga de Datos de Usuario y Configuración de App al iniciar sesión ---
+
+                // Esta función se ejecutará cuando el usuario inicie sesión o se cargue la página si ya está autenticado.
+                // Es una parte del listener onAuthStateChanged
+                async function loadUserDataAndConfig(user) {
+                    let userName = user.email; // Default to email
+                    let isPremium = false;
+                    let userIsAdmin = false;
+                    let generationCredits = 0;
+                    let payPerGeneration = false;
+                    let isPremiumGlobalActive = false;
+                    let isLaunchPromoActive = false;
+                    let premiumGlobalEndDate = null;
+
+                    try {
+                        // 1. Obtener datos del usuario (desde users collection)
+                        const userDocRef = db.collection('users').doc(user.uid);
+                        const userDoc = await userDocRef.get();
+
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            // Determinar el nombre a mostrar
+                            if (userData.nombreDeUsuario) { // Prefer username if set by direct registration
+                                userName = userData.nombreDeUsuario;
+                            } else if (userData.name) { // Fallback to Google name if from Google Auth
+                                userName = userData.name.split(' ')[0]; // Only first name
+                            } else if (user.displayName) { // Fallback to Firebase displayName
+                                userName = user.displayName.split(' ')[0];
+                            } else if (user.email) { // Final fallback to email part before @
+                                userName = user.email.split('@')[0];
+                            }
+
+                            // Cargar preferencias y estados Premium individuales
+                            isPremium = userData.isPremium || false;
+                            isPremiumUntil = userData.premiumUntil ? userData.premiumUntil.toDate() : null;
+                            generationCredits = userData.generationCredits || 0;
+                            payPerGeneration = userData.payPerGeneration || false;
+                            currentLang = userData.languagePreference || currentLang; // Load user's language preference
+                            localStorage.setItem('languagePreference', currentLang); // Persist language locally
+                        } else {
+                            // Si el documento de usuario no existe (ej. nuevo registro con Google antes de setearlo),
+                            // se puede crear o actualizar aquí.
+                            // Ya está manejado en auth.onAuthStateChanged en Bloque 6, pero este es un fallback.
+                            userName = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
+                        }
+
+                        // 2. Verificar si es administrador
+                        const adminDoc = await db.collection('admins').doc(user.uid).get();
+                        if (adminDoc.exists) {
+                            userIsAdmin = true;
+                        }
+
+                        // 3. Obtener configuración global de la aplicación (Premium para todos, promoción)
+                        const appConfigDoc = await db.collection('appConfig').doc('global').get();
+                        const appConfig = appConfigDoc.exists ? appConfigDoc.data() : {};
+                        isPremiumGlobalActive = appConfig.isPremiumGlobalActive || false;
+                        isLaunchPromoActive = appConfig.isLaunchPromoActive || false;
+                        premiumGlobalEndDate = appConfig.premiumGlobalEndDate ? appConfig.premiumGlobalEndDate.toDate() : null;
+
+                        // 4. Actualizar la UI (Navbar, Mensaje de Bienvenida, Reglas Premium)
+                        document.getElementById('welcome-message').textContent = t('welcome-message-prefix') + userName + '!';
+
+                        const authenticatedElements = document.getElementById('auth-buttons-authenticated');
+                        const unauthenticatedElements = document.getElementById('auth-buttons-unauthenticated');
+                        const premiumButtonAuthenticated = document.getElementById('premium-button-authenticated');
+                        const logoutButtonAuthenticated = document.getElementById('logout-button-authenticated');
+                        const adminButtonsAuthenticated = document.getElementById('admin-buttons-authenticated');
+
+                        authenticatedElements.style.display = 'flex';
+                        logoutButtonAuthenticated.style.display = 'block';
+                        unauthenticatedElements.style.display = 'none';
+
+                        if (userIsAdmin) {
+                            adminButtonsAuthenticated.style.display = 'flex';
+                        } else {
+                            adminButtonsAuthenticated.style.display = 'none';
+                        }
+
+                        // Aplica las traducciones primero para que los textos sean correctos
+                        applyTranslations();
+
+                        // Luego aplica las reglas de UI Premium que pueden habilitar/deshabilitar elementos
+                        applyPremiumUI(isPremium, isPremiumGlobalActive, isLaunchPromoActive);
+
+                        // Finalmente, decide la visibilidad del botón Premium en Navbar
+                        if (isPremium) { // Si el usuario es individualmente Premium, ocultar "Obtener Premium"
+                            premiumButtonAuthenticated.style.display = 'none';
+                        } else if (isLaunchPromoActive && !isPremiumGlobalActive) { // Si hay promo activa pero no global
+                            document.getElementById('get-premium-btn').textContent = t('promo-active-get-premium'); // Asumiendo esta traducción existe
+                            premiumButtonAuthenticated.style.display = 'block';
+                        } else if (isPremiumGlobalActive) { // Si Premium está globalmente activo, ocultar "Obtener Premium"
+                            document.getElementById('get-premium-btn').textContent = t('premium-active-for-all'); // Asumiendo esta traducción existe
+                            premiumButtonAuthenticated.style.display = 'none';
+                        } else { // Si no es premium ni hay promo/global activo, mostrar "Obtener Premium"
+                            document.getElementById('get-premium-btn').textContent = t('get-premium-btn');
+                            premiumButtonAuthenticated.style.display = 'block';
+                        }
+
+                        showView('config-view'); // Mostrar la vista principal de configuración
+
+                    } catch (error) {
+                        console.error("Error al cargar datos de usuario o configuración:", error);
+                        // Si hay un error crítico al cargar la configuración, forzar cierre de sesión
+                        auth.signOut();
+                        displayError('error-generic', 'login-error-msg');
+                    }
                 }
-                displayError(errorMessageKey, 'general-generation-error-msg');
-            }
-        });
-        // --- Lógica JavaScript - Manejo de Resultados de Ideas ---
 
-        const ideasContainer = document.getElementById('ideas-container');
-        const finalPhraseDisplay = document.getElementById('final-phrase-display');
-        const backToConfigBtn = document.getElementById('back-to-config-btn');
+                // Modificación del listener auth.onAuthStateChanged del Bloque 6 para llamar a loadUserDataAndConfig
+                // NOTA: Esta sección sobrescribe o modifica una parte del Bloque 6, así que asegúrate de que esté fusionada correctamente
+                auth.onAuthStateChanged(async (user) => {
+                    currentUserId = user ? user.uid : null;
+                    if (user) {
+                        // Usuario autenticado
+                        console.log('Usuario autenticado:', user.email);
 
-        let currentSessionIdForFeedback = null; // Para asociar feedback a la sesión actual
+                        // 1. Registrar la sesión actual y obtener deviceType
+                        await registerCurrentSession(user.uid);
 
-        function renderIdeas(ideas, finalPhrase, isFreeUser) {
-            ideasContainer.innerHTML = ''; // Limpiar contenedor de ideas previas
-            currentSessionIdForFeedback = ideas[0] ? ideas[0].sessionId : null; // Asumiendo que sessionId viene en cada idea o en la respuesta general
+                        // 2. Cargar y aplicar los datos del usuario y la configuración de la app
+                        await loadUserDataAndConfig(user); // Llama a la nueva función
+                    } else {
+                        // Usuario no autenticado
+                        console.log('Usuario no autenticado.');
+                        currentUserId = null;
+                        document.getElementById('auth-buttons-unauthenticated').style.display = 'flex';
+                        document.getElementById('auth-buttons-authenticated').style.display = 'none';
+                        document.getElementById('premium-button-authenticated').style.display = 'none';
+                        document.getElementById('logout-button-authenticated').style.display = 'none';
+                        document.getElementById('admin-buttons-authenticated').style.display = 'none';
+                        applyTranslations(); // Apply translations for auth view
+                        showView('auth-view'); // Mostrar la vista de login/registro
+                    }
+                });
+                // --- Lógica de Funcionalidad de Configuración de Ideas ---
 
-            ideas.forEach((idea, index) => {
-                const ideaCard = document.createElement('div');
-                ideaCard.classList.add('column', 'is-half-tablet', 'is-one-third-desktop', 'card', 'm-3');
-                ideaCard.style.cssText = 'display: flex; flex-direction: column; justify-content: space-between;';
+                // Referencias a elementos de la UI de configuración
+                const topicInput = document.getElementById('topic-input');
+                const copyTypeSelect = document.getElementById('copy-type-select');
+                const socialMediaSelect = document.getElementById('social-media-select');
+                const generateIdeasBtn = document.getElementById('generate-ideas-btn');
+                const loadLastInputsBtn = document.getElementById('load-last-inputs-btn');
+                const generationsRemainingText = document.getElementById('generations-remaining-text');
 
-                const visualFormatContent = isFreeUser 
-                    ? `<div class="blurred-visual-format visual-format-placeholder" style="height: 100px; display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 4px;"><div class="blur-overlay-message">${t('unblur-visual-format')}</div>${idea['Formato Visual Sugerido']}</div>`
-                    : `<p class="content visual-format-placeholder">${idea['Formato Visual Sugerido']}</p>`;
+                // Función para aplicar las reglas de UI Premium (habilitar/deshabilitar opciones, ocultar anuncios, etc.)
+                // Esta función ahora será más robusta para manejar los estados definidos por el prompt.
+                async function applyPremiumUI(isUserPremium, isGlobalPremiumActive, isLaunchPromoActive) {
+                    const isEffectivelyPremium = isUserPremium || isGlobalPremiumActive || isLaunchPromoActive;
 
-                ideaCard.innerHTML = `
+                    // --- Lógica de Publicidad ---
+                    document.querySelectorAll('.ad-space').forEach(adSpace => {
+                        // Anuncios SI se muestran si:
+                        // - El usuario NO es premium individual Y
+                        // - El Premium global NO está activo Y
+                        // - La promoción de lanzamiento NO está activa
+                        // O (durante la promoción de lanzamiento, los anuncios SÍ se muestran, a menos que el usuario sea Premium individual)
+                        if ((!isUserPremium && !isGlobalPremiumActive && !isLaunchPromoActive) || (isLaunchPromoActive && !isUserPremium)) {
+                            adSpace.style.display = 'block'; // Mostrar anuncios
+                        } else {
+                            adSpace.style.display = 'none'; // Ocultar anuncios
+                        }
+                    });
+
+                    // --- Lógica del botón "Obtener Premium" en Navbar ---
+                    const getPremiumBtn = document.getElementById('get-premium-btn');
+                    if (getPremiumBtn) {
+                        if (isUserPremium) { // Si el usuario es individualmente Premium, ocultar "Obtener Premium"
+                            getPremiumBtn.style.display = 'none';
+                        } else if (isLaunchPromoActive) { // Si hay promoción de lanzamiento
+                            getPremiumBtn.textContent = t('promo-active-get-premium') || "¡Promoción Activa!"; // Usar clave de traducción o texto por defecto
+                            getPremiumBtn.style.display = 'block';
+                        } else if (isGlobalPremiumActive) { // Si Premium está globalmente activo (sin promo específica)
+                            getPremiumBtn.textContent = t('premium-active-for-all') || "Premium Activo para Todos"; // Usar clave de traducción
+                            getPremiumBtn.style.display = 'none'; // Ocultar, ya está activo
+                        } else { // Si no es Premium ni hay promo/global activo, mostrar botón normal
+                            getPremiumBtn.textContent = t('get-premium-btn');
+                            getPremiumBtn.style.display = 'block';
+                        }
+                    }
+
+                    // --- Lógica de Habilitación/Inhabilitación de Opciones en Config View ---
+                    // 1. Tipos de Copy
+                    if (copyTypeSelect) {
+                        copyTypeSelect.querySelectorAll('option').forEach(option => {
+                            const optionValue = option.value;
+                            // Los tipos de copy gratuitos son: Informativo, Emocional, Técnico o profesional
+                            const freeCopyTypes = ["Informativo", "Emocional", "Técnico o profesional"];
+
+                            if (!isEffectivelyPremium && !freeCopyTypes.includes(optionValue)) {
+                                option.classList.add('premium-locked-option');
+                                option.setAttribute('disabled', 'true');
+                                if (!option.querySelector('.tag')) { // Add tag if not present
+                                    const tag = document.createElement('span');
+                                    tag.classList.add('tag', 'is-small');
+                                    tag.textContent = t('feature-premium-label');
+                                    option.appendChild(tag);
+                                }
+                            } else {
+                                option.classList.remove('premium-locked-option');
+                                option.removeAttribute('disabled');
+                                if (option.querySelector('.tag')) option.querySelector('.tag').remove(); // Remove premium tag if active
+                            }
+                        });
+                    }
+
+                    // 2. Redes Sociales
+                    if (socialMediaSelect) {
+                        socialMediaSelect.querySelectorAll('option').forEach(option => {
+                            const optionValue = option.value;
+                            // 'Facebook' es la única red social gratuita
+                            if (!isEffectivelyPremium && optionValue !== 'Facebook') {
+                                option.classList.add('premium-locked-option');
+                                option.setAttribute('disabled', 'true');
+                                if (!option.querySelector('.tag')) { // Add tag if not present
+                                    const tag = document.createElement('span');
+                                    tag.classList.add('tag', 'is-small');
+                                    tag.textContent = t('feature-premium-label');
+                                    option.appendChild(tag);
+                                }
+                            } else {
+                                option.classList.remove('premium-locked-option');
+                                option.removeAttribute('disabled');
+                                if (option.querySelector('.tag')) option.querySelector('.tag').remove(); // Remove premium tag if active
+                            }
+                        });
+                    }
+
+                    // 3. Visualización de Generaciones Restantes (para no-Premium efectivo)
+                    if (generationsRemainingText) {
+                        if (isEffectivelyPremium) {
+                            generationsRemainingText.style.display = 'none'; // Ocultar para usuarios Premium efectivos
+                        } else {
+                            // El contador real se actualizará desde el backend, solo asegurar que esté visible
+                            generationsRemainingText.style.display = 'block';
+                        }
+                    }
+
+                    // --- Lógica para el Formato Visual Sugerido Borroso en Results View ---
+                    // Esto se manejará en la función que renderiza los resultados (Bloque 10),
+                    // pero la función `applyPremiumUI` puede pre-configurar variables o estados si es necesario.
+                }
+
+                // --- Lógica para Cargar Última Información Capturada ---
+                loadLastInputsBtn.addEventListener('click', () => {
+                    const lastTopic = localStorage.getItem('lastTopic');
+                    const lastCopyType = localStorage.getItem('lastCopyType');
+                    const lastSocialMedia = localStorage.getItem('lastSocialMedia');
+                    const lastGenerationMode = localStorage.getItem('lastGenerationMode');
+
+                    if (lastTopic) {
+                        topicInput.value = lastTopic;
+                    }
+                    if (lastCopyType) {
+                        copyTypeSelect.value = lastCopyType;
+                    }
+                    if (lastSocialMedia) {
+                        try {
+                            const selectedOptions = JSON.parse(lastSocialMedia);
+                            // Deseleccionar todo primero
+                            Array.from(socialMediaSelect.options).forEach(option => option.selected = false);
+                            // Luego seleccionar las guardadas
+                            selectedOptions.forEach(value => {
+                                const option = socialMediaSelect.querySelector(`option[value="${value}"]`);
+                                if (option) option.selected = true;
+                            });
+                        } catch (e) {
+                            console.error("Error al parsear lastSocialMedia de localStorage:", e);
+                        }
+                    }
+                    if (lastGenerationMode) {
+                        const radio = document.querySelector(`input[name="generation_mode"][value="${lastGenerationMode}"]`);
+                        if (radio) radio.checked = true;
+                    }
+                    alert(t('load-last-inputs-success') || 'Información cargada.'); // Asumiendo que habrá una clave de traducción
+                });
+
+                // Guardar inputs al cambiar (para "Última Información Capturada")
+                topicInput.addEventListener('input', () => localStorage.setItem('lastTopic', topicInput.value));
+                copyTypeSelect.addEventListener('change', () => localStorage.setItem('lastCopyType', copyTypeSelect.value));
+                socialMediaSelect.addEventListener('change', () => {
+                    const selectedValues = Array.from(socialMediaSelect.selectedOptions).map(option => option.value);
+                    localStorage.setItem('lastSocialMedia', JSON.stringify(selectedValues));
+                });
+                document.querySelectorAll('input[name="generation_mode"]').forEach(radio => {
+                    radio.addEventListener('change', () => localStorage.setItem('lastGenerationMode', radio.value));
+                });
+                // --- Lógica JavaScript - Llamada a la Generación de Ideas ---
+
+                const generateIdeasCallable = functions.httpsCallable('generateIdeas');
+
+                generateIdeasBtn.addEventListener('click', async () => {
+                    clearErrors('topic-error-msg'); // Asumiendo un span/div para este error
+                    clearErrors('copy-type-error-msg'); // Asumiendo un span/div para este error
+                    clearErrors('social-media-error-msg'); // Asumiendo un span/div para este error
+                    clearErrors('general-generation-error-msg'); // Asumiendo un span/div para errores generales
+
+                    const topic = topicInput.value.trim();
+                    const copyType = copyTypeSelect.value;
+                    const selectedSocialMedia = Array.from(socialMediaSelect.selectedOptions).map(option => option.value);
+                    const generationMode = document.querySelector('input[name="generation_mode"]:checked').value;
+
+                    // --- Validación Frontend ---
+                    if (!topic) {
+                        displayError('error-form-validation', 'topic-error-msg'); // "Por favor, completa el tema."
+                        return;
+                    }
+                    if (!copyType) {
+                        displayError('error-form-validation', 'copy-type-error-msg'); // "Por favor, selecciona un tipo de copy."
+                        return;
+                    }
+                    if (selectedSocialMedia.length === 0) {
+                        displayError('error-form-validation', 'social-media-error-msg'); // "Por favor, selecciona al menos una red social."
+                        return;
+                    }
+                    if (generationMode === 'single-platform' && selectedSocialMedia.length !== 1) {
+                        displayError('error-form-validation', 'social-media-error-msg'); // "Para el modo de 3 ideas, selecciona solo una red social."
+                        return;
+                    }
+                    if (generationMode === 'multi-platform' && selectedSocialMedia.length < 2) {
+                        displayError('error-form-validation', 'social-media-error-msg'); // "Para el modo multi-plataforma, selecciona al menos 2 redes sociales."
+                        return;
+                    }
+
+                    // --- Lógica de Habilitación/Inhabilitación (Refuerzo de validación del Frontend) ---
+                    // Simular obtención de estado premium para validación local antes de llamar al backend
+                    // El estado real se obtiene en onAuthStateChanged y se pasa a applyPremiumUI
+                    const userDoc = await db.collection('users').doc(currentUserId).get();
+                    const userData = userDoc.exists ? userDoc.data() : {};
+                    const isUserPremium = userData.isPremium || false;
+                    const appConfigDoc = await db.collection('appConfig').doc('global').get();
+                    const appConfig = appConfigDoc.exists ? appConfigDoc.data() : {};
+                    const isPremiumGlobalActive = appConfig.isPremiumGlobalActive || false;
+                    const isLaunchPromoActive = appConfig.isLaunchPromoActive || false;
+                    const isEffectivelyPremium = isUserPremium || isGlobalPremiumActive || isLaunchPromoActive;
+
+                    // Validar redes sociales para usuarios no Premium
+                    if (!isEffectivelyPremium && selectedSocialMedia.length > 1) {
+                        displayError('error-facebook-only', 'social-media-error-msg');
+                        return;
+                    }
+                    if (!isEffectivelyPremium && selectedSocialMedia[0] !== 'Facebook') {
+                        displayError('error-facebook-only', 'social-media-error-msg');
+                        return;
+                    }
+
+                    // Validar tipos de copy para usuarios no Premium
+                    const freeCopyTypes = ["Informativo", "Emocional", "Técnico o profesional"];
+                    if (!isEffectivelyPremium && !freeCopyTypes.includes(copyType)) {
+                        displayError('error-copy-type-limited', 'copy-type-error-msg');
+                        return;
+                    }
+
+                    // --- Preparar llamada al Backend ---
+                    showLoading(t('loading-phrase-generic')); // Mostrar indicador de carga mejorado
+
+                    try {
+                        const response = await generateIdeasCallable({
+                            topic: topic,
+                            copyType: copyType,
+                            socialMediaPlatforms: selectedSocialMedia,
+                            generationMode: generationMode,
+                            language: currentLang,
+                            currentSessionId: currentSessionId // Pasamos el ID de sesión para validación de sesión única
+                        });
+
+                        hideLoading();
+
+                        if (response.data.success) {
+                            renderIdeas(response.data.ideas, response.data.finalPhrase, !isEffectivelyPremium); // Pasar si es efectivamente premium para blur
+                            showView('results-view'); // Mostrar la vista de resultados
+                            // Opcional: Actualizar contador de generaciones restantes si no es premium
+                            if (!isEffectivelyPremium) {
+                                // El backend ya habrá decrementado el contador, aquí podríamos volver a pedir el estado
+                                // o asumir que se ha restado 1 y actualizar la UI si tenemos el contador en frontend
+                                // Por simplicidad, onAuthStateChanged re-cargará los datos de usuario y actualizará el contador
+                                // cuando la vista se vuelva a config-view.
+                            }
+                        } else {
+                            displayError(response.data.messageKey || 'error-generic', 'general-generation-error-msg');
+                        }
+                    } catch (error) {
+                        hideLoading();
+                        console.error("Error al llamar a generateIdeas:", error.code, error.message, error.details);
+                        let errorMessageKey = 'error-generic';
+                        // Mapear códigos de error de CallableFunctionError
+                        switch (error.code) {
+                            case 'resource-exhausted':
+                                errorMessageKey = 'error-generation-limit';
+                                break;
+                            case 'permission-denied': // Puede ser por la sesión inválida o acceso a premium
+                            case 'unauthenticated':
+                                errorMessageKey = 'error-session-invalid';
+                                auth.signOut(); // Forzar cierre de sesión en Frontend
+                                break;
+                            case 'invalid-argument': // Por ejemplo, si se violan las reglas de copia o red social
+                                if (error.message.includes('Facebook')) errorMessageKey = 'error-facebook-only';
+                                else if (error.message.includes('copy type')) errorMessageKey = 'error-copy-type-limited';
+                                else errorMessageKey = 'error-form-validation';
+                                break;
+                            case 'failed-precondition': // Faltan créditos
+                                errorMessageKey = 'error-not-enough-credits';
+                                break;
+                            case 'unavailable': // Error de API de Deepseek
+                                errorMessageKey = 'error-api-deepseek';
+                                break;
+                            default:
+                                errorMessageKey = 'error-generic';
+                                break;
+                        }
+                        displayError(errorMessageKey, 'general-generation-error-msg');
+                    }
+                });
+                // --- Lógica JavaScript - Manejo de Resultados de Ideas ---
+
+                const ideasContainer = document.getElementById('ideas-container');
+                const finalPhraseDisplay = document.getElementById('final-phrase-display');
+                const backToConfigBtn = document.getElementById('back-to-config-btn');
+
+                let currentSessionIdForFeedback = null; // Para asociar feedback a la sesión actual
+
+                function renderIdeas(ideas, finalPhrase, isFreeUser) {
+                    ideasContainer.innerHTML = ''; // Limpiar contenedor de ideas previas
+                    currentSessionIdForFeedback = ideas[0] ? ideas[0].sessionId : null; // Asumiendo que sessionId viene en cada idea o en la respuesta general
+
+                    ideas.forEach((idea, index) => {
+                        const ideaCard = document.createElement('div');
+                        ideaCard.classList.add('column', 'is-half-tablet', 'is-one-third-desktop', 'card', 'm-3');
+                        ideaCard.style.cssText = 'display: flex; flex-direction: column; justify-content: space-between;';
+
+                        const visualFormatContent = isFreeUser
+                            ? `<div class="blurred-visual-format visual-format-placeholder" style="height: 100px; display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 4px;"><div class="blur-overlay-message">${t('unblur-visual-format')}</div>${idea['Formato Visual Sugerido']}</div>`
+                            : `<p class="content visual-format-placeholder">${idea['Formato Visual Sugerido']}</p>`;
+
+                        ideaCard.innerHTML = `
                     <div class="card-content">
                         <p class="title is-5 has-text-primary mb-2">${idea['Gancho Verbal Impactante']}</p>
                         <p class="subtitle is-6 has-text-grey-dark">${idea['Ángulo Narrativo']}</p>
@@ -2426,519 +2427,519 @@
                         <a href="#" class="card-footer-item feedback-btn dislike-btn" data-idea-index="${index}"><i class="fas fa-thumbs-down"></i> ${t('dislike-button-text')}</a>
                     </footer>
                 `;
-                ideasContainer.appendChild(ideaCard);
-            });
+                        ideasContainer.appendChild(ideaCard);
+                    });
 
-            finalPhraseDisplay.textContent = finalPhrase;
-            finalPhraseDisplay.style.display = 'block';
+                    finalPhraseDisplay.textContent = finalPhrase;
+                    finalPhraseDisplay.style.display = 'block';
 
-            // Attach event listeners for Copy, Share, Like/Dislike buttons
-            document.querySelectorAll('.copy-btn').forEach(button => {
-                button.addEventListener('click', (e) => handleCopyIdea(e, ideas));
-            });
-            document.querySelectorAll('.share-btn').forEach(button => {
-                button.addEventListener('click', (e) => handleShareIdea(e, ideas));
-            });
-            document.querySelectorAll('.feedback-btn').forEach(button => {
-                button.addEventListener('click', (e) => handleFeedback(e, ideas));
-            });
-        }
+                    // Attach event listeners for Copy, Share, Like/Dislike buttons
+                    document.querySelectorAll('.copy-btn').forEach(button => {
+                        button.addEventListener('click', (e) => handleCopyIdea(e, ideas));
+                    });
+                    document.querySelectorAll('.share-btn').forEach(button => {
+                        button.addEventListener('click', (e) => handleShareIdea(e, ideas));
+                    });
+                    document.querySelectorAll('.feedback-btn').forEach(button => {
+                        button.addEventListener('click', (e) => handleFeedback(e, ideas));
+                    });
+                }
 
-        // --- Manejo del botón Copiar ---
-        function handleCopyIdea(event, ideas) {
-            event.preventDefault();
-            const index = event.currentTarget.dataset.ideaIndex;
-            const idea = ideas[index];
-            if (!idea) return;
+                // --- Manejo del botón Copiar ---
+                function handleCopyIdea(event, ideas) {
+                    event.preventDefault();
+                    const index = event.currentTarget.dataset.ideaIndex;
+                    const idea = ideas[index];
+                    if (!idea) return;
 
-            // Construir el texto a copiar SIN los títulos
-            const textToCopy = [
-                idea['Gancho Verbal Impactante'],
-                idea['Texto del Post'],
-                idea['Hashtags'],
-                idea['Llamada a la Acción (CTA)']
-            ].filter(Boolean).join('\n\n'); // Unir con dobles saltos de línea para separación clara
+                    // Construir el texto a copiar SIN los títulos
+                    const textToCopy = [
+                        idea['Gancho Verbal Impactante'],
+                        idea['Texto del Post'],
+                        idea['Hashtags'],
+                        idea['Llamada a la Acción (CTA)']
+                    ].filter(Boolean).join('\n\n'); // Unir con dobles saltos de línea para separación clara
 
-            navigator.clipboard.writeText(textToCopy)
-                .then(() => {
-                    alert(t('idea-copied')); // Mensaje de éxito
-                })
-                .catch(err => {
-                    console.error('Error al copiar al portapapeles:', err);
-                    alert(t('error-generic') || 'Error al copiar.'); // Mensaje de error genérico
-                });
-        }
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(() => {
+                            alert(t('idea-copied')); // Mensaje de éxito
+                        })
+                        .catch(err => {
+                            console.error('Error al copiar al portapapeles:', err);
+                            alert(t('error-generic') || 'Error al copiar.'); // Mensaje de error genérico
+                        });
+                }
 
-        // --- Manejo del botón Compartir (Nativo) ---
-        function handleShareIdea(event, ideas) {
-            event.preventDefault();
-            const index = event.currentTarget.dataset.ideaIndex;
-            const idea = ideas[index];
-            if (!idea) return;
+                // --- Manejo del botón Compartir (Nativo) ---
+                function handleShareIdea(event, ideas) {
+                    event.preventDefault();
+                    const index = event.currentTarget.dataset.ideaIndex;
+                    const idea = ideas[index];
+                    if (!idea) return;
 
-            if (navigator.share) {
-                const textToShare = [
-                    idea['Gancho Verbal Impactante'],
-                    idea['Texto del Post'],
-                    idea['Hashtags'],
-                    idea['Llamada a la Acción (CTA)']
-                ].filter(Boolean).join('\n\n');
+                    if (navigator.share) {
+                        const textToShare = [
+                            idea['Gancho Verbal Impactante'],
+                            idea['Texto del Post'],
+                            idea['Hashtags'],
+                            idea['Llamada a la Acción (CTA)']
+                        ].filter(Boolean).join('\n\n');
 
-                navigator.share({
-                        title: t('app-name') || 'FeedFlow Idea', // Usar el nombre de la app
-                        text: textToShare
-                        // url: window.location.href // Opcional: Si quieres compartir un enlace a tu app
-                    })
-                    .then(() => console.log('Contenido compartido con éxito.'))
-                    .catch((error) => console.error('Error al compartir:', error));
-            } else {
-                alert(t('share-not-supported') || 'La función de compartir no es compatible con este navegador.'); // Asumiendo traducción
-            }
-        }
+                        navigator.share({
+                            title: t('app-name') || 'FeedFlow Idea', // Usar el nombre de la app
+                            text: textToShare
+                            // url: window.location.href // Opcional: Si quieres compartir un enlace a tu app
+                        })
+                            .then(() => console.log('Contenido compartido con éxito.'))
+                            .catch((error) => console.error('Error al compartir:', error));
+                    } else {
+                        alert(t('share-not-supported') || 'La función de compartir no es compatible con este navegador.'); // Asumiendo traducción
+                    }
+                }
 
-        // --- Manejo de Feedback (Me gusta/No me gusta) ---
-        const recordIdeaFeedbackCallable = functions.httpsCallable('recordIdeaFeedback');
-        async function handleFeedback(event, ideas) {
-            event.preventDefault();
-            const index = event.currentTarget.dataset.ideaIndex;
-            const idea = ideas[index];
-            if (!idea || !currentSessionIdForFeedback || !currentUserId) return; // Necesita ID de sesión y de usuario
+                // --- Manejo de Feedback (Me gusta/No me gusta) ---
+                const recordIdeaFeedbackCallable = functions.httpsCallable('recordIdeaFeedback');
+                async function handleFeedback(event, ideas) {
+                    event.preventDefault();
+                    const index = event.currentTarget.dataset.ideaIndex;
+                    const idea = ideas[index];
+                    if (!idea || !currentSessionIdForFeedback || !currentUserId) return; // Necesita ID de sesión y de usuario
 
-            const feedbackType = event.currentTarget.classList.contains('like-btn') ? 'like' : 'dislike';
-            const value = feedbackType === 'like' ? true : false; // O un sistema de rating numérico
+                    const feedbackType = event.currentTarget.classList.contains('like-btn') ? 'like' : 'dislike';
+                    const value = feedbackType === 'like' ? true : false; // O un sistema de rating numérico
 
-            showLoading(t('loading-phrase-feedback')); // Mensaje de carga para feedback
-            try {
-                const response = await recordIdeaFeedbackCallable({
-                    sessionId: currentSessionIdForFeedback, // Usar el ID de la sesión que generó la idea
-                    ideaIndex: index,
-                    feedbackType: feedbackType,
-                    value: value,
-                    ideaDetails: { // Para contexto en el backend
-                        topic: idea.topic, // Asumimos que topic se guarda en la idea para feedback
-                        copyType: idea.copyType,
-                        socialMedia: idea['Red Social'] // Asumimos este campo si la idea es individual
+                    showLoading(t('loading-phrase-feedback')); // Mensaje de carga para feedback
+                    try {
+                        const response = await recordIdeaFeedbackCallable({
+                            sessionId: currentSessionIdForFeedback, // Usar el ID de la sesión que generó la idea
+                            ideaIndex: index,
+                            feedbackType: feedbackType,
+                            value: value,
+                            ideaDetails: { // Para contexto en el backend
+                                topic: idea.topic, // Asumimos que topic se guarda en la idea para feedback
+                                copyType: idea.copyType,
+                                socialMedia: idea['Red Social'] // Asumimos este campo si la idea es individual
+                            }
+                        });
+                        hideLoading();
+                        if (response.data.success) {
+                            console.log('Feedback registrado:', response.data.message);
+                            // Opcional: Cambiar visualmente el botón para indicar que ya se dio feedback
+                            event.currentTarget.classList.add('is-success'); // Ejemplo visual
+                        } else {
+                            displayError(response.data.messageKey || 'error-generic', 'general-generation-error-msg');
+                        }
+                    } catch (error) {
+                        hideLoading();
+                        console.error('Error al enviar feedback:', error.code, error.message);
+                        displayError('error-generic', 'general-generation-error-msg');
+                    }
+                }
+
+                // --- Manejo del botón Volver a Generar / Nueva Búsqueda ---
+                backToConfigBtn.addEventListener('click', () => {
+                    // Limpiar campos de la vista de configuración
+                    topicInput.value = '';
+                    copyTypeSelect.value = ''; // Reset dropdown
+                    Array.from(socialMediaSelect.options).forEach(option => option.selected = false); // Deseleccionar todo
+                    document.querySelector('input[name="generation_mode"][value="multi-platform"]').checked = true; // Reset radio button
+                    localStorage.removeItem('lastTopic'); // Limpiar datos guardados para evitar precarga
+                    localStorage.removeItem('lastCopyType');
+                    localStorage.removeItem('lastSocialMedia');
+                    localStorage.removeItem('lastGenerationMode');
+
+                    // Ocultar vista de resultados y mostrar vista de configuración
+                    showView('config-view');
+                    // Re-aplicar reglas premium y traducciones
+                    // auth.onAuthStateChanged (que es quien llama a loadUserDataAndConfig) se encargará de esto cuando se cambie de vista
+                    // Por ahora, simplemente llamamos directamente para asegurar la UI correcta
+                    // Deberíamos recargar el estado del usuario para obtener el contador de generaciones actualizado
+                    if (currentUserId) {
+                        db.collection('users').doc(currentUserId).get().then(userDoc => {
+                            const userData = userDoc.exists ? userDoc.data() : {};
+                            // Asumiendo que estos valores ya están disponibles globalmente en el scope
+                            const isUserPremium = userData.isPremium || false;
+                            const appConfigRef = db.collection('appConfig').doc('global');
+                            appConfigRef.get().then(appConfigDoc => {
+                                const appConfig = appConfigDoc.exists ? appConfigDoc.data() : {};
+                                const isGlobalPremiumActive = appConfig.isPremiumGlobalActive || false;
+                                const isLaunchPromoActive = appConfig.isLaunchPromoActive || false;
+                                applyPremiumUI(isUserPremium, isGlobalPremiumActive, isLaunchPromoActive);
+                                applyTranslations(); // Asegurar que todo el texto está actualizado
+                            }).catch(err => console.error("Error al obtener appConfig al volver:", err));
+                        }).catch(err => console.error("Error al obtener userDoc al volver:", err));
                     }
                 });
-                hideLoading();
-                if (response.data.success) {
-                    console.log('Feedback registrado:', response.data.message);
-                    // Opcional: Cambiar visualmente el botón para indicar que ya se dio feedback
-                    event.currentTarget.classList.add('is-success'); // Ejemplo visual
-                } else {
-                    displayError(response.data.messageKey || 'error-generic', 'general-generation-error-msg');
-                }
-            } catch (error) {
-                hideLoading();
-                console.error('Error al enviar feedback:', error.code, error.message);
-                displayError('error-generic', 'general-generation-error-msg');
-            }
-        }
+                // --- Lógica JavaScript - Funcionalidad de Perfil (Campos Adicionales) ---
 
-        // --- Manejo del botón Volver a Generar / Nueva Búsqueda ---
-        backToConfigBtn.addEventListener('click', () => {
-            // Limpiar campos de la vista de configuración
-            topicInput.value = '';
-            copyTypeSelect.value = ''; // Reset dropdown
-            Array.from(socialMediaSelect.options).forEach(option => option.selected = false); // Deseleccionar todo
-            document.querySelector('input[name="generation_mode"][value="multi-platform"]').checked = true; // Reset radio button
-            localStorage.removeItem('lastTopic'); // Limpiar datos guardados para evitar precarga
-            localStorage.removeItem('lastCopyType');
-            localStorage.removeItem('lastSocialMedia');
-            localStorage.removeItem('lastGenerationMode');
-            
-            // Ocultar vista de resultados y mostrar vista de configuración
-            showView('config-view');
-            // Re-aplicar reglas premium y traducciones
-            // auth.onAuthStateChanged (que es quien llama a loadUserDataAndConfig) se encargará de esto cuando se cambie de vista
-            // Por ahora, simplemente llamamos directamente para asegurar la UI correcta
-            // Deberíamos recargar el estado del usuario para obtener el contador de generaciones actualizado
-            if (currentUserId) {
-                db.collection('users').doc(currentUserId).get().then(userDoc => {
-                    const userData = userDoc.exists ? userDoc.data() : {};
-                    // Asumiendo que estos valores ya están disponibles globalmente en el scope
-                    const isUserPremium = userData.isPremium || false;
-                    const appConfigRef = db.collection('appConfig').doc('global');
-                    appConfigRef.get().then(appConfigDoc => {
+                const profileModal = document.getElementById('profile-modal');
+                const profileForm = document.getElementById('profile-form');
+                const closeProfileModalBtn = document.getElementById('close-profile-modal');
+                const profileAgeInput = document.getElementById('profile-age-input');
+                const profileGenderSelect = document.getElementById('profile-gender-select');
+                const profileCountryInput = document.getElementById('profile-country-input');
+
+                const updateUserProfileCallable = functions.httpsCallable('updateUserProfile');
+
+                // Función para cargar los datos del perfil actual en el modal
+                async function loadProfileData() {
+                    if (!currentUserId) return;
+
+                    try {
+                        const userDoc = await db.collection('users').doc(currentUserId).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            profileAgeInput.value = userData.edad || '';
+                            profileGenderSelect.value = userData.sexo || '';
+                            profileCountryInput.value = userData.pais || '';
+                        }
+                    } catch (error) {
+                        console.error("Error al cargar datos del perfil:", error);
+                        displayError('error-generic', 'profile-error-msg'); // Asumiendo un elemento para errores en modal de perfil
+                    }
+                }
+
+                // Listener para abrir el modal de perfil (si se añade un botón en Navbar, por ejemplo)
+                // Por ahora, solo se activa cuando se necesite completar perfil.
+                // Asumiendo que habrá un botón en el Navbar para abrir el perfil, o se llama desde onAuthStateChanged
+                // si el perfil está incompleto.
+
+                // Función para guardar los datos del perfil
+                profileForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    showLoading(t('loading-phrase-profile-update')); // Asumiendo traducción
+                    clearErrors('profile-error-msg'); // Asumiendo elemento para errores en modal de perfil
+
+                    const age = parseInt(profileAgeInput.value);
+                    const gender = profileGenderSelect.value;
+                    const country = profileCountryInput.value.trim();
+
+                    if (!currentUserId) {
+                        displayError('error-auth-generic', 'profile-error-msg');
+                        hideLoading();
+                        return;
+                    }
+
+                    try {
+                        await updateUserProfileCallable({
+                            uid: currentUserId, // Asegurar que la función use el UID autenticado
+                            edad: isNaN(age) ? null : age,
+                            sexo: gender || null,
+                            pais: country || null
+                        });
+                        alert(t('success-profile-update'));
+                        profileModal.classList.remove('is-active'); // Cerrar modal al guardar
+                    } catch (error) {
+                        console.error("Error al actualizar perfil:", error.code, error.message);
+                        let errorMessageKey = 'error-generic';
+                        switch (error.code) {
+                            case 'unauthenticated':
+                            case 'permission-denied':
+                                errorMessageKey = 'error-session-invalid';
+                                auth.signOut();
+                                break;
+                            case 'invalid-argument':
+                                errorMessageKey = 'error-form-validation'; // Mensaje genérico para validación de input
+                                break;
+                        }
+                        displayError(errorMessageKey, 'profile-error-msg');
+                    } finally {
+                        hideLoading();
+                    }
+                });
+
+                closeProfileModalBtn.addEventListener('click', () => {
+                    profileModal.classList.remove('is-active');
+                });
+
+                // Este es un ejemplo de cómo podrías activar el modal de perfil si es la primera vez que inicia sesión con Google
+                // Lo que sigue en el bloque 7 es el onAuthStateChanged, puedes llamar loadProfileData() y profileModal.classList.add('is-active');
+                // si el usuario no tiene los campos de perfil ya seteados en Firestore.
+                // --- Lógica JavaScript - Funcionalidad de Administración ---
+
+                // Referencias a elementos de la UI de administración
+                const adminHistoryBtn = document.getElementById('admin-history-btn');
+                const adminHistoryView = document.getElementById('admin-history-view');
+                const adminHistoryTableBody = document.getElementById('admin-history-table-body');
+
+                const adminPremiumControlBtn = document.getElementById('admin-premium-control-btn');
+                const adminPremiumControlView = document.getElementById('admin-premium-control-view');
+                const globalPremiumStatusText = document.getElementById('global-premium-status-text');
+                const launchPromoStatusText = document.getElementById('launch-promo-status-text');
+                const activateGlobalPremiumBtn = document.getElementById('activate-global-premium-btn');
+                const deactivateGlobalPremiumBtn = document.getElementById('deactivate-global-premium-btn');
+                const activateLaunchPromoBtn = document.getElementById('activate-launch-promo-btn');
+                const deactivateLaunchPromoBtn = document.getElementById('deactivate-launch-promo-btn');
+
+                const getAdminHistoryCallable = functions.httpsCallable('getAdminHistory');
+                const setPremiumGlobalStatusCallable = functions.httpsCallable('setPremiumGlobalStatus');
+
+                // --- Historial de Generaciones (Admin) ---
+                adminHistoryBtn.addEventListener('click', async () => {
+                    if (!currentUserId) { // Debería estar autenticado, pero doble check
+                        alert(t('error-auth-generic'));
+                        return;
+                    }
+                    showLoading(t('loading-phrase-admin-history')); // Mensaje de carga específico
+                    try {
+                        // Aquí deberías pasar el sessionId para la validación del backend si getAdminHistory lo requiere
+                        const response = await getAdminHistoryCallable({ currentSessionId: currentSessionId });
+                        hideLoading();
+
+                        if (response.data.success && response.data.history) {
+                            adminHistoryTableBody.innerHTML = ''; // Limpiar tabla
+                            response.data.history.forEach(gen => {
+                                const row = adminHistoryTableBody.insertRow();
+                                row.insertCell().textContent = gen.userId || 'N/A';
+                                row.insertCell().textContent = gen.timestamp ? new Date(gen.timestamp._seconds * 1000).toLocaleString() : 'N/A'; // Convertir Timestamp
+                                row.insertCell().textContent = gen.topic || 'N/A';
+                                row.insertCell().textContent = gen.copyType || 'N/A';
+                                row.insertCell().textContent = Array.isArray(gen.socialMediaPlatforms) ? gen.socialMediaPlatforms.join(', ') : 'N/A';
+                                row.insertCell().textContent = gen.generationMode || 'N/A';
+                                row.insertCell().textContent = gen.language || 'N/A';
+                            });
+                            showView('admin-history-view');
+                        } else {
+                            displayError(response.data.messageKey || 'error-generic', 'admin-history-error-msg'); // Asumiendo un elemento para errores en admin history
+                        }
+                    } catch (error) {
+                        hideLoading();
+                        console.error("Error al obtener historial admin:", error.code, error.message);
+                        if (error.code === 'permission-denied' || error.code === 'unauthenticated') {
+                            displayError('error-session-invalid', 'admin-history-error-msg');
+                            auth.signOut(); // Forzar cierre de sesión si no es admin o sesión inválida
+                        } else {
+                            displayError('error-generic', 'admin-history-error-msg');
+                        }
+                    }
+                });
+
+                // --- Control Premium Global (Admin) ---
+                adminPremiumControlBtn.addEventListener('click', async () => {
+                    if (!currentUserId) {
+                        alert(t('error-auth-generic'));
+                        return;
+                    }
+                    showLoading(t('loading-phrase-admin-control')); // Mensaje de carga
+                    try {
+                        // Fetch current config to display it
+                        const appConfigDoc = await db.collection('appConfig').doc('global').get();
                         const appConfig = appConfigDoc.exists ? appConfigDoc.data() : {};
-                        const isGlobalPremiumActive = appConfig.isPremiumGlobalActive || false;
-                        const isLaunchPromoActive = appConfig.isLaunchPromoActive || false;
-                        applyPremiumUI(isUserPremium, isGlobalPremiumActive, isLaunchPromoActive);
-                        applyTranslations(); // Asegurar que todo el texto está actualizado
-                    }).catch(err => console.error("Error al obtener appConfig al volver:", err));
-                }).catch(err => console.error("Error al obtener userDoc al volver:", err));
-            }
-        });
-        // --- Lógica JavaScript - Funcionalidad de Perfil (Campos Adicionales) ---
 
-        const profileModal = document.getElementById('profile-modal');
-        const profileForm = document.getElementById('profile-form');
-        const closeProfileModalBtn = document.getElementById('close-profile-modal');
-        const profileAgeInput = document.getElementById('profile-age-input');
-        const profileGenderSelect = document.getElementById('profile-gender-select');
-        const profileCountryInput = document.getElementById('profile-country-input');
-
-        const updateUserProfileCallable = functions.httpsCallable('updateUserProfile');
-
-        // Función para cargar los datos del perfil actual en el modal
-        async function loadProfileData() {
-            if (!currentUserId) return;
-
-            try {
-                const userDoc = await db.collection('users').doc(currentUserId).get();
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    profileAgeInput.value = userData.edad || '';
-                    profileGenderSelect.value = userData.sexo || '';
-                    profileCountryInput.value = userData.pais || '';
-                }
-            } catch (error) {
-                console.error("Error al cargar datos del perfil:", error);
-                displayError('error-generic', 'profile-error-msg'); // Asumiendo un elemento para errores en modal de perfil
-            }
-        }
-
-        // Listener para abrir el modal de perfil (si se añade un botón en Navbar, por ejemplo)
-        // Por ahora, solo se activa cuando se necesite completar perfil.
-        // Asumiendo que habrá un botón en el Navbar para abrir el perfil, o se llama desde onAuthStateChanged
-        // si el perfil está incompleto.
-
-        // Función para guardar los datos del perfil
-        profileForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading(t('loading-phrase-profile-update')); // Asumiendo traducción
-            clearErrors('profile-error-msg'); // Asumiendo elemento para errores en modal de perfil
-
-            const age = parseInt(profileAgeInput.value);
-            const gender = profileGenderSelect.value;
-            const country = profileCountryInput.value.trim();
-
-            if (!currentUserId) {
-                displayError('error-auth-generic', 'profile-error-msg');
-                hideLoading();
-                return;
-            }
-
-            try {
-                await updateUserProfileCallable({
-                    uid: currentUserId, // Asegurar que la función use el UID autenticado
-                    edad: isNaN(age) ? null : age,
-                    sexo: gender || null,
-                    pais: country || null
+                        updateGlobalPremiumStatusDisplay(
+                            appConfig.isPremiumGlobalActive || false,
+                            appConfig.premiumGlobalEndDate ? appConfig.premiumGlobalEndDate.toDate() : null,
+                            appConfig.isLaunchPromoActive || false
+                        );
+                        showView('admin-premium-control-view');
+                    } catch (error) {
+                        console.error("Error al cargar control Premium admin:", error);
+                        if (error.code === 'permission-denied' || error.code === 'unauthenticated') {
+                            displayError('error-session-invalid', 'admin-premium-control-error-msg'); // Asumiendo elemento
+                            auth.signOut();
+                        } else {
+                            displayError('error-generic', 'admin-premium-control-error-msg');
+                        }
+                    } finally {
+                        hideLoading();
+                    }
                 });
-                alert(t('success-profile-update'));
-                profileModal.classList.remove('is-active'); // Cerrar modal al guardar
-            } catch (error) {
-                console.error("Error al actualizar perfil:", error.code, error.message);
-                let errorMessageKey = 'error-generic';
-                switch (error.code) {
-                    case 'unauthenticated':
-                    case 'permission-denied':
-                        errorMessageKey = 'error-session-invalid';
-                        auth.signOut();
-                        break;
-                    case 'invalid-argument':
-                        errorMessageKey = 'error-form-validation'; // Mensaje genérico para validación de input
-                        break;
+
+                function updateGlobalPremiumStatusDisplay(isActive, endDate, isPromoActive) {
+                    let statusText = t('status-inactive');
+                    if (isActive) {
+                        statusText = t('status-active');
+                        if (endDate && endDate > new Date()) {
+                            statusText += `${t('status-until')}${endDate.toLocaleDateString()}`;
+                        }
+                    }
+                    globalPremiumStatusText.textContent = `${t('global-premium-status-text')}${statusText}`;
+                    launchPromoStatusText.textContent = `${t('launch-promo-status-text')}${isPromoActive ? t('status-active') : t('status-inactive')}`;
                 }
-                displayError(errorMessageKey, 'profile-error-msg');
-            } finally {
-                hideLoading();
-            }
-        });
 
-        closeProfileModalBtn.addEventListener('click', () => {
-            profileModal.classList.remove('is-active');
-        });
+                activateGlobalPremiumBtn.addEventListener('click', async () => {
+                    if (!confirm(t('confirm-activate-global-premium') || '¿Estás seguro de activar el Premium global para todos?')) return;
+                    showLoading(t('loading-phrase-updating-premium'));
+                    try {
+                        const endDate = new Date();
+                        endDate.setFullYear(endDate.getFullYear() + 1); // Ejemplo: activo por 1 año
+                        const response = await setPremiumGlobalStatusCallable({
+                            isPremiumGlobalActive: true,
+                            premiumGlobalEndDate: endDate,
+                            isLaunchPromoActive: false // Desactiva la promo si activas global
+                        });
+                        if (response.data.success) {
+                            alert(t('success-premium-global-active'));
+                            updateGlobalPremiumStatusDisplay(true, endDate, false);
+                        } else {
+                            displayError(response.data.messageKey || 'error-generic', 'admin-premium-control-error-msg');
+                        }
+                    } catch (error) {
+                        console.error("Error al activar Premium global:", error);
+                        displayError('error-generic', 'admin-premium-control-error-msg');
+                    } finally {
+                        hideLoading();
+                    }
+                });
 
-        // Este es un ejemplo de cómo podrías activar el modal de perfil si es la primera vez que inicia sesión con Google
-        // Lo que sigue en el bloque 7 es el onAuthStateChanged, puedes llamar loadProfileData() y profileModal.classList.add('is-active');
-        // si el usuario no tiene los campos de perfil ya seteados en Firestore.
-        // --- Lógica JavaScript - Funcionalidad de Administración ---
+                deactivateGlobalPremiumBtn.addEventListener('click', async () => {
+                    if (!confirm(t('confirm-deactivate-global-premium') || '¿Estás seguro de desactivar el Premium global para todos?')) return;
+                    showLoading(t('loading-phrase-updating-premium'));
+                    try {
+                        const response = await setPremiumGlobalStatusCallable({
+                            isPremiumGlobalActive: false,
+                            premiumGlobalEndDate: null,
+                            isLaunchPromoActive: false // Desactiva la promo también
+                        });
+                        if (response.data.success) {
+                            alert(t('success-premium-global-deactivated'));
+                            updateGlobalPremiumStatusDisplay(false, null, false);
+                        } else {
+                            displayError(response.data.messageKey || 'error-generic', 'admin-premium-control-error-msg');
+                        }
+                    } catch (error) {
+                        console.error("Error al desactivar Premium global:", error);
+                        displayError('error-generic', 'admin-premium-control-error-msg');
+                    } finally {
+                        hideLoading();
+                    }
+                });
 
-        // Referencias a elementos de la UI de administración
-        const adminHistoryBtn = document.getElementById('admin-history-btn');
-        const adminHistoryView = document.getElementById('admin-history-view');
-        const adminHistoryTableBody = document.getElementById('admin-history-table-body');
-        
-        const adminPremiumControlBtn = document.getElementById('admin-premium-control-btn');
-        const adminPremiumControlView = document.getElementById('admin-premium-control-view');
-        const globalPremiumStatusText = document.getElementById('global-premium-status-text');
-        const launchPromoStatusText = document.getElementById('launch-promo-status-text');
-        const activateGlobalPremiumBtn = document.getElementById('activate-global-premium-btn');
-        const deactivateGlobalPremiumBtn = document.getElementById('deactivate-global-premium-btn');
-        const activateLaunchPromoBtn = document.getElementById('activate-launch-promo-btn');
-        const deactivateLaunchPromoBtn = document.getElementById('deactivate-launch-promo-btn');
+                activateLaunchPromoBtn.addEventListener('click', async () => {
+                    if (!confirm(t('confirm-activate-launch-promo') || '¿Estás seguro de activar la promoción de lanzamiento?')) return;
+                    showLoading(t('loading-phrase-updating-premium'));
+                    try {
+                        // La duración de la promo se puede definir aquí o en el backend. Por simplicidad, no hay end date explícito en UI.
+                        const response = await setPremiumGlobalStatusCallable({
+                            isLaunchPromoActive: true,
+                            isPremiumGlobalActive: false // Asegura que el premium global no esté activo al mismo tiempo
+                        });
+                        if (response.data.success) {
+                            alert(t('success-launch-promo-active'));
+                            updateGlobalPremiumStatusDisplay(false, null, true);
+                        } else {
+                            displayError(response.data.messageKey || 'error-generic', 'admin-premium-control-error-msg');
+                        }
+                    } catch (error) {
+                        console.error("Error al activar promoción:", error);
+                        displayError('error-generic', 'admin-premium-control-error-msg');
+                    } finally {
+                        hideLoading();
+                    }
+                });
 
-        const getAdminHistoryCallable = functions.httpsCallable('getAdminHistory');
-        const setPremiumGlobalStatusCallable = functions.httpsCallable('setPremiumGlobalStatus');
+                deactivateLaunchPromoBtn.addEventListener('click', async () => {
+                    if (!confirm(t('confirm-deactivate-launch-promo') || '¿Estás seguro de desactivar la promoción de lanzamiento?')) return;
+                    showLoading(t('loading-phrase-updating-premium'));
+                    try {
+                        const response = await setPremiumGlobalStatusCallable({
+                            isLaunchPromoActive: false
+                        });
+                        if (response.data.success) {
+                            alert(t('success-launch-promo-deactivated'));
+                            updateGlobalPremiumStatusDisplay(false, null, false);
+                        } else {
+                            displayError(response.data.messageKey || 'error-generic', 'admin-premium-control-error-msg');
+                        }
+                    } catch (error) {
+                        console.error("Error al desactivar promoción:", error);
+                        displayError('error-generic', 'admin-premium-control-error-msg');
+                    } finally {
+                        hideLoading();
+                    }
+                });
 
-        // --- Historial de Generaciones (Admin) ---
-        adminHistoryBtn.addEventListener('click', async () => {
-            if (!currentUserId) { // Debería estar autenticado, pero doble check
-                alert(t('error-auth-generic'));
-                return;
-            }
-            showLoading(t('loading-phrase-admin-history')); // Mensaje de carga específico
-            try {
-                // Aquí deberías pasar el sessionId para la validación del backend si getAdminHistory lo requiere
-                const response = await getAdminHistoryCallable({ currentSessionId: currentSessionId }); 
-                hideLoading();
+                // Adicionar claves de traducción para nuevos mensajes de confirmación si no existen
+                // 'confirm-activate-global-premium': '¿Estás seguro de activar el Premium global para todos?',
+                // 'confirm-deactivate-global-premium': '¿Estás seguro de desactivar el Premium global para todos?',
+                // 'confirm-activate-launch-promo': '¿Estás seguro de activar la promoción de lanzamiento?',
+                // 'confirm-deactivate-launch-promo': '¿Estás seguro de desactivar la promoción de lanzamiento?',
+                // 'loading-phrase-admin-history': 'Cargando historial de administración...',
+                // 'loading-phrase-admin-control': 'Cargando control premium...',
+                // 'loading-phrase-updating-premium': 'Actualizando estado premium...',
+                // 'promo-active-get-premium': '¡Promoción de Lanzamiento Activa!',
+                // 'premium-active-for-all': 'Premium Activo para Todos',
+                // --- Lógica JavaScript - Inicialización y Event Listeners Generales ---
 
-                if (response.data.success && response.data.history) {
-                    adminHistoryTableBody.innerHTML = ''; // Limpiar tabla
-                    response.data.history.forEach(gen => {
-                        const row = adminHistoryTableBody.insertRow();
-                        row.insertCell().textContent = gen.userId || 'N/A';
-                        row.insertCell().textContent = gen.timestamp ? new Date(gen.timestamp._seconds * 1000).toLocaleString() : 'N/A'; // Convertir Timestamp
-                        row.insertCell().textContent = gen.topic || 'N/A';
-                        row.insertCell().textContent = gen.copyType || 'N/A';
-                        row.insertCell().textContent = Array.isArray(gen.socialMediaPlatforms) ? gen.socialMediaPlatforms.join(', ') : 'N/A';
-                        row.insertCell().textContent = gen.generationMode || 'N/A';
-                        row.insertCell().textContent = gen.language || 'N/A';
+                // Event Listeners para el Navbar Burger (menú móvil)
+                document.addEventListener('DOMContentLoaded', () => {
+                    // Get all "navbar-burger" elements
+                    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+                    // Check if there are any navbar burgers
+                    if ($navbarBurgers.length > 0) {
+                        // Add a click event on each of them
+                        $navbarBurgers.forEach(el => {
+                            el.addEventListener('click', () => {
+                                // Get the target from the "data-target" attribute
+                                const target = el.dataset.target;
+                                const $target = document.getElementById(target);
+
+                                // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                                el.classList.toggle('is-active');
+                                $target.classList.toggle('is-active');
+                            });
+                        });
+                    }
+                });
+
+                // Event Listeners para alternar entre Login y Registro
+                const toggleAuthText = document.getElementById('toggle-auth-text');
+                if (toggleAuthText) {
+                    function updateAuthToggleListeners() {
+                        const showSignupLink = document.getElementById('show-signup-form-link');
+                        const showLoginLink = document.getElementById('show-login-form-link');
+
+                        if (showSignupLink) {
+                            showSignupLink.removeEventListener('click', handleShowSignupForm); // Evitar duplicados
+                            showSignupLink.addEventListener('click', handleShowSignupForm);
+                        }
+                        if (showLoginLink) {
+                            showLoginLink.removeEventListener('click', handleShowLoginForm); // Evitar duplicados
+                            showLoginLink.addEventListener('click', handleShowLoginForm);
+                        }
+                    }
+
+                    function handleShowSignupForm(e) {
+                        e.preventDefault();
+                        loginForm.style.display = 'none';
+                        signupFormContainer.classList.add('is-active');
+                        document.getElementById('auth-title').textContent = t('auth-title-signup');
+                        toggleAuthText.innerHTML = `${t('toggle-auth-text-login')} <a id="show-login-form-link">${t('show-login-form-link')}</a>`;
+                        updateAuthToggleListeners(); // Re-attach listener for the new link
+                    }
+
+                    function handleShowLoginForm(e) {
+                        e.preventDefault();
+                        signupFormContainer.classList.remove('is-active');
+                        loginForm.style.display = 'block';
+                        document.getElementById('auth-title').textContent = t('auth-title-login');
+                        toggleAuthText.innerHTML = `${t('toggle-auth-text-signup')} <a id="show-signup-form-link">${t('show-signup-form-link')}</a>`;
+                        updateAuthToggleListeners(); // Re-attach listener for the new link
+                    }
+
+                    // Inicializar listeners
+                    updateAuthToggleListeners();
+                }
+
+                // Llamar a applyTranslations al inicio para que toda la UI se traduzca inicialmente
+                applyTranslations();
+
+                // Asegurar que la vista inicial se muestra correctamente al cargar
+                // onAuthStateChanged ya hace esto, pero para evitar un flash de contenido
+                // antes de que Firebase inicialice, podemos ocultar todo por defecto y mostrar
+                // solo la vista de auth.
+                showView('auth-view');
+
+                // Aquí podrías añadir un listener para un botón "Mi Perfil" en el navbar,
+                // que abra el #profile-modal
+                const profileBtn = document.getElementById('profile-nav-btn'); // Asumiendo que tendrás un ID para este botón en navbar
+                if (profileBtn) {
+                    profileBtn.addEventListener('click', () => {
+                        loadProfileData(); // Carga los datos actuales del perfil
+                        profileModal.classList.add('is-active');
                     });
-                    showView('admin-history-view');
-                } else {
-                    displayError(response.data.messageKey || 'error-generic', 'admin-history-error-msg'); // Asumiendo un elemento para errores en admin history
                 }
-            } catch (error) {
-                hideLoading();
-                console.error("Error al obtener historial admin:", error.code, error.message);
-                if (error.code === 'permission-denied' || error.code === 'unauthenticated') {
-                    displayError('error-session-invalid', 'admin-history-error-msg');
-                    auth.signOut(); // Forzar cierre de sesión si no es admin o sesión inválida
-                } else {
-                    displayError('error-generic', 'admin-history-error-msg');
-                }
-            }
-        });
-
-        // --- Control Premium Global (Admin) ---
-        adminPremiumControlBtn.addEventListener('click', async () => {
-            if (!currentUserId) {
-                alert(t('error-auth-generic'));
-                return;
-            }
-            showLoading(t('loading-phrase-admin-control')); // Mensaje de carga
-            try {
-                // Fetch current config to display it
-                const appConfigDoc = await db.collection('appConfig').doc('global').get();
-                const appConfig = appConfigDoc.exists ? appConfigDoc.data() : {};
-                
-                updateGlobalPremiumStatusDisplay(
-                    appConfig.isPremiumGlobalActive || false,
-                    appConfig.premiumGlobalEndDate ? appConfig.premiumGlobalEndDate.toDate() : null,
-                    appConfig.isLaunchPromoActive || false
-                );
-                showView('admin-premium-control-view');
-            } catch (error) {
-                console.error("Error al cargar control Premium admin:", error);
-                if (error.code === 'permission-denied' || error.code === 'unauthenticated') {
-                    displayError('error-session-invalid', 'admin-premium-control-error-msg'); // Asumiendo elemento
-                    auth.signOut();
-                } else {
-                    displayError('error-generic', 'admin-premium-control-error-msg');
-                }
-            } finally {
-                hideLoading();
-            }
-        });
-
-        function updateGlobalPremiumStatusDisplay(isActive, endDate, isPromoActive) {
-            let statusText = t('status-inactive');
-            if (isActive) {
-                statusText = t('status-active');
-                if (endDate && endDate > new Date()) {
-                    statusText += `${t('status-until')}${endDate.toLocaleDateString()}`;
-                }
-            }
-            globalPremiumStatusText.textContent = `${t('global-premium-status-text')}${statusText}`;
-            launchPromoStatusText.textContent = `${t('launch-promo-status-text')}${isPromoActive ? t('status-active') : t('status-inactive')}`;
-        }
-
-        activateGlobalPremiumBtn.addEventListener('click', async () => {
-            if (!confirm(t('confirm-activate-global-premium') || '¿Estás seguro de activar el Premium global para todos?')) return;
-            showLoading(t('loading-phrase-updating-premium'));
-            try {
-                const endDate = new Date();
-                endDate.setFullYear(endDate.getFullYear() + 1); // Ejemplo: activo por 1 año
-                const response = await setPremiumGlobalStatusCallable({ 
-                    isPremiumGlobalActive: true, 
-                    premiumGlobalEndDate: endDate,
-                    isLaunchPromoActive: false // Desactiva la promo si activas global
-                });
-                if (response.data.success) {
-                    alert(t('success-premium-global-active'));
-                    updateGlobalPremiumStatusDisplay(true, endDate, false);
-                } else {
-                    displayError(response.data.messageKey || 'error-generic', 'admin-premium-control-error-msg');
-                }
-            } catch (error) {
-                console.error("Error al activar Premium global:", error);
-                displayError('error-generic', 'admin-premium-control-error-msg');
-            } finally {
-                hideLoading();
-            }
-        });
-
-        deactivateGlobalPremiumBtn.addEventListener('click', async () => {
-            if (!confirm(t('confirm-deactivate-global-premium') || '¿Estás seguro de desactivar el Premium global para todos?')) return;
-            showLoading(t('loading-phrase-updating-premium'));
-            try {
-                const response = await setPremiumGlobalStatusCallable({ 
-                    isPremiumGlobalActive: false, 
-                    premiumGlobalEndDate: null,
-                    isLaunchPromoActive: false // Desactiva la promo también
-                });
-                if (response.data.success) {
-                    alert(t('success-premium-global-deactivated'));
-                    updateGlobalPremiumStatusDisplay(false, null, false);
-                } else {
-                    displayError(response.data.messageKey || 'error-generic', 'admin-premium-control-error-msg');
-                }
-            } catch (error) {
-                console.error("Error al desactivar Premium global:", error);
-                displayError('error-generic', 'admin-premium-control-error-msg');
-            } finally {
-                hideLoading();
-            }
-        });
-
-        activateLaunchPromoBtn.addEventListener('click', async () => {
-            if (!confirm(t('confirm-activate-launch-promo') || '¿Estás seguro de activar la promoción de lanzamiento?')) return;
-            showLoading(t('loading-phrase-updating-premium'));
-            try {
-                // La duración de la promo se puede definir aquí o en el backend. Por simplicidad, no hay end date explícito en UI.
-                const response = await setPremiumGlobalStatusCallable({ 
-                    isLaunchPromoActive: true,
-                    isPremiumGlobalActive: false // Asegura que el premium global no esté activo al mismo tiempo
-                });
-                if (response.data.success) {
-                    alert(t('success-launch-promo-active'));
-                    updateGlobalPremiumStatusDisplay(false, null, true);
-                } else {
-                    displayError(response.data.messageKey || 'error-generic', 'admin-premium-control-error-msg');
-                }
-            } catch (error) {
-                console.error("Error al activar promoción:", error);
-                displayError('error-generic', 'admin-premium-control-error-msg');
-            } finally {
-                hideLoading();
-            }
-        });
-
-        deactivateLaunchPromoBtn.addEventListener('click', async () => {
-            if (!confirm(t('confirm-deactivate-launch-promo') || '¿Estás seguro de desactivar la promoción de lanzamiento?')) return;
-            showLoading(t('loading-phrase-updating-premium'));
-            try {
-                const response = await setPremiumGlobalStatusCallable({ 
-                    isLaunchPromoActive: false 
-                });
-                if (response.data.success) {
-                    alert(t('success-launch-promo-deactivated'));
-                    updateGlobalPremiumStatusDisplay(false, null, false);
-                } else {
-                    displayError(response.data.messageKey || 'error-generic', 'admin-premium-control-error-msg');
-                }
-            } catch (error) {
-                console.error("Error al desactivar promoción:", error);
-                displayError('error-generic', 'admin-premium-control-error-msg');
-            } finally {
-                hideLoading();
-            }
-        });
-
-        // Adicionar claves de traducción para nuevos mensajes de confirmación si no existen
-        // 'confirm-activate-global-premium': '¿Estás seguro de activar el Premium global para todos?',
-        // 'confirm-deactivate-global-premium': '¿Estás seguro de desactivar el Premium global para todos?',
-        // 'confirm-activate-launch-promo': '¿Estás seguro de activar la promoción de lanzamiento?',
-        // 'confirm-deactivate-launch-promo': '¿Estás seguro de desactivar la promoción de lanzamiento?',
-        // 'loading-phrase-admin-history': 'Cargando historial de administración...',
-        // 'loading-phrase-admin-control': 'Cargando control premium...',
-        // 'loading-phrase-updating-premium': 'Actualizando estado premium...',
-        // 'promo-active-get-premium': '¡Promoción de Lanzamiento Activa!',
-        // 'premium-active-for-all': 'Premium Activo para Todos',
-        // --- Lógica JavaScript - Inicialización y Event Listeners Generales ---
-
-        // Event Listeners para el Navbar Burger (menú móvil)
-        document.addEventListener('DOMContentLoaded', () => {
-            // Get all "navbar-burger" elements
-            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-            // Check if there are any navbar burgers
-            if ($navbarBurgers.length > 0) {
-                // Add a click event on each of them
-                $navbarBurgers.forEach(el => {
-                    el.addEventListener('click', () => {
-                        // Get the target from the "data-target" attribute
-                        const target = el.dataset.target;
-                        const $target = document.getElementById(target);
-
-                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                        el.classList.toggle('is-active');
-                        $target.classList.toggle('is-active');
-                    });
-                });
-            }
-        });
-
-        // Event Listeners para alternar entre Login y Registro
-        const toggleAuthText = document.getElementById('toggle-auth-text');
-        if (toggleAuthText) {
-            function updateAuthToggleListeners() {
-                const showSignupLink = document.getElementById('show-signup-form-link');
-                const showLoginLink = document.getElementById('show-login-form-link');
-
-                if (showSignupLink) {
-                    showSignupLink.removeEventListener('click', handleShowSignupForm); // Evitar duplicados
-                    showSignupLink.addEventListener('click', handleShowSignupForm);
-                }
-                if (showLoginLink) {
-                    showLoginLink.removeEventListener('click', handleShowLoginForm); // Evitar duplicados
-                    showLoginLink.addEventListener('click', handleShowLoginForm);
-                }
-            }
-
-            function handleShowSignupForm(e) {
-                e.preventDefault();
-                loginForm.style.display = 'none';
-                signupFormContainer.classList.add('is-active');
-                document.getElementById('auth-title').textContent = t('auth-title-signup');
-                toggleAuthText.innerHTML = `${t('toggle-auth-text-login')} <a id="show-login-form-link">${t('show-login-form-link')}</a>`;
-                updateAuthToggleListeners(); // Re-attach listener for the new link
-            }
-
-            function handleShowLoginForm(e) {
-                e.preventDefault();
-                signupFormContainer.classList.remove('is-active');
-                loginForm.style.display = 'block';
-                document.getElementById('auth-title').textContent = t('auth-title-login');
-                toggleAuthText.innerHTML = `${t('toggle-auth-text-signup')} <a id="show-signup-form-link">${t('show-signup-form-link')}</a>`;
-                updateAuthToggleListeners(); // Re-attach listener for the new link
-            }
-
-            // Inicializar listeners
-            updateAuthToggleListeners();
-        }
-
-        // Llamar a applyTranslations al inicio para que toda la UI se traduzca inicialmente
-        applyTranslations();
-
-        // Asegurar que la vista inicial se muestra correctamente al cargar
-        // onAuthStateChanged ya hace esto, pero para evitar un flash de contenido
-        // antes de que Firebase inicialice, podemos ocultar todo por defecto y mostrar
-        // solo la vista de auth.
-        showView('auth-view');
-
-        // Aquí podrías añadir un listener para un botón "Mi Perfil" en el navbar,
-        // que abra el #profile-modal
-        const profileBtn = document.getElementById('profile-nav-btn'); // Asumiendo que tendrás un ID para este botón en navbar
-        if (profileBtn) {
-            profileBtn.addEventListener('click', () => {
-                loadProfileData(); // Carga los datos actuales del perfil
-                profileModal.classList.add('is-active');
-            });
-        }
             </script>
         </body>
 
