@@ -1387,7 +1387,7 @@
                     // Don't translate empty option
                     const translatedText = t('copy-type-' + originalValue.toLowerCase().replace(/[^a-z0-9]/g, '_'));
 
-                    option.textContent = translatedText + (option.classList.contains('premium-option') ? ${t('premium-tag')} : '');
+                    option.textContent = translatedText + (option.classList.contains('premium-option') ? t('premium-tag') : '');
                 }
             });
 
