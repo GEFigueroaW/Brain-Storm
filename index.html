@@ -1433,15 +1433,15 @@
 
         // Helper to update generations remaining text (called from applyTranslations and other places)
         function updateGenerationsRemainingDisplay(remaining, limit) {
-            const generationsRemainingElem = document.getElementById('generations-remaining-text');
+  const generationsRemainingElem = document.getElementById('generations-remaining-text');
 
-            if (generationsRemainingElem) {
-                generationsRemainingElem.textContent = `${t('generations-remaining-prefix')}${remaining}${t('generations-remaining-suffix')}`;
-                generationsRemainingElem.dataset.remaining = remaining;
-                generationsRemainingElem.dataset.limit = limit;
-                generationsRemainingElem.style.display = 'block';
-            }
-        }
+  if (generationsRemainingElem) {
+    generationsRemainingElem.textContent = `${t('generations-remaining-prefix')}${remaining}${t('generations-remaining-suffix')}`;
+    generationsRemainingElem.dataset.remaining = remaining;
+    generationsRemainingElem.dataset.limit = limit;
+    generationsRemainingElem.style.display = 'block';
+  }
+}
 
         // Generate UUID (for sessionId and deviceId)
         function generateUUID() {
