@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -623,708 +623,708 @@
             <div class="field mt-5 has-text-centered"><button class="button is-light" id="load-last-inputs-btn"><span
                         id="load-last-inputs-text">Cargar Última Información
                         Capturada</span></button></div>
-                <p class="help is-danger" id="topic-error-msg" style="display: none;"></p>
-                <p class="help is-danger" id="copy-type-error-msg" style="display: none;"></p>
-                <p class="help is-danger" id="social-media-error-msg" style="display: none;"></p>
-                <p class="help is-danger" id="general-generation-error-msg" style="display: none;"></p>
+            <p class="help is-danger" id="topic-error-msg" style="display: none;"></p>
+            <p class="help is-danger" id="copy-type-error-msg" style="display: none;"></p>
+            <p class="help is-danger" id="social-media-error-msg" style="display: none;"></p>
+            <p class="help is-danger" id="general-generation-error-msg" style="display: none;"></p>
+        </div>
+    </section>
+    <section class="section" id="results-view" style="display: none;">
+        <div class="container">
+            <h1 class="title is-2 has-text-centered" id="results-title">Tus Ideas Generadas</h1>
+            <div id="ideas-container" class="columns is-multiline is-centered"></div>
+            <div class="has-text-centered mt-5">
+                <p class="subtitle is-5 has-text-white" id="final-phrase-display"></p>
             </div>
-        </section>
-        <section class="section" id="results-view" style="display: none;">
-            <div class="container">
-                <h1 class="title is-2 has-text-centered" id="results-title">Tus Ideas Generadas</h1>
-                <div id="ideas-container" class="columns is-multiline is-centered"></div>
-                <div class="has-text-centered mt-5">
-                    <p class="subtitle is-5 has-text-white" id="final-phrase-display"></p>
-                </div>
-                <div class="has-text-centered mt-5"><button class="button is-primary is-large"
-                        id="back-to-config-btn"><span id="back-to-config-text">Volver a Generar / Nueva
-                            Búsqueda</span></button></div>
+            <div class="has-text-centered mt-5"><button class="button is-primary is-large" id="back-to-config-btn"><span
+                        id="back-to-config-text">Volver a Generar / Nueva
+                        Búsqueda</span></button></div>
+        </div>
+    </section>
+    <section class="section" id="admin-history-view" style="display: none;">
+        <div class="container">
+            <h1 class="title is-2 has-text-centered" id="admin-history-title">Historial de Generaciones (Admin)
+            </h1>
+            <div class="table-container">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th id="admin-history-user-id">User ID</th>
+                            <th id="admin-history-timestamp">Timestamp</th>
+                            <th id="admin-history-topic">Topic</th>
+                            <th id="admin-history-copy-type">Copy Type</th>
+                            <th id="admin-history-social-media">Redes Sociales</th>
+                            <th id="admin-history-mode">Modo</th>
+                            <th id="admin-history-language">Idioma</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-history-table-body"></tbody>
+                </table>
             </div>
-        </section>
-        <section class="section" id="admin-history-view" style="display: none;">
-            <div class="container">
-                <h1 class="title is-2 has-text-centered" id="admin-history-title">Historial de Generaciones (Admin)
-                </h1>
-                <div class="table-container">
-                    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th id="admin-history-user-id">User ID</th>
-                                <th id="admin-history-timestamp">Timestamp</th>
-                                <th id="admin-history-topic">Topic</th>
-                                <th id="admin-history-copy-type">Copy Type</th>
-                                <th id="admin-history-social-media">Redes Sociales</th>
-                                <th id="admin-history-mode">Modo</th>
-                                <th id="admin-history-language">Idioma</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-history-table-body"></tbody>
-                    </table>
-                </div>
+        </div>
+    </section>
+    <section class="section" id="admin-premium-control-view" style="display: none;">
+        <div class="container">
+            <h1 class="title is-2 has-text-centered" id="admin-premium-control-title">Control Premium Global
+                (Admin)</h1>
+            <div class="box">
+                <p class="subtitle is-5" id="global-premium-status-text">Estado Premium Global: Cargando...</p>
+                <p class="subtitle is-5" id="launch-promo-status-text">Promoción de Lanzamiento: Cargando...</p>
+                <div class="buttons is-centered mt-4"><button class="button is-primary"
+                        id="activate-global-premium-btn">Activar Premium Global</button><button class="button is-light"
+                        id="deactivate-global-premium-btn">Desactivar Premium
+                        Global</button></div>
+                <div class="buttons is-centered mt-4"><button class="button is-primary"
+                        id="activate-launch-promo-btn">Activar Promoción Lanzamiento</button><button
+                        class="button is-light" id="deactivate-launch-promo-btn">Desactivar Promoción
+                        Lanzamiento</button></div>
             </div>
-        </section>
-        <section class="section" id="admin-premium-control-view" style="display: none;">
-            <div class="container">
-                <h1 class="title is-2 has-text-centered" id="admin-premium-control-title">Control Premium Global
-                    (Admin)</h1>
-                <div class="box">
-                    <p class="subtitle is-5" id="global-premium-status-text">Estado Premium Global: Cargando...</p>
-                    <p class="subtitle is-5" id="launch-promo-status-text">Promoción de Lanzamiento: Cargando...</p>
-                    <div class="buttons is-centered mt-4"><button class="button is-primary"
-                            id="activate-global-premium-btn">Activar Premium Global</button><button
-                            class="button is-light" id="deactivate-global-premium-btn">Desactivar Premium
-                            Global</button></div>
-                    <div class="buttons is-centered mt-4"><button class="button is-primary"
-                            id="activate-launch-promo-btn">Activar Promoción Lanzamiento</button><button
-                            class="button is-light" id="deactivate-launch-promo-btn">Desactivar Promoción
-                            Lanzamiento</button></div>
-                </div>
-            </div>
-        </section>
-        <footer class="footer">
-            <div class="content has-text-centered">
-                <p id="disclaimer-text">Este contenido es generado por IA. El usuario es responsable de verificar y
-                    asegurar el uso apropiado y legal de cualquier contenido generado. </p>
-            </div>
-        </footer>
-        <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-functions-compat.js"></script>
-        <script>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p id="disclaimer-text">Este contenido es generado por IA. El usuario es responsable de verificar y
+                asegurar el uso apropiado y legal de cualquier contenido generado. </p>
+        </div>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-functions-compat.js"></script>
+    <script>
 
-            const firebaseConfig = {
-                apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
-                authDomain: "brain-storm-8f0d8.firebaseapp.com",
-                databaseURL: "https://brain-storm-8f0d8-default-rtdb.firebaseio.com",
-                projectId: "brain-storm-8f0d8",
-                storageBucket: "brain-storm-8f0d8.firebasestorage.app",
-                messagingSenderId: "401208607043",
-                appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+        const firebaseConfig = {
+            apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
+            authDomain: "brain-storm-8f0d8.firebaseapp.com",
+            databaseURL: "https://brain-storm-8f0d8-default-rtdb.firebaseio.com",
+            projectId: "brain-storm-8f0d8",
+            storageBucket: "brain-storm-8f0d8.firebasestorage.app",
+            messagingSenderId: "401208607043",
+            appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+        }
+
+            ;
+
+        // Inicializa Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const functions = firebase.functions();
+        const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+
+        // Objetos de traducción para i18n
+        const translations = {
+            es: {
+                // Auth View
+                'auth-title-login': 'Iniciar Sesión',
+                'auth-title-signup': 'Crear una Cuenta',
+                'login-email-label': 'Correo Electrónico',
+                'login-password-label': 'Contraseña',
+                'remember-me-label': 'Recuérdame',
+                'forgot-password-link': '¿Has olvidado tu Contraseña?',
+                'login-submit-btn': 'Acceder',
+                'auth-divider': 'o',
+                'google-login-text': 'Iniciar Sesión con Google',
+                'toggle-auth-text-signup': '¿No tienes una cuenta?',
+                'show-signup-form-link': 'Crear una Cuenta',
+                'toggle-auth-text-login': '¿Ya tienes una cuenta?',
+                'show-login-form-link': 'Iniciar Sesión',
+                'signup-email-label': 'Email',
+                'signup-confirm-email-label': 'Confirmar Email',
+                'signup-password-label': 'Contraseña',
+                'signup-confirm-password-label': 'Confirmar contraseña',
+                'signup-name-label': 'Nombre',
+                'signup-lastname-label': 'Apellido(s)',
+                'signup-username-label': 'Nombre De Usuario',
+                'signup-username-help': 'Crea un nombre que servirá de identificador único de tu cuenta.',
+                'terms-text': 'Estoy de acuerdo con ',
+                'terms-link': 'Términos y Condiciones',
+                'privacy-link': 'Política de Privacidad',
+                'signup-submit-btn': 'Crear Cuenta',
+                'reset-password-title': 'Restablecer Contraseña',
+                'reset-email-label': 'Correo Electrónico',
+                'reset-password-submit-btn': 'Enviar Enlace',
+                'reset-password-info-sent': 'Si tu correo existe, recibirás un enlace de recuperación.',
+                'reset-password-info-error': 'Error al enviar el enlace. Inténtalo de nuevo.',
+                'profile-title': 'Completa tu Perfil',
+                'profile-age-label': 'Edad',
+                'profile-gender-label': 'Sexo',
+                'profile-gender-placeholder': 'Selecciona...',
+                'profile-gender-male': 'Masculino',
+                'profile-gender-female': 'Femenino',
+                'profile-gender-prefer-not-say': 'Prefiero no decirlo',
+                'profile-country-label': 'País de Residencia',
+                'profile-save-btn': 'Guardar',
+                // Navbar
+                'logout-btn': 'Cerrar Sesión',
+                'get-premium-btn': 'Obtener Premium',
+                'language-selector-display': 'Idioma',
+                'admin-history-btn': 'Historial Admin',
+                'admin-premium-control-btn': 'Control Premium Admin',
+
+                // Config View
+                'welcome-message-prefix': '¡Hola, ',
+                'config-subtitle': 'Genera ideas de contenido para tus redes sociales con FeedFlow.',
+                'topic-label': 'Palabra Clave',
+                'topic-help': '✨ ¡Sé preciso como un láser! Cuanto más preciso sea tu tema, más brillantes serán las ideas que desbloquearemos juntos. ✨',
+                'copy-type-label': 'Define el Tipo de Copy:',
+                'copy-type-placeholder': 'Selecciona un tipo de copy',
+                'copy-type-promotional': 'Promocional',
+                'copy-type-cta': 'Llamada a la acción (CTA)',
+                'copy-type-authority': 'Autoridad o prueba social',
+                'copy-type-storytelling': 'Narrativo o storytelling',
+                'copy-type-urgency': 'Urgencia o escasez',
+                'copy-type-positioning': 'Posicionamiento o branding',
+                'social-media-label': 'Selecciona la Red Social:',
+                'mode-multi-platform': 'Generar una idea por cada red social seleccionada',
+                'mode-single-platform': 'Generar 3 opciones o ideas distintas para una sola red social',
+                'generations-remaining-prefix': 'Generaciones restantes esta semana: ',
+                'generations-remaining-suffix': '/3',
+                'generate-ideas-text': '¡Generar Ideas!',
+                'load-last-inputs-text': 'Cargar Última Información Capturada',
+                'premium-tag': 'Premium',
+                'premium-locked-message': 'Característica Premium',
+                'facebook-only-message': 'Solo Facebook disponible en versión gratuita',
+                'copy-type-limited-message': 'Tipos de copy limitados en versión gratuita',
+
+
+                // Results View
+                'results-title': 'Tus Ideas Generadas',
+                'copy-btn': 'Copiar',
+                'share-btn': 'Compartir',
+                'back-to-config-text': 'Volver a Generar / Nueva Búsqueda',
+                'unblur-visual-format': 'Desbloquea el formato visual con Premium',
+                'like-button-text': 'Me gusta',
+                'dislike-button-text': 'No me gusta',
+
+
+                // Admin Views
+                'admin-history-title': 'Historial de Generaciones (Admin)',
+                'admin-history-user-id': 'User ID',
+                'admin-history-timestamp': 'Timestamp',
+                'admin-history-topic': 'Topic',
+                'admin-history-copy-type': 'Tipo de Copy',
+                'admin-history-social-media': 'Redes Sociales',
+                'admin-history-mode': 'Modo',
+                'admin-history-language': 'Idioma',
+                'admin-premium-control-title': 'Control Premium Global (Admin)',
+                'global-premium-status-text': 'Estado Premium Global: ',
+                'launch-promo-status-text': 'Promoción de Lanzamiento: ',
+                'status-active': 'Activado',
+                'status-inactive': 'Desactivado',
+                'status-until': ' hasta ',
+                'activate-global-premium-btn': 'Activar Premium Global',
+                'deactivate-global-premium-btn': 'Desactivar Premium Global',
+                'activate-launch-promo-btn': 'Activar Promoción Lanzamiento',
+                'deactivate-launch-promo-btn': 'Desactivar Promoción Lanzamiento',
+
+                // Loading Phrases (10-15 frases)
+                'loading-phrase-1': 'Desatando tu creatividad...',
+                'loading-phrase-2': 'Conectando ideas brillantes...',
+                'loading-phrase-3': 'Cocinando el contenido perfecto...',
+                'loading-phrase-4': 'Inspiración en camino...',
+                'loading-phrase-5': 'Tu próxima gran idea está a segundos...',
+                'loading-phrase-6': 'Reuniendo la chispa...',
+                'loading-phrase-7': 'Forjando el mensaje ideal...',
+                'loading-phrase-8': 'Preparando tu estrategia...',
+                'loading-phrase-9': 'Activando la musa digital...',
+                'loading-phrase-10': 'Organizando la magia de las redes...',
+                'loading-phrase-11': 'Construyendo tu narrativa...',
+                'loading-phrase-12': 'La creatividad está fluyendo...',
+                'loading-phrase-13': 'Pulimiendo tus conceptos...',
+                'loading-phrase-14': 'Transformando tus ideas en impacto...',
+                'loading-phrase-15': 'Desplegando el potencial creativo...',
+
+
+                // Mensajes de Error/Info
+                'error-auth-generic': 'Error de autenticación. Por favor, inténtalo de nuevo.',
+                'error-auth-invalid-email': 'Correo electrónico o contraseña incorrectos.',
+                'error-auth-user-not-found': 'Usuario no encontrado.',
+                'error-auth-wrong-password': 'Contraseña incorrecta.',
+                'error-auth-email-already-in-use': 'Este correo ya está registrado.',
+                'error-auth-weak-password': 'La contraseña debe tener al menos 6 caracteres.',
+                'error-auth-network-request-failed': 'Problema de conexión. Revisa tu internet.',
+                'error-auth-too-many-requests': 'Demasiados intentos. Inténtalo más tarde.',
+                'error-form-validation': 'Por favor, completa todos los campos requeridos y asegúrate de que sean válidos.',
+                'error-session-invalid': 'Tu sesión se ha cerrado porque iniciaste sesión en otro dispositivo.',
+                'error-generation-limit': 'Has alcanzado tu límite semanal de 3 generaciones gratuitas. ¡Actualiza a Premium para generaciones ilimitadas!',
+                'error-facebook-only': 'En la versión gratuita, solo se puede generar contenido para Facebook. ¡Actualiza a Premium para más redes!',
+                'error-copy-type-limited': 'Este tipo de copy es exclusivo de la versión Premium. ¡Actualiza para desbloquearlo!',
+                'error-not-enough-credits': 'No tienes suficientes créditos de generación. Por favor, recarga o adquiere un paquete Premium.',
+                'error-api-deepseek': 'Error al generar ideas. La IA no pudo procesar la solicitud. Intenta de nuevo más tarde.',
+                'error-generic': 'Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.',
+                'success-signup': 'Cuenta creada exitosamente. ¡Bienvenido a FeedFlow!',
+                'success-login': 'Inicio de sesión exitoso. ¡Bienvenido de nuevo a FeedFlow!',
+                'success-password-reset': 'Enlace de restablecimiento enviado. Revisa tu bandeja de entrada.',
+                'success-profile-update': 'Perfil actualizado exitosamente.',
+                'success-premium-global-active': 'Premium global activado para todos.',
+                'success-premium-global-deactivated': 'Premium global desactivado.',
+                'success-launch-promo-active': 'Promoción de lanzamiento activada.',
+                'success-launch-promo-deactivated': 'Promoción de lanzamiento desactivada.',
+                'idea-copied': 'Idea copiada al portapapeles.',
+                'feature-premium-label': 'Premium',
+                'feature-facebook-only-label': 'Solo Facebook',
+                'feature-limited-copy-label': 'Copy Limitado',
+
+
             }
 
-                ;
+            ,
+            en: {
+                // Auth View
+                'auth-title-login': 'Login',
+                'auth-title-signup': 'Create an Account',
+                'login-email-label': 'Email Address',
+                'login-password-label': 'Password',
+                'remember-me-label': 'Remember Me',
+                'forgot-password-link': 'Forgot your Password?',
+                'login-submit-btn': 'Access',
+                'auth-divider': 'or',
+                'google-login-text': 'Login with Google',
+                'toggle-auth-text-signup': 'Don\'t have an account?',
+                'show-signup-form-link': 'Create an Account',
+                'toggle-auth-text-login': 'Already have an account?',
+                'show-login-form-link': 'Login',
+                'signup-email-label': 'Email',
+                'signup-confirm-email-label': 'Confirm Email',
+                'signup-password-label': 'Password',
+                'signup-confirm-password-label': 'Confirm Password',
+                'signup-name-label': 'First Name',
+                'signup-lastname-label': 'Last Name(s)',
+                'signup-username-label': 'Username',
+                'signup-username-help': 'Create a unique identifier for your account.',
+                'terms-text': 'I agree to the ',
+                'terms-link': 'Terms and Conditions',
+                'privacy-link': 'Privacy Policy',
+                'signup-submit-btn': 'Create Account',
+                'reset-password-title': 'Reset Password',
+                'reset-email-label': 'Email Address',
+                'reset-password-submit-btn': 'Send Link',
+                'reset-password-info-sent': 'If your email exists, you will receive a recovery link.',
+                'reset-password-info-error': 'Error sending link. Please try again.',
+                'profile-title': 'Complete your Profile',
+                'profile-age-label': 'Age',
+                'profile-gender-label': 'Gender',
+                'profile-gender-placeholder': 'Select...',
+                'profile-gender-male': 'Male',
+                'profile-gender-female': 'Female',
+                'profile-gender-prefer-not-say': 'Prefer not to say',
+                'profile-country-label': 'Country of Residence',
+                'profile-save-btn': 'Save',
 
-            // Inicializa Firebase
-            firebase.initializeApp(firebaseConfig);
-            const auth = firebase.auth();
-            const db = firebase.firestore();
-            const functions = firebase.functions();
-            const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+                // Navbar
+                'logout-btn': 'Logout',
+                'get-premium-btn': 'Get Premium',
+                'language-selector-display': 'Language',
+                'admin-history-btn': 'Admin History',
+                'admin-premium-control-btn': 'Admin Premium Control',
 
-            // Objetos de traducción para i18n
-            const translations = {
-                es: {
-                    // Auth View
-                    'auth-title-login': 'Iniciar Sesión',
-                    'auth-title-signup': 'Crear una Cuenta',
-                    'login-email-label': 'Correo Electrónico',
-                    'login-password-label': 'Contraseña',
-                    'remember-me-label': 'Recuérdame',
-                    'forgot-password-link': '¿Has olvidado tu Contraseña?',
-                    'login-submit-btn': 'Acceder',
-                    'auth-divider': 'o',
-                    'google-login-text': 'Iniciar Sesión con Google',
-                    'toggle-auth-text-signup': '¿No tienes una cuenta?',
-                    'show-signup-form-link': 'Crear una Cuenta',
-                    'toggle-auth-text-login': '¿Ya tienes una cuenta?',
-                    'show-login-form-link': 'Iniciar Sesión',
-                    'signup-email-label': 'Email',
-                    'signup-confirm-email-label': 'Confirmar Email',
-                    'signup-password-label': 'Contraseña',
-                    'signup-confirm-password-label': 'Confirmar contraseña',
-                    'signup-name-label': 'Nombre',
-                    'signup-lastname-label': 'Apellido(s)',
-                    'signup-username-label': 'Nombre De Usuario',
-                    'signup-username-help': 'Crea un nombre que servirá de identificador único de tu cuenta.',
-                    'terms-text': 'Estoy de acuerdo con ',
-                    'terms-link': 'Términos y Condiciones',
-                    'privacy-link': 'Política de Privacidad',
-                    'signup-submit-btn': 'Crear Cuenta',
-                    'reset-password-title': 'Restablecer Contraseña',
-                    'reset-email-label': 'Correo Electrónico',
-                    'reset-password-submit-btn': 'Enviar Enlace',
-                    'reset-password-info-sent': 'Si tu correo existe, recibirás un enlace de recuperación.',
-                    'reset-password-info-error': 'Error al enviar el enlace. Inténtalo de nuevo.',
-                    'profile-title': 'Completa tu Perfil',
-                    'profile-age-label': 'Edad',
-                    'profile-gender-label': 'Sexo',
-                    'profile-gender-placeholder': 'Selecciona...',
-                    'profile-gender-male': 'Masculino',
-                    'profile-gender-female': 'Femenino',
-                    'profile-gender-prefer-not-say': 'Prefiero no decirlo',
-                    'profile-country-label': 'País de Residencia',
-                    'profile-save-btn': 'Guardar',
-                    // Navbar
-                    'logout-btn': 'Cerrar Sesión',
-                    'get-premium-btn': 'Obtener Premium',
-                    'language-selector-display': 'Idioma',
-                    'admin-history-btn': 'Historial Admin',
-                    'admin-premium-control-btn': 'Control Premium Admin',
+                // Config View
+                'welcome-message-prefix': 'Hello, ',
+                'config-subtitle': 'Generate content ideas for your social media with FeedFlow.',
+                'topic-label': 'Keyword',
+                'topic-help': '✨ Be precise like a laser! The more accurate your topic, the brighter the ideas we\'ll unlock together. ✨',
+                'copy-type-label': 'Define Copy Type:',
+                'copy-type-placeholder': 'Select a copy type',
+                'copy-type-promotional': 'Promotional',
+                'copy-type-cta': 'Call to Action (CTA)',
+                'copy-type-authority': 'Authority or Social Proof',
+                'copy-type-storytelling': 'Narrative or Storytelling',
+                'copy-type-urgency': 'Urgency or Scarcity',
+                'copy-type-positioning': 'Positioning or Branding',
+                'social-media-label': 'Select Social Media:',
+                'mode-multi-platform': 'Generate one idea per selected social media platform',
+                'mode-single-platform': 'Generate 3 distinct idea options for a single social media platform',
+                'generations-remaining-prefix': 'Generations left this week: ',
+                'generations-remaining-suffix': '/3',
+                'generate-ideas-text': 'Generate Ideas!',
+                'load-last-inputs-text': 'Load Last Captured Information',
+                'premium-tag': 'Premium',
+                'premium-locked-message': 'Premium Feature',
+                'facebook-only-message': 'Only Facebook available in free version',
+                'copy-type-limited-message': 'Limited copy types in free version',
 
-                    // Config View
-                    'welcome-message-prefix': '¡Hola, ',
-                    'config-subtitle': 'Genera ideas de contenido para tus redes sociales con FeedFlow.',
-                    'topic-label': 'Palabra Clave',
-                    'topic-help': '✨ ¡Sé preciso como un láser! Cuanto más preciso sea tu tema, más brillantes serán las ideas que desbloquearemos juntos. ✨',
-                    'copy-type-label': 'Define el Tipo de Copy:',
-                    'copy-type-placeholder': 'Selecciona un tipo de copy',
-                    'copy-type-promotional': 'Promocional',
-                    'copy-type-cta': 'Llamada a la acción (CTA)',
-                    'copy-type-authority': 'Autoridad o prueba social',
-                    'copy-type-storytelling': 'Narrativo o storytelling',
-                    'copy-type-urgency': 'Urgencia o escasez',
-                    'copy-type-positioning': 'Posicionamiento o branding',
-                    'social-media-label': 'Selecciona la Red Social:',
-                    'mode-multi-platform': 'Generar una idea por cada red social seleccionada',
-                    'mode-single-platform': 'Generar 3 opciones o ideas distintas para una sola red social',
-                    'generations-remaining-prefix': 'Generaciones restantes esta semana: ',
-                    'generations-remaining-suffix': '/3',
-                    'generate-ideas-text': '¡Generar Ideas!',
-                    'load-last-inputs-text': 'Cargar Última Información Capturada',
-                    'premium-tag': 'Premium',
-                    'premium-locked-message': 'Característica Premium',
-                    'facebook-only-message': 'Solo Facebook disponible en versión gratuita',
-                    'copy-type-limited-message': 'Tipos de copy limitados en versión gratuita',
+                // Results View
+                'results-title': 'Your Generated Ideas',
+                'copy-btn': 'Copy',
+                'share-btn': 'Share',
+                'back-to-config-text': 'Generate Again / New Search',
+                'unblur-visual-format': 'Unlock visual format with Premium',
+                'like-button-text': 'Like',
+                'dislike-button-text': 'Dislike',
+                // Admin Views
+                'admin-history-title': 'Generation History (Admin)',
+                'admin-history-user-id': 'User ID',
+                'admin-history-timestamp': 'Timestamp',
+                'admin-history-topic': 'Topic',
+                'admin-history-copy-type': 'Copy Type',
+                'admin-history-social-media': 'Social Media',
+                'admin-history-mode': 'Mode',
+                'admin-history-language': 'Language',
+                'admin-premium-control-title': 'Global Premium Control (Admin)',
+                'global-premium-status-text': 'Global Premium Status: ',
+                'launch-promo-status-text': 'Launch Promotion: ',
+                'status-active': 'Active',
+                'status-inactive': 'Inactive',
+                'status-until': ' until ',
+                'activate-global-premium-btn': 'Activate Global Premium',
+                'deactivate-global-premium-btn': 'Deactivate Global Premium',
+                'activate-launch-promo-btn': 'Activate Launch Promotion',
+                'deactivate-launch-promo-btn': 'Deactivate Launch Promotion',
 
+                // Loading Phrases (10-15 phrases)
+                'loading-phrase-1': 'Unleashing your creativity...',
+                'loading-phrase-2': 'Connecting brilliant ideas...',
+                'loading-phrase-3': 'Cooking the perfect content...',
+                'loading-phrase-4': 'Inspiration on the way...',
+                'loading-phrase-5': 'Your next big idea is seconds away...',
+                'loading-phrase-6': 'Gathering the spark...',
+                'loading-phrase-7': 'Forging the ideal message...',
+                'loading-phrase-8': 'Preparing your strategy...',
+                'loading-phrase-9': 'Activating the digital muse...',
+                'loading-phrase-10': 'Organizing social media magic...',
+                'loading-phrase-11': 'Building your narrative...',
+                'loading-phrase-12': 'Creativity is flowing...',
+                'loading-phrase-13': 'Polishing your concepts...',
+                'loading-phrase-14': 'Transforming your ideas into impact...',
+                'loading-phrase-15': 'Unlocking creative potential...',
 
-                    // Results View
-                    'results-title': 'Tus Ideas Generadas',
-                    'copy-btn': 'Copiar',
-                    'share-btn': 'Compartir',
-                    'back-to-config-text': 'Volver a Generar / Nueva Búsqueda',
-                    'unblur-visual-format': 'Desbloquea el formato visual con Premium',
-                    'like-button-text': 'Me gusta',
-                    'dislike-button-text': 'No me gusta',
-
-
-                    // Admin Views
-                    'admin-history-title': 'Historial de Generaciones (Admin)',
-                    'admin-history-user-id': 'User ID',
-                    'admin-history-timestamp': 'Timestamp',
-                    'admin-history-topic': 'Topic',
-                    'admin-history-copy-type': 'Tipo de Copy',
-                    'admin-history-social-media': 'Redes Sociales',
-                    'admin-history-mode': 'Modo',
-                    'admin-history-language': 'Idioma',
-                    'admin-premium-control-title': 'Control Premium Global (Admin)',
-                    'global-premium-status-text': 'Estado Premium Global: ',
-                    'launch-promo-status-text': 'Promoción de Lanzamiento: ',
-                    'status-active': 'Activado',
-                    'status-inactive': 'Desactivado',
-                    'status-until': ' hasta ',
-                    'activate-global-premium-btn': 'Activar Premium Global',
-                    'deactivate-global-premium-btn': 'Desactivar Premium Global',
-                    'activate-launch-promo-btn': 'Activar Promoción Lanzamiento',
-                    'deactivate-launch-promo-btn': 'Desactivar Promoción Lanzamiento',
-
-                    // Loading Phrases (10-15 frases)
-                    'loading-phrase-1': 'Desatando tu creatividad...',
-                    'loading-phrase-2': 'Conectando ideas brillantes...',
-                    'loading-phrase-3': 'Cocinando el contenido perfecto...',
-                    'loading-phrase-4': 'Inspiración en camino...',
-                    'loading-phrase-5': 'Tu próxima gran idea está a segundos...',
-                    'loading-phrase-6': 'Reuniendo la chispa...',
-                    'loading-phrase-7': 'Forjando el mensaje ideal...',
-                    'loading-phrase-8': 'Preparando tu estrategia...',
-                    'loading-phrase-9': 'Activando la musa digital...',
-                    'loading-phrase-10': 'Organizando la magia de las redes...',
-                    'loading-phrase-11': 'Construyendo tu narrativa...',
-                    'loading-phrase-12': 'La creatividad está fluyendo...',
-                    'loading-phrase-13': 'Pulimiendo tus conceptos...',
-                    'loading-phrase-14': 'Transformando tus ideas en impacto...',
-                    'loading-phrase-15': 'Desplegando el potencial creativo...',
-
-
-                    // Mensajes de Error/Info
-                    'error-auth-generic': 'Error de autenticación. Por favor, inténtalo de nuevo.',
-                    'error-auth-invalid-email': 'Correo electrónico o contraseña incorrectos.',
-                    'error-auth-user-not-found': 'Usuario no encontrado.',
-                    'error-auth-wrong-password': 'Contraseña incorrecta.',
-                    'error-auth-email-already-in-use': 'Este correo ya está registrado.',
-                    'error-auth-weak-password': 'La contraseña debe tener al menos 6 caracteres.',
-                    'error-auth-network-request-failed': 'Problema de conexión. Revisa tu internet.',
-                    'error-auth-too-many-requests': 'Demasiados intentos. Inténtalo más tarde.',
-                    'error-form-validation': 'Por favor, completa todos los campos requeridos y asegúrate de que sean válidos.',
-                    'error-session-invalid': 'Tu sesión se ha cerrado porque iniciaste sesión en otro dispositivo.',
-                    'error-generation-limit': 'Has alcanzado tu límite semanal de 3 generaciones gratuitas. ¡Actualiza a Premium para generaciones ilimitadas!',
-                    'error-facebook-only': 'En la versión gratuita, solo se puede generar contenido para Facebook. ¡Actualiza a Premium para más redes!',
-                    'error-copy-type-limited': 'Este tipo de copy es exclusivo de la versión Premium. ¡Actualiza para desbloquearlo!',
-                    'error-not-enough-credits': 'No tienes suficientes créditos de generación. Por favor, recarga o adquiere un paquete Premium.',
-                    'error-api-deepseek': 'Error al generar ideas. La IA no pudo procesar la solicitud. Intenta de nuevo más tarde.',
-                    'error-generic': 'Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.',
-                    'success-signup': 'Cuenta creada exitosamente. ¡Bienvenido a FeedFlow!',
-                    'success-login': 'Inicio de sesión exitoso. ¡Bienvenido de nuevo a FeedFlow!',
-                    'success-password-reset': 'Enlace de restablecimiento enviado. Revisa tu bandeja de entrada.',
-                    'success-profile-update': 'Perfil actualizado exitosamente.',
-                    'success-premium-global-active': 'Premium global activado para todos.',
-                    'success-premium-global-deactivated': 'Premium global desactivado.',
-                    'success-launch-promo-active': 'Promoción de lanzamiento activada.',
-                    'success-launch-promo-deactivated': 'Promoción de lanzamiento desactivada.',
-                    'idea-copied': 'Idea copiada al portapapeles.',
-                    'feature-premium-label': 'Premium',
-                    'feature-facebook-only-label': 'Solo Facebook',
-                    'feature-limited-copy-label': 'Copy Limitado',
-
-
-                }
-
-                ,
-                en: {
-                    // Auth View
-                    'auth-title-login': 'Login',
-                    'auth-title-signup': 'Create an Account',
-                    'login-email-label': 'Email Address',
-                    'login-password-label': 'Password',
-                    'remember-me-label': 'Remember Me',
-                    'forgot-password-link': 'Forgot your Password?',
-                    'login-submit-btn': 'Access',
-                    'auth-divider': 'or',
-                    'google-login-text': 'Login with Google',
-                    'toggle-auth-text-signup': 'Don\'t have an account?',
-                    'show-signup-form-link': 'Create an Account',
-                    'toggle-auth-text-login': 'Already have an account?',
-                    'show-login-form-link': 'Login',
-                    'signup-email-label': 'Email',
-                    'signup-confirm-email-label': 'Confirm Email',
-                    'signup-password-label': 'Password',
-                    'signup-confirm-password-label': 'Confirm Password',
-                    'signup-name-label': 'First Name',
-                    'signup-lastname-label': 'Last Name(s)',
-                    'signup-username-label': 'Username',
-                    'signup-username-help': 'Create a unique identifier for your account.',
-                    'terms-text': 'I agree to the ',
-                    'terms-link': 'Terms and Conditions',
-                    'privacy-link': 'Privacy Policy',
-                    'signup-submit-btn': 'Create Account',
-                    'reset-password-title': 'Reset Password',
-                    'reset-email-label': 'Email Address',
-                    'reset-password-submit-btn': 'Send Link',
-                    'reset-password-info-sent': 'If your email exists, you will receive a recovery link.',
-                    'reset-password-info-error': 'Error sending link. Please try again.',
-                    'profile-title': 'Complete your Profile',
-                    'profile-age-label': 'Age',
-                    'profile-gender-label': 'Gender',
-                    'profile-gender-placeholder': 'Select...',
-                    'profile-gender-male': 'Male',
-                    'profile-gender-female': 'Female',
-                    'profile-gender-prefer-not-say': 'Prefer not to say',
-                    'profile-country-label': 'Country of Residence',
-                    'profile-save-btn': 'Save',
-
-                    // Navbar
-                    'logout-btn': 'Logout',
-                    'get-premium-btn': 'Get Premium',
-                    'language-selector-display': 'Language',
-                    'admin-history-btn': 'Admin History',
-                    'admin-premium-control-btn': 'Admin Premium Control',
-
-                    // Config View
-                    'welcome-message-prefix': 'Hello, ',
-                    'config-subtitle': 'Generate content ideas for your social media with FeedFlow.',
-                    'topic-label': 'Keyword',
-                    'topic-help': '✨ Be precise like a laser! The more accurate your topic, the brighter the ideas we\'ll unlock together. ✨',
-                    'copy-type-label': 'Define Copy Type:',
-                    'copy-type-placeholder': 'Select a copy type',
-                    'copy-type-promotional': 'Promotional',
-                    'copy-type-cta': 'Call to Action (CTA)',
-                    'copy-type-authority': 'Authority or Social Proof',
-                    'copy-type-storytelling': 'Narrative or Storytelling',
-                    'copy-type-urgency': 'Urgency or Scarcity',
-                    'copy-type-positioning': 'Positioning or Branding',
-                    'social-media-label': 'Select Social Media:',
-                    'mode-multi-platform': 'Generate one idea per selected social media platform',
-                    'mode-single-platform': 'Generate 3 distinct idea options for a single social media platform',
-                    'generations-remaining-prefix': 'Generations left this week: ',
-                    'generations-remaining-suffix': '/3',
-                    'generate-ideas-text': 'Generate Ideas!',
-                    'load-last-inputs-text': 'Load Last Captured Information',
-                    'premium-tag': 'Premium',
-                    'premium-locked-message': 'Premium Feature',
-                    'facebook-only-message': 'Only Facebook available in free version',
-                    'copy-type-limited-message': 'Limited copy types in free version',
-
-                    // Results View
-                    'results-title': 'Your Generated Ideas',
-                    'copy-btn': 'Copy',
-                    'share-btn': 'Share',
-                    'back-to-config-text': 'Generate Again / New Search',
-                    'unblur-visual-format': 'Unlock visual format with Premium',
-                    'like-button-text': 'Like',
-                    'dislike-button-text': 'Dislike',
-                    // Admin Views
-                    'admin-history-title': 'Generation History (Admin)',
-                    'admin-history-user-id': 'User ID',
-                    'admin-history-timestamp': 'Timestamp',
-                    'admin-history-topic': 'Topic',
-                    'admin-history-copy-type': 'Copy Type',
-                    'admin-history-social-media': 'Social Media',
-                    'admin-history-mode': 'Mode',
-                    'admin-history-language': 'Language',
-                    'admin-premium-control-title': 'Global Premium Control (Admin)',
-                    'global-premium-status-text': 'Global Premium Status: ',
-                    'launch-promo-status-text': 'Launch Promotion: ',
-                    'status-active': 'Active',
-                    'status-inactive': 'Inactive',
-                    'status-until': ' until ',
-                    'activate-global-premium-btn': 'Activate Global Premium',
-                    'deactivate-global-premium-btn': 'Deactivate Global Premium',
-                    'activate-launch-promo-btn': 'Activate Launch Promotion',
-                    'deactivate-launch-promo-btn': 'Deactivate Launch Promotion',
-
-                    // Loading Phrases (10-15 phrases)
-                    'loading-phrase-1': 'Unleashing your creativity...',
-                    'loading-phrase-2': 'Connecting brilliant ideas...',
-                    'loading-phrase-3': 'Cooking the perfect content...',
-                    'loading-phrase-4': 'Inspiration on the way...',
-                    'loading-phrase-5': 'Your next big idea is seconds away...',
-                    'loading-phrase-6': 'Gathering the spark...',
-                    'loading-phrase-7': 'Forging the ideal message...',
-                    'loading-phrase-8': 'Preparing your strategy...',
-                    'loading-phrase-9': 'Activating the digital muse...',
-                    'loading-phrase-10': 'Organizing social media magic...',
-                    'loading-phrase-11': 'Building your narrative...',
-                    'loading-phrase-12': 'Creativity is flowing...',
-                    'loading-phrase-13': 'Polishing your concepts...',
-                    'loading-phrase-14': 'Transforming your ideas into impact...',
-                    'loading-phrase-15': 'Unlocking creative potential...',
-
-                    // Error/Info Messages
-                    'error-auth-generic': 'Authentication error. Please try again.',
-                    'error-auth-invalid-email': 'Incorrect email or password.',
-                    'error-auth-user-not-found': 'User not found.',
-                    'error-auth-wrong-password': 'Wrong password.',
-                    'error-auth-email-already-in-use': 'This email is already registered.',
-                    'error-auth-weak-password': 'Password must be at least 6 characters long.',
-                    'error-auth-network-request-failed': 'Connection issue. Check your internet.',
-                    'error-auth-too-many-requests': 'Too many attempts. Please try again later.',
-                    'error-form-validation': 'Please fill all required fields and ensure they are valid.',
-                    'error-session-invalid': 'Your session has been closed because you logged in on another device.',
-                    'error-generation-limit': 'You have reached your weekly limit of 3 free generations. Upgrade to Premium for unlimited generations!',
-                    'error-facebook-only': 'In the free version, you can only generate content for Facebook. Upgrade to Premium for more networks!',
-                    'error-copy-type-limited': 'This copy type is exclusive to the Premium version. Upgrade to unlock it!',
-                    'error-not-enough-credits': 'You do not have enough generation credits. Please recharge or purchase a Premium package.',
-                    'error-api-deepseek': 'Error generating ideas. The AI could not process the request. Please try again later.',
-                    'error-generic': 'An unexpected error occurred. Please try again.',
-                    'success-signup': 'Account created successfully. Welcome to FeedFlow!',
-                    'success-login': 'Login successful. Welcome back to FeedFlow!',
-                    'success-password-reset': 'Reset link sent. Check your inbox.',
-                    'success-profile-update': 'Profile updated successfully.',
-                    'success-premium-global-active': 'Global Premium activated for all users.',
-                    'success-premium-global-deactivated': 'Global Premium deactivated.',
-                    'success-launch-promo-active': 'Launch promotion activated.',
-                    'success-launch-promo-deactivated': 'Launch promotion deactivated.',
-                    'idea-copied': 'Idea copied to clipboard.',
-                    'feature-premium-label': 'Premium',
-                    'feature-facebook-only-label': 'Facebook Only',
-                    'feature-limited-copy-label': 'Limited Copy',
-                }
-
-                ,
-                pt: {
-                    // Auth View
-                    'auth-title-login': 'Entrar',
-                    'auth-title-signup': 'Criar uma Conta',
-                    'login-email-label': 'Endereço de Email',
-                    'login-password-label': 'Senha',
-                    'remember-me-label': 'Lembrar-me',
-                    'forgot-password-link': 'Esqueceu sua Senha?',
-                    'login-submit-btn': 'Acessar',
-                    'auth-divider': 'ou',
-                    'google-login-text': 'Entrar com Google',
-                    'toggle-auth-text-signup': 'Não tem uma conta?',
-                    'show-signup-form-link': 'Criar uma Conta',
-                    'toggle-auth-text-login': 'Já tem uma conta?',
-                    'show-login-form-link': 'Entrar',
-                    'signup-email-label': 'Email',
-                    'signup-confirm-email-label': 'Confirmar Email',
-                    'signup-password-label': 'Senha',
-                    'signup-confirm-password-label': 'Confirmar Senha',
-                    'signup-name-label': 'Nome',
-                    'signup-lastname-label': 'Sobrenome(s)',
-                    'signup-username-label': 'Nome de Usuário',
-                    'signup-username-help': 'Crie um identificador único para sua conta.',
-                    'terms-text': 'Eu concordo com os ',
-                    'terms-link': 'Termos e Condições',
-                    'privacy-link': 'Política de Privacidade',
-                    'signup-submit-btn': 'Criar Conta',
-                    'reset-password-title': 'Redefinir Senha',
-                    'reset-email-label': 'Endereço de Email',
-                    'reset-password-submit-btn': 'Enviar Link',
-                    'reset-password-info-sent': 'Se seu email existir, você receberá um link de recuperação.',
-                    'reset-password-info-error': 'Erro ao enviar o link. Por favor, tente novamente.',
-                    'profile-title': 'Complete seu Perfil',
-                    'profile-age-label': 'Idade',
-                    'profile-gender-label': 'Gênero',
-                    'profile-gender-placeholder': 'Selecionar...',
-                    'profile-gender-male': 'Masculino',
-                    'profile-gender-female': 'Feminino',
-                    'profile-gender-prefer-not-say': 'Prefiro não dizer',
-                    'profile-country-label': 'País de Residência',
-                    'profile-save-btn': 'Salvar',
-
-                    // Navbar
-                    'logout-btn': 'Sair',
-                    'get-premium-btn': 'Obter Premium',
-                    'language-selector-display': 'Idioma',
-                    'admin-history-btn': 'Histórico Admin',
-                    'admin-premium-control-btn': 'Controle Premium Admin',
-
-                    // Config View
-                    'welcome-message-prefix': 'Olá, ',
-                    'config-subtitle': 'Gere ideias de conteúdo para suas redes sociais com FeedFlow.',
-                    'topic-label': 'Palavra-chave',
-                    'topic-help': '✨ Seja preciso como um laser! Quanto mais preciso seu tópico, mais brilhantes as ideias que desbloquearemos juntos. ✨',
-                    'copy-type-label': 'Defina o Tipo de Copy:',
-                    'copy-type-placeholder': 'Selecione um tipo de copy',
-                    'copy-type-promotional': 'Promocional',
-                    'copy-type-cta': 'Chamada para Ação (CTA)',
-                    'copy-type-authority': 'Autoridade ou Prova Social',
-                    'copy-type-storytelling': 'Narrativa ou Storytelling',
-                    'copy-type-urgency': 'Urgência ou Escassez',
-                    'copy-type-positioning': 'Posicionamento ou Branding',
-                    'social-media-label': 'Selecione a Rede Social:',
-                    'mode-multi-platform': 'Gerar uma ideia por cada rede social selecionada',
-                    'mode-single-platform': 'Gerar 3 opções ou ideias distintas para uma única rede social',
-                    'generations-remaining-prefix': 'Gerações restantes esta semana: ',
-                    'generations-remaining-suffix': '/3',
-                    'generate-ideas-text': 'Gerar Ideias!',
-                    'load-last-inputs-text': 'Carregar Últimas Informações',
-                    'premium-tag': 'Premium',
-                    'premium-locked-message': 'Recurso Premium',
-                    'facebook-only-message': 'Somente Facebook disponível na versão gratuita',
-                    'copy-type-limited-message': 'Tipos de copy limitados na versão gratuita',
-
-
-                    // Results View
-                    'results-title': 'Suas Ideias Geradas',
-                    'copy-btn': 'Copiar',
-                    'share-btn': 'Compartilhar',
-                    'back-to-config-text': 'Gerar Novamente / Nova Pesquisa',
-                    'unblur-visual-format': 'Desbloqueie o formato visual com Premium',
-                    'like-button-text': 'Curtir',
-                    'dislike-button-text': 'Não curtir',
-
-                    // Admin Views
-                    'admin-history-title': 'Histórico de Gerações (Admin)',
-                    'admin-history-user-id': 'ID do Usuário',
-                    'admin-history-timestamp': 'Data/Hora',
-                    'admin-history-topic': 'Tópico',
-                    'admin-history-copy-type': 'Tipo de Copy',
-                    'admin-history-social-media': 'Redes Sociais',
-                    'admin-history-mode': 'Modo',
-                    'admin-history-language': 'Idioma',
-                    'admin-premium-control-title': 'Controle Premium Global (Admin)',
-                    'global-premium-status-text': 'Status Premium Global: ',
-                    'launch-promo-status-text': 'Promoção de Lançamento: ',
-                    'status-active': 'Ativo',
-                    'status-inactive': 'Inativo',
-                    'status-until': ' até ',
-                    'activate-global-premium-btn': 'Ativar Premium Global',
-                    'deactivate-global-premium-btn': 'Desativar Premium Global',
-                    'activate-launch-promo-btn': 'Ativar Promoção de Lançamento',
-                    'deactivate-launch-promo-btn': 'Desativar Promoção de Lançamento',
-                    // Loading Phrases (10-15 phrases)
-                    'loading-phrase-1': 'Liberando sua criatividade...',
-                    'loading-phrase-2': 'Conectando ideias brilhantes...',
-                    'loading-phrase-3': 'Cozinhando o conteúdo perfeito...',
-                    'loading-phrase-4': 'Inspiração a caminho...',
-                    'loading-phrase-5': 'Sua próxima grande ideia está a segundos...',
-                    'loading-phrase-6': 'Coletando a faísca...',
-                    'loading-phrase-7': 'Forjando a mensagem ideal...',
-                    'loading-phrase-8': 'Preparando sua estratégia...',
-                    'loading-phrase-9': 'Ativando a musa digital...',
-                    'loading-phrase-10': 'Organizando a magia das redes...',
-                    'loading-phrase-11': 'Construindo sua narrativa...',
-                    'loading-phrase-12': 'A criatividade está fluindo...',
-                    'loading-phrase-13': 'Polindo seus conceitos...',
-                    'loading-phrase-14': 'Transformando suas ideias em impacto...',
-                    'loading-phrase-15': 'Desbloqueando o potencial criativo...',
-
-                    // Error/Info Messages
-                    'error-auth-generic': 'Erro de autenticação. Por favor, tente novamente.',
-                    'error-auth-invalid-email': 'Email ou senha incorretos.',
-                    'error-auth-user-not-found': 'Usuário não encontrado.',
-                    'error-auth-wrong-password': 'Senha incorreta.',
-                    'error-auth-email-already-in-use': 'Este email já está registrado.',
-                    'error-auth-weak-password': 'A senha deve ter pelo menos 6 caracteres.',
-                    'error-auth-network-request-failed': 'Problema de conexão. Verifique sua internet.',
-                    'error-auth-too-many-requests': 'Muitas tentativas. Por favor, tente mais tarde.',
-                    'error-form-validation': 'Por favor, preencha todos os campos obrigatórios e certifique-se de que sejam válidos.',
-                    'error-session-invalid': 'Sua sessão foi encerrada porque você fez login em outro dispositivo.',
-                    'error-generation-limit': 'Você atingiu seu limite semanal de 3 gerações gratuitas. Atualize para Premium para gerações ilimitadas!',
-                    'error-facebook-only': 'Na versão gratuita, você só pode gerar conteúdo para o Facebook. Atualize para Premium para mais redes!',
-                    'error-copy-type-limited': 'Este tipo de copy é exclusivo da versão Premium. Atualize para desbloqueá-lo!',
-                    'error-not-enough-credits': 'Você não tem créditos de geração suficientes. Por favor, recarregue ou compre um pacote Premium.',
-                    'error-api-deepseek': 'Erro ao gerar ideias. A IA não pôde processar a solicitação. Por favor, tente novamente mais tarde.',
-                    'error-generic': 'Ocorreu um erro inesperado. Por favor, tente novamente.',
-                    'success-signup': 'Conta criada com sucesso. Bem-vindo ao FeedFlow!',
-                    'success-login': 'Login bem-sucedido. Bem-vindo de volta ao FeedFlow!',
-                    'success-password-reset': 'Link de redefinição enviado. Verifique sua caixa de entrada.',
-                    'success-profile-update': 'Perfil atualizado com sucesso.',
-                    'success-premium-global-active': 'Premium global ativado para todos os usuários.',
-                    'success-premium-global-deactivated': 'Premium global desativado.',
-                    'success-launch-promo-active': 'Promoção de lançamento ativada.',
-                    'success-launch-promo-deactivated': 'Promoção de lançamento desativada.',
-                    'idea-copied': 'Ideia copiada para a área de transferência.',
-                    'feature-premium-label': 'Premium',
-                    'feature-facebook-only-label': 'Somente Facebook',
-                    'feature-limited-copy-label': 'Copy Limitado',
-                }
-
-                ,
-                fr: {
-                    // Auth View
-                    'auth-title-login': 'Se connecter',
-                    'auth-title-signup': 'Créer un compte',
-                    'login-email-label': 'Adresse e-mail',
-                    'login-password-label': 'Mot de passe',
-                    'remember-me-label': 'Se souvenir de moi',
-                    'forgot-password-link': 'Mot de passe oublié?',
-                    'login-submit-btn': 'Accéder',
-                    'auth-divider': 'ou',
-                    'google-login-text': 'Se connecter avec Google',
-                    'toggle-auth-text-signup': 'Pas encore de compte?',
-                    'show-signup-form-link': 'Créer un compte',
-                    'toggle-auth-text-login': 'Vous avez déjà un compte?',
-                    'show-login-form-link': 'Se connecter',
-                    'signup-email-label': 'E-mail',
-                    'signup-confirm-email-label': 'Confirmer l\'e-mail',
-                    'signup-password-label': 'Mot de passe',
-                    'signup-confirm-password-label': 'Confirmer le mot de passe',
-                    'signup-name-label': 'Prénom',
-                    'signup-lastname-label': 'Nom(s) de famille',
-                    'signup-username-label': 'Nom d\'utilisateur',
-                    'signup-username-help': 'Créez un identifiant unique pour votre compte.',
-                    'terms-text': 'J\'accepte les ',
-                    'terms-link': 'Conditions Générales',
-                    'privacy-link': 'Politique de Confidentialité',
-                    'signup-submit-btn': 'Créer un compte',
-                    'reset-password-title': 'Réinitialiser le mot de passe',
-                    'reset-email-label': 'Adresse e-mail',
-                    'reset-password-submit-btn': 'Envoyer le lien',
-                    'reset-password-info-sent': 'Si votre e-mail existe, vous recevrez un lien de récupération.',
-                    'reset-password-info-error': 'Erreur lors de l\'envoi du lien. Veuillez réessayer.',
-                    'profile-title': 'Compléter votre profil',
-                    'profile-age-label': 'Âge',
-                    'profile-gender-label': 'Sexe',
-                    'profile-gender-placeholder': 'Sélectionner...',
-                    'profile-gender-male': 'Masculin',
-                    'profile-gender-female': 'Féminin',
-                    'profile-gender-prefer-not-say': 'Préfère ne pas dire',
-                    'profile-country-label': 'Pays de résidence',
-                    'profile-save-btn': 'Enregistrer',
-
-                    // Navbar
-                    'logout-btn': 'Déconnexion',
-                    'get-premium-btn': 'Obtenir Premium',
-                    'language-selector-display': 'Langue',
-                    'admin-history-btn': 'Historique Admin',
-                    'admin-premium-control-btn': 'Contrôle Premium Admin',
-
-                    // Config View
-                    'welcome-message-prefix': 'Bonjour, ',
-                    'config-subtitle': 'Générez des idées de contenu pour vos réseaux sociaux avec FeedFlow.',
-                    'topic-label': 'Mot-clé',
-                    'topic-help': '✨ Soyez précis comme un laser ! Plus votre sujet est précis, plus les idées que nous débloquerons ensemble seront brillantes. ✨',
-                    'copy-type-label': 'Définir le Type de Copy:',
-                    'copy-type-placeholder': 'Sélectionner un type de copy',
-                    'copy-type-promotional': 'Promotionnel',
-                    'copy-type-cta': 'Appel à l\'action (CTA)',
-                    'copy-type-authority': 'Autorité ou Preuve Sociale',
-                    'copy-type-storytelling': 'Narratif ou Storytelling',
-                    'copy-type-urgency': 'Urgence ou Rareté',
-                    'copy-type-positioning': 'Positionnement ou Branding',
-                    'social-media-label': 'Sélectionner le Réseau Social:',
-                    'mode-multi-platform': 'Générer une idée par réseau social sélectionné',
-                    'mode-single-platform': 'Générer 3 options ou idées distinctes pour un seul réseau social',
-                    'generations-remaining-prefix': 'Générations restantes cette semaine: ',
-                    'generations-remaining-suffix': '/3',
-                    'generate-ideas-text': 'Générer des Idées!',
-                    'load-last-inputs-text': 'Charger les dernières informations',
-                    'premium-tag': 'Premium',
-                    'premium-locked-message': 'Fonctionnalité Premium',
-                    'facebook-only-message': 'Seul Facebook disponible en version gratuite',
-                    'copy-type-limited-message': 'Types de copy limités en version gratuite',
-
-
-                    // Results View
-                    'results-title': 'Vos Idées Générées',
-                    'copy-btn': 'Copier',
-                    'share-btn': 'Partager',
-                    'back-to-config-text': 'Générer à nouveau / Nouvelle recherche',
-                    'unblur-visual-format': 'Débloquez le format visuel avec Premium',
-                    'like-button-text': 'J\'aime',
-                    'dislike-button-text': 'Je n\'aime pas',
-
-                    // Admin Views
-                    'admin-history-title': 'Historique des Générations (Admin)',
-                    'admin-history-user-id': 'ID Utilisateur',
-                    'admin-history-timestamp': 'Horodatage',
-                    'admin-history-topic': 'Sujet',
-                    'admin-history-copy-type': 'Type de Copy',
-                    'admin-history-social-media': 'Réseaux Sociaux',
-                    'admin-history-mode': 'Mode',
-                    'admin-history-language': 'Langue',
-                    'admin-premium-control-title': 'Contrôle Global Premium (Admin)',
-                    'global-premium-status-text': 'Statut Global Premium: ',
-                    'launch-promo-status-text': 'Promotion de Lancement: ',
-                    'status-active': 'Actif',
-                    'status-inactive': 'Inactif',
-                    'status-until': ' jusqu\'à ',
-                    'activate-global-premium-btn': 'Activer Premium Global',
-                    'deactivate-global-premium-btn': 'Désactiver Premium Global',
-                    'activate-launch-promo-btn': 'Activer Promotion Lancement',
-                    'deactivate-launch-promo-btn': 'Désactiver Promotion Lancement',
-
-                    // Loading Phrases (10-15 phrases)
-                    'loading-phrase-1': 'Libérer votre créativité...',
-                    'loading-phrase-2': 'Connecter des idées brillantes...',
-                    'loading-phrase-3': 'Préparer le contenu parfait...',
-                    'loading-phrase-4': 'Inspiration en route...',
-                    'loading-phrase-5': 'Votre prochaine grande idée est à quelques secondes...',
-                    'loading-phrase-6': 'Rassembler l\'étincelle...',
-                    'loading-phrase-7': 'Forger le message idéal...',
-                    'loading-phrase-8': 'Préparer votre stratégie...',
-                    'loading-phrase-9': 'Activer la muse numérique...',
-                    'loading-phrase-10': 'Organiser la magie des réseaux...',
-                    'loading-phrase-11': 'Construire votre récit...',
-                    'loading-phrase-12': 'La créativité est en marche...',
-                    'loading-phrase-13': 'Peaufiner vos concepts...',
-                    'loading-phrase-14': 'Transformer vos idées en impact...',
-                    'loading-phrase-15': 'Débloquer le potentiel créatif...',
-
-                    // Error/Info Messages
-                    'error-auth-generic': 'Erreur d\'authentification. Veuillez réessayer.',
-                    'error-auth-invalid-email': 'Adresse e-mail ou mot de passe incorrect(e).',
-                    'error-auth-user-not-found': 'Utilisateur non trouvé.',
-                    'error-auth-wrong-password': 'Mot de passe incorrect.',
-                    'error-auth-email-already-in-use': 'Cet e-mail est déjà enregistré.',
-                    'error-auth-weak-password': 'Le mot de passe doit contenir au moins 6 caractères.',
-                    'error-auth-network-request-failed': 'Problème de connexion. Vérifiez votre internet.',
-                    'error-auth-too-many-requests': 'Trop de tentatives. Veuillez réessayer plus tard.',
-                    'error-form-validation': 'Veuillez remplir tous les champs obligatoires et vous assurer qu\'ils sont valides.',
-                    'error-session-invalid': 'Votre session a été fermée car vous vous êtes connecté sur un autre appareil.',
-                    'error-generation-limit': 'Vous avez atteint votre limite hebdomadaire de 3 générations gratuites. Passez à la version Premium pour des générations illimitées !',
-                    'error-facebook-only': 'Dans la version gratuite, vous ne pouvez générer du contenu que pour Facebook. Passez à la version Premium pour plus de réseaux !',
-                    'error-copy-type-limited': 'Ce type de copy est exclusif à la version Premium. Mettez à niveau pour le débloquer !',
-                    'error-not-enough-credits': 'Vous n\'avez pas suffisamment de crédits de génération. Veuillez recharger ou acheter un pack Premium.',
-                    'error-api-deepseek': 'Erreur lors de la génération d\'idées. L\'IA n\'a pas pu traiter la demande. Veuillez réessayer plus tard.',
-                    'error-generic': 'Une erreur inattendue est survenue. Veuillez réessayer.',
-                    'success-signup': 'Compte créé avec succès. Bienvenue sur FeedFlow !',
-                    'success-login': 'Connexion réussie. Bienvenue de nouveau sur FeedFlow !',
-                    'success-password-reset': 'Lien de réinitialisation envoyé. Vérifiez votre boîte de réception.',
-                    'success-profile-update': 'Profil mis à jour avec succès.',
-                    'success-premium-global-active': 'Premium global activé pour tous les utilisateurs.',
-                    'success-premium-global-deactivated': 'Premium global désactivé.',
-                    'success-launch-promo-active': 'Promotion de lancement activée.',
-                    'success-launch-promo-deactivated': 'Promotion de lancement désactivée.',
-                    'idea-copied': 'Idée copiée dans le presse-papiers.',
-                    'feature-premium-label': 'Premium',
-                    'feature-facebook-only-label': 'Facebook Seulement',
-                    'feature-limited-copy-label': 'Copy Limité',
-                }
+                // Error/Info Messages
+                'error-auth-generic': 'Authentication error. Please try again.',
+                'error-auth-invalid-email': 'Incorrect email or password.',
+                'error-auth-user-not-found': 'User not found.',
+                'error-auth-wrong-password': 'Wrong password.',
+                'error-auth-email-already-in-use': 'This email is already registered.',
+                'error-auth-weak-password': 'Password must be at least 6 characters long.',
+                'error-auth-network-request-failed': 'Connection issue. Check your internet.',
+                'error-auth-too-many-requests': 'Too many attempts. Please try again later.',
+                'error-form-validation': 'Please fill all required fields and ensure they are valid.',
+                'error-session-invalid': 'Your session has been closed because you logged in on another device.',
+                'error-generation-limit': 'You have reached your weekly limit of 3 free generations. Upgrade to Premium for unlimited generations!',
+                'error-facebook-only': 'In the free version, you can only generate content for Facebook. Upgrade to Premium for more networks!',
+                'error-copy-type-limited': 'This copy type is exclusive to the Premium version. Upgrade to unlock it!',
+                'error-not-enough-credits': 'You do not have enough generation credits. Please recharge or purchase a Premium package.',
+                'error-api-deepseek': 'Error generating ideas. The AI could not process the request. Please try again later.',
+                'error-generic': 'An unexpected error occurred. Please try again.',
+                'success-signup': 'Account created successfully. Welcome to FeedFlow!',
+                'success-login': 'Login successful. Welcome back to FeedFlow!',
+                'success-password-reset': 'Reset link sent. Check your inbox.',
+                'success-profile-update': 'Profile updated successfully.',
+                'success-premium-global-active': 'Global Premium activated for all users.',
+                'success-premium-global-deactivated': 'Global Premium deactivated.',
+                'success-launch-promo-active': 'Launch promotion activated.',
+                'success-launch-promo-deactivated': 'Launch promotion deactivated.',
+                'idea-copied': 'Idea copied to clipboard.',
+                'feature-premium-label': 'Premium',
+                'feature-facebook-only-label': 'Facebook Only',
+                'feature-limited-copy-label': 'Limited Copy',
             }
+
+            ,
+            pt: {
+                // Auth View
+                'auth-title-login': 'Entrar',
+                'auth-title-signup': 'Criar uma Conta',
+                'login-email-label': 'Endereço de Email',
+                'login-password-label': 'Senha',
+                'remember-me-label': 'Lembrar-me',
+                'forgot-password-link': 'Esqueceu sua Senha?',
+                'login-submit-btn': 'Acessar',
+                'auth-divider': 'ou',
+                'google-login-text': 'Entrar com Google',
+                'toggle-auth-text-signup': 'Não tem uma conta?',
+                'show-signup-form-link': 'Criar uma Conta',
+                'toggle-auth-text-login': 'Já tem uma conta?',
+                'show-login-form-link': 'Entrar',
+                'signup-email-label': 'Email',
+                'signup-confirm-email-label': 'Confirmar Email',
+                'signup-password-label': 'Senha',
+                'signup-confirm-password-label': 'Confirmar Senha',
+                'signup-name-label': 'Nome',
+                'signup-lastname-label': 'Sobrenome(s)',
+                'signup-username-label': 'Nome de Usuário',
+                'signup-username-help': 'Crie um identificador único para sua conta.',
+                'terms-text': 'Eu concordo com os ',
+                'terms-link': 'Termos e Condições',
+                'privacy-link': 'Política de Privacidade',
+                'signup-submit-btn': 'Criar Conta',
+                'reset-password-title': 'Redefinir Senha',
+                'reset-email-label': 'Endereço de Email',
+                'reset-password-submit-btn': 'Enviar Link',
+                'reset-password-info-sent': 'Se seu email existir, você receberá um link de recuperação.',
+                'reset-password-info-error': 'Erro ao enviar o link. Por favor, tente novamente.',
+                'profile-title': 'Complete seu Perfil',
+                'profile-age-label': 'Idade',
+                'profile-gender-label': 'Gênero',
+                'profile-gender-placeholder': 'Selecionar...',
+                'profile-gender-male': 'Masculino',
+                'profile-gender-female': 'Feminino',
+                'profile-gender-prefer-not-say': 'Prefiro não dizer',
+                'profile-country-label': 'País de Residência',
+                'profile-save-btn': 'Salvar',
+
+                // Navbar
+                'logout-btn': 'Sair',
+                'get-premium-btn': 'Obter Premium',
+                'language-selector-display': 'Idioma',
+                'admin-history-btn': 'Histórico Admin',
+                'admin-premium-control-btn': 'Controle Premium Admin',
+
+                // Config View
+                'welcome-message-prefix': 'Olá, ',
+                'config-subtitle': 'Gere ideias de conteúdo para suas redes sociais com FeedFlow.',
+                'topic-label': 'Palavra-chave',
+                'topic-help': '✨ Seja preciso como um laser! Quanto mais preciso seu tópico, mais brilhantes as ideias que desbloquearemos juntos. ✨',
+                'copy-type-label': 'Defina o Tipo de Copy:',
+                'copy-type-placeholder': 'Selecione um tipo de copy',
+                'copy-type-promotional': 'Promocional',
+                'copy-type-cta': 'Chamada para Ação (CTA)',
+                'copy-type-authority': 'Autoridade ou Prova Social',
+                'copy-type-storytelling': 'Narrativa ou Storytelling',
+                'copy-type-urgency': 'Urgência ou Escassez',
+                'copy-type-positioning': 'Posicionamento ou Branding',
+                'social-media-label': 'Selecione a Rede Social:',
+                'mode-multi-platform': 'Gerar uma ideia por cada rede social selecionada',
+                'mode-single-platform': 'Gerar 3 opções ou ideias distintas para uma única rede social',
+                'generations-remaining-prefix': 'Gerações restantes esta semana: ',
+                'generations-remaining-suffix': '/3',
+                'generate-ideas-text': 'Gerar Ideias!',
+                'load-last-inputs-text': 'Carregar Últimas Informações',
+                'premium-tag': 'Premium',
+                'premium-locked-message': 'Recurso Premium',
+                'facebook-only-message': 'Somente Facebook disponível na versão gratuita',
+                'copy-type-limited-message': 'Tipos de copy limitados na versão gratuita',
+
+
+                // Results View
+                'results-title': 'Suas Ideias Geradas',
+                'copy-btn': 'Copiar',
+                'share-btn': 'Compartilhar',
+                'back-to-config-text': 'Gerar Novamente / Nova Pesquisa',
+                'unblur-visual-format': 'Desbloqueie o formato visual com Premium',
+                'like-button-text': 'Curtir',
+                'dislike-button-text': 'Não curtir',
+
+                // Admin Views
+                'admin-history-title': 'Histórico de Gerações (Admin)',
+                'admin-history-user-id': 'ID do Usuário',
+                'admin-history-timestamp': 'Data/Hora',
+                'admin-history-topic': 'Tópico',
+                'admin-history-copy-type': 'Tipo de Copy',
+                'admin-history-social-media': 'Redes Sociais',
+                'admin-history-mode': 'Modo',
+                'admin-history-language': 'Idioma',
+                'admin-premium-control-title': 'Controle Premium Global (Admin)',
+                'global-premium-status-text': 'Status Premium Global: ',
+                'launch-promo-status-text': 'Promoção de Lançamento: ',
+                'status-active': 'Ativo',
+                'status-inactive': 'Inativo',
+                'status-until': ' até ',
+                'activate-global-premium-btn': 'Ativar Premium Global',
+                'deactivate-global-premium-btn': 'Desativar Premium Global',
+                'activate-launch-promo-btn': 'Ativar Promoção de Lançamento',
+                'deactivate-launch-promo-btn': 'Desativar Promoção de Lançamento',
+                // Loading Phrases (10-15 phrases)
+                'loading-phrase-1': 'Liberando sua criatividade...',
+                'loading-phrase-2': 'Conectando ideias brilhantes...',
+                'loading-phrase-3': 'Cozinhando o conteúdo perfeito...',
+                'loading-phrase-4': 'Inspiração a caminho...',
+                'loading-phrase-5': 'Sua próxima grande ideia está a segundos...',
+                'loading-phrase-6': 'Coletando a faísca...',
+                'loading-phrase-7': 'Forjando a mensagem ideal...',
+                'loading-phrase-8': 'Preparando sua estratégia...',
+                'loading-phrase-9': 'Ativando a musa digital...',
+                'loading-phrase-10': 'Organizando a magia das redes...',
+                'loading-phrase-11': 'Construindo sua narrativa...',
+                'loading-phrase-12': 'A criatividade está fluindo...',
+                'loading-phrase-13': 'Polindo seus conceitos...',
+                'loading-phrase-14': 'Transformando suas ideias em impacto...',
+                'loading-phrase-15': 'Desbloqueando o potencial criativo...',
+
+                // Error/Info Messages
+                'error-auth-generic': 'Erro de autenticação. Por favor, tente novamente.',
+                'error-auth-invalid-email': 'Email ou senha incorretos.',
+                'error-auth-user-not-found': 'Usuário não encontrado.',
+                'error-auth-wrong-password': 'Senha incorreta.',
+                'error-auth-email-already-in-use': 'Este email já está registrado.',
+                'error-auth-weak-password': 'A senha deve ter pelo menos 6 caracteres.',
+                'error-auth-network-request-failed': 'Problema de conexão. Verifique sua internet.',
+                'error-auth-too-many-requests': 'Muitas tentativas. Por favor, tente mais tarde.',
+                'error-form-validation': 'Por favor, preencha todos os campos obrigatórios e certifique-se de que sejam válidos.',
+                'error-session-invalid': 'Sua sessão foi encerrada porque você fez login em outro dispositivo.',
+                'error-generation-limit': 'Você atingiu seu limite semanal de 3 gerações gratuitas. Atualize para Premium para gerações ilimitadas!',
+                'error-facebook-only': 'Na versão gratuita, você só pode gerar conteúdo para o Facebook. Atualize para Premium para mais redes!',
+                'error-copy-type-limited': 'Este tipo de copy é exclusivo da versão Premium. Atualize para desbloqueá-lo!',
+                'error-not-enough-credits': 'Você não tem créditos de geração suficientes. Por favor, recarregue ou compre um pacote Premium.',
+                'error-api-deepseek': 'Erro ao gerar ideias. A IA não pôde processar a solicitação. Por favor, tente novamente mais tarde.',
+                'error-generic': 'Ocorreu um erro inesperado. Por favor, tente novamente.',
+                'success-signup': 'Conta criada com sucesso. Bem-vindo ao FeedFlow!',
+                'success-login': 'Login bem-sucedido. Bem-vindo de volta ao FeedFlow!',
+                'success-password-reset': 'Link de redefinição enviado. Verifique sua caixa de entrada.',
+                'success-profile-update': 'Perfil atualizado com sucesso.',
+                'success-premium-global-active': 'Premium global ativado para todos os usuários.',
+                'success-premium-global-deactivated': 'Premium global desativado.',
+                'success-launch-promo-active': 'Promoção de lançamento ativada.',
+                'success-launch-promo-deactivated': 'Promoção de lançamento desativada.',
+                'idea-copied': 'Ideia copiada para a área de transferência.',
+                'feature-premium-label': 'Premium',
+                'feature-facebook-only-label': 'Somente Facebook',
+                'feature-limited-copy-label': 'Copy Limitado',
+            }
+
+            ,
+            fr: {
+                // Auth View
+                'auth-title-login': 'Se connecter',
+                'auth-title-signup': 'Créer un compte',
+                'login-email-label': 'Adresse e-mail',
+                'login-password-label': 'Mot de passe',
+                'remember-me-label': 'Se souvenir de moi',
+                'forgot-password-link': 'Mot de passe oublié?',
+                'login-submit-btn': 'Accéder',
+                'auth-divider': 'ou',
+                'google-login-text': 'Se connecter avec Google',
+                'toggle-auth-text-signup': 'Pas encore de compte?',
+                'show-signup-form-link': 'Créer un compte',
+                'toggle-auth-text-login': 'Vous avez déjà un compte?',
+                'show-login-form-link': 'Se connecter',
+                'signup-email-label': 'E-mail',
+                'signup-confirm-email-label': 'Confirmer l\'e-mail',
+                'signup-password-label': 'Mot de passe',
+                'signup-confirm-password-label': 'Confirmer le mot de passe',
+                'signup-name-label': 'Prénom',
+                'signup-lastname-label': 'Nom(s) de famille',
+                'signup-username-label': 'Nom d\'utilisateur',
+                'signup-username-help': 'Créez un identifiant unique pour votre compte.',
+                'terms-text': 'J\'accepte les ',
+                'terms-link': 'Conditions Générales',
+                'privacy-link': 'Politique de Confidentialité',
+                'signup-submit-btn': 'Créer un compte',
+                'reset-password-title': 'Réinitialiser le mot de passe',
+                'reset-email-label': 'Adresse e-mail',
+                'reset-password-submit-btn': 'Envoyer le lien',
+                'reset-password-info-sent': 'Si votre e-mail existe, vous recevrez un lien de récupération.',
+                'reset-password-info-error': 'Erreur lors de l\'envoi du lien. Veuillez réessayer.',
+                'profile-title': 'Compléter votre profil',
+                'profile-age-label': 'Âge',
+                'profile-gender-label': 'Sexe',
+                'profile-gender-placeholder': 'Sélectionner...',
+                'profile-gender-male': 'Masculin',
+                'profile-gender-female': 'Féminin',
+                'profile-gender-prefer-not-say': 'Préfère ne pas dire',
+                'profile-country-label': 'Pays de résidence',
+                'profile-save-btn': 'Enregistrer',
+
+                // Navbar
+                'logout-btn': 'Déconnexion',
+                'get-premium-btn': 'Obtenir Premium',
+                'language-selector-display': 'Langue',
+                'admin-history-btn': 'Historique Admin',
+                'admin-premium-control-btn': 'Contrôle Premium Admin',
+
+                // Config View
+                'welcome-message-prefix': 'Bonjour, ',
+                'config-subtitle': 'Générez des idées de contenu pour vos réseaux sociaux avec FeedFlow.',
+                'topic-label': 'Mot-clé',
+                'topic-help': '✨ Soyez précis comme un laser ! Plus votre sujet est précis, plus les idées que nous débloquerons ensemble seront brillantes. ✨',
+                'copy-type-label': 'Définir le Type de Copy:',
+                'copy-type-placeholder': 'Sélectionner un type de copy',
+                'copy-type-promotional': 'Promotionnel',
+                'copy-type-cta': 'Appel à l\'action (CTA)',
+                'copy-type-authority': 'Autorité ou Preuve Sociale',
+                'copy-type-storytelling': 'Narratif ou Storytelling',
+                'copy-type-urgency': 'Urgence ou Rareté',
+                'copy-type-positioning': 'Positionnement ou Branding',
+                'social-media-label': 'Sélectionner le Réseau Social:',
+                'mode-multi-platform': 'Générer une idée par réseau social sélectionné',
+                'mode-single-platform': 'Générer 3 options ou idées distinctes pour un seul réseau social',
+                'generations-remaining-prefix': 'Générations restantes cette semaine: ',
+                'generations-remaining-suffix': '/3',
+                'generate-ideas-text': 'Générer des Idées!',
+                'load-last-inputs-text': 'Charger les dernières informations',
+                'premium-tag': 'Premium',
+                'premium-locked-message': 'Fonctionnalité Premium',
+                'facebook-only-message': 'Seul Facebook disponible en version gratuite',
+                'copy-type-limited-message': 'Types de copy limités en version gratuite',
+
+
+                // Results View
+                'results-title': 'Vos Idées Générées',
+                'copy-btn': 'Copier',
+                'share-btn': 'Partager',
+                'back-to-config-text': 'Générer à nouveau / Nouvelle recherche',
+                'unblur-visual-format': 'Débloquez le format visuel avec Premium',
+                'like-button-text': 'J\'aime',
+                'dislike-button-text': 'Je n\'aime pas',
+
+                // Admin Views
+                'admin-history-title': 'Historique des Générations (Admin)',
+                'admin-history-user-id': 'ID Utilisateur',
+                'admin-history-timestamp': 'Horodatage',
+                'admin-history-topic': 'Sujet',
+                'admin-history-copy-type': 'Type de Copy',
+                'admin-history-social-media': 'Réseaux Sociaux',
+                'admin-history-mode': 'Mode',
+                'admin-history-language': 'Langue',
+                'admin-premium-control-title': 'Contrôle Global Premium (Admin)',
+                'global-premium-status-text': 'Statut Global Premium: ',
+                'launch-promo-status-text': 'Promotion de Lancement: ',
+                'status-active': 'Actif',
+                'status-inactive': 'Inactif',
+                'status-until': ' jusqu\'à ',
+                'activate-global-premium-btn': 'Activer Premium Global',
+                'deactivate-global-premium-btn': 'Désactiver Premium Global',
+                'activate-launch-promo-btn': 'Activer Promotion Lancement',
+                'deactivate-launch-promo-btn': 'Désactiver Promotion Lancement',
+
+                // Loading Phrases (10-15 phrases)
+                'loading-phrase-1': 'Libérer votre créativité...',
+                'loading-phrase-2': 'Connecter des idées brillantes...',
+                'loading-phrase-3': 'Préparer le contenu parfait...',
+                'loading-phrase-4': 'Inspiration en route...',
+                'loading-phrase-5': 'Votre prochaine grande idée est à quelques secondes...',
+                'loading-phrase-6': 'Rassembler l\'étincelle...',
+                'loading-phrase-7': 'Forger le message idéal...',
+                'loading-phrase-8': 'Préparer votre stratégie...',
+                'loading-phrase-9': 'Activer la muse numérique...',
+                'loading-phrase-10': 'Organiser la magie des réseaux...',
+                'loading-phrase-11': 'Construire votre récit...',
+                'loading-phrase-12': 'La créativité est en marche...',
+                'loading-phrase-13': 'Peaufiner vos concepts...',
+                'loading-phrase-14': 'Transformer vos idées en impact...',
+                'loading-phrase-15': 'Débloquer le potentiel créatif...',
+
+                // Error/Info Messages
+                'error-auth-generic': 'Erreur d\'authentification. Veuillez réessayer.',
+                'error-auth-invalid-email': 'Adresse e-mail ou mot de passe incorrect(e).',
+                'error-auth-user-not-found': 'Utilisateur non trouvé.',
+                'error-auth-wrong-password': 'Mot de passe incorrect.',
+                'error-auth-email-already-in-use': 'Cet e-mail est déjà enregistré.',
+                'error-auth-weak-password': 'Le mot de passe doit contenir au moins 6 caractères.',
+                'error-auth-network-request-failed': 'Problème de connexion. Vérifiez votre internet.',
+                'error-auth-too-many-requests': 'Trop de tentatives. Veuillez réessayer plus tard.',
+                'error-form-validation': 'Veuillez remplir tous les champs obligatoires et vous assurer qu\'ils sont valides.',
+                'error-session-invalid': 'Votre session a été fermée car vous vous êtes connecté sur un autre appareil.',
+                'error-generation-limit': 'Vous avez atteint votre limite hebdomadaire de 3 générations gratuites. Passez à la version Premium pour des générations illimitées !',
+                'error-facebook-only': 'Dans la version gratuite, vous ne pouvez générer du contenu que pour Facebook. Passez à la version Premium pour plus de réseaux !',
+                'error-copy-type-limited': 'Ce type de copy est exclusif à la version Premium. Mettez à niveau pour le débloquer !',
+                'error-not-enough-credits': 'Vous n\'avez pas suffisamment de crédits de génération. Veuillez recharger ou acheter un pack Premium.',
+                'error-api-deepseek': 'Erreur lors de la génération d\'idées. L\'IA n\'a pas pu traiter la demande. Veuillez réessayer plus tard.',
+                'error-generic': 'Une erreur inattendue est survenue. Veuillez réessayer.',
+                'success-signup': 'Compte créé avec succès. Bienvenue sur FeedFlow !',
+                'success-login': 'Connexion réussie. Bienvenue de nouveau sur FeedFlow !',
+                'success-password-reset': 'Lien de réinitialisation envoyé. Vérifiez votre boîte de réception.',
+                'success-profile-update': 'Profil mis à jour avec succès.',
+                'success-premium-global-active': 'Premium global activé pour tous les utilisateurs.',
+                'success-premium-global-deactivated': 'Premium global désactivé.',
+                'success-launch-promo-active': 'Promotion de lancement activée.',
+                'success-launch-promo-deactivated': 'Promotion de lancement désactivée.',
+                'idea-copied': 'Idée copiée dans le presse-papiers.',
+                'feature-premium-label': 'Premium',
+                'feature-facebook-only-label': 'Facebook Seulement',
+                'feature-limited-copy-label': 'Copy Limité',
+            }
+        }
 
             ;
 
@@ -1387,7 +1387,7 @@
                     // Don't translate empty option
                     const translatedText = t('copy-type-' + originalValue.toLowerCase().replace(/[^a-z0-9]/g, '_'));
 
-                    option.textContent = translatedText + (option.classList.contains('premium-option') ? ` ${t('premium-tag')}` : '');
+                    option.textContent = translatedText + (option.classList.contains('premium-option') ? `${t('premium-tag')}` : '');
                 }
             });
 
@@ -1534,7 +1534,7 @@
         function getDeviceType() {
             const ua = navigator.userAgent;
 
-            if (/(tablet|ipad|playbook|silk)|(android(? !.*mobi))/i.test(ua)) {
+            if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
                 return 'tablet';
             }
 
@@ -1576,8 +1576,8 @@
         const resetEmailInput = document.getElementById('reset-email-input');
 
         // Mensajes de error/info (añadidos para ser usados por displayError)
-        const loginErrorMsg = document.getElementById('login-error-msg'); 
-        const signupErrorMsg = document.getElementById('signup-error-msg'); 
+        const loginErrorMsg = document.getElementById('login-error-msg');
+        const signupErrorMsg = document.getElementById('signup-error-msg');
         const resetPasswordInfo = document.getElementById('reset-password-info');
         const profileErrorMsg = document.getElementById('profile-error-msg'); // Added
         const adminHistoryErrorMsg = document.getElementById('admin-history-error-msg'); // Added
@@ -1596,15 +1596,15 @@
                 loginForm.style.display = 'none'; // Oculta el formulario de login
                 signupFormContainer.classList.add('is-active'); // Muestra el modal de registro
                 authTitle.textContent = t('auth-title-signup'); // Actualiza el título
-                document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-login')} <a
-                id="show-login-form-link">${t('show-login-form-link')}</a>`;
+                document.getElementById('toggle-auth-text').innerHTML = ${ t('toggle-auth-text-login') } <a
+                    id="show-login-form-link">${t('show-login-form-link')}</a>;
                 document.getElementById('show-login-form-link').addEventListener('click', (e) => {
                     e.preventDefault();
                     signupFormContainer.classList.remove('is-active');
                     loginForm.style.display = 'block';
                     authTitle.textContent = t('auth-title-login');
-                    document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-signup')} <a
-                id="show-signup-form-link">${t('show-signup-form-link')}</a>`;
+                    document.getElementById('toggle-auth-text').innerHTML = ${ t('toggle-auth-text-signup') } <a
+                        id="show-signup-form-link">${t('show-signup-form-link')}</a>;
                     document.getElementById('show-signup-form-link').addEventListener('click', arguments.callee); // Re-attach listener
                 });
             });
@@ -1615,15 +1615,15 @@
                 signupFormContainer.classList.remove('is-active');
                 loginForm.style.display = 'block';
                 authTitle.textContent = t('auth-title-login');
-                document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-signup')} <a
-                id="show-signup-form-link">${t('show-signup-form-link')}</a>`;
+                document.getElementById('toggle-auth-text').innerHTML = ${ t('toggle-auth-text-signup') } <a
+                    id="show-signup-form-link">${t('show-signup-form-link')}</a>;
                 document.getElementById('show-signup-form-link').addEventListener('click', (e) => {
                     e.preventDefault();
                     loginForm.style.display = 'none';
                     signupFormContainer.classList.add('is-active');
                     authTitle.textContent = t('auth-title-signup');
-                    document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-login')} <a
-                id="show-login-form-link">${t('show-login-form-link')}</a>`;
+                    document.getElementById('toggle-auth-text').innerHTML = ${ t('toggle-auth-text-login') } <a
+                        id="show-login-form-link">${t('show-login-form-link')}</a>;
                     document.getElementById('show-login-form-link').addEventListener('click', arguments.callee);
                 });
             });
