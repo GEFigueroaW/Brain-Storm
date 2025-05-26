@@ -1436,7 +1436,7 @@
             const generationsRemainingElem = document.getElementById('generations-remaining-text');
 
             if (generationsRemainingElem) {
-                generationsRemainingElem.textContent = t('generations-remaining-prefix'){remaining}${t('generations-remaining-suffix')}`;
+                generationsRemainingElem.textContent = `${t('generations-remaining-prefix')}${remaining}${t('generations-remaining-suffix')}`;
                 generationsRemainingElem.dataset.remaining = remaining;
                 generationsRemainingElem.dataset.limit = limit;
                 generationsRemainingElem.style.display = 'block';
