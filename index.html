@@ -2962,6 +2962,15 @@
                     });
             });
         });
+        document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-login')} <a id="show-login-form-link">${t('show-login-form-link')}</a>`;
+
+        // Activa el cambio de vista de registro a login al hacer clic en el enlace
+        document.getElementById('show-login-form-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('signup-form-container').classList.remove('is-active');
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('auth-title').textContent = t('auth-title-login');
+        });
     </script>
 </body>
 
