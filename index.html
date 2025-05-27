@@ -1608,7 +1608,14 @@
                     signupFormContainer.classList.remove('is-active');
                     loginForm.style.display = 'block';
                     authTitle.textContent = t('auth-title-login');
-                    document.getElementById('toggle-auth-text').innerHTML = ${ t('toggle-auth-text-signup') } <a
+document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-login')} <a id="show-login-form-link">${t('show-login-form-link')}</a>`;
+
+document.getElementById('show-login-form-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('signup-form-container').classList.remove('is-active');
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('auth-title').textContent = t('auth-title-login');
+});
                         id="show-signup-form-link">${t('show-signup-form-link')}</a>;
                     document.getElementById('show-signup-form-link').addEventListener('click', arguments.callee); // Re-attach listener
                 });
