@@ -349,36 +349,37 @@
 
         /* Responsive adjustments */
         @media screen and (min-width: 1200px) {
-        #auth-view .column {
-        max-width: 500px;
-        width: 100%;
-       }
-   }
-                padding: 1.5rem;
-                margin: 10px auto;
+            #auth-view .column {
+                max-width: 500px;
+                width: 100%;
             }
+        }
 
-            .title {
-                font-size: 1.75rem;
-            }
+        padding: 1.5rem;
+        margin: 10px auto;
+        }
 
-            .subtitle {
-                font-size: 1.25rem;
-            }
+        .title {
+            font-size: 1.75rem;
+        }
 
-            .navbar-menu {
-                box-shadow: none;
-            }
+        .subtitle {
+            font-size: 1.25rem;
+        }
 
-            .navbar-item.is-hoverable .navbar-dropdown {
-                background-color: #4b0082;
-                left: 0;
-                right: 0;
-            }
+        .navbar-menu {
+            box-shadow: none;
+        }
 
-            .navbar-item.is-hoverable .navbar-dropdown .navbar-item {
-                padding-left: 1.5rem;
-            }
+        .navbar-item.is-hoverable .navbar-dropdown {
+            background-color: #4b0082;
+            left: 0;
+            right: 0;
+        }
+
+        .navbar-item.is-hoverable .navbar-dropdown .navbar-item {
+            padding-left: 1.5rem;
+        }
         }
     </style>
 </head>
@@ -1433,24 +1434,24 @@
 
         // Helper to update generations remaining text (called from applyTranslations and other places)
         function updateGenerationsRemainingDisplay(remaining, limit) {
-  const generationsRemainingElem = document.getElementById('generations-remaining-text');
+            const generationsRemainingElem = document.getElementById('generations-remaining-text');
 
-  if (generationsRemainingElem) {
-    generationsRemainingElem.textContent = `${t('generations-remaining-prefix')}${remaining}${t('generations-remaining-suffix')}`;
-    generationsRemainingElem.dataset.remaining = remaining;
-    generationsRemainingElem.dataset.limit = limit;
-    generationsRemainingElem.style.display = 'block';
-  }
-}
+            if (generationsRemainingElem) {
+                generationsRemainingElem.textContent = `${t('generations-remaining-prefix')}${remaining}${t('generations-remaining-suffix')}`;
+                generationsRemainingElem.dataset.remaining = remaining;
+                generationsRemainingElem.dataset.limit = limit;
+                generationsRemainingElem.style.display = 'block';
+            }
+        }
 
         // Generate UUID (for sessionId and deviceId)
         function generateUUID() {
-          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            const r = Math.random() * 16 | 0;
-            const v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-         });
-       }
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
 
         // Helper to show/hide views
         function showView(viewId) {
@@ -1600,14 +1601,14 @@
                 loginForm.style.display = 'none'; // Oculta el formulario de login
                 signupFormContainer.classList.add('is-active'); // Muestra el modal de registro
                 authTitle.textContent = t('auth-title-signup'); // Actualiza el título
-                document.getElementById('toggle-auth-text').innerHTML = ${t('toggle-auth-text-login')} <a
+                document.getElementById('toggle-auth-text').innerHTML = ${ t('toggle-auth-text-login') } <a
                     id="show-login-form-link">${t('show-login-form-link')}</a>;
                 document.getElementById('show-login-form-link').addEventListener('click', (e) => {
                     e.preventDefault();
                     signupFormContainer.classList.remove('is-active');
                     loginForm.style.display = 'block';
                     authTitle.textContent = t('auth-title-login');
-                    document.getElementById('toggle-auth-text').innerHTML = ${t('toggle-auth-text-signup')} <a
+                    document.getElementById('toggle-auth-text').innerHTML = ${ t('toggle-auth-text-signup') } <a
                         id="show-signup-form-link">${t('show-signup-form-link')}</a>;
                     document.getElementById('show-signup-form-link').addEventListener('click', arguments.callee); // Re-attach listener
                 });
@@ -1619,14 +1620,14 @@
                 signupFormContainer.classList.remove('is-active');
                 loginForm.style.display = 'block';
                 authTitle.textContent = t('auth-title-login');
-                document.getElementById('toggle-auth-text').innerHTML = ${t('toggle-auth-text-signup')} <a
+                document.getElementById('toggle-auth-text').innerHTML = ${ t('toggle-auth-text-signup') } <a
                     id="show-signup-form-link">${t('show-signup-form-link')}</a>;
                 document.getElementById('show-signup-form-link').addEventListener('click', (e) => {
                     e.preventDefault();
                     loginForm.style.display = 'none';
                     signupFormContainer.classList.add('is-active');
                     authTitle.textContent = t('auth-title-signup');
-                    document.getElementById('toggle-auth-text').innerHTML = ${t('toggle-auth-text-login')} <a
+                    document.getElementById('toggle-auth-text').innerHTML = ${ t('toggle-auth-text-login') } <a
                         id="show-login-form-link">${t('show-login-form-link')}</a>;
                     document.getElementById('show-login-form-link').addEventListener('click', arguments.callee);
                 });
@@ -2927,7 +2928,27 @@
                 loadProfileData(); // Carga los datos actuales del perfil
                 profileModal.classList.add('is-active');
             });
-        }
+        } document.getElementById("login-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById("login-email-input").value.trim();
+            const password = document.getElementById("login-password-input").value;
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log("✅ Login exitoso:", user.email);
+                    // Redirigir o mostrar la vista adecuada:
+                    document.getElementById("auth-view").style.display = "none";
+                    document.getElementById("config-view").style.display = "block";
+                })
+                .catch((error) => {
+                    console.error("❌ Error al iniciar sesión:", error.message);
+                    alert("Error: " + error.message);
+                });
+        });
+    </script>
+
     </script>
 </body>
 
