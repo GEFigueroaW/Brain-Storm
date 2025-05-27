@@ -2944,7 +2944,16 @@ document.getElementById('show-login-form-link').addEventListener('click', (e) =>
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-            const loginForm = document.getElementById("login-form");
+document.getElementById('toggle-auth-text').innerHTML = `${t('toggle-auth-text-login')} <a id="show-login-form-link">${t('show-login-form-link')}</a>`;
+
+document.getElementById('show-login-form-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('signup-form-container').classList.remove('is-active');
+  document.getElementById('login-form').style.display = 'block';
+  document.getElementById('auth-title').textContent = t('auth-title-login');
+});
+
+const loginForm = document.getElementById("login-form");
 
 if (loginForm) {
   loginForm.addEventListener("submit", function (e) {
@@ -2973,7 +2982,7 @@ if (loginForm) {
           deviceType: navigator.userAgent
         })
           .then(() => {
-            console.log("✅ Sesion registrada para:", user.email);
+            console.log("✅ Sesión registrada para:", user.email);
             showView("config-view");
           })
           .catch((error) => {
@@ -2988,7 +2997,6 @@ if (loginForm) {
   });
 }
 </script>
-
 </body>
 
 </html>
