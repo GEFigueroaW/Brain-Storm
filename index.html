@@ -45,6 +45,22 @@
     .is-hidden {
       display: none !important;
     }
+
+    /* Mejora visual para separar descripción del tipo de copy */
+    #ff-copytype-description {
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      color: #4a4a4a;
+    }
+
+    /* Ajuste del texto de ayuda para redes sociales */
+    #ff-help-networks {
+      display: block;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
   </style>
 </head>
 
@@ -111,64 +127,65 @@
       </div>
 
       <!-- Tipo de publicación -->
-      <div class="field">
-        <label id="ff-label-keyword">Tema o palabra clave</label>
-        <div class="control"><input id="ff-keyword" class="input" type="text"></div>
-      </div>
-
-      <div class="field">
+      <div class="field mt-4">
         <label class="label" id="ff-label-copytype">Tipo de publicación</label>
         <div class="control">
           <div class="select is-fullwidth">
-            <select id="ff-copytype" required></select>
-            <option value="de beneficio y solucion" data-key="opt-de beneficio y solucion">De beneficio y solucion
-            </option>
-            <option value="de novedad o lanzamiento" data-key="opt-de novedad o lanzamiento">De novedad o lanzamiento
-            </option>
-            <option value="de interaccion o pregunta" data-key="opt-de interaccion o pregunta">De interaccion o
-              pregunta</option>
-            <option value="de urgencia o escacez" data-key="opt-de urgencia o escacez">De urgencia o escacez</option>
-            <option value="informativo o educativo" data-key="opt-informativo o educativo">Informativo o educativo
-            </option>
-            <option value="informal" data-key="opt-informal">Informal</option>
-            <option value="llamada a la Acción (CTA)" data-key="opt-llamada a la Acción (CTA)">Llamada a la Acción
-              (CTA)</option>
-            <option value="narrativo o storytelling" data-key="opt-narrativo o storytelling">Narrativo o storytelling
-            </option>
-            <option value="posicionamiento o branding" data-key="opt-posicionamiento o branding">Posicionamiento o
-              branding</option>
-            <option value="testimonio o prueba social" data-key="opt-testimonio o prueba social">Testimonio o prueba
-              social</option>
-            <option value="técnico o profesional" data-key="opt-técnico o profesional">Técnico o profesional</option>
-            <option value="venta directa o persuasivo" data-key="opt-venta directa o persuasivo">Venta directa o
-              persuasivo</option>
+            <select id="ff-copytype">
+              <option data-key="opt-de beneficio y solucion">De beneficio y solución</option>
+              <option data-key="opt-de novedad o lanzamiento">De novedad o lanzamiento</option>
+              <option data-key="opt-de interaccion o pregunta">De interacción o pregunta</option>
+              <option data-key="opt-de urgencia o escacez">De urgencia o escasez</option>
+              <option data-key="opt-informativo o educativo">Informativo o educativo</option>
+              <option data-key="opt-informal">Informal</option>
+              <option data-key="opt-llamada a la Acción (CTA)">Llamada a la Acción (CTA)</option>
+              <option data-key="opt-narrativo o storytelling">Narrativo o storytelling</option>
+              <option data-key="opt-posicionamiento o branding">Posicionamiento o branding</option>
+              <option data-key="opt-testimonio o prueba social">Testimonio o prueba</option>
+              <option data-key="opt-técnico o profesional">Técnico o profesional</option>
+              <option data-key="opt-venta directa o persuasivo">Venta directa o persuasivo</option>
             </select>
-            <p id="ff-copytype-description" class="help is-info mt-1 mb-4"></p>
           </div>
         </div>
       </div>
 
+      <!-- Descripción dinámica del tipo de publicación -->
+      <p id="ff-copytype-description" class="help is-info mt-2 mb-4"></p>
+
       <!-- Redes sociales -->
-      <div class="field">
-        <label id="ff-label-networks" class="label">Redes sociales</label>
-        <p id="ff-help-networks" class="help is-info mb-2">
-          Selecciona una o más redes sociales según el modo elegido
-        </p>
+      <div class="field mt-6">
+        <label class="label" id="ff-label-networks">Redes sociales</label>
+        <p id="ff-help-networks" class="help mb-2">Selecciona una o más redes sociales según el modo elegido</p>
         <div class="control">
-          <label class="checkbox mr-3"><input type="checkbox" value="Facebook" class="ff-social"> Facebook</label>
-          <label class="checkbox mr-3"><input type="checkbox" value="X / Twitter" class="ff-social"> X / Twitter</label>
-          <label class="checkbox mr-3"><input type="checkbox" value="LinkedIn" class="ff-social"> LinkedIn</label>
-          <label class="checkbox mr-3"><input type="checkbox" value="WhatsApp" class="ff-social"> WhatsApp</label>
-          <label class="checkbox mr-3"><input type="checkbox" value="Telegram" class="ff-social"> Telegram</label>
-          <label class="checkbox mr-3"><input type="checkbox" value="Reddit" class="ff-social"> Reddit</label>
-          <label class="checkbox mr-3"><input type="checkbox" value="Instagram" class="ff-social"> Instagram</label>
-          <label class="checkbox mr-3"><input type="checkbox" value="TikTok" class="ff-social"> TikTok</label>
-          <label class="checkbox"><input type="checkbox" value="YouTube" class="ff-social"> YouTube</label>
+          <label class="checkbox mr-4">
+            <input type="checkbox" value="Facebook" class="ff-network"> Facebook
+          </label>
+          <label class="checkbox mr-4">
+            <input type="checkbox" value="Instagram" class="ff-network"> Instagram
+          </label>
+          <label class="checkbox mr-4">
+            <input type="checkbox" value="X / Twitter" class="ff-network"> X / Twitter
+          </label>
+          <label class="checkbox mr-4">
+            <input type="checkbox" value="TikTok" class="ff-network"> TikTok
+          </label>
+          <label class="checkbox mr-4">
+            <input type="checkbox" value="LinkedIn" class="ff-network"> LinkedIn
+          </label>
+          <label class="checkbox mr-4">
+            <input type="checkbox" value="YouTube" class="ff-network"> YouTube
+          </label>
+          <label class="checkbox mr-4">
+            <input type="checkbox" value="WhatsApp" class="ff-network"> WhatsApp
+          </label>
+          <label class="checkbox mr-4">
+            <input type="checkbox" value="Telegram" class="ff-network"> Telegram
+          </label>
+          <label class="checkbox mr-4">
+            <input type="checkbox" value="Reddit" class="ff-network"> Reddit
+          </label>
         </div>
       </div>
-
-      <button id="ff-generate-btn" class="button is-primary mt-4">Generar ideas</button>
-    </div>
   </section>
 
   <section id="ff-results-view" class="ff-section is-hidden">
@@ -446,9 +463,8 @@
       if (descEl) descEl.textContent = desc;
     }
 
-    // Escuchar cambios y actualizar
     document.getElementById("ff-copytype").addEventListener("change", updateCopyTypeDescription);
-    document.addEventListener("DOMContentLoaded", updateCopyTypeDescription);    
+    document.addEventListener("DOMContentLoaded", updateCopyTypeDescription); 
   </script>
   <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
   <script type="module">
