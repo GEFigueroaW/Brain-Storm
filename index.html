@@ -54,6 +54,19 @@
     <div class="container">
       <h1 class="title has-text-centered ff-logo">FeedFlow</h1>
       <p class="subtitle has-text-centered" id="auth-title">Inicia sesión para comenzar</p>
+      <div class="box has-background-light mt-4">
+        <label class="label">Idioma de la aplicación</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="ff-auth-language-selector">
+              <option value="es">Español</option>
+              <option value="en">Inglés</option>
+              <option value="pt">Portugués</option>
+            </select>
+          </div>
+        </div>
+        <p class="help mt-1">Elige el idioma para la interfaz y las ideas generadas.</p>
+      </div>
 
       <div class="buttons is-centered">
         <button id="ff-google-login" class="button is-light">
@@ -91,83 +104,84 @@
   </div>
 
   <!-- Modo de generación -->
-     <section id="ff-config-view" class="ff-section is-hidden">
-  <div class="container">
-    <h2 class="title">Configura tu idea</h2>
-  <div class="field">
-    <label class="label">¿Cómo quieres generar las ideas?</label>
-    <div class="control">
-      <div class="select is-fullwidth">
-        <select id="ff-generation-mode">
-          <option value="multired">Una idea por red social seleccionada (Multired)</option>
-          <option value="individual">Tres ideas para una sola red (Individual)</option>
-        </select>
+  <section id="ff-config-view" class="ff-section is-hidden">
+    <div class="container">
+      <h2 class="title">Configura tu idea</h2>
+      <div class="field">
+        <label class="label">¿Cómo quieres generar las ideas?</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="ff-generation-mode">
+              <option value="multired">Una idea por red social seleccionada (Multired)</option>
+              <option value="individual">Tres ideas para una sola red (Individual)</option>
+            </select>
+          </div>
+        </div>
+        <p class="help" id="ff-mode-help">Selecciona : 3 propuestas una red, o varias redes para una idea por cada una.
+        </p>
       </div>
-    </div>
-    <p class="help" id="ff-mode-help">Selecciona : 3 propuestas una red, o varias redes para una idea por cada una.</p>
-  </div>
 
-  <!-- Tipo de publicación -->
-    <div class="field">
-      <label class="label">Tema o palabra clave</label>
-      <div class="control"><input id="ff-keyword" class="input" type="text"></div>
-    </div>
-
-  <div class="field">
-    <label class="label">Tipo de publicación</label>
-    <div class="control">
-      <div class="select is-fullwidth">
-        <select id="ff-copy-type">               
-          <option>De beneficio y solucion</option> 
-          <option>De novedad o lanzamiento</option>    
-          <option>De interaccion o pregunta</option>          
-          <option>De urgencia o escacez</option>                         
-          <option>Informativo o educativo</option>
-          <option>Informal</option>    
-          <option>Llamada a la Acción (CTA)</option>                        
-          <option>Narrativo o storytelling</option>
-          <option>Posicionamiento o branding</option>          
-          <option>Testimonio o prueba social</option>          
-          <option>Técnico o profesional</option>
-          <option>Venta directa o persuasivo</option>          
-        </select>
+      <!-- Tipo de publicación -->
+      <div class="field">
+        <label class="label">Tema o palabra clave</label>
+        <div class="control"><input id="ff-keyword" class="input" type="text"></div>
       </div>
-    </div>
-  </div>
 
-  <!-- Redes sociales -->
-  <div class="field">
-    <label class="label">Redes sociales</label>
-    <p class="help" id="ff-social-help">Selecciona una o más redes sociales según el modo elegido.</p>
-    <div class="control" id="ff-socials">
-      <label class="checkbox mr-3"><input type="checkbox" value="Facebook" class="ff-social"> Facebook</label>
-      <label class="checkbox mr-3"><input type="checkbox" value="X / Twitter" class="ff-social"> X / Twitter</label>
-      <label class="checkbox mr-3"><input type="checkbox" value="LinkedIn" class="ff-social"> LinkedIn</label>
-      <label class="checkbox mr-3"><input type="checkbox" value="WhatsApp" class="ff-social"> WhatsApp</label>    
-      <label class="checkbox mr-3"><input type="checkbox" value="Telegram" class="ff-social"> Telegram</label>           
-      <label class="checkbox mr-3"><input type="checkbox" value="Reddit" class="ff-social"> Reddit</label>         
-      <label class="checkbox mr-3"><input type="checkbox" value="Instagram" class="ff-social"> Instagram</label>  
-      <label class="checkbox mr-3"><input type="checkbox" value="TikTok" class="ff-social"> TikTok</label>          
-      <label class="checkbox"><input type="checkbox" value="YouTube" class="ff-social"> YouTube</label>
-    </div>
-  </div>
-
-  <!-- Idioma (esto luego lo moveremos post-login) -->
-  <div class="field">
-    <label class="label">Idioma</label>
-    <div class="control">
-      <div class="select">
-        <select id="ff-language">
-          <option value="es">Español</option>
-          <option value="en">Inglés</option>
-          <option value="pt">Portugués</option>
-        </select>
+      <div class="field">
+        <label class="label">Tipo de publicación</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="ff-copy-type">
+              <option>De beneficio y solucion</option>
+              <option>De novedad o lanzamiento</option>
+              <option>De interaccion o pregunta</option>
+              <option>De urgencia o escacez</option>
+              <option>Informativo o educativo</option>
+              <option>Informal</option>
+              <option>Llamada a la Acción (CTA)</option>
+              <option>Narrativo o storytelling</option>
+              <option>Posicionamiento o branding</option>
+              <option>Testimonio o prueba social</option>
+              <option>Técnico o profesional</option>
+              <option>Venta directa o persuasivo</option>
+            </select>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <button id="ff-generate-btn" class="button is-primary mt-4">Generar ideas</button>
-  </div>
+      <!-- Redes sociales -->
+      <div class="field">
+        <label class="label">Redes sociales</label>
+        <p class="help" id="ff-social-help">Selecciona una o más redes sociales según el modo elegido.</p>
+        <div class="control" id="ff-socials">
+          <label class="checkbox mr-3"><input type="checkbox" value="Facebook" class="ff-social"> Facebook</label>
+          <label class="checkbox mr-3"><input type="checkbox" value="X / Twitter" class="ff-social"> X / Twitter</label>
+          <label class="checkbox mr-3"><input type="checkbox" value="LinkedIn" class="ff-social"> LinkedIn</label>
+          <label class="checkbox mr-3"><input type="checkbox" value="WhatsApp" class="ff-social"> WhatsApp</label>
+          <label class="checkbox mr-3"><input type="checkbox" value="Telegram" class="ff-social"> Telegram</label>
+          <label class="checkbox mr-3"><input type="checkbox" value="Reddit" class="ff-social"> Reddit</label>
+          <label class="checkbox mr-3"><input type="checkbox" value="Instagram" class="ff-social"> Instagram</label>
+          <label class="checkbox mr-3"><input type="checkbox" value="TikTok" class="ff-social"> TikTok</label>
+          <label class="checkbox"><input type="checkbox" value="YouTube" class="ff-social"> YouTube</label>
+        </div>
+      </div>
+
+      <!-- Idioma (esto luego lo moveremos post-login) -->
+      <div class="field">
+        <label class="label">Idioma</label>
+        <div class="control">
+          <div class="select">
+            <select id="ff-language">
+              <option value="es">Español</option>
+              <option value="en">Inglés</option>
+              <option value="pt">Portugués</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button id="ff-generate-btn" class="button is-primary mt-4">Generar ideas</button>
+    </div>
   </section>
 
   <section id="ff-results-view" class="ff-section is-hidden">
@@ -256,6 +270,16 @@
       document.getElementById('ff-language').addEventListener('change', (e) => {
         setLanguage(e.target.value);
       });
+
+      // 🆕 Nuevo selector en auth-view
+      const authLangSelector = document.getElementById('ff-auth-language-selector');
+      if (authLangSelector) {
+        authLangSelector.value = currentLang;
+        authLangSelector.addEventListener('change', (e) => {
+          setLanguage(e.target.value);
+        });
+      }
+
       setLanguage(currentLang);
     });
   </script>
