@@ -111,6 +111,11 @@
       </div>
 
       <!-- Tipo de publicación -->
+      <div class="field">
+        <label id="ff-label-keyword">Tema o palabra clave</label>
+        <div class="control"><input id="ff-keyword" class="input" type="text"></div>
+      </div>
+
       <div class="field mt-4">
         <label class="label" id="ff-label-copytype">Tipo de publicación</label>
         <div class="control">
@@ -447,14 +452,14 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+      getAuth,
+      signInWithPopup,
+      GoogleAuthProvider,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
       getFirestore,
       doc, setDoc, getDoc, updateDoc
