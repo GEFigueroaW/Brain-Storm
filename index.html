@@ -102,6 +102,7 @@
   </section>
 
   <div class="control"><input id="ff-keyword" class="input" type="text"></div>
+  </div>
 
   <!-- Modo de generación -->
   <section id="ff-config-view" class="ff-section is-hidden">
@@ -435,6 +436,29 @@
       }
     }
     document.addEventListener("DOMContentLoaded", () => {
+      // Limitar selección de redes sociales según el modo
+      const modeSelector = document.getElementById('ff-mode-selector');
+      const networkCheckboxes = document.querySelectorAll('.ff-network');
+
+      function updateNetworkSelectionLimit() {
+        const mode = modeSelector.value;
+        if (mode === 'individual') {
+          networkCheckboxes.forEach(cb => cb.addEventListener('change', () => {
+            const checked = [...networkCheckboxes].filter(n => n.checked);
+            if (checked.length > 1) {
+              checked[0].checked = false;
+            }
+          }));
+        } else {
+          networkCheckboxes.forEach(cb => {
+            cb.onchange = null;
+          });
+        }
+      }
+
+      modeSelector.addEventListener('change', updateNetworkSelectionLimit);
+      updateNetworkSelectionLimit();
+
       const currentLang = localStorage.getItem('ff-lang') || 'es';
       const authLangSelector = document.getElementById('ff-auth-language-selector');
 
@@ -472,7 +496,30 @@
   </script>
   <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      // Limitar selección de redes sociales según el modo
+      const modeSelector = document.getElementById('ff-mode-selector');
+      const networkCheckboxes = document.querySelectorAll('.ff-network');
+
+      function updateNetworkSelectionLimit() {
+        const mode = modeSelector.value;
+        if (mode === 'individual') {
+          networkCheckboxes.forEach(cb => cb.addEventListener('change', () => {
+            const checked = [...networkCheckboxes].filter(n => n.checked);
+            if (checked.length > 1) {
+              checked[0].checked = false;
+            }
+          }));
+        } else {
+          networkCheckboxes.forEach(cb => {
+            cb.onchange = null;
+          });
+        }
+      }
+
+      modeSelector.addEventListener('change', updateNetworkSelectionLimit);
+      updateNetworkSelectionLimit();
+ initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
       getAuth,
       signInWithPopup,
@@ -554,7 +601,7 @@
       const copyType = document.getElementById("ff-copy-type").value;
       const mode = document.getElementById("ff-generation-mode").value;
       const language = localStorage.getItem('ff-lang') || 'es';
-      const socialElems = document.querySelectorAll(".ff-network:checked");
+      const socialElems = document.querySelectorAll(".ff-social:checked");
       const socialNetworks = Array.from(socialElems).map(e => e.value);
 
       if (!keyword || socialNetworks.length === 0) {
@@ -632,6 +679,29 @@
   <!-- 🔧 FF-BLOCK-7: FEEDBACK DE IDEAS -->
   <script type="module">
     document.addEventListener("click", async (e) => {
+      // Limitar selección de redes sociales según el modo
+      const modeSelector = document.getElementById('ff-mode-selector');
+      const networkCheckboxes = document.querySelectorAll('.ff-network');
+
+      function updateNetworkSelectionLimit() {
+        const mode = modeSelector.value;
+        if (mode === 'individual') {
+          networkCheckboxes.forEach(cb => cb.addEventListener('change', () => {
+            const checked = [...networkCheckboxes].filter(n => n.checked);
+            if (checked.length > 1) {
+              checked[0].checked = false;
+            }
+          }));
+        } else {
+          networkCheckboxes.forEach(cb => {
+            cb.onchange = null;
+          });
+        }
+      }
+
+      modeSelector.addEventListener('change', updateNetworkSelectionLimit);
+      updateNetworkSelectionLimit();
+
       if (e.target.classList.contains("ff-feedback-btn")) {
         const feedbackType = e.target.dataset.feedback;
         const ideaIndex = Array.from(document.querySelectorAll(".ff-feedback-btn")).indexOf(e.target);
