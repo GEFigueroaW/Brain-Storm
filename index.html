@@ -119,40 +119,42 @@
       <div class="field">
         <label class="label" id="ff-label-copytype">Tipo de publicación</label>
         <div class="control">
-          <div class="select">
-            <select id="ff-copytype">
-              <option value="de beneficio y solucion" data-key="opt-de beneficio y solucion">De beneficio y solucion
-              </option>
-              <option value="de novedad o lanzamiento" data-key="opt-de novedad o lanzamiento">De novedad o lanzamiento
-              </option>
-              <option value="de interaccion o pregunta" data-key="opt-de interaccion o pregunta">De interaccion o
-                pregunta</option>
-              <option value="de urgencia o escacez" data-key="opt-de urgencia o escacez">De urgencia o escacez</option>
-              <option value="informativo o educativo" data-key="opt-informativo o educativo">Informativo o educativo
-              </option>
-              <option value="informal" data-key="opt-informal">Informal</option>
-              <option value="llamada a la Acción (CTA)" data-key="opt-llamada a la Acción (CTA)">Llamada a la Acción
-                (CTA)</option>
-              <option value="narrativo o storytelling" data-key="opt-narrativo o storytelling">Narrativo o storytelling
-              </option>
-              <option value="posicionamiento o branding" data-key="opt-posicionamiento o branding">Posicionamiento o
-                branding</option>
-              <option value="testimonio o prueba social" data-key="opt-testimonio o prueba social">Testimonio o prueba
-                social</option>
-              <option value="técnico o profesional" data-key="opt-técnico o profesional">Técnico o profesional</option>
-              <option value="venta directa o persuasivo" data-key="opt-venta directa o persuasivo">Venta directa o
-                persuasivo</option>
+          <div class="select is-fullwidth">
+            <select id="ff-copytype" required></select>
+            <option value="de beneficio y solucion" data-key="opt-de beneficio y solucion">De beneficio y solucion
+            </option>
+            <option value="de novedad o lanzamiento" data-key="opt-de novedad o lanzamiento">De novedad o lanzamiento
+            </option>
+            <option value="de interaccion o pregunta" data-key="opt-de interaccion o pregunta">De interaccion o
+              pregunta</option>
+            <option value="de urgencia o escacez" data-key="opt-de urgencia o escacez">De urgencia o escacez</option>
+            <option value="informativo o educativo" data-key="opt-informativo o educativo">Informativo o educativo
+            </option>
+            <option value="informal" data-key="opt-informal">Informal</option>
+            <option value="llamada a la Acción (CTA)" data-key="opt-llamada a la Acción (CTA)">Llamada a la Acción
+              (CTA)</option>
+            <option value="narrativo o storytelling" data-key="opt-narrativo o storytelling">Narrativo o storytelling
+            </option>
+            <option value="posicionamiento o branding" data-key="opt-posicionamiento o branding">Posicionamiento o
+              branding</option>
+            <option value="testimonio o prueba social" data-key="opt-testimonio o prueba social">Testimonio o prueba
+              social</option>
+            <option value="técnico o profesional" data-key="opt-técnico o profesional">Técnico o profesional</option>
+            <option value="venta directa o persuasivo" data-key="opt-venta directa o persuasivo">Venta directa o
+              persuasivo</option>
             </select>
-            <p id="ff-copytype-description" class="help is-info mt-2"></p>
+            <p id="ff-copytype-description" class="help is-info mt-1 mb-4"></p>
           </div>
         </div>
       </div>
 
       <!-- Redes sociales -->
       <div class="field">
-        <label id="ff-label-networks">Redes sociales</label>
-        <p class="help mt-1" id="ff-help-networks">Selecciona una o más redes sociales según el modo elegido</p>
-        <div class="control" id="ff-socials">
+        <label id="ff-label-networks" class="label">Redes sociales</label>
+        <p id="ff-help-networks" class="help is-info mb-2">
+          Selecciona una o más redes sociales según el modo elegido
+        </p>
+        <div class="control">
           <label class="checkbox mr-3"><input type="checkbox" value="Facebook" class="ff-social"> Facebook</label>
           <label class="checkbox mr-3"><input type="checkbox" value="X / Twitter" class="ff-social"> X / Twitter</label>
           <label class="checkbox mr-3"><input type="checkbox" value="LinkedIn" class="ff-social"> LinkedIn</label>
