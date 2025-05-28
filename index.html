@@ -102,7 +102,6 @@
   </section>
 
   <div class="control"><input id="ff-keyword" class="input" type="text"></div>
-  </div>
 
   <!-- Modo de generación -->
   <section id="ff-config-view" class="ff-section is-hidden">
@@ -555,7 +554,7 @@
       const copyType = document.getElementById("ff-copy-type").value;
       const mode = document.getElementById("ff-generation-mode").value;
       const language = localStorage.getItem('ff-lang') || 'es';
-      const socialElems = document.querySelectorAll(".ff-social:checked");
+      const socialElems = document.querySelectorAll(".ff-network:checked");
       const socialNetworks = Array.from(socialElems).map(e => e.value);
 
       if (!keyword || socialNetworks.length === 0) {
