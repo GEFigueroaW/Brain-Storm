@@ -526,8 +526,8 @@
   <script type="module">
     document.getElementById("ff-generate-btn").addEventListener("click", async () => {
       const keyword = document.getElementById("ff-keyword").value;
-      const copyType = document.getElementById("ff-copy-type").value;
-      const mode = document.getElementById("ff-generation-mode").value;
+      const copyType = document.getElementById("ff-copytype").value;
+      const mode = document.getElementById("ff-mode-selector").value;
       const language = localStorage.getItem('ff-lang') || 'es';
       const socialElems = document.querySelectorAll(".ff-social:checked");
       const socialNetworks = Array.from(socialElems).map(e => e.value);
@@ -537,38 +537,50 @@
         return;
       }
 
-      const generateIdeas = httpsCallable(functions, 'generateIdeas');
-      const result = await generateIdeas({
-        keyword,
-        copyType,
-        mode,
-        language,
-        socialNetworks,
-        sessionId
-      });
+      const generateIdeas = firebase.functions().httpsCallable('generateIdeas');
+      try {
+        const result = await generateIdeas({
+          keyword,
+          copyType,
+          mode,
+          language,
+          socialNetworks,
+          sessionId
+        });
 
-      const output = document.getElementById("ff-ideas-output");
-      output.innerHTML = "";
-      result.data.ideas.forEach((idea, idx) => {
-        const box = document.createElement("div");
-        box.className = "box";
-        box.innerHTML = `
-        <h3 class="title is-5">Idea ${idx + 1}</h3>
-        <p><strong>Gancho:</strong> ${idea.hook}</p>
-        <p><strong>Ángulo:</strong> ${idea.angle}</p>
-        <p><strong>Texto:</strong> ${idea.body}</p>
-        <p><strong>CTA:</strong> ${idea.cta}</p>
-        <p><strong>Motivación:</strong> ${idea.motivation}</p>
-        <p><strong>Hashtags:</strong> ${idea.hashtags.join(' ')}</p>
-        <p><strong>Formato visual sugerido:</strong> ${idea.visual}</p>
-        <button class="button is-small is-info mt-2 ff-feedback-btn" data-feedback="like">👍</button>
-        <button class="button is-small is-danger mt-2 ff-feedback-btn" data-feedback="dislike">👎</button>
-      `;
-        output.appendChild(box);
-      });
+        const ideas = result.data.ideas;
+        const container = document.getElementById("ff-results");
+        container.innerHTML = "";
 
-      document.getElementById("ff-config-view").classList.add("is-hidden");
-      document.getElementById("ff-results-view").classList.remove("is-hidden");
+        ideas.forEach((idea, idx) => {
+          const ideaBox = document.createElement("div");
+          ideaBox.className = "box";
+
+          ideaBox.innerHTML = `
+          <h3 class="title is-5">Idea ${idx + 1}</h3>
+          <p><strong>Gancho:</strong> ${idea.hook}</p>
+          <p><strong>Ángulo:</strong> ${idea.angle}</p>
+          <p><strong>Texto:</strong><br>${idea.body}</p>
+          <p><strong>Llamado a la acción (CTA):</strong> ${idea.cta}</p>
+          <p><strong>Frase motivacional final:</strong> ${idea.motivation}</p>
+          <p><strong>Hashtags:</strong> ${idea.hashtags?.join(" ")}</p>
+          <p><strong>📌 Formato visual sugerido:</strong><br><em>${idea.visual}</em></p>
+          <div class="mt-2 has-text-right">
+            <button class="button is-small is-info ff-feedback-btn" data-feedback="like">👍</button>
+            <button class="button is-small is-danger ff-feedback-btn" data-feedback="dislike">👎</button>
+          </div>
+        `;
+
+          container.appendChild(ideaBox);
+        });
+
+        document.getElementById("ff-config-view").classList.add("is-hidden");
+        document.getElementById("ff-results-view").classList.remove("is-hidden");
+
+      } catch (error) {
+        console.error("Error al generar ideas:", error);
+        alert("Ocurrió un error al generar ideas. Intenta de nuevo.");
+      }
     });
 
     document.getElementById("ff-back-to-config").addEventListener("click", () => {
@@ -576,6 +588,7 @@
       document.getElementById("ff-config-view").classList.remove("is-hidden");
     });
   </script>
+
   <script type="module">
     const modeSelector = document.getElementById("ff-mode-selector");
     const socialCheckboxes = document.querySelectorAll(".ff-social");
