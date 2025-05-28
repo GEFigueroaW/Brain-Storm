@@ -116,22 +116,31 @@
       </div>
 
       <div class="field">
-        <label class="label">Tipo de publicación</label>
+        <label class="label" id="ff-label-copytype">Tipo de publicación</label>
         <div class="control">
-          <div class="select is-fullwidth">
-            <select id="ff-copy-type">
-              <option>De beneficio y solucion</option>
-              <option>De novedad o lanzamiento</option>
-              <option>De interaccion o pregunta</option>
-              <option>De urgencia o escacez</option>
-              <option>Informativo o educativo</option>
-              <option>Informal</option>
-              <option>Llamada a la Acción (CTA)</option>
-              <option>Narrativo o storytelling</option>
-              <option>Posicionamiento o branding</option>
-              <option>Testimonio o prueba social</option>
-              <option>Técnico o profesional</option>
-              <option>Venta directa o persuasivo</option>
+          <div class="select">
+            <select id="ff-copytype">
+              <option value="de beneficio y solucion" data-key="opt-de beneficio y solucion">De beneficio y solucion
+              </option>
+              <option value="de novedad o lanzamiento" data-key="opt-de novedad o lanzamiento">De novedad o lanzamiento
+              </option>
+              <option value="de interaccion o pregunta" data-key="opt-de interaccion o pregunta">De interaccion o
+                pregunta</option>
+              <option value="de urgencia o escacez" data-key="opt-de urgencia o escacez">De urgencia o escacez</option>
+              <option value="informativo o educativo" data-key="opt-informativo o educativo">Informativo o educativo
+              </option>
+              <option value="informal" data-key="opt-informal">Informal</option>
+              <option value="llamada a la Acción (CTA)" data-key="opt-llamada a la Acción (CTA)">Llamada a la Acción
+                (CTA)</option>
+              <option value="narrativo o storytelling" data-key="opt-narrativo o storytelling">Narrativo o storytelling
+              </option>
+              <option value="posicionamiento o branding" data-key="opt-posicionamiento o branding">Posicionamiento o
+                branding</option>
+              <option value="testimonio o prueba social" data-key="opt-testimonio o prueba social">Testimonio o prueba
+                social</option>
+              <option value="técnico o profesional" data-key="opt-técnico o profesional">Técnico o profesional</option>
+              <option value="venta directa o persuasivo" data-key="opt-venta directa o persuasivo">Venta directa o
+                persuasivo</option>
             </select>
           </div>
         </div>
@@ -197,100 +206,141 @@
       <p id="ff-premium-status-text" class="mt-3"></p>
     </div>
   </section>
-<!-- FF-BLOCK-4: TRADUCCIONES INTERNACIONALES -->
-<script>
-  const translations = {
-    es: {
-      'auth-title': 'Inicia sesión para comenzar',
-      'generate': 'Generar ideas',
-      'back': 'Volver',
-      'logout': 'Cerrar sesión',
-      'loading': 'Generando ideas...',
-      'copy-success': '¡Texto copiado!',
-      'toggle-auth-text-login': '¿No tienes cuenta?',
-      'show-login-form-link': 'Crea una cuenta',
-      'label-keyword': 'Tema o palabra clave',
-      'label-copytype': 'Tipo de publicación',
-      'label-language': 'Idioma de la idea',
-      'label-networks': 'Redes sociales'
-    },
-    en: {
-      'auth-title': 'Log in to get started',
-      'generate': 'Generate ideas',
-      'back': 'Back',
-      'logout': 'Log out',
-      'loading': 'Generating ideas...',
-      'copy-success': 'Text copied!',
-      'toggle-auth-text-login': 'Don’t have an account?',
-      'show-login-form-link': 'Create an account',
-      'label-keyword': 'Topic or keyword',
-      'label-copytype': 'Post type',
-      'label-language': 'Idea language',
-      'label-networks': 'Social networks'
-    },
-    pt: {
-      'auth-title': 'Faça login para começar',
-      'generate': 'Gerar ideias',
-      'back': 'Voltar',
-      'logout': 'Sair',
-      'loading': 'Gerando ideias...',
-      'copy-success': 'Texto copiado!',
-      'toggle-auth-text-login': 'Ainda não tem conta?',
-      'show-login-form-link': 'Criar conta',
-      'label-keyword': 'Tópico ou palavra-chave',
-      'label-copytype': 'Tipo de publicação',
-      'label-language': 'Idioma da ideia',
-      'label-networks': 'Redes sociais'
-    }
-  };
-
-  function t(key) {
-    const lang = localStorage.getItem('ff-lang') || 'es';
-    return translations[lang][key] || key;
-  }
-
-  function setLanguage(lang) {
-    localStorage.setItem('ff-lang', lang);
-    document.documentElement.setAttribute('lang', lang);
-
-    const mappings = {
-      'auth-title': 'auth-title',
-      'toggle-auth-text': 'toggle-auth-text-login',
-      'ff-generate-btn': 'generate',
-      'ff-back-to-config': 'back',
-      'ff-logout-btn': 'logout',
-      'ff-label-keyword': 'label-keyword',
-      'ff-label-copytype': 'label-copytype',
-      'ff-label-language': 'label-language',
-      'ff-label-networks': 'label-networks',
-      'ff-copy-success-msg': 'copy-success'
+  <!-- FF-BLOCK-4: TRADUCCIONES INTERNACIONALES -->
+  <script>
+    const translations = {
+      es: {
+        'auth-title': 'Inicia sesión para comenzar',
+        'generate': 'Generar ideas',
+        'back': 'Volver',
+        'logout': 'Cerrar sesión',
+        'loading': 'Generando ideas...',
+        'copy-success': '¡Texto copiado!',
+        'toggle-auth-text-login': '¿No tienes cuenta?',
+        'show-login-form-link': 'Crea una cuenta',
+        'label-keyword': 'Tema o palabra clave',
+        'label-copytype': 'Tipo de publicación',
+        'label-language': 'Idioma de la idea',
+        'label-networks': 'Redes sociales',
+        'opt-de beneficio y solucion': 'De beneficio y solucion',
+        'opt-de novedad o lanzamiento': 'De novedad o lanzamiento',
+        'opt-de interaccion o pregunta': 'De interaccion o pregunta',
+        'opt-de urgencia o escacez': 'De urgencia o escacez',
+        'opt-informativo o educativo': 'Informativo o educativo',
+        'opt-informal': 'Informal',
+        'opt-llamada a la Acción (CTA)': 'Llamada a la Acción (CTA)',
+        'opt-narrativo o storytelling': 'Narrativo o storytelling',
+        'opt-posicionamiento o branding': 'Posicionamiento o branding',
+        'opt-testimonio o prueba social': 'Testimonio o prueba social',
+        'opt-técnico o profesional': 'Técnico o profesional',
+        'opt-venta directa o persuasivo': 'Venta directa o persuasivo'
+      },
+      en: {
+        'auth-title': 'Log in to get started',
+        'generate': 'Generate ideas',
+        'back': 'Back',
+        'logout': 'Log out',
+        'loading': 'Generating ideas...',
+        'copy-success': 'Text copied!',
+        'toggle-auth-text-login': 'Don’t have an account?',
+        'show-login-form-link': 'Create an account',
+        'label-keyword': 'Topic or keyword',
+        'label-copytype': 'Post type',
+        'label-language': 'Idea language',
+        'label-networks': 'Social networks',
+        'opt-de beneficio y solucion': 'Of benefit and solution',
+        'opt-de novedad o lanzamiento': 'New or launch',
+        'opt-de interaccion o pregunta': 'Of interaction or question',
+        'opt-de urgencia o escacez': 'Urgent or scarce',
+        'opt-informativo o educativo': 'Informative or educational',
+        'opt-informal': 'Informal',
+        'opt-llamada a la Acción (CTA)': 'Call to action (CTA)',
+        'opt-narrativo o storytelling': 'Narrative or storytelling',
+        'opt-posicionamiento o branding': 'Positioning or branding',
+        'opt-testimonio o prueba social': 'Testimony or social proof',
+        'opt-técnico o profesional': 'Technical or professional',
+        'opt-venta directa o persuasivo': 'Direct or persuasive sales'
+      },
+      pt: {
+        'auth-title': 'Faça login para começar',
+        'generate': 'Gerar ideias',
+        'back': 'Voltar',
+        'logout': 'Sair',
+        'loading': 'Gerando ideias...',
+        'copy-success': 'Texto copiado!',
+        'toggle-auth-text-login': 'Ainda não tem conta?',
+        'show-login-form-link': 'Criar conta',
+        'label-keyword': 'Tópico ou palavra-chave',
+        'label-copytype': 'Tipo de publicação',
+        'label-language': 'Idioma da ideia',
+        'label-networks': 'Redes sociais',
+        'opt-de beneficio y solucion': 'De benefício e solução',
+        'opt-de novedad o lanzamiento': 'Novo ou lançamento',
+        'opt-de interaccion o pregunta': 'De interação ou pergunta',
+        'opt-de urgencia o escacez': 'Urgente ou escasso',
+        'opt-informativo o educativo': 'Informativo ou educacional',
+        'opt-informal': 'Informal',
+        'opt-llamada a la Acción (CTA)': 'Apelo à ação (CTA)',
+        'opt-narrativo o storytelling': 'Narrativa',
+        'opt-posicionamiento o branding': 'Posicionamento ou branding',
+        'opt-testimonio o prueba social': 'Testemunho ou prova social',
+        'opt-técnico o profesional': 'Técnico ou profissional'
+      }
     };
 
-    for (const id in mappings) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = t(mappings[id]);
+    function t(key) {
+      const lang = localStorage.getItem('ff-lang') || 'es';
+      return translations[lang][key] || key;
     }
 
-    const toggleText = document.getElementById('toggle-auth-text');
-    if (toggleText) {
-      toggleText.innerHTML = `${t('toggle-auth-text-login')} <a id="show-login-form-link">${t('show-login-form-link')}</a>`;
+    function setLanguage(lang) {
+      localStorage.setItem('ff-lang', lang);
+      document.documentElement.setAttribute('lang', lang);
+
+      const mappings = {
+        'auth-title': 'auth-title',
+        'toggle-auth-text': 'toggle-auth-text-login',
+        'ff-generate-btn': 'generate',
+        'ff-back-to-config': 'back',
+        'ff-logout-btn': 'logout',
+        'ff-label-keyword': 'label-keyword',
+        'ff-label-copytype': 'label-copytype',
+        'ff-label-language': 'label-language',
+        'ff-label-networks': 'label-networks',
+        'ff-copy-success-msg': 'copy-success'
+      };
+
+      for (const id in mappings) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = t(mappings[id]);
+      }
+
+      const toggleText = document.getElementById('toggle-auth-text');
+      if (toggleText) {
+        toggleText.innerHTML = `${t('toggle-auth-text-login')} <a id="show-login-form-link">${t('show-login-form-link')}</a>`;
+      }
     }
-  }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const currentLang = localStorage.getItem('ff-lang') || 'es';
-    const authLangSelector = document.getElementById('ff-auth-language-selector');
+    document.addEventListener("DOMContentLoaded", () => {
+      const currentLang = localStorage.getItem('ff-lang') || 'es';
+      const authLangSelector = document.getElementById('ff-auth-language-selector');
 
-    if (authLangSelector) {
-      authLangSelector.value = currentLang;
-      authLangSelector.addEventListener('change', (e) => {
-        setLanguage(e.target.value);
-      });
-    }
+      if (authLangSelector) {
+        authLangSelector.value = currentLang;
+        authLangSelector.addEventListener('change', (e) => {
+          setLanguage(e.target.value);
+        });
+      }
 
-    setLanguage(currentLang);
-  });
-</script>
+      setLanguage(currentLang);
+    });
+    // Traducir dinámicamente las opciones del select de tipo de publicación
+    const copytypeOptions = document.querySelectorAll('#ff-copytype option');
+    copytypeOptions.forEach(opt => {
+      const key = opt.dataset.key;
+      if (key) opt.textContent = t(key);
+    });
+  </script>
   <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
