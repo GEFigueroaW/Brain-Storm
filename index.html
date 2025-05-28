@@ -96,12 +96,12 @@
       </div>
       <h2 class="title">Configura tu idea</h2>
       <div class="field">
-        <label class="label">¿Cómo quieres generar las ideas?</label>
+        <label class="label" id="ff-label-generationmode">¿Cómo quieres generar las ideas?</label>
         <div class="control">
-          <div class="select is-fullwidth">
-            <select id="ff-generation-mode">
-              <option value="multired">Una idea por red social seleccionada (Multired)</option>
-              <option value="individual">Tres ideas para una sola red (Individual)</option>
+          <div class="select">
+            <select id="ff-mode-selector">
+              <option value="multired" data-key="opt-multired">Una idea por cada red social (Multired)</option>
+              <option value="individual" data-key="opt-individual">Tres ideas para una sola red (Individual)</option>
             </select>
           </div>
         </div>
@@ -233,7 +233,10 @@
         'opt-posicionamiento o branding': 'Posicionamiento o branding',
         'opt-testimonio o prueba social': 'Testimonio o prueba social',
         'opt-técnico o profesional': 'Técnico o profesional',
-        'opt-venta directa o persuasivo': 'Venta directa o persuasivo'
+        'opt-venta directa o persuasivo': 'Venta directa o persuasivo',
+        'ff-label-generationmode': '¿Cómo quieres generar las ideas?',
+        'opt-multired': 'Una idea por cada red social (Multired)',
+        'opt-individual': 'Tres ideas para una sola red (Individual)'
       },
       en: {
         'auth-title': 'Log in to get started',
@@ -259,7 +262,10 @@
         'opt-posicionamiento o branding': 'Positioning or branding',
         'opt-testimonio o prueba social': 'Testimony or social proof',
         'opt-técnico o profesional': 'Technical or professional',
-        'opt-venta directa o persuasivo': 'Direct or persuasive sales'
+        'opt-venta directa o persuasivo': 'Direct or persuasive sales',
+        'ff-label-generationmode': 'How do you want to generate ideas?',
+        'opt-multired': 'One idea per social network (Multinet)',
+        'opt-individual': 'Three ideas for one network (Individual)'
       },
       pt: {
         'auth-title': 'Faça login para começar',
@@ -284,7 +290,10 @@
         'opt-narrativo o storytelling': 'Narrativa',
         'opt-posicionamiento o branding': 'Posicionamento ou branding',
         'opt-testimonio o prueba social': 'Testemunho ou prova social',
-        'opt-técnico o profesional': 'Técnico ou profissional'
+        'opt-técnico o profesional': 'Técnico ou profissional',
+        'ff-label-generationmode': 'Como você quer gerar as ideias?',
+        'opt-multired': 'Uma ideia por rede social (Multired)',
+        'opt-individual': 'Três ideias para uma rede (Individual)'
       }
     };
 
@@ -337,6 +346,12 @@
     // Traducir dinámicamente las opciones del select de tipo de publicación
     const copytypeOptions = document.querySelectorAll('#ff-copytype option');
     copytypeOptions.forEach(opt => {
+      const key = opt.dataset.key;
+      if (key) opt.textContent = t(key);
+    });
+    // Traducir dinámicamente las opciones del selector de modo
+    const modeOptions = document.querySelectorAll('#ff-mode-selector option');
+    modeOptions.forEach(opt => {
       const key = opt.dataset.key;
       if (key) opt.textContent = t(key);
     });
