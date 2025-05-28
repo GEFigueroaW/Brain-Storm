@@ -45,22 +45,6 @@
     .is-hidden {
       display: none !important;
     }
-
-    /* Mejora visual para separar descripción del tipo de copy */
-    #ff-copytype-description {
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-      color: #4a4a4a;
-    }
-
-    /* Ajuste del texto de ayuda para redes sociales */
-    #ff-help-networks {
-      display: block;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-      color: #666;
-    }
   </style>
 </head>
 
@@ -127,11 +111,6 @@
       </div>
 
       <!-- Tipo de publicación -->
-      <div class="field">
-        <label id="ff-label-keyword">Tema o palabra clave</label>
-        <div class="control"><input id="ff-keyword" class="input" type="text"></div>
-      </div>
-
       <div class="field mt-4">
         <label class="label" id="ff-label-copytype">Tipo de publicación</label>
         <div class="control">
@@ -436,29 +415,6 @@
       }
     }
     document.addEventListener("DOMContentLoaded", () => {
-      // Limitar selección de redes sociales según el modo
-      const modeSelector = document.getElementById('ff-mode-selector');
-      const networkCheckboxes = document.querySelectorAll('.ff-network');
-
-      function updateNetworkSelectionLimit() {
-        const mode = modeSelector.value;
-        if (mode === 'individual') {
-          networkCheckboxes.forEach(cb => cb.addEventListener('change', () => {
-            const checked = [...networkCheckboxes].filter(n => n.checked);
-            if (checked.length > 1) {
-              checked[0].checked = false;
-            }
-          }));
-        } else {
-          networkCheckboxes.forEach(cb => {
-            cb.onchange = null;
-          });
-        }
-      }
-
-      modeSelector.addEventListener('change', updateNetworkSelectionLimit);
-      updateNetworkSelectionLimit();
-
       const currentLang = localStorage.getItem('ff-lang') || 'es';
       const authLangSelector = document.getElementById('ff-auth-language-selector');
 
@@ -496,30 +452,7 @@
   </script>
   <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
   <script type="module">
-    import {
-      // Limitar selección de redes sociales según el modo
-      const modeSelector = document.getElementById('ff-mode-selector');
-      const networkCheckboxes = document.querySelectorAll('.ff-network');
-
-      function updateNetworkSelectionLimit() {
-        const mode = modeSelector.value;
-        if (mode === 'individual') {
-          networkCheckboxes.forEach(cb => cb.addEventListener('change', () => {
-            const checked = [...networkCheckboxes].filter(n => n.checked);
-            if (checked.length > 1) {
-              checked[0].checked = false;
-            }
-          }));
-        } else {
-          networkCheckboxes.forEach(cb => {
-            cb.onchange = null;
-          });
-        }
-      }
-
-      modeSelector.addEventListener('change', updateNetworkSelectionLimit);
-      updateNetworkSelectionLimit();
- initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
       getAuth,
       signInWithPopup,
@@ -528,7 +461,8 @@
       createUserWithEmailAndPassword,
       onAuthStateChanged,
       signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    } ,
+  onAuthStateChanged from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
       getFirestore,
       doc, setDoc, getDoc, updateDoc
@@ -556,18 +490,18 @@
 
     async function registerSession(user) {
       const register = httpsCallable(functions, 'registerUserSession');
-      await register({ uid: user.uid, sessionId, deviceId });
+      register({ uid: user.uid, sessionId, deviceId });
     }
 
     async function checkSession(user) {
       const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
+      const userSnap = getDoc(userRef);
       if (userSnap.exists()) {
         const sessions = userSnap.data().sessions || [];
         const isSessionValid = sessions.some(s => s.sessionId === sessionId && s.deviceId === deviceId);
         if (!isSessionValid) {
           alert("Se cerró la sesión en este dispositivo.");
-          await signOut(auth);
+          signOut(auth);
           location.reload();
         }
       }
@@ -575,8 +509,8 @@
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        await registerSession(user);
-        await checkSession(user);
+        registerSession(user);
+        checkSession(user);
         document.getElementById("ff-auth-view").classList.add("is-hidden");
         document.getElementById("ff-config-view").classList.remove("is-hidden");
       } else {
@@ -591,7 +525,7 @@
 
     document.getElementById("ff-google-login").addEventListener("click", async () => {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      signInWithPopup(auth, provider);
     });
   </script>
   <!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
@@ -610,7 +544,7 @@
       }
 
       const generateIdeas = httpsCallable(functions, 'generateIdeas');
-      const result = await generateIdeas({
+      const result = generateIdeas({
         keyword,
         copyType,
         mode,
@@ -679,36 +613,13 @@
   <!-- 🔧 FF-BLOCK-7: FEEDBACK DE IDEAS -->
   <script type="module">
     document.addEventListener("click", async (e) => {
-      // Limitar selección de redes sociales según el modo
-      const modeSelector = document.getElementById('ff-mode-selector');
-      const networkCheckboxes = document.querySelectorAll('.ff-network');
-
-      function updateNetworkSelectionLimit() {
-        const mode = modeSelector.value;
-        if (mode === 'individual') {
-          networkCheckboxes.forEach(cb => cb.addEventListener('change', () => {
-            const checked = [...networkCheckboxes].filter(n => n.checked);
-            if (checked.length > 1) {
-              checked[0].checked = false;
-            }
-          }));
-        } else {
-          networkCheckboxes.forEach(cb => {
-            cb.onchange = null;
-          });
-        }
-      }
-
-      modeSelector.addEventListener('change', updateNetworkSelectionLimit);
-      updateNetworkSelectionLimit();
-
       if (e.target.classList.contains("ff-feedback-btn")) {
         const feedbackType = e.target.dataset.feedback;
         const ideaIndex = Array.from(document.querySelectorAll(".ff-feedback-btn")).indexOf(e.target);
         const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
 
         try {
-          await recordFeedback({
+          recordFeedback({
             sessionId,
             feedback: feedbackType,
             ideaIndex
@@ -731,9 +642,9 @@
 
     async function checkPremiumStatus(uid) {
       const configRef = doc(db, "appConfig", "global");
-      const configSnap = await getDoc(configRef);
+      const configSnap = getDoc(configRef);
       const userRef = doc(db, "users", uid);
-      const userSnap = await getDoc(userRef);
+      const userSnap = getDoc(userRef);
 
       let isPremium = false;
       let showAds = true;
@@ -768,7 +679,7 @@
     }
 
     onAuthStateChanged(auth, async (user) => {
-      if (user) await checkPremiumStatus(user.uid);
+      if (user) checkPremiumStatus(user.uid);
     });
   </script>
   <!-- 🔧 FF-BLOCK-9: PANEL ADMIN PREMIUM -->
@@ -779,7 +690,7 @@
 
       const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
       try {
-        await setPremiumGlobal({
+        setPremiumGlobal({
           isPremiumGlobalActive: isActive,
           premiumGlobalEndDate: new Date(endDate).toISOString()
         });
@@ -815,14 +726,14 @@
   <script type="module">
     async function validarAdmin(uid) {
       const userRef = doc(db, "users", uid);
-      const userSnap = await getDoc(userRef);
+      const userSnap = getDoc(userRef);
       if (userSnap.exists() && userSnap.data().role === "admin") {
         document.getElementById("ff-admin-view").classList.remove("is-hidden");
       }
     }
 
     onAuthStateChanged(auth, async (user) => {
-      if (user) await validarAdmin(user.uid);
+      if (user) validarAdmin(user.uid);
     });
   </script>
   <!-- 🔧 FF-BLOCK-13: CIERRE HTML -->
