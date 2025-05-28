@@ -584,24 +584,34 @@
     function actualizarRestriccionesRedes() {
       const modo = modeSelector.value;
 
+      // Limpiar selección y restablecer estado
       socialCheckboxes.forEach(cb => {
         cb.checked = false;
         cb.disabled = false;
-        cb.replaceWith(cb.cloneNode(true)); // Limpia listeners previos
+      });
+
+      // Eliminar listeners anteriores usando cloneNode y volver a añadirlos
+      const container = document.getElementById("ff-networks-container");
+      container.querySelectorAll("input.ff-social").forEach((original) => {
+        const nuevo = original.cloneNode(true);
+        nuevo.classList.add("ff-social");
+        original.parentNode.replaceChild(nuevo, original);
       });
 
       if (modo === "individual") {
-        socialCheckboxes.forEach(cb => {
+        const updatedCheckboxes = container.querySelectorAll("input.ff-social");
+
+        updatedCheckboxes.forEach(cb => {
           cb.addEventListener("change", function () {
             if (this.checked) {
-              socialCheckboxes.forEach(other => {
+              updatedCheckboxes.forEach(other => {
                 if (other !== this) {
                   other.checked = false;
                   other.disabled = true;
                 }
               });
             } else {
-              socialCheckboxes.forEach(cb => cb.disabled = false);
+              updatedCheckboxes.forEach(cb => cb.disabled = false);
             }
           });
         });
@@ -611,6 +621,7 @@
     modeSelector.addEventListener("change", actualizarRestriccionesRedes);
     document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
   </script>
+
   <!-- 🔧 FF-BLOCK-7: FEEDBACK DE IDEAS -->
   <script type="module">
     document.addEventListener("click", async (e) => {
