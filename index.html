@@ -578,35 +578,30 @@
     });
   </script>
   <script type="module">
-    const modeSelector = document.getElementById("ff-mode-selector");
-    const socialCheckboxes = document.querySelectorAll(".ff-social");
+  const modeSelector = document.getElementById("ff-mode-selector");
+  const socialCheckboxes = document.querySelectorAll(".ff-social");
 
-    function actualizarRestriccionesRedes() {
-      const modo = modeSelector.value;
+  function actualizarRestriccionesRedes() {
+    const modo = modeSelector.value;
 
+    socialCheckboxes.forEach(cb => {
+      cb.checked = false;
+      cb.disabled = false;
+      cb.replaceWith(cb.cloneNode(true)); // Limpia listeners previos
+    });
+
+    if (modo === "individual") {
       socialCheckboxes.forEach(cb => {
-        cb.checked = false;
-        cb.disabled = false;
-        cb.replaceWith(cb.cloneNode(true)); // Limpia listeners previos
-      });
-
-      if (modo === "individual") {
-        socialCheckboxes.forEach(cb => {
-          cb.addEventListener("change", function () {
-            if (this.checked) {
-              socialCheckboxes.forEach(other => {
-                if (other !== this) {
-                  other.checked = false;
-                  other.disabled = true;
-                }
-              });
-            } else {
-              socialCheckboxes.forEach(cb => cb.disabled = false);
-            }
-          });
+        cb.addEventListener("change", function () {
+          if (this.checked) {
+            socialCheckboxes.forEach(other => {
+              if (other !== this) other.checked = false;
+            });
+          }
         });
-      }
+      });
     }
+  }
 
     modeSelector.addEventListener("change", actualizarRestriccionesRedes);
     document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
@@ -736,7 +731,41 @@
     onAuthStateChanged(auth, async (user) => {
       if (user) await validarAdmin(user.uid);
     });
-  </script>
+  
+const modeSelector = document.getElementById("ff-mode-selector");
+const socialCheckboxes = document.querySelectorAll(".ff-social");
+
+function actualizarRestriccionesRedes() {
+  const modo = modeSelector.value;
+
+  socialCheckboxes.forEach(cb => {
+    cb.checked = false;
+    cb.disabled = false;
+    cb.replaceWith(cb.cloneNode(true)); // Limpia listeners previos
+  });
+
+  if (modo === "individual") {
+    socialCheckboxes.forEach(cb => {
+      cb.addEventListener("change", function () {
+        if (this.checked) {
+          socialCheckboxes.forEach(other => {
+            if (other !== this) {
+              other.checked = false;
+              other.disabled = true;
+            }
+          });
+        } else {
+          socialCheckboxes.forEach(cb => cb.disabled = false);
+        }
+      });
+    });
+  }
+}
+
+modeSelector.addEventListener("change", actualizarRestriccionesRedes);
+document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
+
+</script>
   <!-- 🔧 FF-BLOCK-13: CIERRE HTML -->
 </body>
 
