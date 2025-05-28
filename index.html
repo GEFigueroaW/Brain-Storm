@@ -96,7 +96,7 @@
       </div>
       <h2 class="title" id="ff-title-config">Configura tu idea</h2>
       <div class="field">
-        <label class="label" id="ff-label-generationmode">¿Cómo quieres generar las ideas?</label>
+        <label id="ff-label-generationmode">¿Cómo quieres generar las ideas?</label>
         <div class="control">
           <div class="select">
             <select id="ff-mode-selector">
@@ -105,13 +105,14 @@
             </select>
           </div>
         </div>
-        <p class="help" id="ff-mode-help">Selecciona : 3 propuestas una red, o varias redes para una idea por cada una.
+        <p class="help mt-1" id="ff-mode-help">Selecciona: 3 propuestas una red, o varias redes para una idea por cada
+          una</p>
         </p>
       </div>
 
       <!-- Tipo de publicación -->
       <div class="field">
-        <label class="label">Tema o palabra clave</label>
+        <label id="ff-label-keyword">Tema o palabra clave</label>
         <div class="control"><input id="ff-keyword" class="input" type="text"></div>
       </div>
 
@@ -148,8 +149,8 @@
 
       <!-- Redes sociales -->
       <div class="field">
-        <label class="label">Redes sociales</label>
-        <p class="help" id="ff-social-help">Selecciona una o más redes sociales según el modo elegido.</p>
+        <label id="ff-label-networks">Redes sociales</label>
+        <p class="help mt-1" id="ff-help-networks">Selecciona una o más redes sociales según el modo elegido</p>
         <div class="control" id="ff-socials">
           <label class="checkbox mr-3"><input type="checkbox" value="Facebook" class="ff-social"> Facebook</label>
           <label class="checkbox mr-3"><input type="checkbox" value="X / Twitter" class="ff-social"> X / Twitter</label>
@@ -242,7 +243,12 @@
         'title-results': 'Ideas generadas',
         'feedback-question': '¿Esta idea te fue útil?',
         'title-admin': 'Control Admin – Premium Global',
-        'label-expiration': 'Fecha de expiración'
+        'label-expiration': 'Fecha de expiración',
+        'label-generationmode': '¿Cómo quieres generar las ideas?',
+        'help-mode': 'Selecciona: 3 propuestas una red, o varias redes para una idea por cada una',
+        'label-keyword': 'Tema o palabra clave',
+        'label-networks': 'Redes sociales',
+        'help-networks': 'Selecciona una o más redes sociales según el modo elegido',
       },
       en: {
         'auth-title': 'Log in to get started',
@@ -277,7 +283,12 @@
         'title-results': 'Generated ideas',
         'feedback-question': 'Was this idea helpful?',
         'title-admin': 'Admin Control – Global Premium',
-        'label-expiration': 'Expiration date'
+        'label-expiration': 'Expiration date',
+        'label-generationmode': 'How do you want to generate ideas?',
+        'help-mode': 'Select: 3 ideas for one network, or multiple networks for one idea each',
+        'label-keyword': 'Topic or keyword',
+        'label-networks': 'Social networks',
+        'help-networks': 'Select one or more social networks depending on the mode',
       },
       pt: {
         'auth-title': 'Faça login para começar',
@@ -311,7 +322,12 @@
         'title-results': 'Ideias geradas',
         'feedback-question': 'Esta ideia foi útil?',
         'title-admin': 'Controle Admin – Premium Global',
-        'label-expiration': 'Data de expiração'
+        'label-expiration': 'Data de expiração',
+        'label-generationmode': 'Como você quer gerar as ideias?',
+        'help-mode': 'Selecione: 3 ideias para uma rede ou várias redes para uma ideia cada',
+        'label-keyword': 'Tópico ou palavra-chave',
+        'label-networks': 'Redes sociais',
+        'help-networks': 'Selecione uma ou mais redes sociais de acordo com o modo escolhido',
       }
     };
 
@@ -335,7 +351,12 @@
         'ff-label-language': 'label-language',
         'ff-label-networks': 'label-networks',
         'ff-copy-success-msg': 'copy-success',
-        'ff-title-config': 'title-config'
+        'ff-title-config': 'title-config',
+        'ff-label-generationmode': 'label-generationmode',
+        'ff-mode-help': 'help-mode',
+        'ff-label-keyword': 'label-keyword',
+        'ff-label-networks': 'label-networks',
+        'ff-help-networks': 'help-networks',
       };
 
       for (const id in mappings) {
