@@ -58,7 +58,8 @@
         <label class="label">Idioma de la aplicación</label>
         <div class="control">
           <div class="select is-fullwidth">
-            <select id="ff-auth-language-selector" title="Elige el idioma para la interfaz y las ideas generadas. / Select the language for the interface and generated ideas. / Escolha o idioma da interface e das ideias geradas.">
+            <select id="ff-auth-language-selector"
+              title="Elige el idioma para la interfaz y las ideas generadas. / Select the language for the interface and generated ideas. / Escolha o idioma da interface e das ideias geradas.">
               <option value="es">Español</option>
               <option value="en">Inglés</option>
               <option value="pt">Portugués</option>
@@ -110,6 +111,9 @@
   <!-- Modo de generación -->
   <section id="ff-config-view" class="ff-section is-hidden">
     <div class="container">
+      <div class="is-flex is-justify-content-flex-end">
+        <button id="ff-logout-btn" class="button is-small is-danger">Cerrar sesión</button>
+      </div>
       <h2 class="title">Configura tu idea</h2>
       <div class="field">
         <label class="label">¿Cómo quieres generar las ideas?</label>
@@ -341,10 +345,16 @@
         document.getElementById("ff-results-view").classList.add("is-hidden");
       }
     });
+    document.getElementById("ff-logout-btn")?.addEventListener("click", () => {
+      signOut(auth).then(() => location.reload());
+    });
 
     document.getElementById("ff-google-login").addEventListener("click", async () => {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
+    });
+    document.getElementById("ff-email-login").addEventListener("click", () => {
+      document.getElementById("ff-signup-form-container").classList.remove("is-hidden");
     });
   </script>
   <!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
