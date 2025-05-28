@@ -531,91 +531,99 @@
     });
   </script>
   <script type="module">
-    document.getElementById("ff-generation-mode").addEventListener("change", (e) => {
-      const mode = e.target.value;
-      const checkboxes = document.querySelectorAll(".ff-social");
+    <script type="module">
+      const modeSelector = document.getElementById("ff-mode-selector");
+      const socialCheckboxes = document.querySelectorAll(".ff-social");
 
-      if (mode === "individual") {
-        checkboxes.forEach(cb => cb.checked = false);
-      }
+      function actualizarRestriccionesRedes() {
+    const modo = modeSelector.value;
 
-      checkboxes.forEach(cb => {
-        cb.disabled = false;
-        cb.addEventListener("change", () => {
-          if (mode === "individual") {
-            checkboxes.forEach(other => {
-              if (other !== cb) other.checked = false;
-            });
-          }
-        });
-      });
+    socialCheckboxes.forEach(cb => {
+        cb.checked = false;
+      cb.disabled = false;
     });
+
+      if (modo === "individual") {
+        socialCheckboxes.forEach(cb => {
+          cb.addEventListener("change", function () {
+            if (this.checked) {
+              socialCheckboxes.forEach(other => {
+                if (other !== this) other.checked = false;
+              });
+            }
+          });
+        });
+    }
+  }
+
+      modeSelector.addEventListener("change", actualizarRestriccionesRedes);
+      document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
   </script>
   <!-- 🔧 FF-BLOCK-7: FEEDBACK DE IDEAS -->
   <script type="module">
     document.addEventListener("click", async (e) => {
       if (e.target.classList.contains("ff-feedback-btn")) {
         const feedbackType = e.target.dataset.feedback;
-        const ideaIndex = Array.from(document.querySelectorAll(".ff-feedback-btn")).indexOf(e.target);
-        const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
+   const ideaIndex = Array.from(document.querySelectorAll(".ff-feedback-btn")).indexOf(e.target);
+   const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
 
-        try {
-          await recordFeedback({
-            sessionId,
-            feedback: feedbackType,
-            ideaIndex
-          });
-          alert("¡Gracias por tu opinión!");
+   try {
+     await recordFeedback({
+       sessionId,
+       feedback: feedbackType,
+       ideaIndex
+     });
+   alert("¡Gracias por tu opinión!");
         } catch (error) {
-          console.error("Error enviando feedback:", error);
-          alert("Error al enviar feedback.");
+     console.error("Error enviando feedback:", error);
+   alert("Error al enviar feedback.");
         }
       }
     });
 
     document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
-      document.getElementById("ff-feedback-modal").classList.remove("is-active");
+     document.getElementById("ff-feedback-modal").classList.remove("is-active");
     });
   </script>
   <!-- 🔧 FF-BLOCK-8: CONTROL DE PREMIUM Y PUBLICIDAD -->
   <script type="module">
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+   import {collection, getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    async function checkPremiumStatus(uid) {
+   async function checkPremiumStatus(uid) {
       const configRef = doc(db, "appConfig", "global");
-      const configSnap = await getDoc(configRef);
-      const userRef = doc(db, "users", uid);
-      const userSnap = await getDoc(userRef);
+   const configSnap = await getDoc(configRef);
+   const userRef = doc(db, "users", uid);
+   const userSnap = await getDoc(userRef);
 
-      let isPremium = false;
-      let showAds = true;
+   let isPremium = false;
+   let showAds = true;
 
-      if (userSnap.exists()) {
-        isPremium = userSnap.data().premium || false;
+   if (userSnap.exists()) {
+     isPremium = userSnap.data().premium || false;
       }
 
-      if (configSnap.exists()) {
+   if (configSnap.exists()) {
         const global = configSnap.data();
-        const now = new Date();
-        const endDate = new Date(global.premiumGlobalEndDate);
-        if (global.isPremiumGlobalActive && now < endDate) {
-          isPremium = true;
-          showAds = global.isLaunchPromoActive; // En promo se permiten ads completas
+   const now = new Date();
+   const endDate = new Date(global.premiumGlobalEndDate);
+   if (global.isPremiumGlobalActive && now < endDate) {
+     isPremium = true;
+   showAds = global.isLaunchPromoActive; // En promo se permiten ads completas
         }
       }
 
-      if (!isPremium) {
+   if (!isPremium) {
         // Mostrar publicidad completa
         const ad = document.createElement("div");
-        ad.className = "notification is-warning has-text-centered";
-        ad.innerHTML = "Publicidad: ¡Explora nuestra versión Premium sin anuncios!";
-        document.body.appendChild(ad);
+   ad.className = "notification is-warning has-text-centered";
+   ad.innerHTML = "Publicidad: ¡Explora nuestra versión Premium sin anuncios!";
+   document.body.appendChild(ad);
       } else if (showAds) {
         // Mostrar publicidad discreta
         const ad = document.createElement("div");
-        ad.className = "has-text-centered has-text-grey-light";
-        ad.innerHTML = "<small>Publicidad moderada activa por promoción.</small>";
-        document.body.appendChild(ad);
+   ad.className = "has-text-centered has-text-grey-light";
+   ad.innerHTML = "<small>Publicidad moderada activa por promoción.</small>";
+   document.body.appendChild(ad);
       }
     }
 
@@ -627,16 +635,16 @@
   <script type="module">
     document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
       const isActive = document.getElementById("ff-toggle-premium-global").checked;
-      const endDate = document.getElementById("ff-premium-end-date").value;
+   const endDate = document.getElementById("ff-premium-end-date").value;
 
-      const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
-      try {
-        await setPremiumGlobal({
-          isPremiumGlobalActive: isActive,
-          premiumGlobalEndDate: new Date(endDate).toISOString()
-        });
-        document.getElementById("ff-premium-status-text").textContent =
-          `${t('premium-global-active')} ${new Date(endDate).toLocaleString()}`;
+   const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
+   try {
+     await setPremiumGlobal({
+       isPremiumGlobalActive: isActive,
+       premiumGlobalEndDate: new Date(endDate).toISOString()
+     });
+   document.getElementById("ff-premium-status-text").textContent =
+   `${t('premium-global-active')} ${new Date(endDate).toLocaleString()}`;
         alert("Actualización exitosa.");
       } catch (error) {
         console.error("Error actualizando premium global:", error);
@@ -659,17 +667,17 @@
   </footer>
   <!-- 🔧 FF-BLOCK-11: VISUAL PROMPT REFERENCIA -->
   <script>
-    function construirPromptVisual(idea) {
+   function construirPromptVisual(idea) {
       return `Estilo: ${idea.style || "ilustración vectorial"}, fondo: ${idea.background || "minimalista"}, personaje: ${idea.character || "joven usando celular"}, emoción: ${idea.emotion || "inspiración"}, red social: ${idea.platform || "TikTok"}, orientación: vertical.`;
     }
   </script>
   <!-- 🔧 FF-BLOCK-12: ADMIN AVANZADO -->
   <script type="module">
-    async function validarAdmin(uid) {
+   async function validarAdmin(uid) {
       const userRef = doc(db, "users", uid);
-      const userSnap = await getDoc(userRef);
-      if (userSnap.exists() && userSnap.data().role === "admin") {
-        document.getElementById("ff-admin-view").classList.remove("is-hidden");
+   const userSnap = await getDoc(userRef);
+   if (userSnap.exists() && userSnap.data().role === "admin") {
+     document.getElementById("ff-admin-view").classList.remove("is-hidden");
       }
     }
 
