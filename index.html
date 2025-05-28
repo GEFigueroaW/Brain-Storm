@@ -90,6 +90,20 @@
   <div class="control"><input id="ff-keyword" class="input" type="text"></div>
   </div>
 
+  <!-- Modo de generación -->
+  <div class="field">
+    <label class="label">¿Cómo quieres generar ideas?</label>
+    <div class="control">
+      <div class="select is-fullwidth">
+        <select id="ff-generation-mode">
+          <option value="multired">Una idea por red social seleccionada (Multired)</option>
+          <option value="individual">Tres ideas para una sola red (Individual)</option>
+        </select>
+      </div>
+    </div>
+    <p class="help" id="ff-mode-help">Selecciona : 3 propuestas una red, o varias redes para una idea por cada una.</p>
+  </div>
+
   <!-- Tipo de publicación -->
   <div class="field">
     <label class="label">Tipo de publicación</label>
@@ -128,20 +142,6 @@
       <label class="checkbox mr-3"><input type="checkbox" value="TikTok" class="ff-social"> TikTok</label>          
       <label class="checkbox"><input type="checkbox" value="YouTube" class="ff-social"> YouTube</label>
     </div>
-  </div>
-
-  <!-- Modo de generación -->
-  <div class="field">
-    <label class="label">¿Cómo quieres generar ideas?</label>
-    <div class="control">
-      <div class="select is-fullwidth">
-        <select id="ff-generation-mode">
-          <option value="multired">Una idea por red social seleccionada (Multired)</option>
-          <option value="individual">Tres ideas para una sola red (Individual)</option>
-        </select>
-      </div>
-    </div>
-    <p class="help" id="ff-mode-help">Selecciona una red si quieres 3 ideas, o varias para una idea por cada una.</p>
   </div>
 
   <!-- Idioma (esto luego lo moveremos post-login) -->
