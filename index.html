@@ -197,79 +197,100 @@
       <p id="ff-premium-status-text" class="mt-3"></p>
     </div>
   </section>
-  <!-- FF-BLOCK-4: TRADUCCIONES INTERNACIONALES -->
-  <script>
-    const translations = {
-      es: {
-        'auth-title': 'Inicia sesión para comenzar',
-        'generate': 'Generar ideas',
-        'back': 'Volver',
-        'logout': 'Cerrar sesión',
-        'loading': 'Generando ideas...',
-        'copy-success': '¡Texto copiado!',
-        'toggle-auth-text-login': '¿No tienes cuenta?',
-        'show-login-form-link': 'Crea una cuenta'
-      },
-      en: {
-        'auth-title': 'Log in to get started',
-        'generate': 'Generate ideas',
-        'back': 'Back',
-        'logout': 'Log out',
-        'loading': 'Generating ideas...',
-        'copy-success': 'Text copied!',
-        'toggle-auth-text-login': 'Don’t have an account?',
-        'show-login-form-link': 'Create an account'
-      },
-      pt: {
-        'auth-title': 'Faça login para começar',
-        'generate': 'Gerar ideias',
-        'back': 'Voltar',
-        'logout': 'Sair',
-        'loading': 'Gerando ideias...',
-        'copy-success': 'Texto copiado!',
-        'toggle-auth-text-login': 'Ainda não tem conta?',
-        'show-login-form-link': 'Criar conta'
-      }
+<!-- FF-BLOCK-4: TRADUCCIONES INTERNACIONALES -->
+<script>
+  const translations = {
+    es: {
+      'auth-title': 'Inicia sesión para comenzar',
+      'generate': 'Generar ideas',
+      'back': 'Volver',
+      'logout': 'Cerrar sesión',
+      'loading': 'Generando ideas...',
+      'copy-success': '¡Texto copiado!',
+      'toggle-auth-text-login': '¿No tienes cuenta?',
+      'show-login-form-link': 'Crea una cuenta',
+      'label-keyword': 'Tema o palabra clave',
+      'label-copytype': 'Tipo de publicación',
+      'label-language': 'Idioma de la idea',
+      'label-networks': 'Redes sociales'
+    },
+    en: {
+      'auth-title': 'Log in to get started',
+      'generate': 'Generate ideas',
+      'back': 'Back',
+      'logout': 'Log out',
+      'loading': 'Generating ideas...',
+      'copy-success': 'Text copied!',
+      'toggle-auth-text-login': 'Don’t have an account?',
+      'show-login-form-link': 'Create an account',
+      'label-keyword': 'Topic or keyword',
+      'label-copytype': 'Post type',
+      'label-language': 'Idea language',
+      'label-networks': 'Social networks'
+    },
+    pt: {
+      'auth-title': 'Faça login para começar',
+      'generate': 'Gerar ideias',
+      'back': 'Voltar',
+      'logout': 'Sair',
+      'loading': 'Gerando ideias...',
+      'copy-success': 'Texto copiado!',
+      'toggle-auth-text-login': 'Ainda não tem conta?',
+      'show-login-form-link': 'Criar conta',
+      'label-keyword': 'Tópico ou palavra-chave',
+      'label-copytype': 'Tipo de publicação',
+      'label-language': 'Idioma da ideia',
+      'label-networks': 'Redes sociais'
+    }
+  };
+
+  function t(key) {
+    const lang = localStorage.getItem('ff-lang') || 'es';
+    return translations[lang][key] || key;
+  }
+
+  function setLanguage(lang) {
+    localStorage.setItem('ff-lang', lang);
+    document.documentElement.setAttribute('lang', lang);
+
+    const mappings = {
+      'auth-title': 'auth-title',
+      'toggle-auth-text': 'toggle-auth-text-login',
+      'ff-generate-btn': 'generate',
+      'ff-back-to-config': 'back',
+      'ff-logout-btn': 'logout',
+      'ff-label-keyword': 'label-keyword',
+      'ff-label-copytype': 'label-copytype',
+      'ff-label-language': 'label-language',
+      'ff-label-networks': 'label-networks',
+      'ff-copy-success-msg': 'copy-success'
     };
 
-    function t(key) {
-      const lang = localStorage.getItem('ff-lang') || 'es';
-      return translations[lang][key] || key;
+    for (const id in mappings) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = t(mappings[id]);
     }
 
-    function setLanguage(lang) {
-      localStorage.setItem('ff-lang', lang);
-      document.documentElement.setAttribute('lang', lang);
+    const toggleText = document.getElementById('toggle-auth-text');
+    if (toggleText) {
+      toggleText.innerHTML = `${t('toggle-auth-text-login')} <a id="show-login-form-link">${t('show-login-form-link')}</a>`;
+    }
+  }
 
-      // Traducir elementos clave
-      document.getElementById('auth-title').textContent = t('auth-title');
-      document.getElementById('toggle-auth-text').innerHTML =
-        `${t('toggle-auth-text-login')} <a id="show-login-form-link">${t('show-login-form-link')}</a>`;
+  document.addEventListener("DOMContentLoaded", () => {
+    const currentLang = localStorage.getItem('ff-lang') || 'es';
+    const authLangSelector = document.getElementById('ff-auth-language-selector');
 
-      if (document.getElementById("ff-generate-btn"))
-        document.getElementById("ff-generate-btn").textContent = t("generate");
-
-      if (document.getElementById("ff-back-to-config"))
-        document.getElementById("ff-back-to-config").textContent = t("back");
-
-      if (document.getElementById("ff-logout-btn"))
-        document.getElementById("ff-logout-btn").textContent = t("logout");
+    if (authLangSelector) {
+      authLangSelector.value = currentLang;
+      authLangSelector.addEventListener('change', (e) => {
+        setLanguage(e.target.value);
+      });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const currentLang = localStorage.getItem('ff-lang') || 'es';
-      const authLangSelector = document.getElementById('ff-auth-language-selector');
-
-      if (authLangSelector) {
-        authLangSelector.value = currentLang;
-        authLangSelector.addEventListener('change', (e) => {
-          setLanguage(e.target.value);
-        });
-      }
-
-      setLanguage(currentLang);
-    });
-  </script>
+    setLanguage(currentLang);
+  });
+</script>
   <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
