@@ -78,16 +78,10 @@
           <span class="icon"><i class="fab fa-google"></i></span>
           <span>Google</span>
         </button>
-        <button id="ff-email-login" class="button is-link">Email</button>
       </div>
 
       <p id="toggle-auth-text" class="has-text-centered mt-4"></p>
 
-      <div id="ff-signup-form-container" class="box is-hidden">
-        <div class="field">
-          <label class="label">Nombre</label>
-          <div class="control"><input id="ff-name" class="input" type="text"></div>
-        </div>
         <div class="field">
           <label class="label">Apellido</label>
           <div class="control"><input id="ff-lastname" class="input" type="text"></div>
@@ -352,9 +346,6 @@
     document.getElementById("ff-google-login").addEventListener("click", async () => {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-    });
-    document.getElementById("ff-email-login").addEventListener("click", () => {
-      document.getElementById("ff-signup-form-container").classList.remove("is-hidden");
     });
   </script>
   <!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
