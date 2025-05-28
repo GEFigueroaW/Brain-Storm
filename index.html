@@ -143,6 +143,7 @@
               <option value="venta directa o persuasivo" data-key="opt-venta directa o persuasivo">Venta directa o
                 persuasivo</option>
             </select>
+            <p id="ff-copytype-description" class="help is-info mt-2"></p>
           </div>
         </div>
       </div>
@@ -209,6 +210,50 @@
   </section>
   <!-- FF-BLOCK-4: TRADUCCIONES INTERNACIONALES -->
   <script>
+    const copyTypeDescriptions = {
+      es: {
+        "de beneficio y solucion": "Enfocado en destacar cómo tu producto o servicio mejora la vida del usuario.",
+        "de novedad o lanzamiento": "Presenta un producto o idea recién lanzada, resaltando lo innovador.",
+        "de interaccion o pregunta": "Diseñado para generar participación: preguntas, encuestas, etc.",
+        "de urgencia o escacez": "Crea presión de tiempo o disponibilidad para motivar acción rápida.",
+        "informativo o educativo": "Comparte conocimientos o datos útiles, de forma clara y educativa.",
+        "informal": "Tono relajado, cercano, ideal para conectar de forma humana.",
+        "llamada a la Acción (CTA)": "Texto directo que incita a tomar una acción concreta (compra, clic, etc).",
+        "narrativo o storytelling": "Cuenta una historia breve para conectar emocionalmente.",
+        "posicionamiento o branding": "Refuerza la identidad, valores o personalidad de marca.",
+        "testimonio o prueba": "Usa experiencias reales para generar confianza.",
+        "técnico o profesional": "Contenido especializado, preciso y profesional.",
+        "venta directa o persuasivo": "Enfocado en cerrar ventas o generar conversiones."
+      },
+      en: {
+        "de beneficio y solucion": "Highlights how your product or service improves the user's life.",
+        "de novedad o lanzamiento": "Presents a newly launched product or idea, emphasizing innovation.",
+        "de interaccion o pregunta": "Designed to spark engagement: questions, polls, etc.",
+        "de urgencia o escacez": "Creates time or availability pressure to motivate quick action.",
+        "informativo o educativo": "Shares useful knowledge or data in a clear, educational way.",
+        "informal": "Relaxed, friendly tone to connect more personally.",
+        "llamada a la Acción (CTA)": "Direct text encouraging a specific action (buy, click, etc).",
+        "narrativo o storytelling": "Tells a short story to create an emotional connection.",
+        "posicionamiento o branding": "Reinforces brand identity, values or personality.",
+        "testimonio o prueba": "Uses real experiences to build trust.",
+        "técnico o profesional": "Specialized, precise, professional content.",
+        "venta directa o persuasivo": "Focused on driving sales or conversions."
+      },
+      pt: {
+        "de beneficio y solucion": "Destaca como seu produto ou serviço melhora a vida do usuário.",
+        "de novedad o lanzamiento": "Apresenta um produto ou ideia recém-lançada, com ênfase na inovação.",
+        "de interaccion o pregunta": "Projetado para gerar interação: perguntas, enquetes, etc.",
+        "de urgencia o escacez": "Cria urgência para incentivar ação rápida.",
+        "informativo o educativo": "Compartilha conhecimento ou dados úteis de forma clara e educativa.",
+        "informal": "Tom descontraído e próximo para criar conexão humana.",
+        "llamada a la Acción (CTA)": "Texto direto que incentiva uma ação específica (compra, clique etc.).",
+        "narrativo o storytelling": "Conta uma breve história para criar conexão emocional.",
+        "posicionamiento o branding": "Reforça identidade, valores ou personalidade da marca.",
+        "testimonio o prueba": "Usa experiências reais para gerar confiança.",
+        "técnico o profesional": "Conteúdo técnico, preciso e profissional.",
+        "venta directa o persuasivo": "Focado em fechar vendas ou gerar conversões."
+      }
+    };
     const translations = {
       es: {
         'auth-title': 'Inicia sesión para comenzar',
@@ -243,8 +288,6 @@
         'title-admin': 'Control Admin – Premium Global',
         'label-expiration': 'Fecha de expiración',
         'label-generationmode': '¿Cómo quieres generar las ideas?',
-        'help-mode': 'Selecciona: 3 propuestas una red, o varias redes para una idea por cada una',
-        'label-keyword': 'Tema o palabra clave',
         'label-networks': 'Redes sociales',
         'help-networks': 'Selecciona una o más redes sociales según el modo elegido',
         'footer-disclaimer': 'Aplicación experimental para generación de ideas en redes sociales. Desarrollado con 💡 en Latinoamérica.',
@@ -285,8 +328,6 @@
         'title-admin': 'Admin Control – Global Premium',
         'label-expiration': 'Expiration date',
         'label-generationmode': 'How do you want to generate ideas?',
-        'help-mode': 'Select: 3 ideas for one network, or multiple networks for one idea each',
-        'label-keyword': 'Topic or keyword',
         'label-networks': 'Social networks',
         'help-networks': 'Select one or more social networks depending on the mode',
         'footer-disclaimer': 'Experimental app for generating ideas for social media. Built with 💡 in Latin America.',
@@ -326,8 +367,6 @@
         'title-admin': 'Controle Admin – Premium Global',
         'label-expiration': 'Data de expiração',
         'label-generationmode': 'Como você quer gerar as ideias?',
-        'help-mode': 'Selecione: 3 ideias para uma rede ou várias redes para uma ideia cada',
-        'label-keyword': 'Tópico ou palavra-chave',
         'label-networks': 'Redes sociais',
         'help-networks': 'Selecione uma ou mais redes sociais de acordo com o modo escolhido',
         'footer-disclaimer': 'Aplicativo experimental para gerar ideias para redes sociais. Desenvolvido com 💡 na América Latina.',
@@ -351,7 +390,6 @@
         'ff-generate-btn': 'generate',
         'ff-back-to-config': 'back',
         'ff-logout-btn': 'logout',
-        'ff-label-keyword': 'label-keyword',
         'ff-label-copytype': 'label-copytype',
         'ff-label-language': 'label-language',
         'ff-label-networks': 'label-networks',
@@ -398,6 +436,17 @@
       const key = opt.dataset.key;
       if (key) opt.textContent = t(key);
     });
+    function updateCopyTypeDescription() {
+      const lang = localStorage.getItem("ff-lang") || "es";
+      const value = document.getElementById("ff-copytype").value;
+      const desc = copyTypeDescriptions[lang][value] || "";
+      const descEl = document.getElementById("ff-copytype-description");
+      if (descEl) descEl.textContent = desc;
+    }
+
+    // Escuchar cambios y actualizar
+    document.getElementById("ff-copytype").addEventListener("change", updateCopyTypeDescription);
+    document.addEventListener("DOMContentLoaded", updateCopyTypeDescription);    
   </script>
   <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
   <script type="module">
