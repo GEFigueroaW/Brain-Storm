@@ -452,15 +452,13 @@
   </script>
   <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
       getAuth,
       signInWithPopup,
       GoogleAuthProvider,
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
       onAuthStateChanged,
       signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     } ,
   onAuthStateChanged from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
