@@ -373,141 +373,141 @@
         const el = document.getElementById(id);
         if (el) el.textContent = t(mappings[id]);
       }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const currentLang = localStorage.getItem('ff-lang') || 'es';
+      const authLangSelector = document.getElementById('ff-auth-language-selector');
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const currentLang = localStorage.getItem('ff-lang') || 'es';
-        const authLangSelector = document.getElementById('ff-auth-language-selector');
+      if (authLangSelector) {
+        authLangSelector.value = currentLang;
+        authLangSelector.addEventListener('change', (e) => {
+          setLanguage(e.target.value);
+        });
+      }
 
-        if (authLangSelector) {
-          authLangSelector.value = currentLang;
-          authLangSelector.addEventListener('change', (e) => {
-            setLanguage(e.target.value);
-          });
-        }
-
-        setLanguage(currentLang);
-      });
-      // Traducir dinámicamente las opciones del select de tipo de publicación
-      const copytypeOptions = document.querySelectorAll('#ff-copytype option');
-      copytypeOptions.forEach(opt => {
-        const key = opt.dataset.key;
-        if (key) opt.textContent = t(key);
-      });
-      // Traducir dinámicamente las opciones del selector de modo
-      const modeOptions = document.querySelectorAll('#ff-mode-selector option');
-      modeOptions.forEach(opt => {
-        const key = opt.dataset.key;
-        if (key) opt.textContent = t(key);
-      });
+      setLanguage(currentLang);
+    });
+    // Traducir dinámicamente las opciones del select de tipo de publicación
+    const copytypeOptions = document.querySelectorAll('#ff-copytype option');
+    copytypeOptions.forEach(opt => {
+      const key = opt.dataset.key;
+      if (key) opt.textContent = t(key);
+    });
+    // Traducir dinámicamente las opciones del selector de modo
+    const modeOptions = document.querySelectorAll('#ff-mode-selector option');
+    modeOptions.forEach(opt => {
+      const key = opt.dataset.key;
+      if (key) opt.textContent = t(key);
+    });
   </script>
   <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
   <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-      import {
-        getAuth,
-        signInWithPopup,
-        GoogleAuthProvider,
-        signInWithEmailAndPassword,
-        createUserWithEmailAndPassword,
-        onAuthStateChanged,
-        signOut
-      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-      import {
-        getFirestore,
-        doc, setDoc, getDoc, updateDoc
-      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-      import { httpsCallable, getFunctions } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithPopup,
+      GoogleAuthProvider,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc, setDoc, getDoc, updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { httpsCallable, getFunctions } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
-        authDomain: "brain-storm-8f0d8.firebaseapp.com",
-        databaseURL: "https://brain-storm-8f0d8-default-rtdb.firebaseio.com",
-        projectId: "brain-storm-8f0d8",
-        storageBucket: "brain-storm-8f0d8.appspot.com",
-        messagingSenderId: "401208607043",
-        appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
-      };
+    const firebaseConfig = {
+      apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
+      authDomain: "brain-storm-8f0d8.firebaseapp.com",
+      databaseURL: "https://brain-storm-8f0d8-default-rtdb.firebaseio.com",
+      projectId: "brain-storm-8f0d8",
+      storageBucket: "brain-storm-8f0d8.appspot.com",
+      messagingSenderId: "401208607043",
+      appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+    };
 
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const db = getFirestore(app);
-      const functions = getFunctions(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const functions = getFunctions(app);
 
-      let sessionId = Date.now().toString();
-      let deviceId = localStorage.getItem('ff-device-id') || crypto.randomUUID();
-      localStorage.setItem('ff-device-id', deviceId);
+    let sessionId = Date.now().toString();
+    let deviceId = localStorage.getItem('ff-device-id') || crypto.randomUUID();
+    localStorage.setItem('ff-device-id', deviceId);
 
-      async function registerSession(user) {
-        const register = httpsCallable(functions, 'registerUserSession');
-        await register({ uid: user.uid, sessionId, deviceId });
-      }
+    async function registerSession(user) {
+      const register = httpsCallable(functions, 'registerUserSession');
+      await register({ uid: user.uid, sessionId, deviceId });
+    }
 
-      async function checkSession(user) {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const sessions = userSnap.data().sessions || [];
-          const isSessionValid = sessions.some(s => s.sessionId === sessionId && s.deviceId === deviceId);
-          if (!isSessionValid) {
-            alert("Se cerró la sesión en este dispositivo.");
-            await signOut(auth);
-            location.reload();
-          }
+    async function checkSession(user) {
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        const sessions = userSnap.data().sessions || [];
+        const isSessionValid = sessions.some(s => s.sessionId === sessionId && s.deviceId === deviceId);
+        if (!isSessionValid) {
+          alert("Se cerró la sesión en este dispositivo.");
+          await signOut(auth);
+          location.reload();
         }
       }
+    }
 
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          await registerSession(user);
-          await checkSession(user);
-          document.getElementById("ff-auth-view").classList.add("is-hidden");
-          document.getElementById("ff-config-view").classList.remove("is-hidden");
-        } else {
-          document.getElementById("ff-auth-view").classList.remove("is-hidden");
-          document.getElementById("ff-config-view").classList.add("is-hidden");
-          document.getElementById("ff-results-view").classList.add("is-hidden");
-        }
-      });
-      document.getElementById("ff-logout-btn")?.addEventListener("click", () => {
-        signOut(auth).then(() => location.reload());
-      });
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await registerSession(user);
+        await checkSession(user);
+        document.getElementById("ff-auth-view").classList.add("is-hidden");
+        document.getElementById("ff-config-view").classList.remove("is-hidden");
+      } else {
+        document.getElementById("ff-auth-view").classList.remove("is-hidden");
+        document.getElementById("ff-config-view").classList.add("is-hidden");
+        document.getElementById("ff-results-view").classList.add("is-hidden");
+      }
+    });
+    document.getElementById("ff-logout-btn")?.addEventListener("click", () => {
+      signOut(auth).then(() => location.reload());
+    });
 
-      document.getElementById("ff-google-login").addEventListener("click", async () => {
-        const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
-      });
+    document.getElementById("ff-google-login").addEventListener("click", async () => {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    });
   </script>
   <!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
   <script type="module">
-      document.getElementById("ff-generate-btn").addEventListener("click", async () => {
-        const keyword = document.getElementById("ff-keyword").value;
-        const copyType = document.getElementById("ff-copy-type").value;
-        const mode = document.getElementById("ff-generation-mode").value;
-        const language = localStorage.getItem('ff-lang') || 'es';
-        const socialElems = document.querySelectorAll(".ff-social:checked");
-        const socialNetworks = Array.from(socialElems).map(e => e.value);
+    document.getElementById("ff-generate-btn").addEventListener("click", async () => {
+      const keyword = document.getElementById("ff-keyword").value;
+      const copyType = document.getElementById("ff-copy-type").value;
+      const mode = document.getElementById("ff-generation-mode").value;
+      const language = localStorage.getItem('ff-lang') || 'es';
+      const socialElems = document.querySelectorAll(".ff-social:checked");
+      const socialNetworks = Array.from(socialElems).map(e => e.value);
 
-        if (!keyword || socialNetworks.length === 0) {
-          alert("Por favor, completa los campos requeridos.");
-          return;
-        }
+      if (!keyword || socialNetworks.length === 0) {
+        alert("Por favor, completa los campos requeridos.");
+        return;
+      }
 
-        const generateIdeas = httpsCallable(functions, 'generateIdeas');
-        const result = await generateIdeas({
-          keyword,
-          copyType,
-          mode,
-          language,
-          socialNetworks,
-          sessionId
-        });
+      const generateIdeas = httpsCallable(functions, 'generateIdeas');
+      const result = await generateIdeas({
+        keyword,
+        copyType,
+        mode,
+        language,
+        socialNetworks,
+        sessionId
+      });
 
-        const output = document.getElementById("ff-ideas-output");
-        output.innerHTML = "";
-        result.data.ideas.forEach((idea, idx) => {
-          const box = document.createElement("div");
-          box.className = "box";
-          box.innerHTML = `
+      const output = document.getElementById("ff-ideas-output");
+      output.innerHTML = "";
+      result.data.ideas.forEach((idea, idx) => {
+        const box = document.createElement("div");
+        box.className = "box";
+        box.innerHTML = `
         <h3 class="title is-5">Idea ${idx + 1}</h3>
         <p><strong>Gancho:</strong> ${idea.hook}</p>
         <p><strong>Ángulo:</strong> ${idea.angle}</p>
@@ -519,131 +519,131 @@
         <button class="button is-small is-info mt-2 ff-feedback-btn" data-feedback="like">👍</button>
         <button class="button is-small is-danger mt-2 ff-feedback-btn" data-feedback="dislike">👎</button>
       `;
-          output.appendChild(box);
-        });
-
-        document.getElementById("ff-config-view").classList.add("is-hidden");
-        document.getElementById("ff-results-view").classList.remove("is-hidden");
+        output.appendChild(box);
       });
 
-      document.getElementById("ff-back-to-config").addEventListener("click", () => {
-        document.getElementById("ff-results-view").classList.add("is-hidden");
-        document.getElementById("ff-config-view").classList.remove("is-hidden");
-      });
+      document.getElementById("ff-config-view").classList.add("is-hidden");
+      document.getElementById("ff-results-view").classList.remove("is-hidden");
+    });
+
+    document.getElementById("ff-back-to-config").addEventListener("click", () => {
+      document.getElementById("ff-results-view").classList.add("is-hidden");
+      document.getElementById("ff-config-view").classList.remove("is-hidden");
+    });
   </script>
   <script type="module">
-      document.getElementById("ff-generation-mode").addEventListener("change", (e) => {
-        const mode = e.target.value;
-        const checkboxes = document.querySelectorAll(".ff-social");
+    document.getElementById("ff-generation-mode").addEventListener("change", (e) => {
+      const mode = e.target.value;
+      const checkboxes = document.querySelectorAll(".ff-social");
 
-        if (mode === "individual") {
-          checkboxes.forEach(cb => cb.checked = false);
-        }
+      if (mode === "individual") {
+        checkboxes.forEach(cb => cb.checked = false);
+      }
 
-        checkboxes.forEach(cb => {
-          cb.disabled = false;
-          cb.addEventListener("change", () => {
-            if (mode === "individual") {
-              checkboxes.forEach(other => {
-                if (other !== cb) other.checked = false;
-              });
-            }
-          });
+      checkboxes.forEach(cb => {
+        cb.disabled = false;
+        cb.addEventListener("change", () => {
+          if (mode === "individual") {
+            checkboxes.forEach(other => {
+              if (other !== cb) other.checked = false;
+            });
+          }
         });
       });
+    });
   </script>
   <!-- 🔧 FF-BLOCK-7: FEEDBACK DE IDEAS -->
   <script type="module">
-      document.addEventListener("click", async (e) => {
-        if (e.target.classList.contains("ff-feedback-btn")) {
-          const feedbackType = e.target.dataset.feedback;
-          const ideaIndex = Array.from(document.querySelectorAll(".ff-feedback-btn")).indexOf(e.target);
-          const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
+    document.addEventListener("click", async (e) => {
+      if (e.target.classList.contains("ff-feedback-btn")) {
+        const feedbackType = e.target.dataset.feedback;
+        const ideaIndex = Array.from(document.querySelectorAll(".ff-feedback-btn")).indexOf(e.target);
+        const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
 
-          try {
-            await recordFeedback({
-              sessionId,
-              feedback: feedbackType,
-              ideaIndex
-            });
-            alert("¡Gracias por tu opinión!");
-          } catch (error) {
-            console.error("Error enviando feedback:", error);
-            alert("Error al enviar feedback.");
-          }
+        try {
+          await recordFeedback({
+            sessionId,
+            feedback: feedbackType,
+            ideaIndex
+          });
+          alert("¡Gracias por tu opinión!");
+        } catch (error) {
+          console.error("Error enviando feedback:", error);
+          alert("Error al enviar feedback.");
         }
-      });
+      }
+    });
 
-      document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
-        document.getElementById("ff-feedback-modal").classList.remove("is-active");
-      });
+    document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
+      document.getElementById("ff-feedback-modal").classList.remove("is-active");
+    });
   </script>
   <!-- 🔧 FF-BLOCK-8: CONTROL DE PREMIUM Y PUBLICIDAD -->
   <script type="module">
-      import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-      async function checkPremiumStatus(uid) {
-        const configRef = doc(db, "appConfig", "global");
-        const configSnap = await getDoc(configRef);
-        const userRef = doc(db, "users", uid);
-        const userSnap = await getDoc(userRef);
+    async function checkPremiumStatus(uid) {
+      const configRef = doc(db, "appConfig", "global");
+      const configSnap = await getDoc(configRef);
+      const userRef = doc(db, "users", uid);
+      const userSnap = await getDoc(userRef);
 
-        let isPremium = false;
-        let showAds = true;
+      let isPremium = false;
+      let showAds = true;
 
-        if (userSnap.exists()) {
-          isPremium = userSnap.data().premium || false;
-        }
+      if (userSnap.exists()) {
+        isPremium = userSnap.data().premium || false;
+      }
 
-        if (configSnap.exists()) {
-          const global = configSnap.data();
-          const now = new Date();
-          const endDate = new Date(global.premiumGlobalEndDate);
-          if (global.isPremiumGlobalActive && now < endDate) {
-            isPremium = true;
-            showAds = global.isLaunchPromoActive; // En promo se permiten ads completas
-          }
-        }
-
-        if (!isPremium) {
-          // Mostrar publicidad completa
-          const ad = document.createElement("div");
-          ad.className = "notification is-warning has-text-centered";
-          ad.innerHTML = "Publicidad: ¡Explora nuestra versión Premium sin anuncios!";
-          document.body.appendChild(ad);
-        } else if (showAds) {
-          // Mostrar publicidad discreta
-          const ad = document.createElement("div");
-          ad.className = "has-text-centered has-text-grey-light";
-          ad.innerHTML = "<small>Publicidad moderada activa por promoción.</small>";
-          document.body.appendChild(ad);
+      if (configSnap.exists()) {
+        const global = configSnap.data();
+        const now = new Date();
+        const endDate = new Date(global.premiumGlobalEndDate);
+        if (global.isPremiumGlobalActive && now < endDate) {
+          isPremium = true;
+          showAds = global.isLaunchPromoActive; // En promo se permiten ads completas
         }
       }
 
-      onAuthStateChanged(auth, async (user) => {
-        if (user) await checkPremiumStatus(user.uid);
-      });
+      if (!isPremium) {
+        // Mostrar publicidad completa
+        const ad = document.createElement("div");
+        ad.className = "notification is-warning has-text-centered";
+        ad.innerHTML = "Publicidad: ¡Explora nuestra versión Premium sin anuncios!";
+        document.body.appendChild(ad);
+      } else if (showAds) {
+        // Mostrar publicidad discreta
+        const ad = document.createElement("div");
+        ad.className = "has-text-centered has-text-grey-light";
+        ad.innerHTML = "<small>Publicidad moderada activa por promoción.</small>";
+        document.body.appendChild(ad);
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) await checkPremiumStatus(user.uid);
+    });
   </script>
   <!-- 🔧 FF-BLOCK-9: PANEL ADMIN PREMIUM -->
   <script type="module">
-      document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
-        const isActive = document.getElementById("ff-toggle-premium-global").checked;
-        const endDate = document.getElementById("ff-premium-end-date").value;
+    document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
+      const isActive = document.getElementById("ff-toggle-premium-global").checked;
+      const endDate = document.getElementById("ff-premium-end-date").value;
 
-        const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
-        try {
-          await setPremiumGlobal({
-            isPremiumGlobalActive: isActive,
-            premiumGlobalEndDate: new Date(endDate).toISOString()
-          });
-          document.getElementById("ff-premium-status-text").textContent =
-            `${t('premium-global-active')} ${new Date(endDate).toLocaleString()}`;
-          alert("Actualización exitosa.");
-        } catch (error) {
-          console.error("Error actualizando premium global:", error);
-          alert("Error al actualizar estado global.");
-        }
-      });
+      const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
+      try {
+        await setPremiumGlobal({
+          isPremiumGlobalActive: isActive,
+          premiumGlobalEndDate: new Date(endDate).toISOString()
+        });
+        document.getElementById("ff-premium-status-text").textContent =
+          `${t('premium-global-active')} ${new Date(endDate).toLocaleString()}`;
+        alert("Actualización exitosa.");
+      } catch (error) {
+        console.error("Error actualizando premium global:", error);
+        alert("Error al actualizar estado global.");
+      }
+    });
   </script>
   <!-- 🔧 FF-BLOCK-10: ENLACES ADICIONALES -->
   <!-- Puedes agregar aquí enlaces a redes sociales, blog o botón para recomendar la app -->
@@ -660,23 +660,23 @@
   </footer>
   <!-- 🔧 FF-BLOCK-11: VISUAL PROMPT REFERENCIA -->
   <script>
-      function construirPromptVisual(idea) {
-        return `Estilo: ${idea.style || "ilustración vectorial"}, fondo: ${idea.background || "minimalista"}, personaje: ${idea.character || "joven usando celular"}, emoción: ${idea.emotion || "inspiración"}, red social: ${idea.platform || "TikTok"}, orientación: vertical.`;
-      }
+    function construirPromptVisual(idea) {
+      return `Estilo: ${idea.style || "ilustración vectorial"}, fondo: ${idea.background || "minimalista"}, personaje: ${idea.character || "joven usando celular"}, emoción: ${idea.emotion || "inspiración"}, red social: ${idea.platform || "TikTok"}, orientación: vertical.`;
+    }
   </script>
   <!-- 🔧 FF-BLOCK-12: ADMIN AVANZADO -->
   <script type="module">
-      async function validarAdmin(uid) {
-        const userRef = doc(db, "users", uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists() && userSnap.data().role === "admin") {
-          document.getElementById("ff-admin-view").classList.remove("is-hidden");
-        }
+    async function validarAdmin(uid) {
+      const userRef = doc(db, "users", uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists() && userSnap.data().role === "admin") {
+        document.getElementById("ff-admin-view").classList.remove("is-hidden");
       }
+    }
 
-      onAuthStateChanged(auth, async (user) => {
-        if (user) await validarAdmin(user.uid);
-      });
+    onAuthStateChanged(auth, async (user) => {
+      if (user) await validarAdmin(user.uid);
+    });
   </script>
   <!-- 🔧 FF-BLOCK-13: CIERRE HTML -->
 </body>
