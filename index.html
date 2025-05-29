@@ -1,18 +1,19 @@
- <!-- 🔧 FF-BLOCK-1: HTML BASE Y METADATOS -->
-<!DOCTYPE html>
+  <!-- 🔧 FF-BLOCK-1: HTML BASE Y METADATOS -->
+  <!DOCTYPE html>
+  <html lang="es">
 
-<html lang="es">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="Genera ideas impactantes para redes sociales con IA. Usa FeedFlow, una app creativa, profesional y visualmente atractiva." name="description"/>
-<title>FeedFlow – Ideas con IA</title>
-<link href="favicon.ico" rel="icon" type="image/x-icon"/>
-<!-- 🔧 FF-BLOCK-2: LIBRERÍAS CSS Y ESTILO -->
-<link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+      content="Genera ideas impactantes para redes sociales con IA. Usa FeedFlow, una app creativa, profesional y visualmente atractiva." />
+    <title>FeedFlow – Ideas con IA</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <!-- 🔧 FF-BLOCK-2: LIBRERÍAS CSS Y ESTILO -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
       :root {
         --ff-morado: #8e44ad;
         --ff-dorado: #f1c40f;
@@ -45,267 +46,179 @@
         display: none !important;
       }
     </style>
-</link></head>
-<body><script>
-document.getElementById('generate-btn').addEventListener('click', async () => {
-  const keyword = document.getElementById('keyword-input').value.trim();
-  const copytype = document.getElementById('copytype').value;
-  const language = document.getElementById('language-select').value;
-  const mode = document.querySelector('input[name="mode"]:checked')?.value || 'individual';
+  </head>
 
-  let networks = [];
-  if (mode === 'multired') {
-    document.querySelectorAll('input[name="network"]:checked').forEach(el => {
-      networks.push(el.value);
-    });
-  } else {
-    networks.push("Facebook"); // Red predeterminada si es modo individual
-  }
-
-  if (!keyword || networks.length === 0) {
-    alert("Faltan datos requeridos");
-    return;
-  }
-
-  const data = { keyword, copytype, language, mode, networks };
-
-  try {
-    const generateIdeasFunction = firebase.functions().httpsCallable("generateIdeas");
-    const result = await generateIdeasFunction(data);
-    console.log("✅ Ideas generadas:", result.data.ideas);
-  } catch (error) {
-    console.error("❌ Error al generar ideas:", error);
-    alert("Error al generar ideas. Revisa consola.");
-  }
-});
-</script>
-<section class="section">
-<div class="container">
-<h2 class="title">Generador de Ideas</h2>
-<div class="field">
-<label class="label">Palabra Clave</label>
-<div class="control">
-<input class="input" id="keyword-input" placeholder="Ej. Zapatos cómodos" type="text"/>
-</div>
-</div>
-<div class="field">
-<label class="label">Idioma</label>
-<div class="control">
-<div class="select">
-<select id="language-select">
-<option value="español">Español</option>
-<option value="inglés">Inglés</option>
-</select>
-</div>
-</div>
-</div>
-<div class="field">
-<label class="label">Tipo de Contenido</label>
-<div class="control">
-<div class="select">
-<select id="copytype">
-<option value="Promocional">Promocional</option>
-<option value="Informativo">Informativo</option>
-<option value="Técnico o profesional">Técnico o profesional</option>
-<option value="Posicionamiento o branding">Posicionamiento o branding</option>
-</select>
-</div>
-</div>
-</div>
-<div class="field">
-<label class="label">Modo</label>
-<div class="control">
-<label class="radio">
-<input checked="" name="mode" type="radio" value="individual"/>
-          Individual
-        </label>
-<label class="radio">
-<input name="mode" type="radio" value="multired"/>
-          Multired
-        </label>
-</div>
-</div>
-<div class="field" id="networks-container">
-<label class="label">Redes Sociales</label>
-<div class="control">
-<label class="checkbox">
-<input name="network" type="checkbox" value="Facebook"/> Facebook
-        </label>
-<label class="checkbox">
-<input name="network" type="checkbox" value="Instagram"/> Instagram
-        </label>
-<label class="checkbox">
-<input name="network" type="checkbox" value="Twitter"/> Twitter
-        </label>
-<label class="checkbox">
-<input name="network" type="checkbox" value="LinkedIn"/> LinkedIn
-        </label>
-</div>
-</div>
-<div class="field">
-<div class="control">
-<button class="button is-primary" id="generate-btn">Generar Ideas</button>
-</div>
-</div>
-</div>
-</section>
-
-<!-- 🔧 FF-BLOCK-3: ESTRUCTURA HTML -->
-<section class="ff-section" id="ff-auth-view">
-<div class="container">
-<h2 class="title is-4" id="title-results">Ideas generadas</h2>
-<div class="mt-4" id="ff-results-container"></div>
-<h1 class="title has-text-centered ff-logo">FeedFlow</h1>
-<p class="subtitle has-text-centered" id="auth-title">Inicia sesión para comenzar</p>
-<div class="box has-background-light mt-4">
-<label class="label" id="ff-label-language-app">Idioma de la aplicación</label>
-<div class="control">
-<div class="select is-fullwidth">
-<select id="ff-auth-language-selector" title="Elige el idioma para la interfaz y las ideas generadas. / Select the language for the interface and generated ideas. / Escolha o idioma da interface e das ideias geradas.">
-<option value="es">Español</option>
-<option value="en">English</option>
-<option value="pt">Português</option>
-</select>
-</div>
-</div>
-<p class="help mt-1">
-Elige el idioma para la interfaz y las ideas generadas. <br/>
-<em>Select the language for the interface and generated ideas.</em><br/>
-<em>Escolha o idioma da interface e das ideias geradas.</em>
-</p>
-</div>
-<div class="buttons is-centered">
-<button class="button is-light" id="ff-google-login">
-<span class="icon"><i class="fab fa-google"></i></span>
-<span>Google</span>
-</button>
-<div class="notification is-warning is-light is-hidden animate__animated animate__fadeIn" id="ff-loading">
-<strong>Generando ideas...</strong> Por favor, espera un momento.
+  <body>
+    <!-- 🔧 FF-BLOCK-3: ESTRUCTURA HTML -->
+    <section id="ff-auth-view" class="ff-section">
+      <div class="container">
+        <h2 class="title is-4" id="title-results">Ideas generadas</h2>
+        <div id="ff-results-container" class="mt-4"></div>
+        <h1 class="title has-text-centered ff-logo">FeedFlow</h1>
+        <p class="subtitle has-text-centered" id="auth-title">Inicia sesión para comenzar</p>
+        <div class="box has-background-light mt-4">
+          <label class="label" id="ff-label-language-app">Idioma de la aplicación</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select id="ff-auth-language-selector"
+                title="Elige el idioma para la interfaz y las ideas generadas. / Select the language for the interface and generated ideas. / Escolha o idioma da interface e das ideias geradas.">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="pt">Português</option>
+              </select>
+            </div>
           </div>
-</div>
-<p class="has-text-centered mt-4" id="toggle-auth-text"></p>
-</div>
-</section>
-<!-- Modo de generación -->
-<section class="ff-section is-hidden" id="ff-config-view">
-<div class="container">
-<div class="is-flex is-justify-content-flex-end">
-<button class="button is-small is-danger" id="ff-logout-btn">Cerrar sesión</button>
-</div>
-<h2 class="title" id="ff-title-config">Configura tu idea</h2>
-<div class="field">
-<label id="ff-label-generationmode">¿Cómo quieres generar las ideas?</label>
-<div class="control">
-<div class="select">
-<select id="ff-mode-selector">
-<option data-key="opt-multired" value="multired">Una idea por cada red social (Multired)</option>
-<option data-key="opt-individual" value="individual">Tres ideas para una sola red (Individual)</option>
-</select>
-</div>
-</div>
-<p class="help mt-1" id="ff-mode-help">Selecciona: 3 propuestas una red, o varias redes para una idea por cada
-            una</p>
+          <p class="help mt-1">
+            </em>Elige el idioma para la interfaz y las ideas generadas. </em><br>
+            <em>Select the language for the interface and generated ideas.</em><br>
+            <em>Escolha o idioma da interface e das ideias geradas.</em>
+          </p>
+        </div>
 
-</div>
-<!-- Tipo de publicación -->
-<div class="field">
-<label id="ff-label-keyword">Tema o palabra clave</label>
-<div class="control"><input class="input" id="ff-keyword" type="text"/></div>
-</div>
-<div class="field mt-4">
-<label class="label" id="ff-label-copytype">Tipo de publicación</label>
-<div class="control">
-<div class="select is-fullwidth">
-<select id="ff-copytype" required="">
-<option data-key="opt-de beneficio y solucion" value="de beneficio y solucion">De beneficio y solución
+        <div class="buttons is-centered">
+          <button id="ff-google-login" class="button is-light">
+            <span class="icon"><i class="fab fa-google"></i></span>
+            <span>Google</span>
+          </button>
+          <div id="ff-loading" class="notification is-warning is-light is-hidden animate__animated animate__fadeIn">
+            <strong>Generando ideas...</strong> Por favor, espera un momento.
+          </div>
+        </div>
+
+        <p id="toggle-auth-text" class="has-text-centered mt-4"></p>
+
+      </div>
+    </section>
+
+    <!-- Modo de generación -->
+    <section id="ff-config-view" class="ff-section is-hidden">
+      <div class="container">
+        <div class="is-flex is-justify-content-flex-end">
+          <button id="ff-logout-btn" class="button is-small is-danger">Cerrar sesión</button>
+        </div>
+        <h2 class="title" id="ff-title-config">Configura tu idea</h2>
+        <div class="field">
+          <label id="ff-label-generationmode">¿Cómo quieres generar las ideas?</label>
+          <div class="control">
+            <div class="select">
+              <select id="ff-mode-selector">
+                <option value="multired" data-key="opt-multired">Una idea por cada red social (Multired)</option>
+                <option value="individual" data-key="opt-individual">Tres ideas para una sola red (Individual)</option>
+              </select>
+            </div>
+          </div>
+          <p class="help mt-1" id="ff-mode-help">Selecciona: 3 propuestas una red, o varias redes para una idea por cada
+            una</p>
+          </p>
+        </div>
+
+        <!-- Tipo de publicación -->
+        <div class="field">
+          <label id="ff-label-keyword">Tema o palabra clave</label>
+          <div class="control"><input id="ff-keyword" class="input" type="text"></div>
+        </div>
+
+        <div class="field mt-4">
+          <label class="label" id="ff-label-copytype">Tipo de publicación</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select id="ff-copytype" required>
+                <option value="de beneficio y solucion" data-key="opt-de beneficio y solucion">De beneficio y solución
                 </option>
-<option data-key="opt-de novedad o lanzamiento" value="de novedad o lanzamiento">De novedad o lanzamiento
+                <option value="de novedad o lanzamiento" data-key="opt-de novedad o lanzamiento">De novedad o lanzamiento
                 </option>
-<option data-key="opt-de interaccion o pregunta" value="de interaccion o pregunta">De interacción o
+                <option value="de interaccion o pregunta" data-key="opt-de interaccion o pregunta">De interacción o
                   pregunta</option>
-<option data-key="opt-de urgencia o escacez" value="de urgencia o escacez">De urgencia o escasez</option>
-<option data-key="opt-informativo o educativo" value="informativo o educativo">Informativo o educativo
+                <option value="de urgencia o escacez" data-key="opt-de urgencia o escacez">De urgencia o escasez</option>
+                <option value="informativo o educativo" data-key="opt-informativo o educativo">Informativo o educativo
                 </option>
-<option data-key="opt-informal" value="informal">Informal</option>
-<option data-key="opt-llamada a la Acción (CTA)" value="llamada a la Acción (CTA)">Llamada a la Acción
+                <option value="informal" data-key="opt-informal">Informal</option>
+                <option value="llamada a la Acción (CTA)" data-key="opt-llamada a la Acción (CTA)">Llamada a la Acción
                   (CTA)</option>
-<option data-key="opt-narrativo o storytelling" value="narrativo o storytelling">Narrativo o storytelling
+                <option value="narrativo o storytelling" data-key="opt-narrativo o storytelling">Narrativo o storytelling
                 </option>
-<option data-key="opt-posicionamiento o branding" value="posicionamiento o branding">Posicionamiento o
+                <option value="posicionamiento o branding" data-key="opt-posicionamiento o branding">Posicionamiento o
                   branding</option>
-<option data-key="opt-testimonio o prueba social" value="testimonio o prueba">Testimonio o prueba</option>
-<option data-key="opt-técnico o profesional" value="técnico o profesional">Técnico o profesional</option>
-<option data-key="opt-venta directa o persuasivo" value="venta directa o persuasivo">Venta directa o
+                <option value="testimonio o prueba" data-key="opt-testimonio o prueba social">Testimonio o prueba</option>
+                <option value="técnico o profesional" data-key="opt-técnico o profesional">Técnico o profesional</option>
+                <option value="venta directa o persuasivo" data-key="opt-venta directa o persuasivo">Venta directa o
                   persuasivo</option>
-</select>
-</div>
-</div>
-<p class="help is-info mt-2 mb-4" id="ff-copytype-description"></p>
-</div>
-<!-- Redes sociales -->
-<div class="field mt-4">
-<label class="label" id="ff-label-networks">Redes sociales</label>
-<p class="help mb-1" id="ff-help-networks">Selecciona una o más redes sociales según el modo elegido</p>
-<div class="control">
-<div class="buttons are-small is-flex is-flex-wrap-wrap" id="ff-networks-container">
-<label class="checkbox mr-3"><input class="ff-social" type="checkbox" value="Facebook"/> Facebook</label>
-<label class="checkbox mr-3"><input class="ff-social" type="checkbox" value="X / Twitter"/> X /
+              </select>
+            </div>
+          </div>
+          <p id="ff-copytype-description" class="help is-info mt-2 mb-4"></p>
+        </div>
+
+        <!-- Redes sociales -->
+        <div class="field mt-4">
+          <label class="label" id="ff-label-networks">Redes sociales</label>
+          <p id="ff-help-networks" class="help mb-1">Selecciona una o más redes sociales según el modo elegido</p>
+          <div class="control">
+            <div class="buttons are-small is-flex is-flex-wrap-wrap" id="ff-networks-container">
+              <label class="checkbox mr-3"><input type="checkbox" value="Facebook" class="ff-social"> Facebook</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="X / Twitter" class="ff-social"> X /
                 Twitter</label>
-<label class="checkbox mr-3"><input class="ff-social" type="checkbox" value="LinkedIn"/> LinkedIn</label>
-<label class="checkbox mr-3"><input class="ff-social" type="checkbox" value="WhatsApp"/> WhatsApp</label>
-<label class="checkbox mr-3"><input class="ff-social" type="checkbox" value="Telegram"/> Telegram</label>
-<label class="checkbox mr-3"><input class="ff-social" type="checkbox" value="Reddit"/> Reddit</label>
-<label class="checkbox mr-3"><input class="ff-social" type="checkbox" value="Instagram"/> Instagram</label>
-<label class="checkbox mr-3"><input class="ff-social" type="checkbox" value="TikTok"/> TikTok</label>
-<label class="checkbox"><input class="ff-social" type="checkbox" value="YouTube"/> YouTube</label>
-</div>
-</div>
-<!-- Espacio para evitar solapamiento con botón fijo -->
-<div style="margin-bottom: 6rem;"></div>
-<!-- Botón flotante corregido -->
-<div class="field">
-<button class="button is-primary is-fullwidth" id="ff-generate-btn" onclick="generateIdeas()">
+              <label class="checkbox mr-3"><input type="checkbox" value="LinkedIn" class="ff-social"> LinkedIn</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="WhatsApp" class="ff-social"> WhatsApp</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="Telegram" class="ff-social"> Telegram</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="Reddit" class="ff-social"> Reddit</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="Instagram" class="ff-social"> Instagram</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="TikTok" class="ff-social"> TikTok</label>
+              <label class="checkbox"><input type="checkbox" value="YouTube" class="ff-social"> YouTube</label>
+            </div>
+          </div>
+
+          <!-- Espacio para evitar solapamiento con botón fijo -->
+          <div style="margin-bottom: 6rem;"></div>
+
+          <!-- Botón flotante corregido -->
+          <div class="field">
+            <button id="ff-generate-btn" onclick="generateIdeas()" class="button is-primary is-fullwidth">
               Generar ideas
             </button>
-</div>
-</div></div></section>
-<section class="section is-hidden" id="ff-results-view">
-<div class="container">
-<h2 class="title" id="ff-title-results">Ideas generadas</h2>
-<div id="ff-results"></div>
-<button class="button mt-4" id="ff-back-to-config">Volver</button>
-</div>
-</section>
-<!-- Modal Feedback -->
-<div class="modal" id="ff-feedback-modal">
-<div class="modal-background"></div>
-<div class="modal-content">
-<div class="box">
-<p>¿Esta idea te fue útil?</p>
-<div class="buttons is-centered mt-3">
-<button class="button is-success ff-feedback-btn" data-feedback="like"><i class="fas fa-thumbs-up"></i></button>
-<button class="button is-danger ff-feedback-btn" data-feedback="dislike"><i class="fas fa-thumbs-down"></i></button>
-</div>
-</div>
-</div>
-<button aria-label="close" class="modal-close is-large" id="ff-close-feedback"></button>
-</div>
-<section class="ff-section is-hidden" id="ff-admin-view">
-<div class="container">
-<h2 class="title">Control Admin – Premium Global</h2>
-<div class="field">
-<label class="checkbox"><input id="ff-toggle-premium-global" type="checkbox"/> Activar Premium Global</label>
-</div>
-<div class="field">
-<label class="label">Fecha de expiración</label>
-<div class="control"><input class="input" id="ff-premium-end-date" type="datetime-local"/></div>
-</div>
-<button class="button is-warning mt-2" id="ff-set-premium-btn">Actualizar</button>
-<p class="mt-3" id="ff-premium-status-text"></p>
-</div>
-</section>
-<!-- FF-BLOCK-4: TRADUCCIONES INTERNACIONALES -->
-<script>
+          </div>
+    </section>
+
+    <section id="ff-results-view" class="section is-hidden">
+      <div class="container">
+        <h2 class="title" id="ff-title-results">Ideas generadas</h2>
+        <div id="ff-results"></div>
+        <button id="ff-back-to-config" class="button mt-4">Volver</button>
+      </div>
+    </section>
+    <!-- Modal Feedback -->
+    <div class="modal" id="ff-feedback-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <p>¿Esta idea te fue útil?</p>
+          <div class="buttons is-centered mt-3">
+            <button class="button is-success ff-feedback-btn" data-feedback="like"><i
+                class="fas fa-thumbs-up"></i></button>
+            <button class="button is-danger ff-feedback-btn" data-feedback="dislike"><i
+                class="fas fa-thumbs-down"></i></button>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close is-large" aria-label="close" id="ff-close-feedback"></button>
+    </div>
+
+    <section id="ff-admin-view" class="ff-section is-hidden">
+      <div class="container">
+        <h2 class="title">Control Admin – Premium Global</h2>
+        <div class="field">
+          <label class="checkbox"><input type="checkbox" id="ff-toggle-premium-global"> Activar Premium Global</label>
+        </div>
+        <div class="field">
+          <label class="label">Fecha de expiración</label>
+          <div class="control"><input type="datetime-local" id="ff-premium-end-date" class="input"></div>
+        </div>
+        <button id="ff-set-premium-btn" class="button is-warning mt-2">Actualizar</button>
+        <p id="ff-premium-status-text" class="mt-3"></p>
+      </div>
+    </section>
+    <!-- FF-BLOCK-4: TRADUCCIONES INTERNACIONALES -->
+    <script>
       const copyTypeDescriptions = {
         es: {
           "de beneficio y solucion": "Enfocado en destacar cómo tu producto o servicio mejora la vida del usuario.",
@@ -543,8 +456,8 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
       document.getElementById("ff-copytype").addEventListener("change", updateCopyTypeDescription);
       document.addEventListener("DOMContentLoaded", updateCopyTypeDescription); 
     </script>
-<!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
-<script type="module">
+    <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
+    <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
       import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
       import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
@@ -641,8 +554,9 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
 
       window.generateIdeas = generateIdeas;
     </script>
-<!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
-<script type="module">
+
+    <!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
+    <script type="module">
       const modeSelector = document.getElementById("ff-mode-selector");
       const socialCheckboxes = document.querySelectorAll(".ff-social");
 
@@ -686,8 +600,9 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
       modeSelector.addEventListener("change", actualizarRestriccionesRedes);
       document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
     </script>
-<!-- 🔧 FF-BLOCK-7: FEEDBACK DE IDEAS -->
-<script type="module">
+
+    <!-- 🔧 FF-BLOCK-7: FEEDBACK DE IDEAS -->
+    <script type="module">
       document.addEventListener("click", async (e) => {
         if (e.target.classList.contains("ff-feedback-btn")) {
           const feedbackType = e.target.dataset.feedback;
@@ -712,8 +627,8 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
         document.getElementById("ff-feedback-modal").classList.remove("is-active");
       });
     </script>
-<!-- 🔧 FF-BLOCK-8: CONTROL DE PREMIUM Y PUBLICIDAD -->
-<script type="module">
+    <!-- 🔧 FF-BLOCK-8: CONTROL DE PREMIUM Y PUBLICIDAD -->
+    <script type="module">
       import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
       async function checkPremiumStatus(uid) {
@@ -758,8 +673,8 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
         if (user) await checkPremiumStatus(user.uid);
       });
     </script>
-<!-- 🔧 FF-BLOCK-9: PANEL ADMIN PREMIUM -->
-<script type="module">
+    <!-- 🔧 FF-BLOCK-9: PANEL ADMIN PREMIUM -->
+    <script type="module">
       document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
         const isActive = document.getElementById("ff-toggle-premium-global").checked;
         const endDate = document.getElementById("ff-premium-end-date").value;
@@ -779,27 +694,27 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
         }
       });
     </script>
-<!-- 🔧 FF-BLOCK-10: ENLACES ADICIONALES -->
-<!-- Puedes agregar aquí enlaces a redes sociales, blog o botón para recomendar la app -->
-<footer class="footer has-text-centered mt-6">
-<p class="is-size-7" id="ff-footer-disclaimer">
+    <!-- 🔧 FF-BLOCK-10: ENLACES ADICIONALES -->
+    <!-- Puedes agregar aquí enlaces a redes sociales, blog o botón para recomendar la app -->
+    <footer class="footer has-text-centered mt-6">
+      <p id="ff-footer-disclaimer" class="is-size-7">
         Aplicación experimental para generación de ideas en redes sociales. Desarrollado con 💡 en Latinoamérica.
       </p>
-<p class="is-size-7" id="ff-footer-legal">
+      <p id="ff-footer-legal" class="is-size-7">
         FeedFlow no se hace responsable por los contenidos generados por inteligencia artificial.
       </p>
-<p class="is-size-7 has-text-grey" id="ff-footer-copy">
+      <p id="ff-footer-copy" class="is-size-7 has-text-grey">
         Desarrollado por FeedFlow · 2025
       </p>
-</footer>
-<!-- 🔧 FF-BLOCK-11: VISUAL PROMPT REFERENCIA -->
-<script>
+    </footer>
+    <!-- 🔧 FF-BLOCK-11: VISUAL PROMPT REFERENCIA -->
+    <script>
       function construirPromptVisual(idea) {
         return `Estilo: ${idea.style || "ilustración vectorial"}, fondo: ${idea.background || "minimalista"}, personaje: ${idea.character || "joven usando celular"}, emoción: ${idea.emotion || "inspiración"}, red social: ${idea.platform || "TikTok"}, orientación: vertical.`;
       }
     </script>
-<!-- 🔧 FF-BLOCK-12: ADMIN AVANZADO -->
-<script type="module">
+    <!-- 🔧 FF-BLOCK-12: ADMIN AVANZADO -->
+    <script type="module">
       async function validarAdmin(uid) {
         const userRef = doc(db, "users", uid);
         const userSnap = await getDoc(userRef);
@@ -846,8 +761,8 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
       document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
 
     </script>
-<!-- 🔧 FF-BLOCK-13: CIERRE HTML -->
-<script type="module">
+    <!-- 🔧 FF-BLOCK-13: CIERRE HTML -->
+    <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
       import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
@@ -872,6 +787,8 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
         }
       });
     </script>
+
+  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -900,30 +817,6 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
   });
 </script>
 
-
-
-<!-- Contenedor para mostrar las ideas generadas -->
-<section class="section" id="ideas-section" style="display:none;">
-  <div class="container">
-    <h2 class="title is-4">💡 Ideas Generadas</h2>
-    <div id="ideas-output" class="box has-background-light"></div>
-    <button class="button is-link mt-4" onclick="document.getElementById('ideas-section').style.display='none';">Cerrar</button>
-  </div>
-</section>
-
-<script>
-  function mostrarIdeas(ideas) {
-    const output = document.getElementById("ideas-output");
-    output.innerHTML = "";
-    ideas.forEach((idea, index) => {
-      const div = document.createElement("div");
-      div.className = "content mb-3";
-      div.innerHTML = `<strong>${index + 1}.</strong> ${idea}`;
-      output.appendChild(div);
-    });
-    document.getElementById("ideas-section").style.display = "block";
-  }
-</script>
-
 </body>
-</html>
+
+  </html>
