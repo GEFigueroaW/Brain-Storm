@@ -460,148 +460,106 @@
     document.getElementById("ff-copytype").addEventListener("change", updateCopyTypeDescription);
     document.addEventListener("DOMContentLoaded", updateCopyTypeDescription); 
   </script>
-  <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getAuth,
-      signInWithPopup,
-      GoogleAuthProvider,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc, setDoc, getDoc, updateDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { httpsCallable, getFunctions } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
+<!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
-      authDomain: "brain-storm-8f0d8.firebaseapp.com",
-      databaseURL: "https://brain-storm-8f0d8-default-rtdb.firebaseio.com",
-      projectId: "brain-storm-8f0d8",
-      storageBucket: "brain-storm-8f0d8.appspot.com",
-      messagingSenderId: "401208607043",
-      appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
+    authDomain: "brain-storm-8f0d8.firebaseapp.com",
+    projectId: "brain-storm-8f0d8",
+    storageBucket: "brain-storm-8f0d8.appspot.com",
+    messagingSenderId: "401208607043",
+    appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const functions = getFunctions(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  const functions = getFunctions(app);
+  const db = getFirestore(app);
 
-    let sessionId = Date.now().toString();
-    let deviceId = localStorage.getItem('ff-device-id') || crypto.randomUUID();
-    localStorage.setItem('ff-device-id', deviceId);
-
-    async function registerSession(user) {
-      const register = httpsCallable(functions, 'registerUserSession');
-      await register({ uid: user.uid, sessionId, deviceId });
-    }
-
-    async function checkSession(user) {
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-      if (userSnap.exists()) {
-        const sessions = userSnap.data().sessions || [];
-        const isSessionValid = sessions.some(s => s.sessionId === sessionId && s.deviceId === deviceId);
-        if (!isSessionValid) {
-          alert("Se cerró la sesión en este dispositivo.");
-          await signOut(auth);
-          location.reload();
-        }
-      }
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await registerSession(user);
-        await checkSession(user);
-        document.getElementById("ff-auth-view").classList.add("is-hidden");
-        document.getElementById("ff-config-view").classList.remove("is-hidden");
-      } else {
-        document.getElementById("ff-auth-view").classList.remove("is-hidden");
-        document.getElementById("ff-config-view").classList.add("is-hidden");
-        document.getElementById("ff-results-view").classList.add("is-hidden");
-      }
-    });
-    document.getElementById("ff-logout-btn")?.addEventListener("click", () => {
-      signOut(auth).then(() => location.reload());
-    });
-
-    document.getElementById("ff-google-login").addEventListener("click", async () => {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-    });
-  </script>
-  <!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
-  <script type="module">
-    document.getElementById("ff-generate-btn").addEventListener("click", async () => {
-      const keyword = document.getElementById("ff-keyword").value;
-      const copyType = document.getElementById("ff-copytype").value;
-      const mode = document.getElementById("ff-mode-selector").value;
-      const language = localStorage.getItem('ff-lang') || 'es';
-      const socialElems = document.querySelectorAll(".ff-social:checked");
-      const socialNetworks = Array.from(socialElems).map(e => e.value);
-
-      if (!keyword || socialNetworks.length === 0) {
-        alert("Por favor, completa los campos requeridos.");
-        return;
-      }
-
-      const generateIdeas = firebase.functions().httpsCallable('generateIdeas');
-      try {
-        const result = await generateIdeas({
-          keyword,
-          copyType,
-          mode,
-          language,
-          socialNetworks,
-          sessionId
-        });
-
-        const ideas = result.data.ideas;
-        const container = document.getElementById("ff-results");
-        container.innerHTML = "";
-
-        ideas.forEach((idea, idx) => {
-          const ideaBox = document.createElement("div");
-          ideaBox.className = "box";
-
-          ideaBox.innerHTML = `
-          <h3 class="title is-5">Idea ${idx + 1}</h3>
-          <p><strong>Gancho:</strong> ${idea.hook}</p>
-          <p><strong>Ángulo:</strong> ${idea.angle}</p>
-          <p><strong>Texto:</strong><br>${idea.body}</p>
-          <p><strong>Llamado a la acción (CTA):</strong> ${idea.cta}</p>
-          <p><strong>Frase motivacional final:</strong> ${idea.motivation}</p>
-          <p><strong>Hashtags:</strong> ${idea.hashtags?.join(" ")}</p>
-          <p><strong>📌 Formato visual sugerido:</strong><br><em>${idea.visual}</em></p>
-          <div class="mt-2 has-text-right">
-            <button class="button is-small is-info ff-feedback-btn" data-feedback="like">👍</button>
-            <button class="button is-small is-danger ff-feedback-btn" data-feedback="dislike">👎</button>
-          </div>
-        `;
-
-          container.appendChild(ideaBox);
-        });
-
-        document.getElementById("ff-config-view").classList.add("is-hidden");
-        document.getElementById("ff-results-view").classList.remove("is-hidden");
-
-      } catch (error) {
-        console.error("Error al generar ideas:", error);
-        alert("Ocurrió un error al generar ideas. Intenta de nuevo.");
-      }
-    });
-
-    document.getElementById("ff-back-to-config").addEventListener("click", () => {
-      document.getElementById("ff-results-view").classList.add("is-hidden");
+  document.getElementById("ff-google-login").addEventListener("click", async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      document.getElementById("ff-auth-view").classList.add("is-hidden");
       document.getElementById("ff-config-view").classList.remove("is-hidden");
-    });
-  </script>
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+      alert("Error al iniciar sesión. Intenta de nuevo.");
+    }
+  });
 
+  document.getElementById("ff-logout-btn").addEventListener("click", async () => {
+    try {
+      await signOut(auth);
+      document.getElementById("ff-config-view").classList.add("is-hidden");
+      document.getElementById("ff-auth-view").classList.remove("is-hidden");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  });
+
+  async function generateIdeas() {
+    const user = auth.currentUser;
+    const keyword = document.getElementById("ff-keyword").value.trim();
+    const copytype = document.getElementById("ff-copytype").value;
+    const language = localStorage.getItem("ff-lang") || "es";
+    const mode = document.getElementById("ff-mode-selector").value;
+    const networkCheckboxes = document.querySelectorAll(".ff-social:checked");
+    const networks = Array.from(networkCheckboxes).map(el => el.value);
+
+    if (!user || !keyword || !copytype || !mode || networks.length === 0) {
+      alert("Por favor, completa los campos requeridos.");
+      return;
+    }
+
+    const container = document.getElementById("ff-results-container");
+    container.innerHTML = `<div class="notification is-info">Generando ideas...</div>`;
+
+    try {
+      const generateIdeasFn = httpsCallable(functions, "generateIdeas");
+      const response = await generateIdeasFn({ keyword, copytype, language, networks, mode });
+
+      if (response.data.success && response.data.ideas.length > 0) {
+        container.innerHTML = "";
+        response.data.ideas.forEach((idea, index) => {
+          const card = document.createElement("div");
+          card.className = "card mb-3 p-3";
+
+          const content = document.createElement("div");
+          content.className = "content";
+          content.innerHTML = `<strong>Idea ${index + 1}:</strong> ${idea.text}`;
+
+          const copyBtn = document.createElement("button");
+          copyBtn.className = "button is-small is-success mt-2";
+          copyBtn.textContent = "Copiar";
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(idea.text);
+            alert("¡Texto copiado!");
+          };
+
+          card.appendChild(content);
+          card.appendChild(copyBtn);
+          container.appendChild(card);
+        });
+      } else {
+        container.innerHTML = `<div class="notification is-warning">No se generaron ideas. Intenta con otra palabra clave.</div>`;
+      }
+    } catch (error) {
+      console.error("Error al generar ideas:", error);
+      container.innerHTML = `<div class="notification is-danger">Hubo un error al generar las ideas.</div>`;
+    }
+  }
+
+  window.generateIdeas = generateIdeas;
+</script>
+
+  <!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
   <script type="module">
     const modeSelector = document.getElementById("ff-mode-selector");
     const socialCheckboxes = document.querySelectorAll(".ff-social");
