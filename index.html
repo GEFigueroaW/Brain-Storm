@@ -901,5 +901,29 @@ Elige el idioma para la interfaz y las ideas generadas. <br/>
 </script>
 
 
+
+<!-- Contenedor para mostrar las ideas generadas -->
+<section class="section" id="ideas-section" style="display:none;">
+  <div class="container">
+    <h2 class="title is-4">💡 Ideas Generadas</h2>
+    <div id="ideas-output" class="box has-background-light"></div>
+    <button class="button is-link mt-4" onclick="document.getElementById('ideas-section').style.display='none';">Cerrar</button>
+  </div>
+</section>
+
+<script>
+  function mostrarIdeas(ideas) {
+    const output = document.getElementById("ideas-output");
+    output.innerHTML = "";
+    ideas.forEach((idea, index) => {
+      const div = document.createElement("div");
+      div.className = "content mb-3";
+      div.innerHTML = `<strong>${index + 1}.</strong> ${idea}`;
+      output.appendChild(div);
+    });
+    document.getElementById("ideas-section").style.display = "block";
+  }
+</script>
+
 </body>
 </html>
