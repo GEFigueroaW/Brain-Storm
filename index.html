@@ -788,6 +788,35 @@
       });
     </script>
 
-  </body>
+  
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFunctions } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
+    authDomain: "brain-storm-8f0d8.firebaseapp.com",
+    projectId: "brain-storm-8f0d8",
+    storageBucket: "brain-storm-8f0d8.appspot.com",
+    messagingSenderId: "401208607043",
+    appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const functions = getFunctions(app);
+
+  onAuthStateChanged(auth, (user) => {
+    const btn = document.getElementById("ff-generate-btn");
+    if (btn) {
+      btn.disabled = !user;
+    }
+    window.auth = auth;
+    window.functions = functions;
+  });
+</script>
+
+</body>
 
   </html>
