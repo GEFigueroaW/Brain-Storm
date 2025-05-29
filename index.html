@@ -52,8 +52,8 @@
   <!-- 🔧 FF-BLOCK-3: ESTRUCTURA HTML -->
   <section id="ff-auth-view" class="ff-section">
     <div class="container">
-    <h2 class="title is-4" id="title-results">Ideas generadas</h2>
-    <div id="ff-results-container" class="mt-4"></div>
+      <h2 class="title is-4" id="title-results">Ideas generadas</h2>
+      <div id="ff-results-container" class="mt-4"></div>
       <h1 class="title has-text-centered ff-logo">FeedFlow</h1>
       <p class="subtitle has-text-centered" id="auth-title">Inicia sesión para comenzar</p>
       <div class="box has-background-light mt-4">
@@ -80,9 +80,9 @@
           <span class="icon"><i class="fab fa-google"></i></span>
           <span>Google</span>
         </button>
-<div id="ff-loading" class="notification is-warning is-light is-hidden animate__animated animate__fadeIn">
-  <strong>Generando ideas...</strong> Por favor, espera un momento.
-</div>
+        <div id="ff-loading" class="notification is-warning is-light is-hidden animate__animated animate__fadeIn">
+          <strong>Generando ideas...</strong> Por favor, espera un momento.
+        </div>
       </div>
 
       <p id="toggle-auth-text" class="has-text-centered mt-4"></p>
@@ -171,10 +171,16 @@
           </div>
         </div>
 
-     <button id="ff-generate-btn" onclick="generateIdeas()" class="button is-primary is-fullwidth">
-  Generar ideas
-</button>
-      </div>
+        <!-- Espacio para evitar solapamiento con botón fijo -->
+        <div style="margin-bottom: 6rem;"></div>
+
+        <!-- Botón flotante corregido -->
+        <div class="field">
+          <button id="ff-generate-btn" onclick="generateIdeas()" class="button is-primary is-fullwidth"
+            style="position: fixed; bottom: 1rem; left: 1rem; right: 1rem; z-index: 100;">
+            Generar ideas
+          </button>
+        </div>
   </section>
 
   <section id="ff-results-view" class="section is-hidden">
