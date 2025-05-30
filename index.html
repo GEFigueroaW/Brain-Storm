@@ -531,8 +531,6 @@
 
         console.log("✅ Respuesta recibida:", response);
 
-        const response = await generateIdeasFn({ keyword, copytype, language, networks, mode });
-
         if (response.data.success && response.data.ideas.length > 0) {
           container.innerHTML = "";
           response.data.ideas.forEach((idea, index) => {
