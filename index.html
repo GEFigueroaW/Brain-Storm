@@ -1,827 +1,822 @@
-<!-- 🔧 FF-BLOCK-1: HTML BASE Y METADATOS -->
-<!DOCTYPE html>
-<html lang="es">
+  <!-- 🔧 FF-BLOCK-1: HTML BASE Y METADATOS -->
+  <!DOCTYPE html>
+  <html lang="es">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="Genera ideas impactantes para redes sociales con IA. Usa FeedFlow, una app creativa, profesional y visualmente atractiva." />
-  <title>FeedFlow – Ideas con IA</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <!-- 🔧 FF-BLOCK-2: LIBRERÍAS CSS Y ESTILO -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    :root {
-      --ff-morado: #8e44ad;
-      --ff-dorado: #f1c40f;
-      --ff-fondo: #fdfdfd;
-      --ff-degradado: linear-gradient(to right, #8e44ad, #f39c12);
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+      content="Genera ideas impactantes para redes sociales con IA. Usa FeedFlow, una app creativa, profesional y visualmente atractiva." />
+    <title>FeedFlow – Ideas con IA</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <!-- 🔧 FF-BLOCK-2: LIBRERÍAS CSS Y ESTILO -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+      :root {
+        --ff-morado: #8e44ad;
+        --ff-dorado: #f1c40f;
+        --ff-fondo: #fdfdfd;
+        --ff-degradado: linear-gradient(to right, #8e44ad, #f39c12);
+      }
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--ff-fondo);
-      color: #333;
-    }
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background: var(--ff-fondo);
+        color: #333;
+      }
 
-    .ff-logo {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--ff-morado);
-    }
+      .ff-logo {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--ff-morado);
+      }
 
-    .ff-gradient {
-      background: var(--ff-degradado);
-      color: white;
-    }
+      .ff-gradient {
+        background: var(--ff-degradado);
+        color: white;
+      }
 
-    .ff-section {
-      padding: 2rem 1rem;
-    }
+      .ff-section {
+        padding: 2rem 1rem;
+      }
 
-    .is-hidden {
-      display: none !important;
-    }
-  </style>
-</head>
+      .is-hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
 
-<body>
-  <!-- 🔧 FF-BLOCK-3: ESTRUCTURA HTML -->
-  <section id="ff-auth-view" class="ff-section">
-    <div class="container">
-      <h2 class="title is-4" id="title-results">Ideas generadas</h2>
-      <div id="ff-results-container" class="mt-4"></div>
-      <h1 class="title has-text-centered ff-logo">FeedFlow</h1>
-      <p class="subtitle has-text-centered" id="auth-title">Inicia sesión para comenzar</p>
-      <div class="box has-background-light mt-4">
-        <label class="label" id="ff-label-language-app">Idioma de la aplicación</label>
-        <div class="control">
-          <div class="select is-fullwidth">
-            <select id="ff-auth-language-selector"
-              title="Elige el idioma para la interfaz y las ideas generadas. / Select the language for the interface and generated ideas. / Escolha o idioma da interface e das ideias geradas.">
-              <option value="es">Español</option>
-              <option value="en">English</option>
-              <option value="pt">Português</option>
-            </select>
+  <body>
+    <!-- 🔧 FF-BLOCK-3: ESTRUCTURA HTML -->
+    <section id="ff-auth-view" class="ff-section">
+      <div class="container">
+        <h2 class="title is-4" id="title-results">Ideas generadas</h2>
+        <div id="ff-results-container" class="mt-4"></div>
+        <h1 class="title has-text-centered ff-logo">FeedFlow</h1>
+        <p class="subtitle has-text-centered" id="auth-title">Inicia sesión para comenzar</p>
+        <div class="box has-background-light mt-4">
+          <label class="label" id="ff-label-language-app">Idioma de la aplicación</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select id="ff-auth-language-selector"
+                title="Elige el idioma para la interfaz y las ideas generadas. / Select the language for the interface and generated ideas. / Escolha o idioma da interface e das ideias geradas.">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="pt">Português</option>
+              </select>
+            </div>
           </div>
+          <p class="help mt-1">
+            </em>Elige el idioma para la interfaz y las ideas generadas. </em><br>
+            <em>Select the language for the interface and generated ideas.</em><br>
+            <em>Escolha o idioma da interface e das ideias geradas.</em>
+          </p>
         </div>
-        <p class="help mt-1">
-          </em>Elige el idioma para la interfaz y las ideas generadas. </em><br>
-          <em>Select the language for the interface and generated ideas.</em><br>
-          <em>Escolha o idioma da interface e das ideias geradas.</em>
-        </p>
-      </div>
 
-      <div class="buttons is-centered">
-        <button id="ff-google-login" class="button is-light">
-          <span class="icon"><i class="fab fa-google"></i></span>
-          <span>Google</span>
-        </button>
-        <div id="ff-loading" class="notification is-warning is-light is-hidden animate__animated animate__fadeIn">
-          <strong>Generando ideas...</strong> Por favor, espera un momento.
-        </div>
-      </div>
-
-      <p id="toggle-auth-text" class="has-text-centered mt-4"></p>
-
-    </div>
-  </section>
-
-  <!-- Modo de generación -->
-  <section id="ff-config-view" class="ff-section is-hidden">
-    <div class="container">
-      <div class="is-flex is-justify-content-flex-end">
-        <button id="ff-logout-btn" class="button is-small is-danger">Cerrar sesión</button>
-      </div>
-      <h2 class="title" id="ff-title-config">Configura tu idea</h2>
-      <div class="field">
-        <label id="ff-label-generationmode">¿Cómo quieres generar las ideas?</label>
-        <div class="control">
-          <div class="select">
-            <select id="ff-mode-selector">
-              <option value="multired" data-key="opt-multired">Una idea por cada red social (Multired)</option>
-              <option value="individual" data-key="opt-individual">Tres ideas para una sola red (Individual)</option>
-            </select>
-          </div>
-        </div>
-        <p class="help mt-1" id="ff-mode-help">Selecciona: 3 propuestas una red, o varias redes para una idea por cada
-          una</p>
-        </p>
-      </div>
-
-      <!-- Tipo de publicación -->
-      <div class="field">
-        <label id="ff-label-keyword">Tema o palabra clave</label>
-        <div class="control"><input id="ff-keyword" class="input" type="text"></div>
-      </div>
-
-      <div class="field mt-4">
-        <label class="label" id="ff-label-copytype">Tipo de publicación</label>
-        <div class="control">
-          <div class="select is-fullwidth">
-            <select id="ff-copytype" required>
-              <option value="de beneficio y solucion" data-key="opt-de beneficio y solucion">De beneficio y solución
-              </option>
-              <option value="de novedad o lanzamiento" data-key="opt-de novedad o lanzamiento">De novedad o lanzamiento
-              </option>
-              <option value="de interaccion o pregunta" data-key="opt-de interaccion o pregunta">De interacción o
-                pregunta</option>
-              <option value="de urgencia o escacez" data-key="opt-de urgencia o escacez">De urgencia o escasez</option>
-              <option value="informativo o educativo" data-key="opt-informativo o educativo">Informativo o educativo
-              </option>
-              <option value="informal" data-key="opt-informal">Informal</option>
-              <option value="llamada a la Acción (CTA)" data-key="opt-llamada a la Acción (CTA)">Llamada a la Acción
-                (CTA)</option>
-              <option value="narrativo o storytelling" data-key="opt-narrativo o storytelling">Narrativo o storytelling
-              </option>
-              <option value="posicionamiento o branding" data-key="opt-posicionamiento o branding">Posicionamiento o
-                branding</option>
-              <option value="testimonio o prueba" data-key="opt-testimonio o prueba social">Testimonio o prueba</option>
-              <option value="técnico o profesional" data-key="opt-técnico o profesional">Técnico o profesional</option>
-              <option value="venta directa o persuasivo" data-key="opt-venta directa o persuasivo">Venta directa o
-                persuasivo</option>
-            </select>
-          </div>
-        </div>
-        <p id="ff-copytype-description" class="help is-info mt-2 mb-4"></p>
-      </div>
-
-      <!-- Redes sociales -->
-      <div class="field mt-4">
-        <label class="label" id="ff-label-networks">Redes sociales</label>
-        <p id="ff-help-networks" class="help mb-1">Selecciona una o más redes sociales según el modo elegido</p>
-        <div class="control">
-          <div class="buttons are-small is-flex is-flex-wrap-wrap" id="ff-networks-container">
-            <label class="checkbox mr-3"><input type="checkbox" value="Facebook" class="ff-social"> Facebook</label>
-            <label class="checkbox mr-3"><input type="checkbox" value="X / Twitter" class="ff-social"> X /
-              Twitter</label>
-            <label class="checkbox mr-3"><input type="checkbox" value="LinkedIn" class="ff-social"> LinkedIn</label>
-            <label class="checkbox mr-3"><input type="checkbox" value="WhatsApp" class="ff-social"> WhatsApp</label>
-            <label class="checkbox mr-3"><input type="checkbox" value="Telegram" class="ff-social"> Telegram</label>
-            <label class="checkbox mr-3"><input type="checkbox" value="Reddit" class="ff-social"> Reddit</label>
-            <label class="checkbox mr-3"><input type="checkbox" value="Instagram" class="ff-social"> Instagram</label>
-            <label class="checkbox mr-3"><input type="checkbox" value="TikTok" class="ff-social"> TikTok</label>
-            <label class="checkbox"><input type="checkbox" value="YouTube" class="ff-social"> YouTube</label>
+        <div class="buttons is-centered">
+          <button id="ff-google-login" class="button is-light">
+            <span class="icon"><i class="fab fa-google"></i></span>
+            <span>Google</span>
+          </button>
+          <div id="ff-loading" class="notification is-warning is-light is-hidden animate__animated animate__fadeIn">
+            <strong>Generando ideas...</strong> Por favor, espera un momento.
           </div>
         </div>
 
-        <!-- Espacio para evitar solapamiento con botón fijo -->
-        <div style="margin-bottom: 6rem;"></div>
+        <p id="toggle-auth-text" class="has-text-centered mt-4"></p>
 
-        <!-- Botón flotante corregido -->
+      </div>
+    </section>
+
+    <!-- Modo de generación -->
+    <section id="ff-config-view" class="ff-section is-hidden">
+      <div class="container">
+        <div class="is-flex is-justify-content-flex-end">
+          <button id="ff-logout-btn" class="button is-small is-danger">Cerrar sesión</button>
+        </div>
+        <h2 class="title" id="ff-title-config">Configura tu idea</h2>
         <div class="field">
-          <button id="ff-generate-btn" onclick="generateIdeas()">Generar ideas</button>
-
+          <label id="ff-label-generationmode">¿Cómo quieres generar las ideas?</label>
+          <div class="control">
+            <div class="select">
+              <select id="ff-mode-selector">
+                <option value="multired" data-key="opt-multired">Una idea por cada red social (Multired)</option>
+                <option value="individual" data-key="opt-individual">Tres ideas para una sola red (Individual)</option>
+              </select>
+            </div>
+          </div>
+          <p class="help mt-1" id="ff-mode-help">Selecciona: 3 propuestas una red, o varias redes para una idea por cada
+            una</p>
+          </p>
         </div>
-  </section>
 
-  <section id="ff-results-view" class="section is-hidden">
-    <div class="container">
-      <h2 class="title" id="ff-title-results">Ideas generadas</h2>
-      <div id="ff-results"></div>
-      <button id="ff-back-to-config" class="button mt-4">Volver</button>
-    </div>
-  </section>
-  <!-- Modal Feedback -->
-  <div class="modal" id="ff-feedback-modal">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-      <div class="box">
-        <p>¿Esta idea te fue útil?</p>
-        <div class="buttons is-centered mt-3">
-          <button class="button is-success ff-feedback-btn" data-feedback="like"><i
-              class="fas fa-thumbs-up"></i></button>
-          <button class="button is-danger ff-feedback-btn" data-feedback="dislike"><i
-              class="fas fa-thumbs-down"></i></button>
+        <!-- Tipo de publicación -->
+        <div class="field">
+          <label id="ff-label-keyword">Tema o palabra clave</label>
+          <div class="control"><input id="ff-keyword" class="input" type="text"></div>
+        </div>
+
+        <div class="field mt-4">
+          <label class="label" id="ff-label-copytype">Tipo de publicación</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select id="ff-copytype" required>
+                <option value="de beneficio y solucion" data-key="opt-de beneficio y solucion">De beneficio y solución
+                </option>
+                <option value="de novedad o lanzamiento" data-key="opt-de novedad o lanzamiento">De novedad o lanzamiento
+                </option>
+                <option value="de interaccion o pregunta" data-key="opt-de interaccion o pregunta">De interacción o
+                  pregunta</option>
+                <option value="de urgencia o escacez" data-key="opt-de urgencia o escacez">De urgencia o escasez</option>
+                <option value="informativo o educativo" data-key="opt-informativo o educativo">Informativo o educativo
+                </option>
+                <option value="informal" data-key="opt-informal">Informal</option>
+                <option value="llamada a la Acción (CTA)" data-key="opt-llamada a la Acción (CTA)">Llamada a la Acción
+                  (CTA)</option>
+                <option value="narrativo o storytelling" data-key="opt-narrativo o storytelling">Narrativo o storytelling
+                </option>
+                <option value="posicionamiento o branding" data-key="opt-posicionamiento o branding">Posicionamiento o
+                  branding</option>
+                <option value="testimonio o prueba" data-key="opt-testimonio o prueba social">Testimonio o prueba</option>
+                <option value="técnico o profesional" data-key="opt-técnico o profesional">Técnico o profesional</option>
+                <option value="venta directa o persuasivo" data-key="opt-venta directa o persuasivo">Venta directa o
+                  persuasivo</option>
+              </select>
+            </div>
+          </div>
+          <p id="ff-copytype-description" class="help is-info mt-2 mb-4"></p>
+        </div>
+
+        <!-- Redes sociales -->
+        <div class="field mt-4">
+          <label class="label" id="ff-label-networks">Redes sociales</label>
+          <p id="ff-help-networks" class="help mb-1">Selecciona una o más redes sociales según el modo elegido</p>
+          <div class="control">
+            <div class="buttons are-small is-flex is-flex-wrap-wrap" id="ff-networks-container">
+              <label class="checkbox mr-3"><input type="checkbox" value="Facebook" class="ff-social"> Facebook</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="X / Twitter" class="ff-social"> X /
+                Twitter</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="LinkedIn" class="ff-social"> LinkedIn</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="WhatsApp" class="ff-social"> WhatsApp</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="Telegram" class="ff-social"> Telegram</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="Reddit" class="ff-social"> Reddit</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="Instagram" class="ff-social"> Instagram</label>
+              <label class="checkbox mr-3"><input type="checkbox" value="TikTok" class="ff-social"> TikTok</label>
+              <label class="checkbox"><input type="checkbox" value="YouTube" class="ff-social"> YouTube</label>
+            </div>
+          </div>
+
+          <!-- Espacio para evitar solapamiento con botón fijo -->
+          <div style="margin-bottom: 6rem;"></div>
+
+          <!-- Botón flotante corregido -->
+          <div class="field">
+            <button id="ff-generate-btn" onclick="generateIdeas()" class="button is-primary is-fullwidth">
+              Generar ideas
+            </button>
+          </div>
+    </section>
+
+    <section id="ff-results-view" class="section is-hidden">
+      <div class="container">
+        <h2 class="title" id="ff-title-results">Ideas generadas</h2>
+        <div id="ff-results"></div>
+        <button id="ff-back-to-config" class="button mt-4">Volver</button>
+      </div>
+    </section>
+    <!-- Modal Feedback -->
+    <div class="modal" id="ff-feedback-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <p>¿Esta idea te fue útil?</p>
+          <div class="buttons is-centered mt-3">
+            <button class="button is-success ff-feedback-btn" data-feedback="like"><i
+                class="fas fa-thumbs-up"></i></button>
+            <button class="button is-danger ff-feedback-btn" data-feedback="dislike"><i
+                class="fas fa-thumbs-down"></i></button>
+          </div>
         </div>
       </div>
+      <button class="modal-close is-large" aria-label="close" id="ff-close-feedback"></button>
     </div>
-    <button class="modal-close is-large" aria-label="close" id="ff-close-feedback"></button>
-  </div>
 
-  <section id="ff-admin-view" class="ff-section is-hidden">
-    <div class="container">
-      <h2 class="title">Control Admin – Premium Global</h2>
-      <div class="field">
-        <label class="checkbox"><input type="checkbox" id="ff-toggle-premium-global"> Activar Premium Global</label>
+    <section id="ff-admin-view" class="ff-section is-hidden">
+      <div class="container">
+        <h2 class="title">Control Admin – Premium Global</h2>
+        <div class="field">
+          <label class="checkbox"><input type="checkbox" id="ff-toggle-premium-global"> Activar Premium Global</label>
+        </div>
+        <div class="field">
+          <label class="label">Fecha de expiración</label>
+          <div class="control"><input type="datetime-local" id="ff-premium-end-date" class="input"></div>
+        </div>
+        <button id="ff-set-premium-btn" class="button is-warning mt-2">Actualizar</button>
+        <p id="ff-premium-status-text" class="mt-3"></p>
       </div>
-      <div class="field">
-        <label class="label">Fecha de expiración</label>
-        <div class="control"><input type="datetime-local" id="ff-premium-end-date" class="input"></div>
-      </div>
-      <button id="ff-set-premium-btn" class="button is-warning mt-2">Actualizar</button>
-      <p id="ff-premium-status-text" class="mt-3"></p>
-    </div>
-  </section>
-  <!-- FF-BLOCK-4: TRADUCCIONES INTERNACIONALES -->
-  <script>
-    const copyTypeDescriptions = {
-      es: {
-        "de beneficio y solucion": "Enfocado en destacar cómo tu producto o servicio mejora la vida del usuario.",
-        "de novedad o lanzamiento": "Presenta un producto o idea recién lanzada, resaltando lo innovador.",
-        "de interaccion o pregunta": "Diseñado para generar participación: preguntas, encuestas, etc.",
-        "de urgencia o escacez": "Crea presión de tiempo o disponibilidad para motivar acción rápida.",
-        "informativo o educativo": "Comparte conocimientos o datos útiles, de forma clara y educativa.",
-        "informal": "Tono relajado, cercano, ideal para conectar de forma humana.",
-        "llamada a la Acción (CTA)": "Texto directo que incita a tomar una acción concreta (compra, clic, etc).",
-        "narrativo o storytelling": "Cuenta una historia breve para conectar emocionalmente.",
-        "posicionamiento o branding": "Refuerza la identidad, valores o personalidad de marca.",
-        "testimonio o prueba": "Usa experiencias reales para generar confianza.",
-        "técnico o profesional": "Contenido especializado, preciso y profesional.",
-        "venta directa o persuasivo": "Enfocado en cerrar ventas o generar conversiones."
-      },
-      en: {
-        "de beneficio y solucion": "Highlights how your product or service improves the user's life.",
-        "de novedad o lanzamiento": "Presents a newly launched product or idea, emphasizing innovation.",
-        "de interaccion o pregunta": "Designed to spark engagement: questions, polls, etc.",
-        "de urgencia o escacez": "Creates time or availability pressure to motivate quick action.",
-        "informativo o educativo": "Shares useful knowledge or data in a clear, educational way.",
-        "informal": "Relaxed, friendly tone to connect more personally.",
-        "llamada a la Acción (CTA)": "Direct text encouraging a specific action (buy, click, etc).",
-        "narrativo o storytelling": "Tells a short story to create an emotional connection.",
-        "posicionamiento o branding": "Reinforces brand identity, values or personality.",
-        "testimonio o prueba": "Uses real experiences to build trust.",
-        "técnico o profesional": "Specialized, precise, professional content.",
-        "venta directa o persuasivo": "Focused on driving sales or conversions."
-      },
-      pt: {
-        "de beneficio y solucion": "Destaca como seu produto ou serviço melhora a vida do usuário.",
-        "de novedad o lanzamiento": "Apresenta um produto ou ideia recém-lançada, com ênfase na inovação.",
-        "de interaccion o pregunta": "Projetado para gerar interação: perguntas, enquetes, etc.",
-        "de urgencia o escacez": "Cria urgência para incentivar ação rápida.",
-        "informativo o educativo": "Compartilha conhecimento ou dados úteis de forma clara e educativa.",
-        "informal": "Tom descontraído e próximo para criar conexão humana.",
-        "llamada a la Acción (CTA)": "Texto direto que incentiva uma ação específica (compra, clique etc.).",
-        "narrativo o storytelling": "Conta uma breve história para criar conexão emocional.",
-        "posicionamiento o branding": "Reforça identidade, valores ou personalidade da marca.",
-        "testimonio o prueba": "Usa experiências reais para gerar confiança.",
-        "técnico o profesional": "Conteúdo técnico, preciso e profissional.",
-        "venta directa o persuasivo": "Focado em fechar vendas ou gerar conversões."
-      }
-    };
-    const translations = {
-      es: {
-        'auth-title': 'Inicia sesión para comenzar',
-        'generate': 'Generar ideas',
-        'back': 'Volver',
-        'logout': 'Cerrar sesión',
-        'loading': 'Generando ideas...',
-        'copy-success': '¡Texto copiado!',
-        'label-keyword': 'Tema o palabra clave',
-        'label-copytype': 'Tipo de publicación',
-        'label-language': 'Idioma de la idea',
-        'label-networks': 'Redes sociales',
-        'opt-de beneficio y solucion': 'De beneficio y solucion',
-        'opt-de novedad o lanzamiento': 'De novedad o lanzamiento',
-        'opt-de interaccion o pregunta': 'De interaccion o pregunta',
-        'opt-de urgencia o escacez': 'De urgencia o escacez',
-        'opt-informativo o educativo': 'Informativo o educativo',
-        'opt-informal': 'Informal',
-        'opt-llamada a la Acción (CTA)': 'Llamada a la Acción (CTA)',
-        'opt-narrativo o storytelling': 'Narrativo o storytelling',
-        'opt-posicionamiento o branding': 'Posicionamiento o branding',
-        'opt-testimonio o prueba social': 'Testimonio o prueba social',
-        'opt-técnico o profesional': 'Técnico o profesional',
-        'opt-venta directa o persuasivo': 'Venta directa o persuasivo',
-        'ff-label-generationmode': '¿Cómo quieres generar las ideas?',
-        'opt-multired': 'Una idea por cada red social (Multired)',
-        'opt-individual': 'Tres ideas para una sola red (Individual)',
-        'title-config': 'Configura tu idea',
-        'help-mode': 'Selecciona: 3 propuestas una red, o varias redes para una idea por cada una.',
-        'title-results': 'Ideas generadas',
-        'feedback-question': '¿Esta idea te fue útil?',
-        'title-admin': 'Control Admin – Premium Global',
-        'label-expiration': 'Fecha de expiración',
-        'label-generationmode': '¿Cómo quieres generar las ideas?',
-        'label-networks': 'Redes sociales',
-        'help-networks': 'Selecciona una o más redes sociales según el modo elegido',
-        'footer-disclaimer': 'Aplicación experimental para generación de ideas en redes sociales. Desarrollado con 💡 en Latinoamérica.',
-        'footer-legal': 'FeedFlow no se hace responsable por los contenidos generados por inteligencia artificial.',
-        'footer-copy': 'Desarrollado por FeedFlow · 2025',
-        'label-language-app': 'Idioma de la aplicación'
-      },
-      en: {
-        'auth-title': 'Log in to get started',
-        'generate': 'Generate ideas',
-        'back': 'Back',
-        'logout': 'Log out',
-        'loading': 'Generating ideas...',
-        'copy-success': 'Text copied!',
-        'label-keyword': 'Topic or keyword',
-        'label-copytype': 'Post type',
-        'label-language': 'Idea language',
-        'label-networks': 'Social networks',
-        'opt-de beneficio y solucion': 'Of benefit and solution',
-        'opt-de novedad o lanzamiento': 'New or launch',
-        'opt-de interaccion o pregunta': 'Of interaction or question',
-        'opt-de urgencia o escacez': 'Urgent or scarce',
-        'opt-informativo o educativo': 'Informative or educational',
-        'opt-informal': 'Informal',
-        'opt-llamada a la Acción (CTA)': 'Call to action (CTA)',
-        'opt-narrativo o storytelling': 'Narrative or storytelling',
-        'opt-posicionamiento o branding': 'Positioning or branding',
-        'opt-testimonio o prueba social': 'Testimony or social proof',
-        'opt-técnico o profesional': 'Technical or professional',
-        'opt-venta directa o persuasivo': 'Direct or persuasive sales',
-        'ff-label-generationmode': 'How do you want to generate ideas?',
-        'opt-multired': 'One idea per social network (Multinet)',
-        'opt-individual': 'Three ideas for one network (Individual)',
-        'title-config': 'Configure your idea',
-        'help-mode': 'Select: 3 ideas for one network, or multiple networks for one idea each.',
-        'title-results': 'Generated ideas',
-        'feedback-question': 'Was this idea helpful?',
-        'title-admin': 'Admin Control – Global Premium',
-        'label-expiration': 'Expiration date',
-        'label-generationmode': 'How do you want to generate ideas?',
-        'label-networks': 'Social networks',
-        'help-networks': 'Select one or more social networks depending on the mode',
-        'footer-disclaimer': 'Experimental app for generating ideas for social media. Built with 💡 in Latin America.',
-        'footer-legal': 'FeedFlow is not responsible for content generated by artificial intelligence.',
-        'footer-copy': 'Developed by FeedFlow · 2025',
-        'label-language-app': 'Application language',
-      },
-      pt: {
-        'auth-title': 'Faça login para começar',
-        'generate': 'Gerar ideias',
-        'back': 'Voltar',
-        'logout': 'Sair',
-        'loading': 'Gerando ideias...',
-        'copy-success': 'Texto copiado!',
-        'label-keyword': 'Tópico ou palavra-chave',
-        'label-copytype': 'Tipo de publicação',
-        'label-language': 'Idioma da ideia',
-        'label-networks': 'Redes sociais',
-        'opt-de beneficio y solucion': 'De benefício e solução',
-        'opt-de novedad o lanzamiento': 'Novo ou lançamento',
-        'opt-de interaccion o pregunta': 'De interação ou pergunta',
-        'opt-de urgencia o escacez': 'Urgente ou escasso',
-        'opt-informativo o educativo': 'Informativo ou educacional',
-        'opt-informal': 'Informal',
-        'opt-llamada a la Acción (CTA)': 'Apelo à ação (CTA)',
-        'opt-narrativo o storytelling': 'Narrativa',
-        'opt-posicionamiento o branding': 'Posicionamento ou branding',
-        'opt-testimonio o prueba social': 'Testemunho ou prova social',
-        'opt-técnico o profesional': 'Técnico ou profissional',
-        'ff-label-generationmode': 'Como você quer gerar as ideias?',
-        'opt-multired': 'Uma ideia por rede social (Multired)',
-        'opt-individual': 'Três ideias para uma rede (Individual)',
-        'title-config': 'Configure sua ideia',
-        'help-mode': 'Selecione: 3 ideias para uma rede, ou várias redes para uma ideia cada.',
-        'title-results': 'Ideias geradas',
-        'feedback-question': 'Esta ideia foi útil?',
-        'title-admin': 'Controle Admin – Premium Global',
-        'label-expiration': 'Data de expiração',
-        'label-generationmode': 'Como você quer gerar as ideias?',
-        'label-networks': 'Redes sociais',
-        'help-networks': 'Selecione uma ou mais redes sociais de acordo com o modo escolhido',
-        'footer-disclaimer': 'Aplicativo experimental para gerar ideias para redes sociais. Desenvolvido com 💡 na América Latina.',
-        'footer-legal': 'A FeedFlow não se responsabiliza pelo conteúdo gerado por inteligência artificial.',
-        'footer-copy': 'Desenvolvido por FeedFlow · 2025',
-        'label-language-app': 'Idioma do aplicativo'
-      }
-    };
-
-    function t(key) {
-      const lang = localStorage.getItem('ff-lang') || 'es';
-      return translations[lang][key] || key;
-    }
-
-    function setLanguage(lang) {
-      localStorage.setItem('ff-lang', lang);
-      document.documentElement.setAttribute('lang', lang);
-
-      const mappings = {
-        'auth-title': 'auth-title',
-        'ff-generate-btn': 'generate',
-        'ff-back-to-config': 'back',
-        'ff-logout-btn': 'logout',
-        'ff-label-copytype': 'label-copytype',
-        'ff-label-language': 'label-language',
-        'ff-label-networks': 'label-networks',
-        'ff-copy-success-msg': 'copy-success',
-        'ff-title-config': 'title-config',
-        'ff-label-generationmode': 'label-generationmode',
-        'ff-mode-help': 'help-mode',
-        'ff-label-keyword': 'label-keyword',
-        'ff-label-networks': 'label-networks',
-        'ff-help-networks': 'help-networks',
-        'ff-footer-disclaimer': 'footer-disclaimer',
-        'ff-footer-legal': 'footer-legal',
-        'ff-footer-copy': 'footer-copy',
-        'ff-label-language-app': 'label-language-app'
+    </section>
+    <!-- FF-BLOCK-4: TRADUCCIONES INTERNACIONALES -->
+    <script>
+      const copyTypeDescriptions = {
+        es: {
+          "de beneficio y solucion": "Enfocado en destacar cómo tu producto o servicio mejora la vida del usuario.",
+          "de novedad o lanzamiento": "Presenta un producto o idea recién lanzada, resaltando lo innovador.",
+          "de interaccion o pregunta": "Diseñado para generar participación: preguntas, encuestas, etc.",
+          "de urgencia o escacez": "Crea presión de tiempo o disponibilidad para motivar acción rápida.",
+          "informativo o educativo": "Comparte conocimientos o datos útiles, de forma clara y educativa.",
+          "informal": "Tono relajado, cercano, ideal para conectar de forma humana.",
+          "llamada a la Acción (CTA)": "Texto directo que incita a tomar una acción concreta (compra, clic, etc).",
+          "narrativo o storytelling": "Cuenta una historia breve para conectar emocionalmente.",
+          "posicionamiento o branding": "Refuerza la identidad, valores o personalidad de marca.",
+          "testimonio o prueba": "Usa experiencias reales para generar confianza.",
+          "técnico o profesional": "Contenido especializado, preciso y profesional.",
+          "venta directa o persuasivo": "Enfocado en cerrar ventas o generar conversiones."
+        },
+        en: {
+          "de beneficio y solucion": "Highlights how your product or service improves the user's life.",
+          "de novedad o lanzamiento": "Presents a newly launched product or idea, emphasizing innovation.",
+          "de interaccion o pregunta": "Designed to spark engagement: questions, polls, etc.",
+          "de urgencia o escacez": "Creates time or availability pressure to motivate quick action.",
+          "informativo o educativo": "Shares useful knowledge or data in a clear, educational way.",
+          "informal": "Relaxed, friendly tone to connect more personally.",
+          "llamada a la Acción (CTA)": "Direct text encouraging a specific action (buy, click, etc).",
+          "narrativo o storytelling": "Tells a short story to create an emotional connection.",
+          "posicionamiento o branding": "Reinforces brand identity, values or personality.",
+          "testimonio o prueba": "Uses real experiences to build trust.",
+          "técnico o profesional": "Specialized, precise, professional content.",
+          "venta directa o persuasivo": "Focused on driving sales or conversions."
+        },
+        pt: {
+          "de beneficio y solucion": "Destaca como seu produto ou serviço melhora a vida do usuário.",
+          "de novedad o lanzamiento": "Apresenta um produto ou ideia recém-lançada, com ênfase na inovação.",
+          "de interaccion o pregunta": "Projetado para gerar interação: perguntas, enquetes, etc.",
+          "de urgencia o escacez": "Cria urgência para incentivar ação rápida.",
+          "informativo o educativo": "Compartilha conhecimento ou dados úteis de forma clara e educativa.",
+          "informal": "Tom descontraído e próximo para criar conexão humana.",
+          "llamada a la Acción (CTA)": "Texto direto que incentiva uma ação específica (compra, clique etc.).",
+          "narrativo o storytelling": "Conta uma breve história para criar conexão emocional.",
+          "posicionamiento o branding": "Reforça identidade, valores ou personalidade da marca.",
+          "testimonio o prueba": "Usa experiências reais para gerar confiança.",
+          "técnico o profesional": "Conteúdo técnico, preciso e profissional.",
+          "venta directa o persuasivo": "Focado em fechar vendas ou gerar conversões."
+        }
+      };
+      const translations = {
+        es: {
+          'auth-title': 'Inicia sesión para comenzar',
+          'generate': 'Generar ideas',
+          'back': 'Volver',
+          'logout': 'Cerrar sesión',
+          'loading': 'Generando ideas...',
+          'copy-success': '¡Texto copiado!',
+          'label-keyword': 'Tema o palabra clave',
+          'label-copytype': 'Tipo de publicación',
+          'label-language': 'Idioma de la idea',
+          'label-networks': 'Redes sociales',
+          'opt-de beneficio y solucion': 'De beneficio y solucion',
+          'opt-de novedad o lanzamiento': 'De novedad o lanzamiento',
+          'opt-de interaccion o pregunta': 'De interaccion o pregunta',
+          'opt-de urgencia o escacez': 'De urgencia o escacez',
+          'opt-informativo o educativo': 'Informativo o educativo',
+          'opt-informal': 'Informal',
+          'opt-llamada a la Acción (CTA)': 'Llamada a la Acción (CTA)',
+          'opt-narrativo o storytelling': 'Narrativo o storytelling',
+          'opt-posicionamiento o branding': 'Posicionamiento o branding',
+          'opt-testimonio o prueba social': 'Testimonio o prueba social',
+          'opt-técnico o profesional': 'Técnico o profesional',
+          'opt-venta directa o persuasivo': 'Venta directa o persuasivo',
+          'ff-label-generationmode': '¿Cómo quieres generar las ideas?',
+          'opt-multired': 'Una idea por cada red social (Multired)',
+          'opt-individual': 'Tres ideas para una sola red (Individual)',
+          'title-config': 'Configura tu idea',
+          'help-mode': 'Selecciona: 3 propuestas una red, o varias redes para una idea por cada una.',
+          'title-results': 'Ideas generadas',
+          'feedback-question': '¿Esta idea te fue útil?',
+          'title-admin': 'Control Admin – Premium Global',
+          'label-expiration': 'Fecha de expiración',
+          'label-generationmode': '¿Cómo quieres generar las ideas?',
+          'label-networks': 'Redes sociales',
+          'help-networks': 'Selecciona una o más redes sociales según el modo elegido',
+          'footer-disclaimer': 'Aplicación experimental para generación de ideas en redes sociales. Desarrollado con 💡 en Latinoamérica.',
+          'footer-legal': 'FeedFlow no se hace responsable por los contenidos generados por inteligencia artificial.',
+          'footer-copy': 'Desarrollado por FeedFlow · 2025',
+          'label-language-app': 'Idioma de la aplicación'
+        },
+        en: {
+          'auth-title': 'Log in to get started',
+          'generate': 'Generate ideas',
+          'back': 'Back',
+          'logout': 'Log out',
+          'loading': 'Generating ideas...',
+          'copy-success': 'Text copied!',
+          'label-keyword': 'Topic or keyword',
+          'label-copytype': 'Post type',
+          'label-language': 'Idea language',
+          'label-networks': 'Social networks',
+          'opt-de beneficio y solucion': 'Of benefit and solution',
+          'opt-de novedad o lanzamiento': 'New or launch',
+          'opt-de interaccion o pregunta': 'Of interaction or question',
+          'opt-de urgencia o escacez': 'Urgent or scarce',
+          'opt-informativo o educativo': 'Informative or educational',
+          'opt-informal': 'Informal',
+          'opt-llamada a la Acción (CTA)': 'Call to action (CTA)',
+          'opt-narrativo o storytelling': 'Narrative or storytelling',
+          'opt-posicionamiento o branding': 'Positioning or branding',
+          'opt-testimonio o prueba social': 'Testimony or social proof',
+          'opt-técnico o profesional': 'Technical or professional',
+          'opt-venta directa o persuasivo': 'Direct or persuasive sales',
+          'ff-label-generationmode': 'How do you want to generate ideas?',
+          'opt-multired': 'One idea per social network (Multinet)',
+          'opt-individual': 'Three ideas for one network (Individual)',
+          'title-config': 'Configure your idea',
+          'help-mode': 'Select: 3 ideas for one network, or multiple networks for one idea each.',
+          'title-results': 'Generated ideas',
+          'feedback-question': 'Was this idea helpful?',
+          'title-admin': 'Admin Control – Global Premium',
+          'label-expiration': 'Expiration date',
+          'label-generationmode': 'How do you want to generate ideas?',
+          'label-networks': 'Social networks',
+          'help-networks': 'Select one or more social networks depending on the mode',
+          'footer-disclaimer': 'Experimental app for generating ideas for social media. Built with 💡 in Latin America.',
+          'footer-legal': 'FeedFlow is not responsible for content generated by artificial intelligence.',
+          'footer-copy': 'Developed by FeedFlow · 2025',
+          'label-language-app': 'Application language',
+        },
+        pt: {
+          'auth-title': 'Faça login para começar',
+          'generate': 'Gerar ideias',
+          'back': 'Voltar',
+          'logout': 'Sair',
+          'loading': 'Gerando ideias...',
+          'copy-success': 'Texto copiado!',
+          'label-keyword': 'Tópico ou palavra-chave',
+          'label-copytype': 'Tipo de publicação',
+          'label-language': 'Idioma da ideia',
+          'label-networks': 'Redes sociais',
+          'opt-de beneficio y solucion': 'De benefício e solução',
+          'opt-de novedad o lanzamiento': 'Novo ou lançamento',
+          'opt-de interaccion o pregunta': 'De interação ou pergunta',
+          'opt-de urgencia o escacez': 'Urgente ou escasso',
+          'opt-informativo o educativo': 'Informativo ou educacional',
+          'opt-informal': 'Informal',
+          'opt-llamada a la Acción (CTA)': 'Apelo à ação (CTA)',
+          'opt-narrativo o storytelling': 'Narrativa',
+          'opt-posicionamiento o branding': 'Posicionamento ou branding',
+          'opt-testimonio o prueba social': 'Testemunho ou prova social',
+          'opt-técnico o profesional': 'Técnico ou profissional',
+          'ff-label-generationmode': 'Como você quer gerar as ideias?',
+          'opt-multired': 'Uma ideia por rede social (Multired)',
+          'opt-individual': 'Três ideias para uma rede (Individual)',
+          'title-config': 'Configure sua ideia',
+          'help-mode': 'Selecione: 3 ideias para uma rede, ou várias redes para uma ideia cada.',
+          'title-results': 'Ideias geradas',
+          'feedback-question': 'Esta ideia foi útil?',
+          'title-admin': 'Controle Admin – Premium Global',
+          'label-expiration': 'Data de expiração',
+          'label-generationmode': 'Como você quer gerar as ideias?',
+          'label-networks': 'Redes sociais',
+          'help-networks': 'Selecione uma ou mais redes sociais de acordo com o modo escolhido',
+          'footer-disclaimer': 'Aplicativo experimental para gerar ideias para redes sociais. Desenvolvido com 💡 na América Latina.',
+          'footer-legal': 'A FeedFlow não se responsabiliza pelo conteúdo gerado por inteligência artificial.',
+          'footer-copy': 'Desenvolvido por FeedFlow · 2025',
+          'label-language-app': 'Idioma do aplicativo'
+        }
       };
 
-      for (const id in mappings) {
-        const el = document.getElementById(id);
-        if (el) el.textContent = t(mappings[id]);
-      }
-    }
-    document.addEventListener("DOMContentLoaded", () => {
-      const currentLang = localStorage.getItem('ff-lang') || 'es';
-      const authLangSelector = document.getElementById('ff-auth-language-selector');
-
-      if (authLangSelector) {
-        authLangSelector.value = currentLang;
-        authLangSelector.addEventListener('change', (e) => {
-          setLanguage(e.target.value);
-        });
+      function t(key) {
+        const lang = localStorage.getItem('ff-lang') || 'es';
+        return translations[lang][key] || key;
       }
 
-      setLanguage(currentLang);
-    });
-    // Traducir dinámicamente las opciones del select de tipo de publicación
-    const copytypeOptions = document.querySelectorAll('#ff-copytype option');
-    copytypeOptions.forEach(opt => {
-      const key = opt.dataset.key;
-      if (key) opt.textContent = t(key);
-    });
-    // Traducir dinámicamente las opciones del selector de modo
-    const modeOptions = document.querySelectorAll('#ff-mode-selector option');
-    modeOptions.forEach(opt => {
-      const key = opt.dataset.key;
-      if (key) opt.textContent = t(key);
-    });
-    function updateCopyTypeDescription() {
-      const lang = localStorage.getItem("ff-lang") || "es";
-      const value = document.getElementById("ff-copytype").value;
-      const desc = copyTypeDescriptions[lang][value] || "";
-      const descEl = document.getElementById("ff-copytype-description");
-      if (descEl) descEl.textContent = desc;
-    }
+      function setLanguage(lang) {
+        localStorage.setItem('ff-lang', lang);
+        document.documentElement.setAttribute('lang', lang);
 
-    document.getElementById("ff-copytype").addEventListener("change", updateCopyTypeDescription);
-    document.addEventListener("DOMContentLoaded", updateCopyTypeDescription); 
-  </script>
-  <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        const mappings = {
+          'auth-title': 'auth-title',
+          'ff-generate-btn': 'generate',
+          'ff-back-to-config': 'back',
+          'ff-logout-btn': 'logout',
+          'ff-label-copytype': 'label-copytype',
+          'ff-label-language': 'label-language',
+          'ff-label-networks': 'label-networks',
+          'ff-copy-success-msg': 'copy-success',
+          'ff-title-config': 'title-config',
+          'ff-label-generationmode': 'label-generationmode',
+          'ff-mode-help': 'help-mode',
+          'ff-label-keyword': 'label-keyword',
+          'ff-label-networks': 'label-networks',
+          'ff-help-networks': 'help-networks',
+          'ff-footer-disclaimer': 'footer-disclaimer',
+          'ff-footer-legal': 'footer-legal',
+          'ff-footer-copy': 'footer-copy',
+          'ff-label-language-app': 'label-language-app'
+        };
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
-      authDomain: "brain-storm-8f0d8.firebaseapp.com",
-      projectId: "brain-storm-8f0d8",
-      storageBucket: "brain-storm-8f0d8.appspot.com",
-      messagingSenderId: "401208607043",
-      appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    const functions = getFunctions(app);
-    const db = getFirestore(app);
-
-    document.getElementById("ff-google-login").addEventListener("click", async () => {
-      try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        document.getElementById("ff-auth-view").classList.add("is-hidden");
-        document.getElementById("ff-config-view").classList.remove("is-hidden");
-      } catch (error) {
-        console.error("Error al iniciar sesión:", error);
-        alert("Error al iniciar sesión. Intenta de nuevo.");
-      }
-    });
-
-    document.getElementById("ff-logout-btn").addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-        document.getElementById("ff-config-view").classList.add("is-hidden");
-        document.getElementById("ff-auth-view").classList.remove("is-hidden");
-      } catch (error) {
-        console.error("Error al cerrar sesión:", error);
-      }
-    });
-
-    async function generateIdeas() {
-      const user = auth.currentUser;
-      const keyword = document.getElementById("ff-keyword").value.trim();
-      const copytype = document.getElementById("ff-copytype").value;
-      const language = localStorage.getItem("ff-lang") || "es";
-      const mode = document.getElementById("ff-mode-selector").value;
-      const networkCheckboxes = document.querySelectorAll(".ff-social:checked");
-      const networks = Array.from(networkCheckboxes).map(el => el.value);
-      console.log("✅ generateIdeas fue llamada");
-
-      if (!user || !keyword || !copytype || !mode || networks.length === 0) {
-        alert("Por favor, completa los campos requeridos.");
-        return;
-      }
-
-      const container = document.getElementById("ff-results-container");
-      container.innerHTML = `<div class="notification is-info">Generando ideas...</div>`;
-
-      try {
-        const generateIdeasFn = httpsCallable(functions, "generateIdeas");
-        console.log("🚀 Enviando datos a la función");
-
-        const response = await generateIdeasFn({
-          keyword,
-          copytype,
-          language,
-          networks,
-          mode
-        });
-
-        console.log("✅ Respuesta recibida:", response);
-
-        if (response.data.success && response.data.ideas.length > 0) {
-          container.innerHTML = "";
-          response.data.ideas.forEach((idea, index) => {
-            const card = document.createElement("div");
-            card.className = "card mb-3 p-3";
-
-            const content = document.createElement("div");
-            content.className = "content";
-            content.innerHTML = `<strong>Idea ${index + 1}:</strong> ${idea.text}`;
-
-            const copyBtn = document.createElement("button");
-            copyBtn.className = "button is-small is-success mt-2";
-            copyBtn.textContent = "Copiar";
-            copyBtn.onclick = () => {
-              navigator.clipboard.writeText(idea.text);
-              alert("¡Texto copiado!");
-            };
-
-            card.appendChild(content);
-            card.appendChild(copyBtn);
-            container.appendChild(card);
-          });
-        } else {
-          container.innerHTML = `<div class="notification is-warning">No se generaron ideas. Intenta con otra palabra clave.</div>`;
+        for (const id in mappings) {
+          const el = document.getElementById(id);
+          if (el) el.textContent = t(mappings[id]);
         }
-      } catch (error) {
-        console.error("Error al generar ideas:", error);
-        container.innerHTML = `<div class="notification is-danger">Hubo un error al generar las ideas.</div>`;
       }
-    }
+      document.addEventListener("DOMContentLoaded", () => {
+        const currentLang = localStorage.getItem('ff-lang') || 'es';
+        const authLangSelector = document.getElementById('ff-auth-language-selector');
 
-    window.generateIdeas = generateIdeas;
-  </script>
-
-  <!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
-  <script type="module">
-    const modeSelector = document.getElementById("ff-mode-selector");
-    const socialCheckboxes = document.querySelectorAll(".ff-social");
-
-    function actualizarRestriccionesRedes() {
-      const modo = modeSelector.value;
-
-      // Limpiar selección y restablecer estado
-      socialCheckboxes.forEach(cb => {
-        cb.checked = false;
-        cb.disabled = false;
-      });
-
-      // Eliminar listeners anteriores usando cloneNode y volver a añadirlos
-      const container = document.getElementById("ff-networks-container");
-      container.querySelectorAll("input.ff-social").forEach((original) => {
-        const nuevo = original.cloneNode(true);
-        nuevo.classList.add("ff-social");
-        original.parentNode.replaceChild(nuevo, original);
-      });
-
-      if (modo === "individual") {
-        const updatedCheckboxes = container.querySelectorAll("input.ff-social");
-
-        updatedCheckboxes.forEach(cb => {
-          cb.addEventListener("change", function () {
-            if (this.checked) {
-              updatedCheckboxes.forEach(other => {
-                if (other !== this) {
-                  other.checked = false;
-                  other.disabled = true;
-                }
-              });
-            } else {
-              updatedCheckboxes.forEach(cb => cb.disabled = false);
-            }
+        if (authLangSelector) {
+          authLangSelector.value = currentLang;
+          authLangSelector.addEventListener('change', (e) => {
+            setLanguage(e.target.value);
           });
-        });
+        }
+
+        setLanguage(currentLang);
+      });
+      // Traducir dinámicamente las opciones del select de tipo de publicación
+      const copytypeOptions = document.querySelectorAll('#ff-copytype option');
+      copytypeOptions.forEach(opt => {
+        const key = opt.dataset.key;
+        if (key) opt.textContent = t(key);
+      });
+      // Traducir dinámicamente las opciones del selector de modo
+      const modeOptions = document.querySelectorAll('#ff-mode-selector option');
+      modeOptions.forEach(opt => {
+        const key = opt.dataset.key;
+        if (key) opt.textContent = t(key);
+      });
+      function updateCopyTypeDescription() {
+        const lang = localStorage.getItem("ff-lang") || "es";
+        const value = document.getElementById("ff-copytype").value;
+        const desc = copyTypeDescriptions[lang][value] || "";
+        const descEl = document.getElementById("ff-copytype-description");
+        if (descEl) descEl.textContent = desc;
       }
-    }
 
-    modeSelector.addEventListener("change", actualizarRestriccionesRedes);
-    document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
-  </script>
+      document.getElementById("ff-copytype").addEventListener("change", updateCopyTypeDescription);
+      document.addEventListener("DOMContentLoaded", updateCopyTypeDescription); 
+    </script>
+    <!-- 🔧 FF-BLOCK-5: AUTHENTICACIÓN Y SESIÓN -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+      import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
+      import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  <!-- 🔧 FF-BLOCK-7: FEEDBACK DE IDEAS -->
-  <script type="module">
-    document.addEventListener("click", async (e) => {
-      if (e.target.classList.contains("ff-feedback-btn")) {
-        const feedbackType = e.target.dataset.feedback;
-        const ideaIndex = Array.from(document.querySelectorAll(".ff-feedback-btn")).indexOf(e.target);
-        const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
+      const firebaseConfig = {
+        apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
+        authDomain: "brain-storm-8f0d8.firebaseapp.com",
+        projectId: "brain-storm-8f0d8",
+        storageBucket: "brain-storm-8f0d8.appspot.com",
+        messagingSenderId: "401208607043",
+        appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+      const functions = getFunctions(app);
+      const db = getFirestore(app);
+
+      document.getElementById("ff-google-login").addEventListener("click", async () => {
+        try {
+          const result = await signInWithPopup(auth, provider);
+          const user = result.user;
+          document.getElementById("ff-auth-view").classList.add("is-hidden");
+          document.getElementById("ff-config-view").classList.remove("is-hidden");
+        } catch (error) {
+          console.error("Error al iniciar sesión:", error);
+          alert("Error al iniciar sesión. Intenta de nuevo.");
+        }
+      });
+
+      document.getElementById("ff-logout-btn").addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+          document.getElementById("ff-config-view").classList.add("is-hidden");
+          document.getElementById("ff-auth-view").classList.remove("is-hidden");
+        } catch (error) {
+          console.error("Error al cerrar sesión:", error);
+        }
+      });
+
+      async function generateIdeas() {
+        const user = auth.currentUser;
+        const keyword = document.getElementById("ff-keyword").value.trim();
+        const copytype = document.getElementById("ff-copytype").value;
+        const language = localStorage.getItem("ff-lang") || "es";
+        const mode = document.getElementById("ff-mode-selector").value;
+        const networkCheckboxes = document.querySelectorAll(".ff-social:checked");
+        const networks = Array.from(networkCheckboxes).map(el => el.value);
+
+        if (!user || !keyword || !copytype || !mode || networks.length === 0) {
+          alert("Por favor, completa los campos requeridos.");
+          return;
+        }
+
+        const container = document.getElementById("ff-results-container");
+        container.innerHTML = `<div class="notification is-info">Generando ideas...</div>`;
 
         try {
-          await recordFeedback({
-            sessionId,
-            feedback: feedbackType,
-            ideaIndex
-          });
-          alert("¡Gracias por tu opinión!");
+          const generateIdeasFn = httpsCallable(functions, "generateIdeas");
+          const response = await generateIdeasFn({ keyword, copytype, language, networks, mode });
+
+          if (response.data.success && response.data.ideas.length > 0) {
+            container.innerHTML = "";
+            response.data.ideas.forEach((idea, index) => {
+              const card = document.createElement("div");
+              card.className = "card mb-3 p-3";
+
+              const content = document.createElement("div");
+              content.className = "content";
+              content.innerHTML = `<strong>Idea ${index + 1}:</strong> ${idea.text}`;
+
+              const copyBtn = document.createElement("button");
+              copyBtn.className = "button is-small is-success mt-2";
+              copyBtn.textContent = "Copiar";
+              copyBtn.onclick = () => {
+                navigator.clipboard.writeText(idea.text);
+                alert("¡Texto copiado!");
+              };
+
+              card.appendChild(content);
+              card.appendChild(copyBtn);
+              container.appendChild(card);
+            });
+          } else {
+            container.innerHTML = `<div class="notification is-warning">No se generaron ideas. Intenta con otra palabra clave.</div>`;
+          }
         } catch (error) {
-          console.error("Error enviando feedback:", error);
-          alert("Error al enviar feedback.");
-        }
-      }
-    });
-
-    document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
-      document.getElementById("ff-feedback-modal").classList.remove("is-active");
-    });
-  </script>
-  <!-- 🔧 FF-BLOCK-8: CONTROL DE PREMIUM Y PUBLICIDAD -->
-  <script type="module">
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    async function checkPremiumStatus(uid) {
-      const configRef = doc(db, "appConfig", "global");
-      const configSnap = await getDoc(configRef);
-      const userRef = doc(db, "users", uid);
-      const userSnap = await getDoc(userRef);
-
-      let isPremium = false;
-      let showAds = true;
-
-      if (userSnap.exists()) {
-        isPremium = userSnap.data().premium || false;
-      }
-
-      if (configSnap.exists()) {
-        const global = configSnap.data();
-        const now = new Date();
-        const endDate = new Date(global.premiumGlobalEndDate);
-        if (global.isPremiumGlobalActive && now < endDate) {
-          isPremium = true;
-          showAds = global.isLaunchPromoActive; // En promo se permiten ads completas
+          console.error("Error al generar ideas:", error);
+          container.innerHTML = `<div class="notification is-danger">Hubo un error al generar las ideas.</div>`;
         }
       }
 
-      if (!isPremium) {
-        // Mostrar publicidad completa
-        const ad = document.createElement("div");
-        ad.className = "notification is-warning has-text-centered";
-        ad.innerHTML = "Publicidad: ¡Explora nuestra versión Premium sin anuncios!";
-        document.body.appendChild(ad);
-      } else if (showAds) {
-        // Mostrar publicidad discreta
-        const ad = document.createElement("div");
-        ad.className = "has-text-centered has-text-grey-light";
-        ad.innerHTML = "<small>Publicidad moderada activa por promoción.</small>";
-        document.body.appendChild(ad);
-      }
-    }
+      window.generateIdeas = generateIdeas;
+    </script>
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) await checkPremiumStatus(user.uid);
-    });
-  </script>
-  <!-- 🔧 FF-BLOCK-9: PANEL ADMIN PREMIUM -->
-  <script type="module">
-    document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
-      const isActive = document.getElementById("ff-toggle-premium-global").checked;
-      const endDate = document.getElementById("ff-premium-end-date").value;
+    <!-- 🔧 FF-BLOCK-6: GENERACIÓN DE IDEAS CON IA -->
+    <script type="module">
+      const modeSelector = document.getElementById("ff-mode-selector");
+      const socialCheckboxes = document.querySelectorAll(".ff-social");
 
-      const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
-      try {
-        await setPremiumGlobal({
-          isPremiumGlobalActive: isActive,
-          premiumGlobalEndDate: new Date(endDate).toISOString()
+      function actualizarRestriccionesRedes() {
+        const modo = modeSelector.value;
+
+        // Limpiar selección y restablecer estado
+        socialCheckboxes.forEach(cb => {
+          cb.checked = false;
+          cb.disabled = false;
         });
-        document.getElementById("ff-premium-status-text").textContent =
-          `${t('premium-global-active')} ${new Date(endDate).toLocaleString()}`;
-        alert("Actualización exitosa.");
-      } catch (error) {
-        console.error("Error actualizando premium global:", error);
-        alert("Error al actualizar estado global.");
+
+        // Eliminar listeners anteriores usando cloneNode y volver a añadirlos
+        const container = document.getElementById("ff-networks-container");
+        container.querySelectorAll("input.ff-social").forEach((original) => {
+          const nuevo = original.cloneNode(true);
+          nuevo.classList.add("ff-social");
+          original.parentNode.replaceChild(nuevo, original);
+        });
+
+        if (modo === "individual") {
+          const updatedCheckboxes = container.querySelectorAll("input.ff-social");
+
+          updatedCheckboxes.forEach(cb => {
+            cb.addEventListener("change", function () {
+              if (this.checked) {
+                updatedCheckboxes.forEach(other => {
+                  if (other !== this) {
+                    other.checked = false;
+                    other.disabled = true;
+                  }
+                });
+              } else {
+                updatedCheckboxes.forEach(cb => cb.disabled = false);
+              }
+            });
+          });
+        }
       }
-    });
-  </script>
-  <!-- 🔧 FF-BLOCK-10: ENLACES ADICIONALES -->
-  <!-- Puedes agregar aquí enlaces a redes sociales, blog o botón para recomendar la app -->
-  <footer class="footer has-text-centered mt-6">
-    <p id="ff-footer-disclaimer" class="is-size-7">
-      Aplicación experimental para generación de ideas en redes sociales. Desarrollado con 💡 en Latinoamérica.
-    </p>
-    <p id="ff-footer-legal" class="is-size-7">
-      FeedFlow no se hace responsable por los contenidos generados por inteligencia artificial.
-    </p>
-    <p id="ff-footer-copy" class="is-size-7 has-text-grey">
-      Desarrollado por FeedFlow · 2025
-    </p>
-  </footer>
-  <!-- 🔧 FF-BLOCK-11: VISUAL PROMPT REFERENCIA -->
-  <script>
-    function construirPromptVisual(idea) {
-      return `Estilo: ${idea.style || "ilustración vectorial"}, fondo: ${idea.background || "minimalista"}, personaje: ${idea.character || "joven usando celular"}, emoción: ${idea.emotion || "inspiración"}, red social: ${idea.platform || "TikTok"}, orientación: vertical.`;
-    }
-  </script>
-  <!-- 🔧 FF-BLOCK-12: ADMIN AVANZADO -->
-  <script type="module">
-    async function validarAdmin(uid) {
-      const userRef = doc(db, "users", uid);
-      const userSnap = await getDoc(userRef);
-      if (userSnap.exists() && userSnap.data().role === "admin") {
-        document.getElementById("ff-admin-view").classList.remove("is-hidden");
-      }
-    }
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) await validarAdmin(user.uid);
-    });
+      modeSelector.addEventListener("change", actualizarRestriccionesRedes);
+      document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
+    </script>
 
-    const modeSelector = document.getElementById("ff-mode-selector");
-    const socialCheckboxes = document.querySelectorAll(".ff-social");
+    <!-- 🔧 FF-BLOCK-7: FEEDBACK DE IDEAS -->
+    <script type="module">
+      document.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("ff-feedback-btn")) {
+          const feedbackType = e.target.dataset.feedback;
+          const ideaIndex = Array.from(document.querySelectorAll(".ff-feedback-btn")).indexOf(e.target);
+          const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
 
-    function actualizarRestriccionesRedes() {
-      const modo = modeSelector.value;
-
-      socialCheckboxes.forEach(cb => {
-        cb.checked = false;
-        cb.disabled = false;
-        cb.replaceWith(cb.cloneNode(true)); // Limpia listeners previos
+          try {
+            await recordFeedback({
+              sessionId,
+              feedback: feedbackType,
+              ideaIndex
+            });
+            alert("¡Gracias por tu opinión!");
+          } catch (error) {
+            console.error("Error enviando feedback:", error);
+            alert("Error al enviar feedback.");
+          }
+        }
       });
 
-      if (modo === "individual") {
-        socialCheckboxes.forEach(cb => {
-          cb.addEventListener("change", function () {
-            if (this.checked) {
-              socialCheckboxes.forEach(other => {
-                if (other !== this) {
-                  other.checked = false;
-                  other.disabled = true;
-                }
-              });
-            } else {
-              socialCheckboxes.forEach(cb => cb.disabled = false);
-            }
-          });
-        });
+      document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
+        document.getElementById("ff-feedback-modal").classList.remove("is-active");
+      });
+    </script>
+    <!-- 🔧 FF-BLOCK-8: CONTROL DE PREMIUM Y PUBLICIDAD -->
+    <script type="module">
+      import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+      async function checkPremiumStatus(uid) {
+        const configRef = doc(db, "appConfig", "global");
+        const configSnap = await getDoc(configRef);
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+
+        let isPremium = false;
+        let showAds = true;
+
+        if (userSnap.exists()) {
+          isPremium = userSnap.data().premium || false;
+        }
+
+        if (configSnap.exists()) {
+          const global = configSnap.data();
+          const now = new Date();
+          const endDate = new Date(global.premiumGlobalEndDate);
+          if (global.isPremiumGlobalActive && now < endDate) {
+            isPremium = true;
+            showAds = global.isLaunchPromoActive; // En promo se permiten ads completas
+          }
+        }
+
+        if (!isPremium) {
+          // Mostrar publicidad completa
+          const ad = document.createElement("div");
+          ad.className = "notification is-warning has-text-centered";
+          ad.innerHTML = "Publicidad: ¡Explora nuestra versión Premium sin anuncios!";
+          document.body.appendChild(ad);
+        } else if (showAds) {
+          // Mostrar publicidad discreta
+          const ad = document.createElement("div");
+          ad.className = "has-text-centered has-text-grey-light";
+          ad.innerHTML = "<small>Publicidad moderada activa por promoción.</small>";
+          document.body.appendChild(ad);
+        }
       }
-    }
 
-    modeSelector.addEventListener("change", actualizarRestriccionesRedes);
-    document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
+      onAuthStateChanged(auth, async (user) => {
+        if (user) await checkPremiumStatus(user.uid);
+      });
+    </script>
+    <!-- 🔧 FF-BLOCK-9: PANEL ADMIN PREMIUM -->
+    <script type="module">
+      document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
+        const isActive = document.getElementById("ff-toggle-premium-global").checked;
+        const endDate = document.getElementById("ff-premium-end-date").value;
 
-  </script>
-  <!-- 🔧 FF-BLOCK-13: CIERRE HTML -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
+        try {
+          await setPremiumGlobal({
+            isPremiumGlobalActive: isActive,
+            premiumGlobalEndDate: new Date(endDate).toISOString()
+          });
+          document.getElementById("ff-premium-status-text").textContent =
+            `${t('premium-global-active')} ${new Date(endDate).toLocaleString()}`;
+          alert("Actualización exitosa.");
+        } catch (error) {
+          console.error("Error actualizando premium global:", error);
+          alert("Error al actualizar estado global.");
+        }
+      });
+    </script>
+    <!-- 🔧 FF-BLOCK-10: ENLACES ADICIONALES -->
+    <!-- Puedes agregar aquí enlaces a redes sociales, blog o botón para recomendar la app -->
+    <footer class="footer has-text-centered mt-6">
+      <p id="ff-footer-disclaimer" class="is-size-7">
+        Aplicación experimental para generación de ideas en redes sociales. Desarrollado con 💡 en Latinoamérica.
+      </p>
+      <p id="ff-footer-legal" class="is-size-7">
+        FeedFlow no se hace responsable por los contenidos generados por inteligencia artificial.
+      </p>
+      <p id="ff-footer-copy" class="is-size-7 has-text-grey">
+        Desarrollado por FeedFlow · 2025
+      </p>
+    </footer>
+    <!-- 🔧 FF-BLOCK-11: VISUAL PROMPT REFERENCIA -->
+    <script>
+      function construirPromptVisual(idea) {
+        return `Estilo: ${idea.style || "ilustración vectorial"}, fondo: ${idea.background || "minimalista"}, personaje: ${idea.character || "joven usando celular"}, emoción: ${idea.emotion || "inspiración"}, red social: ${idea.platform || "TikTok"}, orientación: vertical.`;
+      }
+    </script>
+    <!-- 🔧 FF-BLOCK-12: ADMIN AVANZADO -->
+    <script type="module">
+      async function validarAdmin(uid) {
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists() && userSnap.data().role === "admin") {
+          document.getElementById("ff-admin-view").classList.remove("is-hidden");
+        }
+      }
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
-      authDomain: "brain-storm-8f0d8.firebaseapp.com",
-      projectId: "brain-storm-8f0d8",
-      storageBucket: "brain-storm-8f0d8.appspot.com",
-      messagingSenderId: "401208607043",
-      appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
-    };
+      onAuthStateChanged(auth, async (user) => {
+        if (user) await validarAdmin(user.uid);
+      });
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    window.auth = auth;
+      const modeSelector = document.getElementById("ff-mode-selector");
+      const socialCheckboxes = document.querySelectorAll(".ff-social");
 
-  </script>
+      function actualizarRestriccionesRedes() {
+        const modo = modeSelector.value;
 
+        socialCheckboxes.forEach(cb => {
+          cb.checked = false;
+          cb.disabled = false;
+          cb.replaceWith(cb.cloneNode(true)); // Limpia listeners previos
+        });
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFunctions } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
+        if (modo === "individual") {
+          socialCheckboxes.forEach(cb => {
+            cb.addEventListener("change", function () {
+              if (this.checked) {
+                socialCheckboxes.forEach(other => {
+                  if (other !== this) {
+                    other.checked = false;
+                    other.disabled = true;
+                  }
+                });
+              } else {
+                socialCheckboxes.forEach(cb => cb.disabled = false);
+              }
+            });
+          });
+        }
+      }
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
-      authDomain: "brain-storm-8f0d8.firebaseapp.com",
-      projectId: "brain-storm-8f0d8",
-      storageBucket: "brain-storm-8f0d8.appspot.com",
-      messagingSenderId: "401208607043",
-      appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
-    };
+      modeSelector.addEventListener("change", actualizarRestriccionesRedes);
+      document.addEventListener("DOMContentLoaded", actualizarRestriccionesRedes);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const functions = getFunctions(app);
+    </script>
+    <!-- 🔧 FF-BLOCK-13: CIERRE HTML -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    onAuthStateChanged(auth, (user) => {
+      const firebaseConfig = {
+        apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
+        authDomain: "brain-storm-8f0d8.firebaseapp.com",
+        projectId: "brain-storm-8f0d8",
+        storageBucket: "brain-storm-8f0d8.appspot.com",
+        messagingSenderId: "401208607043",
+        appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
       window.auth = auth;
-      window.currentUser = user;
 
-      const btn = document.getElementById("ff-generate-btn");
-      if (btn) btn.disabled = !user;
+      onAuthStateChanged(auth, (user) => {
+        console.log("Usuario autenticado:", user);
+        if (!user) {
+          alert("Por favor, inicia sesión para continuar.");
+          window.location.href = "#auth-view"; // opcional
+        }
+      });
+    </script>
 
-      console.log("Usuario autenticado:", user);
-    });
+  
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFunctions } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
 
-  </script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
+    authDomain: "brain-storm-8f0d8.firebaseapp.com",
+    projectId: "brain-storm-8f0d8",
+    storageBucket: "brain-storm-8f0d8.appspot.com",
+    messagingSenderId: "401208607043",
+    appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const functions = getFunctions(app);
+
+  onAuthStateChanged(auth, (user) => {
+    const btn = document.getElementById("ff-generate-btn");
+    if (btn) {
+      btn.disabled = !user;
+    }
+    window.auth = auth;
+    window.functions = functions;
+  });
+</script>
 
 </body>
 
-</html>
+  </html>
