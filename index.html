@@ -500,7 +500,7 @@
         }
       });
 
-      async function generateIdeas() {
+      const generateIdeas = async () => {
         const user = auth.currentUser;
         const keyword = document.getElementById("ff-keyword").value.trim();
         const copytype = document.getElementById("ff-copytype").value;
