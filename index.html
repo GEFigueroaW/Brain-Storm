@@ -519,6 +519,18 @@
 
       try {
         const generateIdeasFn = httpsCallable(functions, "generateIdeas");
+        console.log("🚀 Enviando datos a la función");
+
+        const response = await generateIdeasFn({
+          keyword,
+          copytype,
+          language,
+          networks,
+          mode
+        });
+
+        console.log("✅ Respuesta recibida:", response);
+
         const response = await generateIdeasFn({ keyword, copytype, language, networks, mode });
 
         if (response.data.success && response.data.ideas.length > 0) {
