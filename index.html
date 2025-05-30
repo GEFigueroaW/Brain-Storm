@@ -508,6 +508,7 @@
         const mode = document.getElementById("ff-mode-selector").value;
         const networkCheckboxes = document.querySelectorAll(".ff-social:checked");
         const networks = Array.from(networkCheckboxes).map(el => el.value);
+        console.log("📥 Respuesta recibida:", response.data);
 
         if (!user || !keyword || !copytype || !mode || networks.length === 0) {
           alert("Por favor, completa los campos requeridos.");
