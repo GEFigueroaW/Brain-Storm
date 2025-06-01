@@ -25,10 +25,10 @@
     .modal.is-active { display: flex; }
     .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); align-items: center; justify-content: center;}
     .modal-content { background: #fff; border-radius: .5em; padding: 2em; max-width: 400px; margin: auto;}
-    .is-premium { color: #fff; background: linear-gradient(90deg, #8e44ad, #f1c40f); border-radius: .4em; font-size: .9em; margin-left: .5em; padding: 0 .4em; font-weight: bold; vertical-align: middle; }
+    .is-premium { color: #fff; background: linear-gradient(90deg, #8e44ad, #f1c40f); border-radius: .4em; font-size: .9em; margin-left: .5em; padding: 0 .4em; font-weight: bold; vertical-align: middle;}
     .disabled, .ff-option-disabled { opacity: 0.5; pointer-events: none; background: #eee!important; }
     .ff-help-icon { cursor: pointer; margin-left: 0.3em; color: #888; font-size: 1em; vertical-align: middle; }
-    .ff-help-tooltip { display: none; position: absolute; background: #fff; color: #333; border: 1px solid #ddd; border-radius: 5px; font-size: .95em; padding: .7em 1em; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.07); max-width: 300px; margin-top: 6px;}
+    .ff-help-tooltip { display: none; position: absolute; background: #fff; color: #333; border: 1px solid #ddd; border-radius: 5px; font-size: .95em; padding: .7em 1em; z-index: 100; box-shadow: 0 4px 16px rgba(0,0,0,0.07);}
     .ff-help-icon:hover + .ff-help-tooltip, .ff-help-icon:focus + .ff-help-tooltip { display: block; }
     #ff-last-input-btn { margin-left: 1em; }
     #ff-generate-btn { animation: pulse 2s infinite; }
@@ -40,10 +40,31 @@
     .ff-idea-comp { margin-bottom: .6em; }
     .ff-idea-label { font-weight: bold; color: #8e44ad; margin-right: .4em; }
     .ff-final-phrase { margin-top: 1.2em; font-style: italic; background: #f5f5fa; padding: .7em 1em; border-radius: .3em; border-left: 4px solid #8e44ad; }
-    .loading-overlay { position: fixed; left:0; top:0; width:100vw; height:100vh; z-index:2000; background:rgba(255,255,255,0.96); display:flex; align-items:center; justify-content:center; flex-direction:column; transition: opacity .3s;}
+    .loading-overlay { position: fixed; left:0; top:0; width:100vw; height:100vh; z-index:2000; background:rgba(255,255,255,0.96); display:flex; align-items:center; justify-content:center; flex-direction:column; }
     .loading-bar-bg { width:350px; height:18px; background:#f1f1f1; border-radius:1em; margin-top:24px; overflow:hidden;}
     .loading-bar-fg { height:100%; width:0%; background:linear-gradient(90deg, #8e44ad, #f1c40f); border-radius:1em; transition: width .7s cubic-bezier(.4,2,.3,1);}
     .loading-motivation { font-size:1.25em; color:#8e44ad; font-weight:600; margin-bottom:0.5em; min-height:1.5em; text-align:center; max-width:450px;}
+
+    /* --- Responsive Improvements --- */
+    @media (max-width: 600px) {
+      .buttons.is-grouped, .field.is-grouped {
+        flex-direction: column !important;
+        align-items: stretch !important;
+      }
+      #ff-logout-btn {
+        width: 100%;
+        margin-top: 0.5em;
+      }
+      .card {
+        padding: 0.7em !important;
+      }
+      .ff-logo {
+        font-size: 1.2rem !important;
+      }
+      .modal-content { padding: 1em; }
+      .box { padding: 1em; }
+      .ff-section { padding: 1em 0.2em; }
+    }
   </style>
 </head>
 <body>
@@ -97,6 +118,12 @@
       <h2 class="title is-4" id="title-results">Genera ideas con IA</h2>
       <div id="ff-gen-counter" class="ff-counter"></div>
       <div class="box" style="position:relative;">
+        <!-- Mueve el botón para cargar última info arriba -->
+        <div class="field">
+          <button id="ff-last-input-btn" class="button is-small is-info is-fullwidth-mobile" style="margin-bottom:1em;">
+            Cargar última información capturada
+          </button>
+        </div>
         <div class="field">
           <label class="label" id="ff-label-mode">
             Selecciona el modo de generación
@@ -128,9 +155,6 @@
           </small>
         </div>
         <div class="field">
-          <button id="ff-last-input-btn" class="button is-small is-info">Cargar última información capturada</button>
-        </div>
-        <div class="field">
           <label class="label" id="ff-label-copytype">
             Define el tipo de copy
             <span class="ff-help-icon" tabindex="0" id="help-copytype"><i class="fas fa-question-circle"></i></span>
@@ -156,13 +180,13 @@
         </div>
         <div class="field is-grouped mt-3">
           <div class="control">
-            <button id="ff-generate-btn" class="button is-primary animate__animated">¡Que fluyan las ideas!</button>
+            <button id="ff-generate-btn" class="button is-primary animate__animated is-fullwidth-mobile">¡Que fluyan las ideas!</button>
           </div>
           <div class="control">
-            <button id="ff-refresh-btn" class="button is-light">Refrescar inspiraciones</button>
+            <button id="ff-refresh-btn" class="button is-light is-fullwidth-mobile">Refrescar inspiraciones</button>
           </div>
           <div class="control">
-            <button id="ff-logout-btn" class="button is-danger">Cerrar sesión</button>
+            <button id="ff-logout-btn" class="button is-danger is-fullwidth-mobile">Cerrar sesión</button>
           </div>
         </div>
       </div>
@@ -200,7 +224,7 @@
       Desarrollado por FeedFlow · 2025
     </p>
   </footer>
-  <script type="module">
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js";
@@ -626,7 +650,7 @@ async function generateIdeas(refresh = false) {
       userGenCount++;
       finishLoadingOverlay();
       updateCounterUI();
-      renderIdeas(parsed.ideas, parsed.fraseFinal);
+      renderIdeas(parsed.ideas, parsed.fraseFinal, selectedNetworks);
     } else {
       finishLoadingOverlay();
       document.getElementById("ff-results-container").innerHTML = `<div class="notification is-warning">${t("no_ideas")}</div>`;
@@ -638,19 +662,28 @@ async function generateIdeas(refresh = false) {
 }
 document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
 document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
-function renderIdeas(ideas, fraseFinal) {
+
+function renderIdeas(ideas, fraseFinal, selectedNetworks) {
   const container = document.getElementById("ff-results-container");
   container.innerHTML = "";
+  // Mostrar cada idea con la red social sólo en modo multi-red
   ideas.forEach((idea, index) => {
     const card = document.createElement("div");
     card.className = "card mb-3 p-3";
+    // Determinar nombre de red social si aplica
+    let redSocial = "";
+    if (selectedNetworks && selectedNetworks.length === ideas.length) {
+      const opt = NETWORK_OPTIONS.find(opt => opt.value === selectedNetworks[index]);
+      if (opt) redSocial = `<div style="font-weight:bold; color:#8e44ad; font-size:1.1em; margin-bottom:4px">${tNetLabel(opt)}</div>`;
+    }
     card.innerHTML = `
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("gancho")}</span>: ${idea.gancho}</div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("angulo")}</span>: ${idea.angulo}</div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("texto")}</span>: ${idea.texto}</div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("hashtags")}</span>: ${idea.hashtags}</div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("visual")}</span>: ${idea.visual}</div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("cta")}</span>: ${idea.cta}</div>
+      ${redSocial}
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("gancho")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.gancho}</pre></div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("angulo")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.angulo}</pre></div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("texto")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.texto}</pre></div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("hashtags")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.hashtags}</pre></div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("visual")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.visual}</pre></div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("cta")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.cta}</pre></div>
     `;
     const copyBtn = document.createElement("button");
     copyBtn.className = "button is-small is-success mt-2";
@@ -678,7 +711,7 @@ function renderIdeas(ideas, fraseFinal) {
   if(fraseFinal && fraseFinal.trim()) {
     const finalDiv = document.createElement("div");
     finalDiv.className = "ff-final-phrase";
-    finalDiv.innerHTML = `<span class="ff-idea-label">${t("frasefinal")}:</span> ${fraseFinal.trim()}`;
+    finalDiv.innerHTML = `<span class="ff-idea-label">${t("frasefinal")}:</span> <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${fraseFinal.trim()}</pre>`;
     container.appendChild(finalDiv);
   }
 }
@@ -774,7 +807,6 @@ document.getElementById("ff-set-premium-btn").addEventListener("click", async ()
   }
 });
 
-// PANEL ADMIN PREMIUM: ACTIVAR/DESACTIVAR PROMO Y ESTADO ACTUAL
 document.getElementById("ff-activate-promo-btn").addEventListener("click", async () => {
   const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
   await setPromo({ isLaunchPromoActive: true });
@@ -802,7 +834,7 @@ onAuthStateChanged(auth, async user => {
     await checkPremiumStatus(user.uid);
     await validarAdmin(user.uid);
     updateCounterUI();
-    await mostrarEstadoPromo(); // Mostrar estado promo si es admin
+    await mostrarEstadoPromo();
   } else {
     document.getElementById("ff-config-view").classList.add("is-hidden");
     document.getElementById("ff-auth-view").classList.remove("is-hidden");
@@ -814,7 +846,6 @@ setLang(lang);
 updateDatalist();
 clearInputsOnChange();
 updateNetworksByMode();
-
-  </script>
+</script>
 </body>
 </html>
