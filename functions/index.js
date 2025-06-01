@@ -1,7 +1,10 @@
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
 const axios = require("axios");
 
-// ✅ Función Cloud de primera generación
+if (!admin.apps.length) admin.initializeApp();
+
+// ====== Función para generar ideas (https.onCall) ======
 exports.generateIdeas = functions.https.onCall(async (data, context) => {
   const { keyword, copytype, language, networks, mode, formatoSalida, nIdeas } = data;
 
@@ -19,7 +22,6 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("internal", "API Key no configurada.");
   }
 
-  // Construye el prompt correctamente, usando el formato delimitado que espera el frontend
   const prompt = construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas);
 
   try {
@@ -34,11 +36,8 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
     });
 
     const textoGenerado = response.data.choices?.[0]?.message?.content || "";
-
-    // Log para depuración (puedes quitarlo después)
     console.log("IDEAS GENERADAS:", textoGenerado);
 
-    // Aquí NO proceses, simplemente retorna el string completo
     return {
       text: textoGenerado
     };
@@ -49,10 +48,9 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
   }
 });
 
-// NUEVO: Usa formatoSalida y nIdeas (opcional)
+// ====== Utilidad para construir el prompt ======
 function construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas) {
   const redes = Array.isArray(networks) ? networks.join(", ") : networks;
-  // Modo seguro: si frontend NO manda formatoSalida, pon uno básico (pero el frontend sí lo envía)
   let mensaje = `Quiero que generes ideas de contenido para redes sociales en ${language}.
 El tema es: "${keyword}".
 El tipo de publicación es: "${copytype}".
@@ -66,7 +64,6 @@ No generes más ideas de las solicitadas.\n`;
 No generes más ideas de las solicitadas.\n`;
   }
 
-  // Agrega el formato delimitado (frontend lo envía en formatoSalida)
   if (formatoSalida) {
     mensaje += `\nUsa este formato de salida:\n${formatoSalida}`;
   } else {
@@ -76,33 +73,38 @@ No generes más ideas de las solicitadas.\n`;
   return mensaje;
 }
 
-// ======= AGREGADO PARA CORS EN setPremiumGlobalStatus =======
-const cors = require("cors")({ origin: true });
+// ====== Panel Admin Premium: setPremiumGlobalStatus usando onCall ======
+exports.setPremiumGlobalStatus = functions.https.onCall(async (data, context) => {
+  // Validar autenticación y admin
+  if (!context.auth) {
+    throw new functions.https.HttpsError("unauthenticated", "El usuario debe estar autenticado.");
+  }
 
-exports.setPremiumGlobalStatus = functions.https.onRequest((req, res) => {
-  cors(req, res, async () => {
-    try {
-      // Aquí va tu lógica original para actualizar el estado premium global
-      // Por ejemplo, suponiendo que recibes { isPremiumGlobalActive, premiumGlobalEndDate, isLaunchPromoActive }
-      // y lo guardas en Firestore:
-      /*
-      const admin = require('firebase-admin');
-      if (!admin.apps.length) admin.initializeApp();
-      const db = admin.firestore();
+  // Puedes agregar más validaciones según tu lógica de admin aquí,
+  // por ejemplo, leer Firestore y verificar que el rol sea "admin".
 
-      const { isPremiumGlobalActive, premiumGlobalEndDate, isLaunchPromoActive } = req.body;
-      await db.collection('config').doc('premiumGlobalStatus').set({
-        isPremiumGlobalActive,
-        premiumGlobalEndDate,
-        isLaunchPromoActive
-      }, { merge: true });
-      */
+  // Validar datos recibidos
+  const {
+    isPremiumGlobalActive,
+    premiumGlobalEndDate,
+    isLaunchPromoActive
+  } = data;
 
-      // Simulación de respuesta de éxito
-      res.status(200).json({ success: true });
-    } catch (error) {
-      console.error("Error en setPremiumGlobalStatus:", error);
-      res.status(500).json({ error: error.message });
-    }
-  });
+  if (typeof isPremiumGlobalActive === "undefined" || typeof isLaunchPromoActive === "undefined") {
+    throw new functions.https.HttpsError("invalid-argument", "Faltan campos obligatorios.");
+  }
+
+  try {
+    // Guardar configuración en Firestore (colección 'config', documento 'premiumGlobalStatus')
+    await admin.firestore().collection('config').doc('premiumGlobalStatus').set({
+      isPremiumGlobalActive,
+      premiumGlobalEndDate: premiumGlobalEndDate || null,
+      isLaunchPromoActive
+    }, { merge: true });
+
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Error en setPremiumGlobalStatus:", error);
+    throw new functions.https.HttpsError("internal", "No se pudo actualizar el estado premium global.");
+  }
 });
