@@ -3,7 +3,7 @@ const axios = require("axios");
 
 // ✅ Función Cloud de primera generación
 exports.generateIdeas = functions.https.onCall(async (data, context) => {
-  const { keyword, copytype, language, networks, mode } = data;
+  const { keyword, copytype, language, networks, mode, formatoSalida, nIdeas } = data;
 
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "El usuario debe estar autenticado.");
@@ -19,7 +19,8 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("internal", "API Key no configurada.");
   }
 
-  const prompt = construirPrompt(keyword, copytype, language, networks, mode);
+  // Construye el prompt correctamente, usando el formato delimitado que espera el frontend
+  const prompt = construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas);
 
   try {
     const response = await axios.post("https://api.deepseek.com/chat/completions", {
@@ -34,14 +35,12 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
 
     const textoGenerado = response.data.choices?.[0]?.message?.content || "";
 
-    const ideas = textoGenerado
-      .split(/\n+/)
-      .filter(line => line.trim())
-      .map((line, i) => ({ text: line.trim() }));
+    // Log para depuración (puedes quitarlo después)
+    console.log("IDEAS GENERADAS:", textoGenerado);
 
+    // Aquí NO proceses, simplemente retorna el string completo
     return {
-      success: true,
-      ideas
+      text: textoGenerado
     };
 
   } catch (error) {
@@ -50,17 +49,29 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
   }
 });
 
-function construirPrompt(keyword, copytype, language, networks, mode) {
+// NUEVO: Usa formatoSalida y nIdeas (opcional)
+function construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas) {
   const redes = Array.isArray(networks) ? networks.join(", ") : networks;
-  let mensaje = `Quiero generar ideas de contenido para redes sociales en ${language}. `;
+  // Modo seguro: si frontend NO manda formatoSalida, pon uno básico (pero el frontend sí lo envía)
+  let mensaje = `Quiero que generes ideas de contenido para redes sociales en ${language}.
+El tema es: "${keyword}".
+El tipo de publicación es: "${copytype}".
+`;
 
-  if (mode === "multired") {
-    mensaje += `Necesito una idea para cada una de estas redes: ${redes}. `;
+  if (mode === "multi" || mode === "multired") {
+    mensaje += `Genera exactamente una idea para cada una de estas redes sociales: ${redes}.
+No generes más ideas de las solicitadas.\n`;
   } else {
-    mensaje += `Necesito tres ideas diferentes para una sola red social: ${redes}. `;
+    mensaje += `Genera exactamente 3 ideas diferentes para esta red social: ${redes}.
+No generes más ideas de las solicitadas.\n`;
   }
 
-  mensaje += `El tema es: "${keyword}". El tipo de publicación es: "${copytype}". Sé claro, breve y creativo.`;
+  // Agrega el formato delimitado (frontend lo envía en formatoSalida)
+  if (formatoSalida) {
+    mensaje += `\nUsa este formato de salida:\n${formatoSalida}`;
+  } else {
+    mensaje += `\nPresenta cada idea de forma clara y separada.`;
+  }
 
   return mensaje;
 }
