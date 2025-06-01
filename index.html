@@ -497,38 +497,6 @@
         // ... agrega más textos según lo necesites
       }
     };
-    function setLanguage(lang) {
-      // Guarda el idioma actual
-      window.currentLang = lang;
-      const t = translations[lang];
-
-      // Ejemplo: Cambia títulos y botones principales
-      document.title = t.app_title;
-      document.getElementById("auth-title").innerText = t.login_title;
-      document.getElementById("ff-label-language-app").innerText = t.label_language;
-      document.getElementById("ff-lang-help").innerText = t.lang_help;
-      document.getElementById("ff-label-copytype").innerHTML = t.copytype_label +
-        ` <span class="ff-help-icon" tabindex="0" id="help-copytype"><i class="fas fa-question-circle"></i></span>` +
-        `<span class="ff-help-tooltip">${t.copytype_tooltip}</span>`;
-      document.getElementById("ff-label-mode").innerHTML = t.mode_label +
-        ` <span class="ff-help-icon" tabindex="0" id="help-mode"><i class="fas fa-question-circle"></i></span>` +
-        `<span class="ff-help-tooltip">${t.mode_tooltip}</span>`;
-      document.getElementById("ff-label-networks").innerHTML = t.networks_label +
-        ` <span class="ff-help-icon" tabindex="0" id="help-networks"><i class="fas fa-question-circle"></i></span>` +
-        `<span class="ff-help-tooltip">${t.networks_tooltip}</span>`;
-      document.getElementById("ff-generate-btn").innerText = t.btn_generate;
-      document.getElementById("ff-refresh-btn").innerText = t.btn_refresh;
-      document.getElementById("ff-logout-btn").innerText = t.btn_logout;
-
-      // Inputs y placeholders
-      document.getElementById("ff-keyword").placeholder = t.keyword_placeholder;
-      document.querySelector('label[for="ff-keyword"]').innerText = t.keyword_label;
-
-      // Tooltips
-      document.getElementById("help-keyword").nextElementSibling.innerText = t.keyword_tooltip;
-
-      // ...repite para los demás elementos que quieras traducir
-    }
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js";
@@ -1153,7 +1121,8 @@ At the end, include a motivational phrase:
     document.getElementById("ff-auth-language-selector").addEventListener("change", function (e) {
       setLanguage(e.target.value);
     });
-    setLanguage(document.getElementById("ff-auth-language-selector").value);
+    setLang(document.getElementById("ff-auth-language-selector").value);
+    updateDatalist();
   </script>
 </body>
 
