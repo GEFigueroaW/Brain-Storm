@@ -168,6 +168,7 @@
       </div>
       <div id="ff-results-container" class="mt-4"></div>
     </div>
+    <!-- PANEL ADMIN PREMIUM COMPLETO -->
     <div id="ff-admin-view" class="box mt-5 is-hidden">
       <h3 class="title is-5">Panel Admin Premium</h3>
       <label class="checkbox">
@@ -176,7 +177,16 @@
       </label>
       <input type="date" id="ff-premium-end-date" />
       <button id="ff-set-premium-btn" class="button is-primary is-small">Actualizar global</button>
+      <div class="mt-3">
+        <button id="ff-activate-promo-btn" class="button is-link is-small">
+          Activar promoción de lanzamiento
+        </button>
+        <button id="ff-deactivate-promo-btn" class="button is-light is-small">
+          Desactivar promoción de lanzamiento
+        </button>
+      </div>
       <div id="ff-premium-status-text" class="mt-3"></div>
+      <div id="ff-promo-status-text" class="mt-2"></div>
     </div>
   </section>
   <footer class="footer has-text-centered mt-6">
@@ -762,6 +772,28 @@ document.getElementById("ff-set-premium-btn").addEventListener("click", async ()
     alert("Error al actualizar estado global.");
   }
 });
+
+// PANEL ADMIN PREMIUM: ACTIVAR/DESACTIVAR PROMO Y ESTADO ACTUAL
+document.getElementById("ff-activate-promo-btn").addEventListener("click", async () => {
+  const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
+  await setPromo({ isLaunchPromoActive: true });
+  document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Activa";
+  alert("¡Promoción de lanzamiento activada!");
+});
+document.getElementById("ff-deactivate-promo-btn").addEventListener("click", async () => {
+  const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
+  await setPromo({ isLaunchPromoActive: false });
+  document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Inactiva";
+  alert("Promoción de lanzamiento desactivada.");
+});
+async function mostrarEstadoPromo() {
+  const configRef = doc(db, "appConfig", "global");
+  const configSnap = await getDoc(configRef);
+  let promo = configSnap.exists() && configSnap.data().isLaunchPromoActive;
+  document.getElementById("ff-promo-status-text").textContent =
+    "Promoción de lanzamiento: " + (promo ? "Activa" : "Inactiva");
+}
+
 onAuthStateChanged(auth, async user => {
   if (user) {
     document.getElementById("ff-auth-view").classList.add("is-hidden");
@@ -769,6 +801,7 @@ onAuthStateChanged(auth, async user => {
     await checkPremiumStatus(user.uid);
     await validarAdmin(user.uid);
     updateCounterUI();
+    await mostrarEstadoPromo(); // Mostrar estado promo si es admin
   } else {
     document.getElementById("ff-config-view").classList.add("is-hidden");
     document.getElementById("ff-auth-view").classList.remove("is-hidden");
@@ -780,6 +813,7 @@ setLang(lang);
 updateDatalist();
 clearInputsOnChange();
 updateNetworksByMode();
+
   </script>
 </body>
 </html>
