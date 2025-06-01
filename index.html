@@ -438,65 +438,6 @@
     </p>
   </footer>
   <script type="module">
-    const translations = {
-      es: {
-        app_title: "FeedFlow",
-        login_title: "Inicia sesión para comenzar",
-        label_language: "Idioma de la aplicación",
-        lang_help: "Elige el idioma para la interfaz y las ideas generadas.",
-        keyword_label: "Palabra clave o tema central",
-        keyword_placeholder: "Ej: marketing digital, recetas fáciles, fitness",
-        keyword_tooltip: "Escribe aquí el tema específico sobre el que quieres generar ideas. Ejemplo: “Viajes ecológicos para niños”.",
-        copytype_label: "Define el tipo de copy",
-        copytype_tooltip: "Elige el formato de texto que necesitas para tu idea. Por ejemplo: Post estándar, historia/story o video corto. Algunas opciones requieren cuenta Premium.",
-        mode_label: "Selecciona el modo de generación",
-        mode_tooltip: "Elige si quieres obtener una idea para cada red social seleccionada o varias ideas para una sola red social.",
-        networks_label: "Selecciona la(s) red(es) social(es)",
-        networks_tooltip: "Marca una o más redes sociales donde te gustaría publicar tu contenido. Algunas redes pueden requerir cuenta Premium.",
-        btn_generate: "¡Que fluyan las ideas!",
-        btn_refresh: "Refrescar inspiraciones",
-        btn_logout: "Cerrar sesión",
-        // ... agrega más textos según lo necesites
-      },
-      en: {
-        app_title: "FeedFlow",
-        login_title: "Sign in to start",
-        label_language: "App language",
-        lang_help: "Choose the language for the interface and the generated ideas.",
-        keyword_label: "Keyword or main topic",
-        keyword_placeholder: "Eg: digital marketing, easy recipes, fitness",
-        keyword_tooltip: "Type here the specific topic you want to generate ideas about. For example: “Eco-friendly travel for kids.”",
-        copytype_label: "Choose the copy type",
-        copytype_tooltip: "Select the text format you need for your idea. For example: Standard post, story or short video. Some options require Premium account.",
-        mode_label: "Select generation mode",
-        mode_tooltip: "Choose if you want one idea per selected social network or several ideas for a single network.",
-        networks_label: "Select social network(s)",
-        networks_tooltip: "Select one or more social networks where you'd like to post your content. Some networks may require Premium.",
-        btn_generate: "Let the ideas flow!",
-        btn_refresh: "Refresh inspirations",
-        btn_logout: "Log out",
-        // ... agrega más textos según lo necesites
-      },
-      pt: {
-        app_title: "FeedFlow",
-        login_title: "Faça login para começar",
-        label_language: "Idioma do aplicativo",
-        lang_help: "Escolha o idioma da interface e das ideias geradas.",
-        keyword_label: "Palavra-chave ou tema central",
-        keyword_placeholder: "Ex: marketing digital, receitas fáceis, fitness",
-        keyword_tooltip: "Digite aqui o tema específico sobre o qual deseja gerar ideias. Exemplo: “Viagens ecológicas para crianças”.",
-        copytype_label: "Defina o tipo de copy",
-        copytype_tooltip: "Escolha o formato de texto que você precisa para sua ideia. Por exemplo: Post padrão, story ou vídeo curto. Algumas opções requerem conta Premium.",
-        mode_label: "Selecione o modo de geração",
-        mode_tooltip: "Escolha se deseja obter uma ideia para cada rede social selecionada ou várias ideias para uma única rede.",
-        networks_label: "Selecione as redes sociais",
-        networks_tooltip: "Marque uma ou mais redes sociais onde gostaria de publicar seu conteúdo. Algumas redes podem exigir conta Premium.",
-        btn_generate: "Deixe as ideias fluírem!",
-        btn_refresh: "Atualizar inspirações",
-        btn_logout: "Sair",
-        // ... agrega más textos según lo necesites
-      }
-    };
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js";
