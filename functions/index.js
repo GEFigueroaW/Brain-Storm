@@ -82,25 +82,39 @@ exports.setPremiumGlobalStatus = functions.https.onCall(async (data, context) =>
 
   // Puedes agregar más validaciones según tu lógica de admin aquí,
   // por ejemplo, leer Firestore y verificar que el rol sea "admin".
+  // Si quieres validar, descomenta este bloque:
+  /*
+  try {
+    const userRef = admin.firestore().collection("users").doc(context.auth.uid);
+    const userSnap = await userRef.get();
+    if (!userSnap.exists || userSnap.data().role !== "admin") {
+      throw new functions.https.HttpsError("permission-denied", "No tienes permisos de admin.");
+    }
+  } catch (e) {
+    throw new functions.https.HttpsError("permission-denied", "No tienes permisos de admin.");
+  }
+  */
 
-  // Validar datos recibidos
-  const {
-    isPremiumGlobalActive,
-    premiumGlobalEndDate,
-    isLaunchPromoActive
-  } = data;
+  // Permitir actualizar cualquier combinación de campos
+  const updateFields = {};
+  if (typeof data.isPremiumGlobalActive !== "undefined") {
+    updateFields.isPremiumGlobalActive = data.isPremiumGlobalActive;
+  }
+  if (typeof data.premiumGlobalEndDate !== "undefined") {
+    updateFields.premiumGlobalEndDate = data.premiumGlobalEndDate || null;
+  }
+  if (typeof data.isLaunchPromoActive !== "undefined") {
+    updateFields.isLaunchPromoActive = data.isLaunchPromoActive;
+  }
 
-  if (typeof isPremiumGlobalActive === "undefined" || typeof isLaunchPromoActive === "undefined") {
-    throw new functions.https.HttpsError("invalid-argument", "Faltan campos obligatorios.");
+  // Para evitar que no se mande nada
+  if (Object.keys(updateFields).length === 0) {
+    throw new functions.https.HttpsError("invalid-argument", "No se enviaron campos para actualizar.");
   }
 
   try {
-    // Guardar configuración en Firestore (colección 'config', documento 'premiumGlobalStatus')
-    await admin.firestore().collection('config').doc('premiumGlobalStatus').set({
-      isPremiumGlobalActive,
-      premiumGlobalEndDate: premiumGlobalEndDate || null,
-      isLaunchPromoActive
-    }, { merge: true });
+    // Guardar configuración en Firestore (colección 'appConfig', documento 'global')
+    await admin.firestore().collection('appConfig').doc('global').set(updateFields, { merge: true });
 
     return { success: true };
   } catch (error) {
