@@ -75,3 +75,34 @@ No generes más ideas de las solicitadas.\n`;
 
   return mensaje;
 }
+
+// ======= AGREGADO PARA CORS EN setPremiumGlobalStatus =======
+const cors = require("cors")({ origin: true });
+
+exports.setPremiumGlobalStatus = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      // Aquí va tu lógica original para actualizar el estado premium global
+      // Por ejemplo, suponiendo que recibes { isPremiumGlobalActive, premiumGlobalEndDate, isLaunchPromoActive }
+      // y lo guardas en Firestore:
+      /*
+      const admin = require('firebase-admin');
+      if (!admin.apps.length) admin.initializeApp();
+      const db = admin.firestore();
+
+      const { isPremiumGlobalActive, premiumGlobalEndDate, isLaunchPromoActive } = req.body;
+      await db.collection('config').doc('premiumGlobalStatus').set({
+        isPremiumGlobalActive,
+        premiumGlobalEndDate,
+        isLaunchPromoActive
+      }, { merge: true });
+      */
+
+      // Simulación de respuesta de éxito
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.error("Error en setPremiumGlobalStatus:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+});
