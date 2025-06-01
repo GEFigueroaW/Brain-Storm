@@ -984,7 +984,7 @@ At the end, include a motivational phrase:
       const form = validateForm();
       if (!form) return;
       if (!userPremium && !promoLaunch && userGenCount >= maxGenFree) {
-        alert(t("generations_left") + userGenCount + "/" + maxGenFree);
+        alert(t("generations_left") + userGenCount + "/" + maxGenFree); 
         return;
       }
       const { mode, keyword, copytype, selectedNetworks } = form;
