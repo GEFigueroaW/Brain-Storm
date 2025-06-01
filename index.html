@@ -8,7 +8,6 @@
     content="Genera ideas impactantes para redes sociales con IA. Usa FeedFlow, una app creativa, profesional y visualmente atractiva." />
   <title>FeedFlow – Ideas con IA</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <!-- CSS LIBRARIES -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -17,45 +16,37 @@
       --ff-morado: #8e44ad;
       --ff-dorado: #f1c40f;
       --ff-fondo: #fdfdfd;
-      --ff-degradado: linear-gradient(to right, #8e44ad, #f39c12);
+      --ff-degradado: linear-gradient(to right, #8e44ad, #f1c40f);
     }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background: var(--ff-fondo);
       color: #333;
     }
-
     .ff-logo {
       font-size: 2rem;
       font-weight: bold;
       color: var(--ff-morado);
     }
-
     .ff-gradient {
       background: var(--ff-degradado);
       color: white;
     }
-
     .ff-section {
       padding: 2rem 1rem;
     }
-
     .is-hidden {
       display: none !important;
     }
-
     .card {
       border: 1px solid #ececec;
       border-radius: .5rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.03);
       margin-bottom: 1rem;
     }
-
     .ff-feedback-btn {
       margin-left: .5em;
     }
-
     .modal.is-active {
       display: flex;
     }
@@ -132,16 +123,37 @@
     }
     .ff-suggestion {
       font-size: .95em;
-      margin-top: -1em;
-      margin-bottom: 1.5em;
+      margin-top: 0.3em;
+      margin-bottom: 1em;
       color: #666;
       font-style: italic;
+      display: block;
+      background: none;
+      border: none;
+      padding: 0;
+      line-height: 1.2;
     }
     .ff-datalist {
       display: none;
     }
     .ff-ad {
       margin: 1em 0;
+    }
+    .ff-idea-comp {
+      margin-bottom: .6em;
+    }
+    .ff-idea-label {
+      font-weight: bold;
+      color: #8e44ad;
+      margin-right: .4em;
+    }
+    .ff-final-phrase {
+      margin-top: 1.2em;
+      font-style: italic;
+      background: #f5f5fa;
+      padding: .7em 1em;
+      border-radius: .3em;
+      border-left: 4px solid #8e44ad;
     }
   </style>
 </head>
@@ -197,7 +209,6 @@
       <h2 class="title is-4" id="title-results">Genera ideas con IA</h2>
       <!-- Visualización de Generaciones Restantes -->
       <div id="ff-gen-counter" class="ff-counter"></div>
-      <!-- FORMULARIO DE GENERACIÓN -->
       <div class="box" style="position:relative;">
         <!-- Selección de Modo -->
         <div class="field">
@@ -222,17 +233,14 @@
           <label class="label">
             Palabra clave o tema central
             <span class="ff-help-icon" tabindex="0" id="help-keyword"><i class="fas fa-question-circle"></i></span>
-            <span class="ff-help-tooltip" id="tooltip-keyword">
-              Escribe el tema principal sobre el que quieres generar ideas. Sé lo más preciso posible.
-            </span>
           </label>
           <div class="control">
             <input class="input" type="text" id="ff-keyword" placeholder="Ej: marketing digital, recetas fáciles, fitness" list="ff-keyword-datalist">
             <datalist id="ff-keyword-datalist"></datalist>
           </div>
-          <div class="ff-suggestion" id="ff-keyword-suggestion">
+          <small id="ff-keyword-suggestion" class="ff-suggestion">
             ¡Sé lo más preciso posible! Cuanto más específico sea tu tema, más brillantes serán las ideas que desbloquearemos juntos.
-          </div>
+          </small>
         </div>
         <!-- Botón última información capturada -->
         <div class="field">
@@ -276,11 +284,8 @@
           </div>
         </div>
       </div>
-      <!-- RESULTADOS -->
       <div id="ff-results-container" class="mt-4"></div>
     </div>
-
-    <!-- Panel premium solo visible si el usuario es admin (esto es solo el contenedor, lógica en JS) -->
     <div id="ff-admin-view" class="box mt-5 is-hidden">
       <h3 class="title is-5">Panel Admin Premium</h3>
       <label class="checkbox">
@@ -292,8 +297,6 @@
       <div id="ff-premium-status-text" class="mt-3"></div>
     </div>
   </section>
-
-  <!-- FOOTER -->
   <footer class="footer has-text-centered mt-6">
     <p id="ff-footer-disclaimer" class="is-size-7">
       Aplicación experimental para generación de ideas en redes sociales. Desarrollado con 💡 en Latinoamérica.
@@ -305,563 +308,575 @@
       Desarrollado por FeedFlow · 2025
     </p>
   </footer>
-
-  <!-- SCRIPT CENTRALIZADO -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // --- CONFIGURACIÓN --
-    const firebaseConfig = {
-      apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
-      authDomain: "brain-storm-8f0d8.firebaseapp.com",
-      projectId: "brain-storm-8f0d8",
-      storageBucket: "brain-storm-8f0d8.appspot.com",
-      messagingSenderId: "401208607043",
-      appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
-    };
+// --- CONFIGURACIÓN --
+const firebaseConfig = {
+  apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
+  authDomain: "brain-storm-8f0d8.firebaseapp.com",
+  projectId: "brain-storm-8f0d8",
+  storageBucket: "brain-storm-8f0d8.appspot.com",
+  messagingSenderId: "401208607043",
+  appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const functions = getFunctions(app);
-    const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const functions = getFunctions(app);
+const db = getFirestore(app);
 
-    // --- TRADUCCIONES SIMPLIFICADAS (agrega más según idioma/llave si lo deseas)
-    const LANGS = ["es", "en", "pt"];
-    const tr = {
-      es: {
-        mode_multi: "Generar una idea por cada red social seleccionada",
-        mode_single: "Generar 3 opciones distintas para una sola red social",
-        help_mode: "Elige si deseas una idea por cada red social o varias ideas para una sola red social.",
-        keyword_label: "Palabra clave o tema central",
-        help_keyword: "Escribe el tema principal sobre el que quieres generar ideas.",
-        keyword_suggestion: "¡Sé lo más preciso posible! Cuanto más específico sea tu tema, más brillantes serán las ideas que desbloquearemos juntos.",
-        last_input: "Cargar última información capturada",
-        copytype_label: "Define el tipo de copy",
-        help_copytype: "Selecciona el tipo de texto. Algunas opciones requieren cuenta Premium.",
-        networks_label: "Selecciona la(s) red(es) social(es)",
-        help_networks: "Selecciona una o varias redes sociales. Algunas requieren cuenta Premium.",
-        generate: "¡Que fluyan las ideas!",
-        refresh: "Refrescar inspiraciones",
-        logout: "Cerrar sesión",
-        free_copytypes: ["Informativo o educativo", "Informal", "Técnico o profesional"],
-        premium_label: "Premium",
-        free_network: "Facebook",
-        generations_left: "Generaciones restantes esta semana: ",
-        error_required: "Por favor, completa todos los campos requeridos.",
-        error_network: "Selecciona al menos una red social.",
-        error_keyword: "Debes escribir un tema.",
-        error_copytype: "Selecciona un tipo de copy.",
-        generation_loading: "Generando ideas...",
-        no_ideas: "No se generaron ideas. Intenta con otra palabra clave.",
-        copy: "Copiar",
-        copied: "¡Texto copiado!",
-        feedback_thank: "¡Gracias por tu feedback!",
-        feedback_modal: "Tu opinión ayuda a mejorar la calidad de las ideas generadas.",
-        close: "Cerrar",
-        ad_full: "Publicidad: ¡Explora nuestra versión Premium sin anuncios!",
-        ad_light: "Publicidad moderada activa por promoción.",
-        premium_admin: "Panel Admin Premium",
-        activate_premium: "Activar premium global",
-        update_global: "Actualizar global",
-        premium_until: "Premium global activo hasta: ",
-        premium_update_success: "Actualización exitosa."
-      },
-      en: {
-        mode_multi: "Generate one idea for each selected social network",
-        mode_single: "Generate 3 different ideas for a single social network",
-        help_mode: "Choose if you want one idea per selected network or several for one.",
-        keyword_label: "Keyword or main topic",
-        help_keyword: "Type the main topic for your ideas.",
-        keyword_suggestion: "Be as specific as possible! The more specific, the brighter the ideas.",
-        last_input: "Load last captured info",
-        copytype_label: "Define the copy type",
-        help_copytype: "Select the type of text. Some options require Premium.",
-        networks_label: "Select social network(s)",
-        help_networks: "Select one or more networks. Some require Premium.",
-        generate: "Let the ideas flow!",
-        refresh: "Refresh inspirations",
-        logout: "Log out",
-        free_copytypes: ["Informative/Educational", "Informal", "Technical/Professional"],
-        premium_label: "Premium",
-        free_network: "Facebook",
-        generations_left: "Generations left this week: ",
-        error_required: "Please fill all required fields.",
-        error_network: "Select at least one social network.",
-        error_keyword: "You must provide a topic.",
-        error_copytype: "Select a copy type.",
-        generation_loading: "Generating ideas...",
-        no_ideas: "No ideas generated. Try another keyword.",
-        copy: "Copy",
-        copied: "Copied!",
-        feedback_thank: "Thanks for your feedback!",
-        feedback_modal: "Your opinion helps to improve idea quality.",
-        close: "Close",
-        ad_full: "Ads: Try our Premium version for no ads!",
-        ad_light: "Moderate ads active due to promotion.",
-        premium_admin: "Premium Admin Panel",
-        activate_premium: "Activate global premium",
-        update_global: "Update global",
-        premium_until: "Global premium active until: ",
-        premium_update_success: "Updated successfully."
-      },
-      pt: {
-        mode_multi: "Gerar uma ideia para cada rede social selecionada",
-        mode_single: "Gerar 3 ideias diferentes para uma única rede social",
-        help_mode: "Escolha se quer uma ideia por rede ou várias para uma só.",
-        keyword_label: "Palavra-chave ou tema principal",
-        help_keyword: "Escreva o tema principal para suas ideias.",
-        keyword_suggestion: "Seja o mais específico possível! Quanto mais preciso, melhores as ideias.",
-        last_input: "Carregar última informação capturada",
-        copytype_label: "Defina o tipo de copy",
-        help_copytype: "Selecione o tipo de texto. Algumas opções são Premium.",
-        networks_label: "Selecione a(s) rede(s) social(is)",
-        help_networks: "Selecione uma ou mais redes. Algumas são Premium.",
-        generate: "Que fluam as ideias!",
-        refresh: "Atualizar inspirações",
-        logout: "Sair",
-        free_copytypes: ["Informativo ou educativo", "Informal", "Técnico ou profissional"],
-        premium_label: "Premium",
-        free_network: "Facebook",
-        generations_left: "Gerações restantes esta semana: ",
-        error_required: "Preencha todos os campos obrigatórios.",
-        error_network: "Selecione pelo menos uma rede social.",
-        error_keyword: "Você deve fornecer um tema.",
-        error_copytype: "Selecione um tipo de copy.",
-        generation_loading: "Gerando ideias...",
-        no_ideas: "Nenhuma ideia gerada. Tente outra palavra-chave.",
-        copy: "Copiar",
-        copied: "Copiado!",
-        feedback_thank: "Obrigado pelo seu feedback!",
-        feedback_modal: "Sua opinião ajuda a melhorar a qualidade das ideias.",
-        close: "Fechar",
-        ad_full: "Publicidade: Explore a versão Premium sem anúncios!",
-        ad_light: "Publicidade moderada ativa devido à promoção.",
-        premium_admin: "Painel Admin Premium",
-        activate_premium: "Ativar premium global",
-        update_global: "Atualizar global",
-        premium_until: "Premium global ativo até: ",
-        premium_update_success: "Atualização realizada com sucesso."
-      }
-    };
+// --- TRADUCCIONES SIMPLIFICADAS ---
+const LANGS = ["es", "en", "pt"];
+const tr = {
+  es: {
+    mode_multi: "Generar una idea por cada red social seleccionada",
+    mode_single: "Generar 3 opciones distintas para una sola red social",
+    help_mode: "Elige si deseas una idea por cada red social o varias ideas para una sola red social.",
+    keyword_label: "Palabra clave o tema central",
+    help_keyword: "Escribe el tema principal sobre el que quieres generar ideas.",
+    keyword_suggestion: "¡Sé lo más preciso posible! Cuanto más específico sea tu tema, más brillantes serán las ideas que desbloquearemos juntos.",
+    last_input: "Cargar última información capturada",
+    copytype_label: "Define el tipo de copy",
+    help_copytype: "Selecciona el tipo de texto. Algunas opciones requieren cuenta Premium.",
+    networks_label: "Selecciona la(s) red(es) social(es)",
+    help_networks: "Selecciona una o varias redes sociales. Algunas requieren cuenta Premium.",
+    generate: "¡Que fluyan las ideas!",
+    refresh: "Refrescar inspiraciones",
+    logout: "Cerrar sesión",
+    free_copytypes: ["Informativo o educativo", "Informal", "Técnico o profesional"],
+    premium_label: "Premium",
+    free_network: "Facebook",
+    generations_left: "Generaciones restantes esta semana: ",
+    error_required: "Por favor, completa todos los campos requeridos.",
+    error_network: "Selecciona al menos una red social.",
+    error_keyword: "Debes escribir un tema.",
+    error_copytype: "Selecciona un tipo de copy.",
+    generation_loading: "Generando ideas...",
+    no_ideas: "No se generaron ideas. Intenta con otra palabra clave.",
+    copy: "Copiar",
+    copied: "¡Texto copiado!",
+    feedback_thank: "¡Gracias por tu feedback!",
+    feedback_modal: "Tu opinión ayuda a mejorar la calidad de las ideas generadas.",
+    close: "Cerrar",
+    ad_full: "Publicidad: ¡Explora nuestra versión Premium sin anuncios!",
+    ad_light: "Publicidad moderada activa por promoción.",
+    premium_admin: "Panel Admin Premium",
+    activate_premium: "Activar premium global",
+    update_global: "Actualizar global",
+    premium_until: "Premium global activo hasta: ",
+    premium_update_success: "Actualización exitosa.",
+    gancho: "Gancho Verbal Impactante",
+    angulo: "Ángulo Narrativo",
+    texto: "Texto del Post",
+    hashtags: "Hashtags",
+    visual: "Formato Visual Sugerido",
+    cta: "Llamada a la Acción (CTA)",
+    frasefinal: "Frase motivacional"
+  },
+  en: {
+    // ...Completa según necesidad...
+    gancho: "Impactful Hook",
+    angulo: "Narrative Angle",
+    texto: "Post Text",
+    hashtags: "Hashtags",
+    visual: "Suggested Visual Format",
+    cta: "Call to Action (CTA)",
+    frasefinal: "Motivational Phrase"
+  },
+  pt: {
+    // ...Completa según necesidad...
+    gancho: "Gancho Impactante",
+    angulo: "Ângulo Narrativo",
+    texto: "Texto da Postagem",
+    hashtags: "Hashtags",
+    visual: "Formato Visual Sugerido",
+    cta: "Chamada para Ação (CTA)",
+    frasefinal: "Frase motivacional"
+  }
+};
 
-    // --- OPCIONES DE COPY Y REDES SOCIALES PARA BACKEND Y ETIQUETA
-    const COPYTYPE_OPTIONS = [
-      { value: "beneficio", label: { es: "De beneficio y solución", en: "Benefit & Solution", pt: "Benefício e solução" }, premium: true },
-      { value: "novedad", label: { es: "De novedad o lanzamiento", en: "New or Launch", pt: "Novidade ou lançamento" }, premium: true },
-      { value: "interaccion", label: { es: "De interacción o pregunta", en: "Interaction or Question", pt: "Interação ou pergunta" }, premium: true },
-      { value: "urgencia", label: { es: "De urgencia o escasez", en: "Urgency or Scarcity", pt: "Urgência ou escassez" }, premium: true },
-      { value: "informativo", label: { es: "Informativo o educativo", en: "Informative/Educational", pt: "Informativo ou educativo" }, premium: false },
-      { value: "informal", label: { es: "Informal", en: "Informal", pt: "Informal" }, premium: false },
-      { value: "cta", label: { es: "Llamada a la acción (CTA)", en: "Call to Action (CTA)", pt: "Chamada à ação (CTA)" }, premium: true },
-      { value: "narrativo", label: { es: "Narrativo o storytelling", en: "Narrative/Storytelling", pt: "Narrativo ou storytelling" }, premium: true },
-      { value: "branding", label: { es: "Posicionamiento o branding", en: "Branding", pt: "Posicionamento ou branding" }, premium: true },
-      { value: "testimonio", label: { es: "Testimonio o prueba social", en: "Testimonial/Social Proof", pt: "Testemunho ou prova social" }, premium: true },
-      { value: "tecnico", label: { es: "Técnico o profesional", en: "Technical/Professional", pt: "Técnico ou profissional" }, premium: false },
-      { value: "venta", label: { es: "Venta directa o persuasivo", en: "Direct Sale/Persuasive", pt: "Venda direta ou persuasivo" }, premium: true }
-    ];
+// --- OPCIONES DE COPY Y REDES SOCIALES ---
+const COPYTYPE_OPTIONS = [
+  { value: "beneficio", label: { es: "De beneficio y solución", en: "Benefit & Solution", pt: "Benefício e solução" }, premium: true },
+  { value: "novedad", label: { es: "De novedad o lanzamiento", en: "New or Launch", pt: "Novidade ou lançamento" }, premium: true },
+  { value: "interaccion", label: { es: "De interacción o pregunta", en: "Interaction or Question", pt: "Interação ou pergunta" }, premium: true },
+  { value: "urgencia", label: { es: "De urgencia o escasez", en: "Urgency or Scarcity", pt: "Urgência ou escassez" }, premium: true },
+  { value: "informativo", label: { es: "Informativo o educativo", en: "Informative/Educational", pt: "Informativo ou educativo" }, premium: false },
+  { value: "informal", label: { es: "Informal", en: "Informal", pt: "Informal" }, premium: false },
+  { value: "cta", label: { es: "Llamada a la acción (CTA)", en: "Call to Action (CTA)", pt: "Chamada à ação (CTA)" }, premium: true },
+  { value: "narrativo", label: { es: "Narrativo o storytelling", en: "Narrative/Storytelling", pt: "Narrativo ou storytelling" }, premium: true },
+  { value: "branding", label: { es: "Posicionamiento o branding", en: "Branding", pt: "Posicionamento ou branding" }, premium: true },
+  { value: "testimonio", label: { es: "Testimonio o prueba social", en: "Testimonial/Social Proof", pt: "Testemunho ou prova social" }, premium: true },
+  { value: "tecnico", label: { es: "Técnico o profesional", en: "Technical/Professional", pt: "Técnico ou profissional" }, premium: false },
+  { value: "venta", label: { es: "Venta directa o persuasivo", en: "Direct Sale/Persuasive", pt: "Venda direta ou persuasivo" }, premium: true }
+];
 
-    const NETWORK_OPTIONS = [
-      { value: "facebook", label: { es: "Facebook", en: "Facebook", pt: "Facebook" }, premium: false },
-      { value: "linkedin", label: { es: "LinkedIn", en: "LinkedIn", pt: "LinkedIn" }, premium: true },
-      { value: "twitter", label: { es: "X / Twitter", en: "X / Twitter", pt: "X / Twitter" }, premium: true },
-      { value: "whatsapp", label: { es: "Whatsapp", en: "Whatsapp", pt: "Whatsapp" }, premium: true },
-      { value: "telegram", label: { es: "Telegram", en: "Telegram", pt: "Telegram" }, premium: true },
-      { value: "reddit", label: { es: "Reddit", en: "Reddit", pt: "Reddit" }, premium: true },
-      { value: "instagram", label: { es: "Instagram", en: "Instagram", pt: "Instagram" }, premium: true },
-      { value: "tiktok", label: { es: "TikTok", en: "TikTok", pt: "TikTok" }, premium: true },
-      { value: "youtube", label: { es: "Youtube", en: "Youtube", pt: "Youtube" }, premium: true }
-    ];
+const NETWORK_OPTIONS = [
+  { value: "facebook", label: { es: "Facebook", en: "Facebook", pt: "Facebook" }, premium: false },
+  { value: "linkedin", label: { es: "LinkedIn", en: "LinkedIn", pt: "LinkedIn" }, premium: true },
+  { value: "twitter", label: { es: "X / Twitter", en: "X / Twitter", pt: "X / Twitter" }, premium: true },
+  { value: "whatsapp", label: { es: "Whatsapp", en: "Whatsapp", pt: "Whatsapp" }, premium: true },
+  { value: "telegram", label: { es: "Telegram", en: "Telegram", pt: "Telegram" }, premium: true },
+  { value: "reddit", label: { es: "Reddit", en: "Reddit", pt: "Reddit" }, premium: true },
+  { value: "instagram", label: { es: "Instagram", en: "Instagram", pt: "Instagram" }, premium: true },
+  { value: "tiktok", label: { es: "TikTok", en: "TikTok", pt: "TikTok" }, premium: true },
+  { value: "youtube", label: { es: "Youtube", en: "Youtube", pt: "Youtube" }, premium: true }
+];
 
-    // --- ESTADO GLOBAL
-    let userPremium = false;
-    let userIsAdmin = false;
-    let userGenCount = 0, maxGenFree = 3;
-    let lang = "es";
-    let promoLaunch = false;
-    let lastInputs = null;
-    let lastIdeasInputs = null;
+// --- ESTADO GLOBAL
+let userPremium = false;
+let userIsAdmin = false;
+let userGenCount = 0, maxGenFree = 3;
+let lang = "es";
+let promoLaunch = false;
+let lastInputs = null;
 
-    // --- FUNCIONES AUXILIARES DE UI, TRADUCCIÓN Y ESTADO
-    function t(key) {
-      return tr[lang] && tr[lang][key] ? tr[lang][key] : key;
+// --- FUNCIONES AUXILIARES DE UI, TRADUCCIÓN Y ESTADO
+function t(key) {
+  return tr[lang] && tr[lang][key] ? tr[lang][key] : key;
+}
+function tCopyLabel(c) { return c.label[lang] || c.label["es"] || c.value; }
+function tNetLabel(n) { return n.label[lang] || n.label["es"] || n.value; }
+
+function renderCopytypeOptions() {
+  const select = document.getElementById("ff-copytype");
+  select.innerHTML = "";
+  COPYTYPE_OPTIONS.forEach(opt => {
+    const option = document.createElement("option");
+    option.value = opt.value;
+    option.textContent = tCopyLabel(opt);
+    if (opt.premium && !userPremium && !promoLaunch) {
+      option.disabled = true;
+      option.className = "ff-option-disabled";
+      option.textContent += ` (${t("premium_label")})`;
     }
+    select.appendChild(option);
+  });
+}
 
-    function tCopyLabel(c) { return c.label[lang] || c.label["es"] || c.value; }
-    function tNetLabel(n) { return n.label[lang] || n.label["es"] || n.value; }
-
-    function renderCopytypeOptions() {
-      const select = document.getElementById("ff-copytype");
-      select.innerHTML = "";
-      COPYTYPE_OPTIONS.forEach(opt => {
-        const option = document.createElement("option");
-        option.value = opt.value;
-        option.textContent = tCopyLabel(opt);
-        if (opt.premium && !userPremium && !promoLaunch) {
-          option.disabled = true;
-          option.className = "ff-option-disabled";
-          option.textContent += ` (${t("premium_label")})`;
-        }
-        select.appendChild(option);
-      });
+function renderNetworkOptions() {
+  const container = document.getElementById("ff-networks-container");
+  container.innerHTML = "";
+  NETWORK_OPTIONS.forEach(opt => {
+    const btn = document.createElement("label");
+    btn.className = "button is-small";
+    btn.style.position = "relative";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.className = "ff-social";
+    input.value = opt.value;
+    if (opt.premium && !userPremium && !promoLaunch) {
+      input.disabled = true;
+      btn.classList.add("ff-option-disabled");
+      btn.innerHTML += ` <span class="is-premium">${t("premium_label")}</span>`;
     }
+    btn.appendChild(input);
+    btn.append(" " + tNetLabel(opt));
+    container.appendChild(btn);
+  });
+}
 
-    function renderNetworkOptions() {
-      const container = document.getElementById("ff-networks-container");
-      container.innerHTML = "";
-      NETWORK_OPTIONS.forEach(opt => {
-        const btn = document.createElement("label");
-        btn.className = "button is-small";
-        btn.style.position = "relative";
-        const input = document.createElement("input");
-        input.type = "checkbox";
-        input.className = "ff-social";
-        input.value = opt.value;
-        if (opt.premium && !userPremium && !promoLaunch) {
-          input.disabled = true;
-          btn.classList.add("ff-option-disabled");
-          btn.innerHTML += ` <span class="is-premium">${t("premium_label")}</span>`;
-        }
-        btn.appendChild(input);
-        btn.append(" " + tNetLabel(opt));
-        container.appendChild(btn);
-      });
-    }
+function updateCounterUI() {
+  const el = document.getElementById("ff-gen-counter");
+  if (!userPremium && !promoLaunch) {
+    el.textContent = `${t("generations_left")}${userGenCount}/${maxGenFree}`;
+    el.style.display = "";
+  } else {
+    el.style.display = "none";
+  }
+}
 
-    function updateCounterUI() {
-      const el = document.getElementById("ff-gen-counter");
-      if (!userPremium && !promoLaunch) {
-        el.textContent = `${t("generations_left")}${userGenCount}/${maxGenFree}`;
-        el.style.display = "";
-      } else {
-        el.style.display = "none";
-      }
-    }
+function setLang(newLang) {
+  lang = newLang;
+  document.getElementById("ff-label-mode").childNodes[0].textContent = t("mode_multi");
+  document.getElementById("ff-label-copytype").childNodes[0].textContent = t("copytype_label");
+  document.getElementById("ff-label-networks").childNodes[0].textContent = t("networks_label");
+  document.getElementById("ff-label-language-app").textContent = t("ff-label-language-app") || "Idioma de la aplicación";
+  document.getElementById("ff-keyword-suggestion").textContent = t("keyword_suggestion");
+  document.getElementById("ff-generate-btn").textContent = t("generate");
+  document.getElementById("ff-refresh-btn").textContent = t("refresh");
+  document.getElementById("ff-logout-btn").textContent = t("logout");
+  document.getElementById("ff-last-input-btn").textContent = t("last_input");
+  renderCopytypeOptions();
+  renderNetworkOptions();
+  updateCounterUI();
+}
 
-    function setLang(newLang) {
-      lang = newLang;
-      document.getElementById("ff-label-mode").childNodes[0].textContent = t("mode_multi");
-      document.getElementById("ff-label-copytype").childNodes[0].textContent = t("copytype_label");
-      document.getElementById("ff-label-networks").childNodes[0].textContent = t("networks_label");
-      document.getElementById("ff-label-language-app").textContent = t("ff-label-language-app") || "Idioma de la aplicación";
-      document.getElementById("ff-keyword-suggestion").textContent = t("keyword_suggestion");
-      document.getElementById("ff-label-language-app").textContent = t("ff-label-language-app") || "Idioma de la aplicación";
-      document.getElementById("ff-generate-btn").textContent = t("generate");
-      document.getElementById("ff-refresh-btn").textContent = t("refresh");
-      document.getElementById("ff-logout-btn").textContent = t("logout");
-      document.getElementById("ff-last-input-btn").textContent = t("last_input");
-      renderCopytypeOptions();
-      renderNetworkOptions();
-      updateCounterUI();
-    }
+// --- PERSISTENCIA DE ÚLTIMOS INPUTS
+function saveInputs() {
+  lastInputs = {
+    mode: document.querySelector('input[name="ff-mode"]:checked').value,
+    keyword: document.getElementById("ff-keyword").value,
+    copytype: document.getElementById("ff-copytype").value,
+    networks: Array.from(document.querySelectorAll(".ff-social:checked")).map(el => el.value)
+  };
+  localStorage.setItem("ff-last-inputs", JSON.stringify(lastInputs));
+}
 
-    // --- PERSISTENCIA DE ÚLTIMOS INPUTS
-    function saveInputs() {
-      lastInputs = {
-        mode: document.querySelector('input[name="ff-mode"]:checked').value,
-        keyword: document.getElementById("ff-keyword").value,
-        copytype: document.getElementById("ff-copytype").value,
-        networks: Array.from(document.querySelectorAll(".ff-social:checked")).map(el => el.value)
-      };
-      localStorage.setItem("ff-last-inputs", JSON.stringify(lastInputs));
-    }
+function restoreInputs() {
+  if (!lastInputs) lastInputs = JSON.parse(localStorage.getItem("ff-last-inputs") || "null");
+  if (!lastInputs) return;
+  document.querySelector(`input[name="ff-mode"][value="${lastInputs.mode}"]`).checked = true;
+  document.getElementById("ff-keyword").value = lastInputs.keyword;
+  document.getElementById("ff-copytype").value = lastInputs.copytype;
+  renderNetworkOptions();
+  lastInputs.networks.forEach(val => {
+    const el = document.querySelector(`.ff-social[value="${val}"]`);
+    if (el) el.checked = true;
+  });
+}
 
-    function restoreInputs() {
-      if (!lastInputs) lastInputs = JSON.parse(localStorage.getItem("ff-last-inputs") || "null");
-      if (!lastInputs) return;
-      document.querySelector(`input[name="ff-mode"][value="${lastInputs.mode}"]`).checked = true;
-      document.getElementById("ff-keyword").value = lastInputs.keyword;
-      document.getElementById("ff-copytype").value = lastInputs.copytype;
-      renderNetworkOptions();
-      lastInputs.networks.forEach(val => {
-        const el = document.querySelector(`.ff-social[value="${val}"]`);
-        if (el) el.checked = true;
-      });
-    }
+function clearInputsOnChange() {
+  document.getElementById("ff-keyword").addEventListener("input", () => localStorage.removeItem("ff-last-inputs"));
+  document.getElementById("ff-copytype").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
+  document.getElementById("ff-networks-container").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
+}
 
-    function clearInputsOnChange() {
-      document.getElementById("ff-keyword").addEventListener("input", () => localStorage.removeItem("ff-last-inputs"));
-      document.getElementById("ff-copytype").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
-      document.getElementById("ff-networks-container").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
-    }
+// --- DATALIST DE PALABRAS CLAVE SUGERIDAS (simulado)
+const SUGGESTED_KEYWORDS = ["marketing digital", "recetas fáciles", "fitness", "emprendimiento", "finanzas", "viajes", "tecnología", "salud mental", "moda", "gaming"];
+function updateDatalist() {
+  const datalist = document.getElementById("ff-keyword-datalist");
+  datalist.innerHTML = "";
+  SUGGESTED_KEYWORDS.forEach(k => {
+    const opt = document.createElement("option");
+    opt.value = k;
+    datalist.appendChild(opt);
+  });
+}
 
-    // --- DATALIST DE PALABRAS CLAVE SUGERIDAS (simulado)
-    const SUGGESTED_KEYWORDS = ["marketing digital", "recetas fáciles", "fitness", "emprendimiento", "finanzas", "viajes", "tecnología", "salud mental", "moda", "gaming"];
-    function updateDatalist() {
-      const datalist = document.getElementById("ff-keyword-datalist");
-      datalist.innerHTML = "";
-      SUGGESTED_KEYWORDS.forEach(k => {
-        const opt = document.createElement("option");
-        opt.value = k;
-        datalist.appendChild(opt);
-      });
-    }
+// --- EVENTOS Y LOGICA GENERAL ---
+document.getElementById("ff-google-login").addEventListener("click", async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    alert("Error al iniciar sesión.");
+  }
+});
+document.getElementById("ff-logout-btn").addEventListener("click", async () => await signOut(auth));
+document.getElementById("ff-last-input-btn").addEventListener("click", restoreInputs);
+document.getElementById("ff-auth-language-selector").addEventListener("change", e => {
+  setLang(e.target.value);
+  updateDatalist();
+});
+document.querySelectorAll(".ff-help-icon").forEach(icon => {
+  icon.addEventListener("focus", e => e.target.nextElementSibling.style.display = "block");
+  icon.addEventListener("blur", e => e.target.nextElementSibling.style.display = "none");
+});
 
-    // --- EVENTOS Y LOGICA GENERAL ---
-    // Login
-    document.getElementById("ff-google-login").addEventListener("click", async () => {
-      const provider = new GoogleAuthProvider();
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (error) {
-        alert("Error al iniciar sesión.");
-      }
-    });
+// Validación y lógica de selección de modo/redes
+function validateForm() {
+  const mode = document.querySelector('input[name="ff-mode"]:checked').value;
+  const keyword = document.getElementById("ff-keyword").value.trim();
+  const copytype = document.getElementById("ff-copytype").value;
+  const selectedNetworks = Array.from(document.querySelectorAll(".ff-social:checked")).map(el => el.value);
 
-    // Logout
-    document.getElementById("ff-logout-btn").addEventListener("click", async () => await signOut(auth));
+  if (!keyword) {
+    alert(t("error_keyword"));
+    return false;
+  }
+  if (!copytype) {
+    alert(t("error_copytype"));
+    return false;
+  }
+  if (mode === "multi" && selectedNetworks.length < 1) {
+    alert(t("error_network"));
+    return false;
+  }
+  if (mode === "single" && selectedNetworks.length !== 1) {
+    alert(t("error_network"));
+    return false;
+  }
+  return { mode, keyword, copytype, selectedNetworks };
+}
 
-    // Cargar última información capturada
-    document.getElementById("ff-last-input-btn").addEventListener("click", restoreInputs);
-
-    // Idioma seleccionado
-    document.getElementById("ff-auth-language-selector").addEventListener("change", e => {
-      setLang(e.target.value);
-      updateDatalist();
-    });
-
-    // Tooltips (accesibilidad)
-    document.querySelectorAll(".ff-help-icon").forEach(icon => {
-      icon.addEventListener("focus", e => e.target.nextElementSibling.style.display = "block");
-      icon.addEventListener("blur", e => e.target.nextElementSibling.style.display = "none");
-    });
-
-    // Validación y lógica de selección de modo/redes
-    function validateForm() {
-      const mode = document.querySelector('input[name="ff-mode"]:checked').value;
-      const keyword = document.getElementById("ff-keyword").value.trim();
-      const copytype = document.getElementById("ff-copytype").value;
-      const selectedNetworks = Array.from(document.querySelectorAll(".ff-social:checked")).map(el => el.value);
-
-      if (!keyword) {
-        alert(t("error_keyword"));
-        return false;
-      }
-      if (!copytype) {
-        alert(t("error_copytype"));
-        return false;
-      }
-      if (mode === "multi" && selectedNetworks.length < 1) {
-        alert(t("error_network"));
-        return false;
-      }
-      if (mode === "single" && selectedNetworks.length !== 1) {
-        alert(t("error_network"));
-        return false;
-      }
-      return { mode, keyword, copytype, selectedNetworks };
-    }
-
-    // Lógica de modo: inhabilitar o permitir redes según modo
-    function updateNetworksByMode() {
-      const mode = document.querySelector('input[name="ff-mode"]:checked').value;
-      renderNetworkOptions();
-      if (mode === "single") {
-        // Solo una red seleccionable
-        document.querySelectorAll(".ff-social").forEach(cb => {
-          cb.addEventListener("change", function () {
-            if (this.checked) {
-              document.querySelectorAll(".ff-social").forEach(other => {
-                if (other !== this) {
-                  other.checked = false;
-                  other.disabled = true;
-                }
-              });
-            } else {
-              document.querySelectorAll(".ff-social").forEach(cb => cb.disabled = false);
+function updateNetworksByMode() {
+  const mode = document.querySelector('input[name="ff-mode"]:checked').value;
+  renderNetworkOptions();
+  if (mode === "single") {
+    document.querySelectorAll(".ff-social").forEach(cb => {
+      cb.addEventListener("change", function () {
+        if (this.checked) {
+          document.querySelectorAll(".ff-social").forEach(other => {
+            if (other !== this) {
+              other.checked = false;
+              other.disabled = true;
             }
           });
-        });
-      }
-    }
-    document.querySelectorAll('input[name="ff-mode"]').forEach(el => el.addEventListener("change", updateNetworksByMode));
-
-    // Formulario: GENERAR IDEAS
-    async function generateIdeas(refresh = false) {
-      const form = validateForm();
-      if (!form) return;
-      if (!userPremium && !promoLaunch && userGenCount >= maxGenFree) {
-        alert(t("generations_left") + userGenCount + "/" + maxGenFree);
-        return;
-      }
-      const { mode, keyword, copytype, selectedNetworks } = form;
-      saveInputs();
-      document.getElementById("ff-results-container").innerHTML = `<div class="notification is-info">${t("generation_loading")}</div>`;
-      try {
-        const generateIdeasFn = httpsCallable(functions, "generateIdeas");
-        const response = await generateIdeasFn({
-          keyword, copytype, language: lang, networks: selectedNetworks, mode
-        });
-        if (response.data.success && response.data.ideas.length > 0) {
-          userGenCount++;
-          updateCounterUI();
-          renderIdeas(response.data.ideas);
         } else {
-          document.getElementById("ff-results-container").innerHTML = `<div class="notification is-warning">${t("no_ideas")}</div>`;
+          document.querySelectorAll(".ff-social").forEach(cb => cb.disabled = false);
         }
-      } catch (error) {
-        document.getElementById("ff-results-container").innerHTML = `<div class="notification is-danger">${t("no_ideas")}</div>`;
-      }
-    }
-    document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
-    document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
-
-    // Render ideas y feedback
-    function renderIdeas(ideas) {
-      const container = document.getElementById("ff-results-container");
-      container.innerHTML = "";
-      ideas.forEach((idea, index) => {
-        const card = document.createElement("div");
-        card.className = "card mb-3 p-3";
-        const content = document.createElement("div");
-        content.className = "content";
-        content.innerHTML = `<strong>Idea ${index + 1}:</strong> ${idea.text}`;
-        const copyBtn = document.createElement("button");
-        copyBtn.className = "button is-small is-success mt-2";
-        copyBtn.textContent = t("copy");
-        copyBtn.onclick = () => {
-          navigator.clipboard.writeText(idea.text);
-          alert(t("copied"));
-        };
-        // Feedback buttons
-        const feedbackDiv = document.createElement("div");
-        feedbackDiv.className = "mt-2";
-        ["👍", "👎"].forEach(type => {
-          const btn = document.createElement("button");
-          btn.className = "button is-small ff-feedback-btn";
-          btn.dataset.feedback = (type === "👍") ? "positivo" : "negativo";
-          btn.dataset.ideaIndex = index;
-          btn.innerHTML = type;
-          feedbackDiv.appendChild(btn);
-        });
-        card.appendChild(content);
-        card.appendChild(copyBtn);
-        card.appendChild(feedbackDiv);
-        container.appendChild(card);
       });
+    });
+  }
+}
+document.querySelectorAll('input[name="ff-mode"]').forEach(el => el.addEventListener("change", updateNetworksByMode));
+
+// --- FORMATO DE SALIDA Y PARSER ---
+function getPromptFormatoSalida(lang) {
+  // Puedes ajustar según idioma
+  if (lang === "es") {
+    return `
+Por cada idea, sigue exactamente este formato en español:
+---IDEA_N---
+Gancho Verbal Impactante: [gancho impactante aquí]
+Ángulo Narrativo: [ángulo aquí]
+Texto del Post: [texto principal aquí]
+Hashtags: [hashtags aquí]
+Formato Visual Sugerido: [formato visual aquí]
+Llamada a la Acción (CTA): [cta aquí]
+---FIN_IDEA_N---
+
+Al final de todas las ideas, incluye una frase motivacional así:
+---FRASE_FINAL---
+[frase motivacional aquí]
+---FIN_FRASE_FINAL---
+`.trim();
+  }
+  // Agregar otros idiomas si es necesario (en, pt)
+  return `
+For each idea, use exactly this format in ${lang}:
+---IDEA_N---
+Impactful Hook: [impactful hook here]
+Narrative Angle: [angle here]
+Post Text: [main text here]
+Hashtags: [hashtags here]
+Suggested Visual Format: [visual format here]
+Call to Action (CTA): [cta here]
+---FIN_IDEA_N---
+
+At the end, include a motivational phrase:
+---FRASE_FINAL---
+[motivational phrase here]
+---FIN_FRASE_FINAL---
+`.trim();
+}
+function parseIdeasFromResponse(text) {
+  const ideaBlocks = text.split(/---IDEA_\d+---/g).slice(1);
+  const ideas = ideaBlocks.map(block => {
+    const [body] = block.split(/---FIN_IDEA_\d+---/);
+    return {
+      gancho: /Gancho Verbal Impactante:\s*([\s\S]*?)\n/i.exec(body)?.[1]?.trim() || "",
+      angulo: /Ángulo Narrativo:\s*([\s\S]*?)\n/i.exec(body)?.[1]?.trim() || "",
+      texto: /Texto del Post:\s*([\s\S]*?)\n/i.exec(body)?.[1]?.trim() || "",
+      hashtags: /Hashtags:\s*([\s\S]*?)\n/i.exec(body)?.[1]?.trim() || "",
+      visual: /Formato Visual Sugerido:\s*([\s\S]*?)\n/i.exec(body)?.[1]?.trim() || "",
+      cta: /Llamada a la Acción \(CTA\):\s*([\s\S]*?)\n/i.exec(body)?.[1]?.trim() || "",
+    };
+  });
+  const fraseFinal = (text.match(/---FRASE_FINAL---\s*([\s\S]+?)\s*---FIN_FRASE_FINAL---/)||[])[1] || "";
+  return { ideas, fraseFinal };
+}
+
+// GENERACIÓN DE IDEAS
+async function generateIdeas(refresh = false) {
+  const form = validateForm();
+  if (!form) return;
+  if (!userPremium && !promoLaunch && userGenCount >= maxGenFree) {
+    alert(t("generations_left") + userGenCount + "/" + maxGenFree);
+    return;
+  }
+  const { mode, keyword, copytype, selectedNetworks } = form;
+  saveInputs();
+  document.getElementById("ff-results-container").innerHTML = `<div class="notification is-info">${t("generation_loading")}</div>`;
+  try {
+    // Instrucción de formato
+    const formatoSalida = getPromptFormatoSalida(lang);
+
+    const generateIdeasFn = httpsCallable(functions, "generateIdeas");
+    const response = await generateIdeasFn({
+      keyword,
+      copytype,
+      language: lang,
+      networks: selectedNetworks,
+      mode,
+      formatoSalida // <-- CRÍTICO para el backend
+    });
+
+    // El backend debe devolver response.data.text (o response.data.ideasText) en el formato delimitado
+    const parsed = parseIdeasFromResponse(response.data.text || response.data.ideasText || "");
+    if (parsed.ideas.length > 0) {
+      userGenCount++;
+      updateCounterUI();
+      renderIdeas(parsed.ideas, parsed.fraseFinal);
+    } else {
+      document.getElementById("ff-results-container").innerHTML = `<div class="notification is-warning">${t("no_ideas")}</div>`;
     }
+  } catch (error) {
+    document.getElementById("ff-results-container").innerHTML = `<div class="notification is-danger">${t("no_ideas")}</div>`;
+  }
+}
+document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
+document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
 
-    // Feedback de ideas
-    document.addEventListener("click", async (e) => {
-      if (e.target.classList.contains("ff-feedback-btn")) {
-        const feedbackType = e.target.dataset.feedback;
-        const ideaIndex = e.target.dataset.ideaIndex;
-        const user = auth.currentUser;
-        if (!user) return;
-        const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
-        try {
-          await recordFeedback({
-            uid: user.uid,
-            feedback: feedbackType,
-            ideaIndex: Number(ideaIndex),
-            timestamp: new Date().toISOString(),
-          });
-          document.getElementById("ff-feedback-modal").classList.add("is-active");
-        } catch (error) {
-          alert("Error al enviar feedback.");
-        }
-      }
+// Render ideas y feedback
+function renderIdeas(ideas, fraseFinal) {
+  const container = document.getElementById("ff-results-container");
+  container.innerHTML = "";
+  ideas.forEach((idea, index) => {
+    const card = document.createElement("div");
+    card.className = "card mb-3 p-3";
+    card.innerHTML = `
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("gancho")}</span>: ${idea.gancho}</div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("angulo")}</span>: ${idea.angulo}</div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("texto")}</span>: ${idea.texto}</div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("hashtags")}</span>: ${idea.hashtags}</div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("visual")}</span>: ${idea.visual}</div>
+      <div class="ff-idea-comp"><span class="ff-idea-label">${t("cta")}</span>: ${idea.cta}</div>
+    `;
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "button is-small is-success mt-2";
+    copyBtn.textContent = t("copy");
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(
+        `Gancho: ${idea.gancho}\nÁngulo: ${idea.angulo}\nTexto: ${idea.texto}\nHashtags: ${idea.hashtags}\nVisual: ${idea.visual}\nCTA: ${idea.cta}`
+      );
+      alert(t("copied"));
+    };
+    const feedbackDiv = document.createElement("div");
+    feedbackDiv.className = "mt-2";
+    ["👍", "👎"].forEach(type => {
+      const btn = document.createElement("button");
+      btn.className = "button is-small ff-feedback-btn";
+      btn.dataset.feedback = (type === "👍") ? "positivo" : "negativo";
+      btn.dataset.ideaIndex = index;
+      btn.innerHTML = type;
+      feedbackDiv.appendChild(btn);
     });
-    document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
-      document.getElementById("ff-feedback-modal").classList.remove("is-active");
-    });
+    card.appendChild(copyBtn);
+    card.appendChild(feedbackDiv);
+    container.appendChild(card);
+  });
+  if(fraseFinal && fraseFinal.trim()) {
+    const finalDiv = document.createElement("div");
+    finalDiv.className = "ff-final-phrase";
+    finalDiv.innerHTML = `<span class="ff-idea-label">${t("frasefinal")}:</span> ${fraseFinal.trim()}`;
+    container.appendChild(finalDiv);
+  }
+}
 
-    // --- PREMIUM, ADMIN, PUBLICIDAD ---
-    async function checkPremiumStatus(uid) {
-      try {
-        const configRef = doc(db, "appConfig", "global");
-        const configSnap = await getDoc(configRef);
-        const userRef = doc(db, "users", uid);
-        const userSnap = await getDoc(userRef);
-
-        userPremium = false;
-        promoLaunch = false;
-        maxGenFree = 3;
-
-        if (userSnap.exists()) {
-          userPremium = userSnap.data().premium || false;
-          userIsAdmin = userSnap.data().role === "admin";
-        }
-        if (configSnap.exists()) {
-          const global = configSnap.data();
-          const now = new Date();
-          const endDate = new Date(global.premiumGlobalEndDate);
-          if (global.isPremiumGlobalActive && now < endDate) {
-            userPremium = true;
-            promoLaunch = !!global.isLaunchPromoActive;
-          }
-        }
-        renderCopytypeOptions();
-        renderNetworkOptions();
-        updateCounterUI();
-        document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
-        if (!userPremium && !promoLaunch) {
-          const ad = document.createElement("div");
-          ad.className = "notification is-warning has-text-centered ff-ad";
-          ad.innerHTML = t("ad_full");
-          document.body.appendChild(ad);
-        } else if (promoLaunch) {
-          const ad = document.createElement("div");
-          ad.className = "has-text-centered has-text-grey-light ff-ad";
-          ad.innerHTML = `<small>${t("ad_light")}</small>`;
-          document.body.appendChild(ad);
-        }
-      } catch (error) {}
+// Feedback de ideas
+document.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("ff-feedback-btn")) {
+    const feedbackType = e.target.dataset.feedback;
+    const ideaIndex = e.target.dataset.ideaIndex;
+    const user = auth.currentUser;
+    if (!user) return;
+    const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
+    try {
+      await recordFeedback({
+        uid: user.uid,
+        feedback: feedbackType,
+        ideaIndex: Number(ideaIndex),
+        timestamp: new Date().toISOString(),
+      });
+      document.getElementById("ff-feedback-modal").classList.add("is-active");
+    } catch (error) {
+      alert("Error al enviar feedback.");
     }
+  }
+});
+document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
+  document.getElementById("ff-feedback-modal").classList.remove("is-active");
+});
 
-    async function validarAdmin(uid) {
-      try {
-        const userRef = doc(db, "users", uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists() && userSnap.data().role === "admin") {
-          document.getElementById("ff-admin-view").classList.remove("is-hidden");
-        } else {
-          document.getElementById("ff-admin-view").classList.add("is-hidden");
-        }
-      } catch (error) {}
+// PREMIUM, ADMIN, PUBLICIDAD
+async function checkPremiumStatus(uid) {
+  try {
+    const configRef = doc(db, "appConfig", "global");
+    const configSnap = await getDoc(configRef);
+    const userRef = doc(db, "users", uid);
+    const userSnap = await getDoc(userRef);
+
+    userPremium = false;
+    promoLaunch = false;
+    maxGenFree = 3;
+
+    if (userSnap.exists()) {
+      userPremium = userSnap.data().premium || false;
+      userIsAdmin = userSnap.data().role === "admin";
     }
-
-    document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
-      const isActive = document.getElementById("ff-toggle-premium-global").checked;
-      const endDate = document.getElementById("ff-premium-end-date").value;
-      const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
-      try {
-        await setPremiumGlobal({
-          isPremiumGlobalActive: isActive,
-          premiumGlobalEndDate: new Date(endDate).toISOString()
-        });
-        document.getElementById("ff-premium-status-text").textContent =
-          `${t("premium_until")}${new Date(endDate).toLocaleString()}`;
-        alert(t("premium_update_success"));
-      } catch (error) {
-        alert("Error al actualizar estado global.");
+    if (configSnap.exists()) {
+      const global = configSnap.data();
+      const now = new Date();
+      const endDate = new Date(global.premiumGlobalEndDate);
+      if (global.isPremiumGlobalActive && now < endDate) {
+        userPremium = true;
+        promoLaunch = !!global.isLaunchPromoActive;
       }
+    }
+    renderCopytypeOptions();
+    renderNetworkOptions();
+    updateCounterUI();
+    document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
+    if (!userPremium && !promoLaunch) {
+      const ad = document.createElement("div");
+      ad.className = "notification is-warning has-text-centered ff-ad";
+      ad.innerHTML = t("ad_full");
+      document.body.appendChild(ad);
+    } else if (promoLaunch) {
+      const ad = document.createElement("div");
+      ad.className = "has-text-centered has-text-grey-light ff-ad";
+      ad.innerHTML = `<small>${t("ad_light")}</small>`;
+      document.body.appendChild(ad);
+    }
+  } catch (error) {}
+}
+
+async function validarAdmin(uid) {
+  try {
+    const userRef = doc(db, "users", uid);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists() && userSnap.data().role === "admin") {
+      document.getElementById("ff-admin-view").classList.remove("is-hidden");
+    } else {
+      document.getElementById("ff-admin-view").classList.add("is-hidden");
+    }
+  } catch (error) {}
+}
+
+document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
+  const isActive = document.getElementById("ff-toggle-premium-global").checked;
+  const endDate = document.getElementById("ff-premium-end-date").value;
+  const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
+  try {
+    await setPremiumGlobal({
+      isPremiumGlobalActive: isActive,
+      premiumGlobalEndDate: new Date(endDate).toISOString()
     });
+    document.getElementById("ff-premium-status-text").textContent =
+      `${t("premium_until")}${new Date(endDate).toLocaleString()}`;
+    alert(t("premium_update_success"));
+  } catch (error) {
+    alert("Error al actualizar estado global.");
+  }
+});
 
-    // --- ON AUTH CHANGE ---
-    onAuthStateChanged(auth, async user => {
-      if (user) {
-        document.getElementById("ff-auth-view").classList.add("is-hidden");
-        document.getElementById("ff-config-view").classList.remove("is-hidden");
-        await checkPremiumStatus(user.uid);
-        await validarAdmin(user.uid);
-        updateCounterUI();
-      } else {
-        document.getElementById("ff-config-view").classList.add("is-hidden");
-        document.getElementById("ff-auth-view").classList.remove("is-hidden");
-        document.getElementById("ff-admin-view").classList.add("is-hidden");
-        document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
-      }
-    });
+// --- ON AUTH CHANGE ---
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    document.getElementById("ff-auth-view").classList.add("is-hidden");
+    document.getElementById("ff-config-view").classList.remove("is-hidden");
+    await checkPremiumStatus(user.uid);
+    await validarAdmin(user.uid);
+    updateCounterUI();
+  } else {
+    document.getElementById("ff-config-view").classList.add("is-hidden");
+    document.getElementById("ff-auth-view").classList.remove("is-hidden");
+    document.getElementById("ff-admin-view").classList.add("is-hidden");
+    document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
+  }
+});
 
-    // --- INICIALIZACIÓN UI ---
-    setLang(lang);
-    updateDatalist();
-    clearInputsOnChange();
-    updateNetworksByMode();
-
+// --- INICIALIZACIÓN UI ---
+setLang(lang);
+updateDatalist();
+clearInputsOnChange();
+updateNetworksByMode();
   </script>
 </body>
 </html>
