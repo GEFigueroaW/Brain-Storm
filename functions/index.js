@@ -80,40 +80,30 @@ exports.setPremiumGlobalStatus = functions.https.onCall(async (data, context) =>
     throw new functions.https.HttpsError("unauthenticated", "El usuario debe estar autenticado.");
   }
 
-  // Puedes agregar más validaciones según tu lógica de admin aquí,
-  // por ejemplo, leer Firestore y verificar que el rol sea "admin".
-  // Si quieres validar, descomenta este bloque:
-  /*
-  try {
-    const userRef = admin.firestore().collection("users").doc(context.auth.uid);
-    const userSnap = await userRef.get();
-    if (!userSnap.exists || userSnap.data().role !== "admin") {
-      throw new functions.https.HttpsError("permission-denied", "No tienes permisos de admin.");
-    }
-  } catch (e) {
-    throw new functions.https.HttpsError("permission-denied", "No tienes permisos de admin.");
-  }
-  */
+  // Puedes agregar validación de admin si quieres aquí
 
   // Permitir actualizar cualquier combinación de campos
   const updateFields = {};
-  if (typeof data.isPremiumGlobalActive !== "undefined") {
-    updateFields.isPremiumGlobalActive = data.isPremiumGlobalActive;
+
+  // Si el campo está presente (aunque sea false o null), lo tomamos
+  if ("isPremiumGlobalActive" in data) {
+    updateFields.isPremiumGlobalActive = !!data.isPremiumGlobalActive;
   }
-  if (typeof data.premiumGlobalEndDate !== "undefined") {
-    updateFields.premiumGlobalEndDate = data.premiumGlobalEndDate || null;
+  if ("premiumGlobalEndDate" in data) {
+    // Si es string vacío o indefinido, lo ponemos null
+    updateFields.premiumGlobalEndDate = data.premiumGlobalEndDate ? data.premiumGlobalEndDate : null;
   }
-  if (typeof data.isLaunchPromoActive !== "undefined") {
-    updateFields.isLaunchPromoActive = data.isLaunchPromoActive;
+  if ("isLaunchPromoActive" in data) {
+    updateFields.isLaunchPromoActive = !!data.isLaunchPromoActive;
   }
 
-  // Para evitar que no se mande nada
+  // Si no hay ningún campo relevante, error
   if (Object.keys(updateFields).length === 0) {
-    throw new functions.https.HttpsError("invalid-argument", "No se enviaron campos para actualizar.");
+    throw new functions.https.HttpsError("invalid-argument", "No se enviaron campos válidos para actualizar.");
   }
 
   try {
-    // Guardar configuración en Firestore (colección 'appConfig', documento 'global')
+    // Guardar en appConfig/global
     await admin.firestore().collection('appConfig').doc('global').set(updateFields, { merge: true });
 
     return { success: true };
