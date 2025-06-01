@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="Genera ideas impactantes para redes sociales con IA. Usa FeedFlow, una app creativa, profesional y visualmente atractiva." />
   <title>FeedFlow – Ideas con IA</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -18,161 +15,59 @@
       --ff-fondo: #fdfdfd;
       --ff-degradado: linear-gradient(to right, #8e44ad, #f1c40f);
     }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--ff-fondo);
-      color: #333;
-    }
-    .ff-logo {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--ff-morado);
-    }
-    .ff-gradient {
-      background: var(--ff-degradado);
-      color: white;
-    }
-    .ff-section {
-      padding: 2rem 1rem;
-    }
-    .is-hidden {
-      display: none !important;
-    }
-    .card {
-      border: 1px solid #ececec;
-      border-radius: .5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      margin-bottom: 1rem;
-    }
-    .ff-feedback-btn {
-      margin-left: .5em;
-    }
-    .modal.is-active {
-      display: flex;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.3);
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-content {
-      background: #fff;
-      border-radius: .5em;
-      padding: 2em;
-      max-width: 400px;
-      margin: auto;
-    }
-    .is-premium {
-      color: #fff;
-      background: linear-gradient(90deg, #8e44ad, #f1c40f);
-      border-radius: .4em;
-      font-size: .9em;
-      margin-left: .5em;
-      padding: 0 .4em;
-      font-weight: bold;
-      vertical-align: middle;
-    }
-    .disabled, .ff-option-disabled {
-      opacity: 0.5;
-      pointer-events: none;
-      background: #eee!important;
-    }
-    .ff-help-icon {
-      cursor: pointer;
-      margin-left: 0.3em;
-      color: #888;
-      font-size: 1em;
-      vertical-align: middle;
-    }
-    .ff-help-tooltip {
-      display: none;
-      position: absolute;
-      background: #fff;
-      color: #333;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: .95em;
-      padding: .7em 1em;
-      z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-      max-width: 300px;
-      margin-top: 6px;
-    }
-    .ff-help-icon:hover + .ff-help-tooltip, .ff-help-icon:focus + .ff-help-tooltip {
-      display: block;
-    }
-    #ff-last-input-btn {
-      margin-left: 1em;
-    }
-    #ff-generate-btn {
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(142,68,173,0.3);}
-      70% { box-shadow: 0 0 0 10px rgba(142,68,173,0); }
-      100% { box-shadow: 0 0 0 0 rgba(142,68,173,0.3);}
-    }
-    .ff-counter {
-      font-weight: bold;
-      color: #8e44ad;
-      margin-bottom: 1em;
-    }
-    .ff-suggestion {
-      font-size: .95em;
-      margin-top: 0.3em;
-      margin-bottom: 1em;
-      color: #666;
-      font-style: italic;
-      display: block;
-      background: none;
-      border: none;
-      padding: 0;
-      line-height: 1.2;
-    }
-    .ff-datalist {
-      display: none;
-    }
-    .ff-ad {
-      margin: 1em 0;
-    }
-    .ff-idea-comp {
-      margin-bottom: .6em;
-    }
-    .ff-idea-label {
-      font-weight: bold;
-      color: #8e44ad;
-      margin-right: .4em;
-    }
-    .ff-final-phrase {
-      margin-top: 1.2em;
-      font-style: italic;
-      background: #f5f5fa;
-      padding: .7em 1em;
-      border-radius: .3em;
-      border-left: 4px solid #8e44ad;
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: var(--ff-fondo); color: #333; }
+    .ff-logo { font-size: 2rem; font-weight: bold; color: var(--ff-morado); }
+    .ff-gradient { background: var(--ff-degradado); color: white; }
+    .ff-section { padding: 2rem 1rem; }
+    .is-hidden { display: none !important; }
+    .card { border: 1px solid #ececec; border-radius: .5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 1rem; }
+    .ff-feedback-btn { margin-left: .5em; }
+    .modal.is-active { display: flex; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); align-items: center; justify-content: center;}
+    .modal-content { background: #fff; border-radius: .5em; padding: 2em; max-width: 400px; margin: auto;}
+    .is-premium { color: #fff; background: linear-gradient(90deg, #8e44ad, #f1c40f); border-radius: .4em; font-size: .9em; margin-left: .5em; padding: 0 .4em; font-weight: bold; vertical-align: middle; }
+    .disabled, .ff-option-disabled { opacity: 0.5; pointer-events: none; background: #eee!important; }
+    .ff-help-icon { cursor: pointer; margin-left: 0.3em; color: #888; font-size: 1em; vertical-align: middle; }
+    .ff-help-tooltip { display: none; position: absolute; background: #fff; color: #333; border: 1px solid #ddd; border-radius: 5px; font-size: .95em; padding: .7em 1em; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.07); max-width: 300px; margin-top: 6px;}
+    .ff-help-icon:hover + .ff-help-tooltip, .ff-help-icon:focus + .ff-help-tooltip { display: block; }
+    #ff-last-input-btn { margin-left: 1em; }
+    #ff-generate-btn { animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(142,68,173,0.3);} 70% { box-shadow: 0 0 0 10px rgba(142,68,173,0); } 100% { box-shadow: 0 0 0 0 rgba(142,68,173,0.3);}}
+    .ff-counter { font-weight: bold; color: #8e44ad; margin-bottom: 1em;}
+    .ff-suggestion { font-size: .95em; margin-top: 0.3em; margin-bottom: 1em; color: #666; font-style: italic; display: block; background: none; border: none; padding: 0; line-height: 1.2;}
+    .ff-datalist { display: none; }
+    .ff-ad { margin: 1em 0; }
+    .ff-idea-comp { margin-bottom: .6em; }
+    .ff-idea-label { font-weight: bold; color: #8e44ad; margin-right: .4em; }
+    .ff-final-phrase { margin-top: 1.2em; font-style: italic; background: #f5f5fa; padding: .7em 1em; border-radius: .3em; border-left: 4px solid #8e44ad; }
+    .loading-overlay { position: fixed; left:0; top:0; width:100vw; height:100vh; z-index:2000; background:rgba(255,255,255,0.96); display:flex; align-items:center; justify-content:center; flex-direction:column; transition: opacity .3s;}
+    .loading-bar-bg { width:350px; height:18px; background:#f1f1f1; border-radius:1em; margin-top:24px; overflow:hidden;}
+    .loading-bar-fg { height:100%; width:0%; background:linear-gradient(90deg, #8e44ad, #f1c40f); border-radius:1em; transition: width .7s cubic-bezier(.4,2,.3,1);}
+    .loading-motivation { font-size:1.25em; color:#8e44ad; font-weight:600; margin-bottom:0.5em; min-height:1.5em; text-align:center; max-width:450px;}
   </style>
 </head>
-
 <body>
+  <!-- OVERLAY DE CARGA -->
+  <div id="loading-overlay" class="loading-overlay is-hidden">
+    <div class="loading-motivation" id="loading-motivation"></div>
+    <div class="loading-bar-bg">
+      <div class="loading-bar-fg" id="loading-bar-fg"></div>
+    </div>
+  </div>
   <!-- LOGIN -->
   <section id="ff-auth-view" class="ff-section">
     <div class="container">
       <h1 class="title has-text-centered ff-logo">FeedFlow</h1>
       <p class="subtitle has-text-centered" id="auth-title">Inicia sesión para comenzar</p>
       <div class="box has-background-light mt-4">
-        <label class="label" id="ff-label-language-app">Idioma de la aplicación</label>
+        <label class="label" for="ff-auth-language-selector" id="ff-label-language-app">Idioma de la aplicación</label>
         <div class="control">
           <div class="select is-fullwidth">
-            <select id="ff-auth-language-selector"
-              title="Elige el idioma para la interfaz y las ideas generadas. / Select the language for the interface and generated ideas. / Escolha o idioma da interface e das ideias geradas.">
+            <select id="ff-auth-language-selector">
               <option value="es">Español</option>
               <option value="en">English</option>
               <option value="pt">Português</option>
+              <option value="fr">Français</option>
             </select>
           </div>
         </div>
@@ -185,15 +80,10 @@
           <span class="icon"><i class="fab fa-google"></i></span>
           <span>Google</span>
         </button>
-        <div id="ff-loading" class="notification is-warning is-light is-hidden animate__animated animate__fadeIn">
-          <strong>Generando ideas...</strong> Por favor, espera un momento.
-        </div>
       </div>
       <p id="toggle-auth-text" class="has-text-centered mt-4"></p>
     </div>
   </section>
-
-  <!-- MODAL FEEDBACK -->
   <div class="modal" id="ff-feedback-modal">
     <div class="modal-background"></div>
     <div class="modal-content">
@@ -202,15 +92,11 @@
       <button id="ff-close-feedback" class="button is-primary mt-3">Cerrar</button>
     </div>
   </div>
-
-  <!-- VISTA PRINCIPAL (AUTENTICADO) -->
   <section id="ff-config-view" class="ff-section is-hidden">
     <div class="container">
       <h2 class="title is-4" id="title-results">Genera ideas con IA</h2>
-      <!-- Visualización de Generaciones Restantes -->
       <div id="ff-gen-counter" class="ff-counter"></div>
       <div class="box" style="position:relative;">
-        <!-- Selección de Modo -->
         <div class="field">
           <label class="label" id="ff-label-mode">
             Selecciona el modo de generación
@@ -228,7 +114,6 @@
             </label>
           </div>
         </div>
-        <!-- Palabra Clave/Tema Central -->
         <div class="field">
           <label class="label">
             Palabra clave o tema central
@@ -242,11 +127,9 @@
             ¡Sé lo más preciso posible! Cuanto más específico sea tu tema, más brillantes serán las ideas que desbloquearemos juntos.
           </small>
         </div>
-        <!-- Botón última información capturada -->
         <div class="field">
           <button id="ff-last-input-btn" class="button is-small is-info">Cargar última información capturada</button>
         </div>
-        <!-- Dropdown Tipo de Copy -->
         <div class="field">
           <label class="label" id="ff-label-copytype">
             Define el tipo de copy
@@ -261,7 +144,6 @@
             </div>
           </div>
         </div>
-        <!-- Opciones de Red Social -->
         <div class="field">
           <label class="label" id="ff-label-networks">
             Selecciona la(s) red(es) social(es)
@@ -298,13 +180,13 @@
     </div>
   </section>
   <footer class="footer has-text-centered mt-6">
-    <p id="ff-footer-disclaimer" class="is-size-7">
+    <p class="is-size-7">
       Aplicación experimental para generación de ideas en redes sociales. Desarrollado con 💡 en Latinoamérica.
     </p>
-    <p id="ff-footer-legal" class="is-size-7">
+    <p class="is-size-7">
       FeedFlow no se hace responsable por los contenidos generados por inteligencia artificial.
     </p>
-    <p id="ff-footer-copy" class="is-size-7 has-text-grey">
+    <p class="is-size-7 has-text-grey">
       Desarrollado por FeedFlow · 2025
     </p>
   </footer>
@@ -329,8 +211,93 @@ const auth = getAuth(app);
 const functions = getFunctions(app);
 const db = getFirestore(app);
 
+// --- FRASES DE CARGA
+const LOADING_PHRASES = {
+  es: [
+    "Desatando tu creatividad...",
+    "Conectando ideas brillantes...",
+    "Cocinando el contenido perfecto...",
+    "Inspiración en camino...",
+    "Tu próxima gran idea está a segundos...",
+    "¡Imaginación en acción!",
+    "Dándole chispa a tu contenido...",
+    "¡Las mejores ideas se están gestando!",
+    "Preparando inspiración para tus redes...",
+    "¡Listos para sorprender a tu audiencia!"
+  ],
+  en: [
+    "Unleashing your creativity...",
+    "Connecting brilliant ideas...",
+    "Cooking up the perfect content...",
+    "Inspiration is on its way...",
+    "Your next big idea is seconds away...",
+    "Imagination in action!",
+    "Sparking up your content...",
+    "Great ideas are brewing!",
+    "Preparing inspiration for your feed...",
+    "Ready to wow your audience!"
+  ],
+  pt: [
+    "Liberando sua criatividade...",
+    "Conectando ideias brilhantes...",
+    "Preparando o conteúdo perfeito...",
+    "Inspiração a caminho...",
+    "Sua próxima grande ideia está chegando...",
+    "Imaginação em ação!",
+    "Dando vida ao seu conteúdo...",
+    "Grandes ideias estão surgindo!",
+    "Preparando inspiração para suas redes...",
+    "Pronto para surpreender sua audiência!"
+  ],
+  fr: [
+    "Libérer ta créativité...",
+    "Connecter des idées brillantes...",
+    "Préparer le contenu parfait...",
+    "Inspiration en cours...",
+    "Ta prochaine grande idée arrive...",
+    "Imagination en action!",
+    "Allumer l’étincelle de ton contenu...",
+    "De grandes idées se préparent!",
+    "Préparation d’inspiration pour tes réseaux...",
+    "Prêt à surprendre ton audience!"
+  ]
+};
+
+let loadingInterval, loadingPhraseIndex = 0;
+function showLoadingOverlay(lang) {
+  const overlay = document.getElementById("loading-overlay");
+  const bar = document.getElementById("loading-bar-fg");
+  const mot = document.getElementById("loading-motivation");
+  const phrases = LOADING_PHRASES[lang] || LOADING_PHRASES['es'];
+  let progress = 0;
+  loadingPhraseIndex = 0;
+  bar.style.width = "0%";
+  mot.textContent = phrases[loadingPhraseIndex];
+  overlay.classList.remove("is-hidden");
+  clearInterval(loadingInterval);
+  loadingInterval = setInterval(() => {
+    progress += Math.random() * 17 + 3;
+    if (progress > 99) progress = 99;
+    bar.style.width = progress + "%";
+    if (Math.floor(progress/100 * phrases.length) > loadingPhraseIndex && loadingPhraseIndex < phrases.length - 1) {
+      loadingPhraseIndex++;
+      mot.textContent = phrases[loadingPhraseIndex];
+    }
+  }, 600);
+}
+function hideLoadingOverlay() {
+  clearInterval(loadingInterval);
+  document.getElementById("loading-overlay").classList.add("is-hidden");
+  document.getElementById("loading-bar-fg").style.width = "0%";
+}
+function finishLoadingOverlay() {
+  clearInterval(loadingInterval);
+  document.getElementById("loading-bar-fg").style.width = "100%";
+  setTimeout(hideLoadingOverlay, 600);
+}
+
 // --- TRADUCCIONES SIMPLIFICADAS ---
-const LANGS = ["es", "en", "pt"];
+const LANGS = ["es", "en", "pt", "fr"];
 const tr = {
   es: {
     mode_multi: "Generar una idea por cada red social seleccionada",
@@ -376,27 +343,8 @@ const tr = {
     visual: "Formato Visual Sugerido",
     cta: "Llamada a la Acción (CTA)",
     frasefinal: "Frase motivacional"
-  },
-  en: {
-    // ...Completa según necesidad...
-    gancho: "Impactful Hook",
-    angulo: "Narrative Angle",
-    texto: "Post Text",
-    hashtags: "Hashtags",
-    visual: "Suggested Visual Format",
-    cta: "Call to Action (CTA)",
-    frasefinal: "Motivational Phrase"
-  },
-  pt: {
-    // ...Completa según necesidad...
-    gancho: "Gancho Impactante",
-    angulo: "Ângulo Narrativo",
-    texto: "Texto da Postagem",
-    hashtags: "Hashtags",
-    visual: "Formato Visual Sugerido",
-    cta: "Chamada para Ação (CTA)",
-    frasefinal: "Frase motivacional"
   }
+  // ...Completa el resto de los idiomas si lo deseas...
 };
 
 // --- OPCIONES DE COPY Y REDES SOCIALES ---
@@ -435,13 +383,12 @@ let lang = "es";
 let promoLaunch = false;
 let lastInputs = null;
 
-// --- FUNCIONES AUXILIARES DE UI, TRADUCCIÓN Y ESTADO
+// --- FUNCIONES UI ---
 function t(key) {
   return tr[lang] && tr[lang][key] ? tr[lang][key] : key;
 }
 function tCopyLabel(c) { return c.label[lang] || c.label["es"] || c.value; }
 function tNetLabel(n) { return n.label[lang] || n.label["es"] || n.value; }
-
 function renderCopytypeOptions() {
   const select = document.getElementById("ff-copytype");
   select.innerHTML = "";
@@ -457,7 +404,6 @@ function renderCopytypeOptions() {
     select.appendChild(option);
   });
 }
-
 function renderNetworkOptions() {
   const container = document.getElementById("ff-networks-container");
   container.innerHTML = "";
@@ -479,7 +425,6 @@ function renderNetworkOptions() {
     container.appendChild(btn);
   });
 }
-
 function updateCounterUI() {
   const el = document.getElementById("ff-gen-counter");
   if (!userPremium && !promoLaunch) {
@@ -489,13 +434,12 @@ function updateCounterUI() {
     el.style.display = "none";
   }
 }
-
 function setLang(newLang) {
   lang = newLang;
   document.getElementById("ff-label-mode").childNodes[0].textContent = t("mode_multi");
   document.getElementById("ff-label-copytype").childNodes[0].textContent = t("copytype_label");
   document.getElementById("ff-label-networks").childNodes[0].textContent = t("networks_label");
-  document.getElementById("ff-label-language-app").textContent = t("ff-label-language-app") || "Idioma de la aplicación";
+  document.getElementById("ff-label-language-app").textContent = "Idioma de la aplicación";
   document.getElementById("ff-keyword-suggestion").textContent = t("keyword_suggestion");
   document.getElementById("ff-generate-btn").textContent = t("generate");
   document.getElementById("ff-refresh-btn").textContent = t("refresh");
@@ -505,8 +449,6 @@ function setLang(newLang) {
   renderNetworkOptions();
   updateCounterUI();
 }
-
-// --- PERSISTENCIA DE ÚLTIMOS INPUTS
 function saveInputs() {
   lastInputs = {
     mode: document.querySelector('input[name="ff-mode"]:checked').value,
@@ -516,7 +458,6 @@ function saveInputs() {
   };
   localStorage.setItem("ff-last-inputs", JSON.stringify(lastInputs));
 }
-
 function restoreInputs() {
   if (!lastInputs) lastInputs = JSON.parse(localStorage.getItem("ff-last-inputs") || "null");
   if (!lastInputs) return;
@@ -529,14 +470,11 @@ function restoreInputs() {
     if (el) el.checked = true;
   });
 }
-
 function clearInputsOnChange() {
   document.getElementById("ff-keyword").addEventListener("input", () => localStorage.removeItem("ff-last-inputs"));
   document.getElementById("ff-copytype").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
   document.getElementById("ff-networks-container").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
 }
-
-// --- DATALIST DE PALABRAS CLAVE SUGERIDAS (simulado)
 const SUGGESTED_KEYWORDS = ["marketing digital", "recetas fáciles", "fitness", "emprendimiento", "finanzas", "viajes", "tecnología", "salud mental", "moda", "gaming"];
 function updateDatalist() {
   const datalist = document.getElementById("ff-keyword-datalist");
@@ -551,11 +489,8 @@ function updateDatalist() {
 // --- EVENTOS Y LOGICA GENERAL ---
 document.getElementById("ff-google-login").addEventListener("click", async () => {
   const provider = new GoogleAuthProvider();
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (error) {
-    alert("Error al iniciar sesión.");
-  }
+  try { await signInWithPopup(auth, provider); }
+  catch (error) { alert("Error al iniciar sesión."); }
 });
 document.getElementById("ff-logout-btn").addEventListener("click", async () => await signOut(auth));
 document.getElementById("ff-last-input-btn").addEventListener("click", restoreInputs);
@@ -567,33 +502,17 @@ document.querySelectorAll(".ff-help-icon").forEach(icon => {
   icon.addEventListener("focus", e => e.target.nextElementSibling.style.display = "block");
   icon.addEventListener("blur", e => e.target.nextElementSibling.style.display = "none");
 });
-
-// Validación y lógica de selección de modo/redes
 function validateForm() {
   const mode = document.querySelector('input[name="ff-mode"]:checked').value;
   const keyword = document.getElementById("ff-keyword").value.trim();
   const copytype = document.getElementById("ff-copytype").value;
   const selectedNetworks = Array.from(document.querySelectorAll(".ff-social:checked")).map(el => el.value);
-
-  if (!keyword) {
-    alert(t("error_keyword"));
-    return false;
-  }
-  if (!copytype) {
-    alert(t("error_copytype"));
-    return false;
-  }
-  if (mode === "multi" && selectedNetworks.length < 1) {
-    alert(t("error_network"));
-    return false;
-  }
-  if (mode === "single" && selectedNetworks.length !== 1) {
-    alert(t("error_network"));
-    return false;
-  }
+  if (!keyword) { alert(t("error_keyword")); return false; }
+  if (!copytype) { alert(t("error_copytype")); return false; }
+  if (mode === "multi" && selectedNetworks.length < 1) { alert(t("error_network")); return false; }
+  if (mode === "single" && selectedNetworks.length !== 1) { alert(t("error_network")); return false; }
   return { mode, keyword, copytype, selectedNetworks };
 }
-
 function updateNetworksByMode() {
   const mode = document.querySelector('input[name="ff-mode"]:checked').value;
   renderNetworkOptions();
@@ -602,10 +521,7 @@ function updateNetworksByMode() {
       cb.addEventListener("change", function () {
         if (this.checked) {
           document.querySelectorAll(".ff-social").forEach(other => {
-            if (other !== this) {
-              other.checked = false;
-              other.disabled = true;
-            }
+            if (other !== this) { other.checked = false; other.disabled = true; }
           });
         } else {
           document.querySelectorAll(".ff-social").forEach(cb => cb.disabled = false);
@@ -618,7 +534,6 @@ document.querySelectorAll('input[name="ff-mode"]').forEach(el => el.addEventList
 
 // --- FORMATO DE SALIDA Y PARSER ---
 function getPromptFormatoSalida(lang) {
-  // Puedes ajustar según idioma
   if (lang === "es") {
     return `
 Por cada idea, sigue exactamente este formato en español:
@@ -637,7 +552,7 @@ Al final de todas las ideas, incluye una frase motivacional así:
 ---FIN_FRASE_FINAL---
 `.trim();
   }
-  // Agregar otros idiomas si es necesario (en, pt)
+  // Agrega otros idiomas si lo deseas
   return `
 For each idea, use exactly this format in ${lang}:
 ---IDEA_N---
@@ -671,8 +586,6 @@ function parseIdeasFromResponse(text) {
   const fraseFinal = (text.match(/---FRASE_FINAL---\s*([\s\S]+?)\s*---FIN_FRASE_FINAL---/)||[])[1] || "";
   return { ideas, fraseFinal };
 }
-
-// GENERACIÓN DE IDEAS
 async function generateIdeas(refresh = false) {
   const form = validateForm();
   if (!form) return;
@@ -682,38 +595,38 @@ async function generateIdeas(refresh = false) {
   }
   const { mode, keyword, copytype, selectedNetworks } = form;
   saveInputs();
-  document.getElementById("ff-results-container").innerHTML = `<div class="notification is-info">${t("generation_loading")}</div>`;
-  try {
-    // Instrucción de formato
-    const formatoSalida = getPromptFormatoSalida(lang);
+  showLoadingOverlay(lang);
 
+  try {
+    const formatoSalida = getPromptFormatoSalida(lang);
     const generateIdeasFn = httpsCallable(functions, "generateIdeas");
+    let nIdeas = 1;
+    if (mode === "single") nIdeas = 3;
+    else nIdeas = selectedNetworks.length;
     const response = await generateIdeasFn({
-      keyword,
-      copytype,
-      language: lang,
-      networks: selectedNetworks,
-      mode,
-      formatoSalida // <-- CRÍTICO para el backend
+      keyword, copytype, language: lang, networks: selectedNetworks, mode, formatoSalida, nIdeas
     });
 
-    // El backend debe devolver response.data.text (o response.data.ideasText) en el formato delimitado
     const parsed = parseIdeasFromResponse(response.data.text || response.data.ideasText || "");
-    if (parsed.ideas.length > 0) {
+    if (
+      (mode === "single" && parsed.ideas.length === 3) ||
+      (mode === "multi" && parsed.ideas.length === selectedNetworks.length)
+    ) {
       userGenCount++;
+      finishLoadingOverlay();
       updateCounterUI();
       renderIdeas(parsed.ideas, parsed.fraseFinal);
     } else {
+      finishLoadingOverlay();
       document.getElementById("ff-results-container").innerHTML = `<div class="notification is-warning">${t("no_ideas")}</div>`;
     }
   } catch (error) {
+    finishLoadingOverlay();
     document.getElementById("ff-results-container").innerHTML = `<div class="notification is-danger">${t("no_ideas")}</div>`;
   }
 }
 document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
 document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
-
-// Render ideas y feedback
 function renderIdeas(ideas, fraseFinal) {
   const container = document.getElementById("ff-results-container");
   container.innerHTML = "";
@@ -758,8 +671,6 @@ function renderIdeas(ideas, fraseFinal) {
     container.appendChild(finalDiv);
   }
 }
-
-// Feedback de ideas
 document.addEventListener("click", async (e) => {
   if (e.target.classList.contains("ff-feedback-btn")) {
     const feedbackType = e.target.dataset.feedback;
@@ -783,8 +694,6 @@ document.addEventListener("click", async (e) => {
 document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
   document.getElementById("ff-feedback-modal").classList.remove("is-active");
 });
-
-// PREMIUM, ADMIN, PUBLICIDAD
 async function checkPremiumStatus(uid) {
   try {
     const configRef = doc(db, "appConfig", "global");
@@ -826,7 +735,6 @@ async function checkPremiumStatus(uid) {
     }
   } catch (error) {}
 }
-
 async function validarAdmin(uid) {
   try {
     const userRef = doc(db, "users", uid);
@@ -838,7 +746,6 @@ async function validarAdmin(uid) {
     }
   } catch (error) {}
 }
-
 document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
   const isActive = document.getElementById("ff-toggle-premium-global").checked;
   const endDate = document.getElementById("ff-premium-end-date").value;
@@ -855,8 +762,6 @@ document.getElementById("ff-set-premium-btn").addEventListener("click", async ()
     alert("Error al actualizar estado global.");
   }
 });
-
-// --- ON AUTH CHANGE ---
 onAuthStateChanged(auth, async user => {
   if (user) {
     document.getElementById("ff-auth-view").classList.add("is-hidden");
@@ -871,8 +776,6 @@ onAuthStateChanged(auth, async user => {
     document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
   }
 });
-
-// --- INICIALIZACIÓN UI ---
 setLang(lang);
 updateDatalist();
 clearInputsOnChange();
