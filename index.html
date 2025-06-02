@@ -547,189 +547,189 @@
     // --- TRADUCCIONES SIMPLIFICADAS ---
     const LANGS = ["es", "en", "pt"];
     const tr = {
-es: {
-    mode_multi: "Generar una idea por cada red social seleccionada",
-    mode_single: "Generar 3 opciones distintas para una sola red social",
-    help_mode: "Elige si deseas una idea por cada red social o varias ideas para una sola red social.",
-    keyword_label: "Palabra clave o tema central",
-    help_keyword: "Escribe el tema principal sobre el que quieres generar ideas.",
-    keyword_suggestion: "¡Sé lo más preciso posible! Cuanto más específico sea tu tema, más brillantes serán las ideas que desbloquearemos juntos.",
-    last_input: "Cargar última información capturada",
-    copytype_label: "Define el tipo de copy",
-    help_copytype: "Selecciona el tipo de texto. Algunas opciones requieren cuenta Premium.",
-    networks_label: "Selecciona la(s) red(es) social(es)",
-    help_networks: "Selecciona una o varias redes sociales. Algunas requieren cuenta Premium.",
-    generate: "¡Que fluyan las ideas!",
-    refresh: "Refrescar inspiraciones",
-    logout: "Cerrar sesión",
-    free_copytypes: ["Informativo o educativo", "Informal", "Técnico o profesional"],
-    premium_label: "Premium",
-    free_network: "Facebook",
-    generations_left: "Generaciones restantes esta semana: ",
-    error_required: "Por favor, completa todos los campos requeridos.",
-    error_network: "Selecciona al menos una red social.",
-    error_keyword: "Debes escribir un tema.",
-    error_copytype: "Selecciona un tipo de copy.",
-    generation_loading: "Generando ideas...",
-    no_ideas: "No se generaron ideas. Intenta con otra palabra clave.",
-    copy: "Copiar",
-    copied: "¡Texto copiado!",
-    feedback_thank: "¡Gracias por tu feedback!",
-    feedback_modal: "Tu opinión ayuda a mejorar la calidad de las ideas generadas.",
-    close: "Cerrar",
-    ad_full: "Publicidad: ¡Explora nuestra versión Premium sin anuncios!",
-    ad_light: "Publicidad moderada activa por promoción.",
-    premium_admin: "Panel Admin Premium",
-    activate_premium: "Activar premium global",
-    update_global: "Actualizar global",
-    premium_until: "Premium global activo hasta: ",
-    premium_update_success: "Actualización exitosa.",
-    gancho: "Gancho Verbal Impactante",
-    angulo: "Ángulo Narrativo",
-    texto: "Texto del Post",
-    hashtags: "Hashtags",
-    visual: "Formato Visual Sugerido",
-    cta: "Llamada a la Acción (CTA)",
-    frasefinal: "Frase motivacional",
-    app_title: "FeedFlow",
-    login_title: "Inicia sesión para comenzar",
-    label_language: "Idioma de la aplicación",
-    lang_help: "Elige el idioma para la interfaz y las ideas generadas.",
-    keyword_placeholder: "Ej: marketing digital, recetas fáciles, fitness",
-    keyword_tooltip: "Escribe aquí el tema específico sobre el que quieres generar ideas. Ejemplo: “Viajes ecológicos para niños”.",
-    copytype_tooltip: "Elige el formato de texto que necesitas para tu idea. Por ejemplo: Post estándar, historia/story o video corto. Algunas opciones requieren cuenta Premium.",
-    mode_label: "Selecciona el modo de generación",
-    mode_tooltip: "Elige si quieres obtener una idea para cada red social seleccionada o varias ideas para una sola red social.",
-    networks_tooltip: "Marca una o más redes sociales donde te gustaría publicar tu contenido. Algunas redes pueden requerir cuenta Premium.",
-    btn_generate: "¡Que fluyan las ideas!",
-    btn_refresh: "Refrescar inspiraciones",
-    btn_logout: "Cerrar sesión"
-  },
-  en: {
-    mode_multi: "Generate one idea for each selected social network",
-    mode_single: "Generate 3 different options for a single social network",
-    help_mode: "Choose whether you want one idea per social network or multiple ideas for a single social network.",
-    keyword_label: "Keyword or central theme",
-    help_keyword: "Write the main topic you want to generate ideas about.",
-    keyword_suggestion: "Be as precise as possible! The more specific your topic, the brighter the ideas we will unlock together.",
-    last_input: "Load last captured information",
-    copytype_label: "Define the type of copy",
-    help_copytype: "Select the type of text. Some options require a Premium account.",
-    networks_label: "Select the social network(s)",
-    help_networks: "Select one or more social networks. Some require a Premium account.",
-    generate: "Let the ideas flow!",
-    refresh: "Refresh inspirations",
-    logout: "Log out",
-    free_copytypes: [
-      "Informative or educational",
-      "Informal",
-      "Technical or professional"
-    ],
-    premium_label: "Premium",
-    free_network: "Facebook",
-    generations_left: "Generations left this week: ",
-    error_required: "Please complete all required fields.",
-    error_network: "Select at least one social network.",
-    error_keyword: "You must write a topic.",
-    error_copytype: "Select a type of copy.",
-    generation_loading: "Generating ideas...",
-    no_ideas: "No ideas were generated. Try another keyword.",
-    copy: "Copy",
-    copied: "Text copied!",
-    feedback_thank: "Thank you for your feedback!",
-    feedback_modal: "Your opinion helps improve the quality of the generated ideas.",
-    close: "Close",
-    ad_full: "Advertising: Explore our Premium version without ads!",
-    ad_light: "Moderate advertising active for promotion.",
-    premium_admin: "Premium Admin Panel",
-    activate_premium: "Activate global premium",
-    update_global: "Update global",
-    premium_until: "Global premium active until: ",
-    premium_update_success: "Successful update.",
-    gancho: "Impactful Verbal Hook",
-    angulo: "Narrative Angle",
-    texto: "Post Text",
-    hashtags: "Hashtags",
-    visual: "Suggested Visual Format",
-    cta: "Call to Action (CTA)",
-    frasefinal: "Motivational Phrase",
-    app_title: "FeedFlow",
-    login_title: "Log in to start",
-    label_language: "App language",
-    lang_help: "Choose the language for the interface and generated ideas.",
-    keyword_placeholder: "Eg: digital marketing, easy recipes, fitness",
-    keyword_tooltip: "Write here the specific topic you want to generate ideas about. Example: “Eco-friendly travel for kids”.",
-    copytype_tooltip: "Choose the text format you need for your idea. For example: Standard post, story, or short video. Some options require a Premium account.",
-    mode_label: "Select the generation mode",
-    mode_tooltip: "Choose whether you want one idea per selected social network or multiple ideas for a single social network.",
-    networks_tooltip: "Check one or more social networks where you would like to publish your content. Some networks may require a Premium account.",
-    btn_generate: "Let the ideas flow!",
-    btn_refresh: "Refresh inspirations",
-    btn_logout: "Log out"
-  },
-  pt: {
-    mode_multi: "Gerar uma ideia para cada rede social selecionada",
-    mode_single: "Gerar 3 opções diferentes para uma única rede social",
-    help_mode: "Escolha se deseja uma ideia por rede social ou várias ideias para uma única rede social.",
-    keyword_label: "Palavra-chave ou tema central",
-    help_keyword: "Escreva o tema principal sobre o qual deseja gerar ideias.",
-    keyword_suggestion: "Seja o mais preciso possível! Quanto mais específico for o seu tema, mais brilhantes serão as ideias que desbloquearemos juntos.",
-    last_input: "Carregar última informação capturada",
-    copytype_label: "Defina o tipo de copy",
-    help_copytype: "Selecione o tipo de texto. Algumas opções requerem conta Premium.",
-    networks_label: "Selecione a(s) rede(s) social(is)",
-    help_networks: "Selecione uma ou mais redes sociais. Algumas requerem conta Premium.",
-    generate: "Deixe as ideias fluírem!",
-    refresh: "Atualizar inspirações",
-    logout: "Sair",
-    free_copytypes: [
-      "Informativo ou educativo",
-      "Informal",
-      "Técnico ou profissional"
-    ],
-    premium_label: "Premium",
-    free_network: "Facebook",
-    generations_left: "Gerações restantes esta semana: ",
-    error_required: "Por favor, complete todos os campos obrigatórios.",
-    error_network: "Selecione pelo menos uma rede social.",
-    error_keyword: "Você deve escrever um tema.",
-    error_copytype: "Selecione um tipo de copy.",
-    generation_loading: "Gerando ideias...",
-    no_ideas: "Nenhuma ideia foi gerada. Tente outra palavra-chave.",
-    copy: "Copiar",
-    copied: "Texto copiado!",
-    feedback_thank: "Obrigado pelo seu feedback!",
-    feedback_modal: "Sua opinião ajuda a melhorar a qualidade das ideias geradas.",
-    close: "Fechar",
-    ad_full: "Publicidade: Explore nossa versão Premium sem anúncios!",
-    ad_light: "Publicidade moderada ativa por promoção.",
-    premium_admin: "Painel Admin Premium",
-    activate_premium: "Ativar premium global",
-    update_global: "Atualizar global",
-    premium_until: "Premium global ativo até: ",
-    premium_update_success: "Atualização bem-sucedida.",
-    gancho: "Gancho Verbal Impactante",
-    angulo: "Ângulo Narrativo",
-    texto: "Texto do Post",
-    hashtags: "Hashtags",
-    visual: "Formato Visual Sugerido",
-    cta: "Chamada para Ação (CTA)",
-    frasefinal: "Frase motivacional",
-    app_title: "FeedFlow",
-    login_title: "Faça login para começar",
-    label_language: "Idioma do aplicativo",
-    lang_help: "Escolha o idioma para a interface e as ideias geradas.",
-    keyword_placeholder: "Ex: marketing digital, receitas fáceis, fitness",
-    keyword_tooltip: "Escreva aqui o tema específico sobre o qual deseja gerar ideias. Exemplo: “Viagens ecológicas para crianças”.",
-    copytype_tooltip: "Escolha o formato de texto que você precisa para sua ideia. Por exemplo: Post padrão, história/story ou vídeo curto. Algumas opções requerem conta Premium.",
-    mode_label: "Selecione o modo de geração",
-    mode_tooltip: "Escolha se deseja obter uma ideia por rede social selecionada ou várias ideias para uma única rede social.",
-    networks_tooltip: "Marque uma ou mais redes sociais onde gostaria de publicar seu conteúdo. Algumas redes podem requerer conta Premium.",
-    btn_generate: "Deixe as ideias fluírem!",
-    btn_refresh: "Atualizar inspirações",
-    btn_logout: "Sair"
-  }
-};
+      es: {
+        mode_multi: "Generar una idea por cada red social seleccionada",
+        mode_single: "Generar 3 opciones distintas para una sola red social",
+        help_mode: "Elige si deseas una idea por cada red social o varias ideas para una sola red social.",
+        keyword_label: "Palabra clave o tema central",
+        help_keyword: "Escribe el tema principal sobre el que quieres generar ideas.",
+        keyword_suggestion: "¡Sé lo más preciso posible! Cuanto más específico sea tu tema, más brillantes serán las ideas que desbloquearemos juntos.",
+        last_input: "Cargar última información capturada",
+        copytype_label: "Define el tipo de copy",
+        help_copytype: "Selecciona el tipo de texto. Algunas opciones requieren cuenta Premium.",
+        networks_label: "Selecciona la(s) red(es) social(es)",
+        help_networks: "Selecciona una o varias redes sociales. Algunas requieren cuenta Premium.",
+        generate: "¡Que fluyan las ideas!",
+        refresh: "Refrescar inspiraciones",
+        logout: "Cerrar sesión",
+        free_copytypes: ["Informativo o educativo", "Informal", "Técnico o profesional"],
+        premium_label: "Premium",
+        free_network: "Facebook",
+        generations_left: "Generaciones restantes esta semana: ",
+        error_required: "Por favor, completa todos los campos requeridos.",
+        error_network: "Selecciona al menos una red social.",
+        error_keyword: "Debes escribir un tema.",
+        error_copytype: "Selecciona un tipo de copy.",
+        generation_loading: "Generando ideas...",
+        no_ideas: "No se generaron ideas. Intenta con otra palabra clave.",
+        copy: "Copiar",
+        copied: "¡Texto copiado!",
+        feedback_thank: "¡Gracias por tu feedback!",
+        feedback_modal: "Tu opinión ayuda a mejorar la calidad de las ideas generadas.",
+        close: "Cerrar",
+        ad_full: "Publicidad: ¡Explora nuestra versión Premium sin anuncios!",
+        ad_light: "Publicidad moderada activa por promoción.",
+        premium_admin: "Panel Admin Premium",
+        activate_premium: "Activar premium global",
+        update_global: "Actualizar global",
+        premium_until: "Premium global activo hasta: ",
+        premium_update_success: "Actualización exitosa.",
+        gancho: "Gancho Verbal Impactante",
+        angulo: "Ángulo Narrativo",
+        texto: "Texto del Post",
+        hashtags: "Hashtags",
+        visual: "Formato Visual Sugerido",
+        cta: "Llamada a la Acción (CTA)",
+        frasefinal: "Frase motivacional",
+        app_title: "FeedFlow",
+        login_title: "Inicia sesión para comenzar",
+        label_language: "Idioma de la aplicación",
+        lang_help: "Elige el idioma para la interfaz y las ideas generadas.",
+        keyword_placeholder: "Ej: marketing digital, recetas fáciles, fitness",
+        keyword_tooltip: "Escribe aquí el tema específico sobre el que quieres generar ideas. Ejemplo: “Viajes ecológicos para niños”.",
+        copytype_tooltip: "Elige el formato de texto que necesitas para tu idea. Por ejemplo: Post estándar, historia/story o video corto. Algunas opciones requieren cuenta Premium.",
+        mode_label: "Selecciona el modo de generación",
+        mode_tooltip: "Elige si quieres obtener una idea para cada red social seleccionada o varias ideas para una sola red social.",
+        networks_tooltip: "Marca una o más redes sociales donde te gustaría publicar tu contenido. Algunas redes pueden requerir cuenta Premium.",
+        btn_generate: "¡Que fluyan las ideas!",
+        btn_refresh: "Refrescar inspiraciones",
+        btn_logout: "Cerrar sesión"
+      },
+      en: {
+        mode_multi: "Generate one idea for each selected social network",
+        mode_single: "Generate 3 different options for a single social network",
+        help_mode: "Choose whether you want one idea per social network or multiple ideas for a single social network.",
+        keyword_label: "Keyword or central theme",
+        help_keyword: "Write the main topic you want to generate ideas about.",
+        keyword_suggestion: "Be as precise as possible! The more specific your topic, the brighter the ideas we will unlock together.",
+        last_input: "Load last captured information",
+        copytype_label: "Define the type of copy",
+        help_copytype: "Select the type of text. Some options require a Premium account.",
+        networks_label: "Select the social network(s)",
+        help_networks: "Select one or more social networks. Some require a Premium account.",
+        generate: "Let the ideas flow!",
+        refresh: "Refresh inspirations",
+        logout: "Log out",
+        free_copytypes: [
+          "Informative or educational",
+          "Informal",
+          "Technical or professional"
+        ],
+        premium_label: "Premium",
+        free_network: "Facebook",
+        generations_left: "Generations left this week: ",
+        error_required: "Please complete all required fields.",
+        error_network: "Select at least one social network.",
+        error_keyword: "You must write a topic.",
+        error_copytype: "Select a type of copy.",
+        generation_loading: "Generating ideas...",
+        no_ideas: "No ideas were generated. Try another keyword.",
+        copy: "Copy",
+        copied: "Text copied!",
+        feedback_thank: "Thank you for your feedback!",
+        feedback_modal: "Your opinion helps improve the quality of the generated ideas.",
+        close: "Close",
+        ad_full: "Advertising: Explore our Premium version without ads!",
+        ad_light: "Moderate advertising active for promotion.",
+        premium_admin: "Premium Admin Panel",
+        activate_premium: "Activate global premium",
+        update_global: "Update global",
+        premium_until: "Global premium active until: ",
+        premium_update_success: "Successful update.",
+        gancho: "Impactful Verbal Hook",
+        angulo: "Narrative Angle",
+        texto: "Post Text",
+        hashtags: "Hashtags",
+        visual: "Suggested Visual Format",
+        cta: "Call to Action (CTA)",
+        frasefinal: "Motivational Phrase",
+        app_title: "FeedFlow",
+        login_title: "Log in to start",
+        label_language: "App language",
+        lang_help: "Choose the language for the interface and generated ideas.",
+        keyword_placeholder: "Eg: digital marketing, easy recipes, fitness",
+        keyword_tooltip: "Write here the specific topic you want to generate ideas about. Example: “Eco-friendly travel for kids”.",
+        copytype_tooltip: "Choose the text format you need for your idea. For example: Standard post, story, or short video. Some options require a Premium account.",
+        mode_label: "Select the generation mode",
+        mode_tooltip: "Choose whether you want one idea per selected social network or multiple ideas for a single social network.",
+        networks_tooltip: "Check one or more social networks where you would like to publish your content. Some networks may require a Premium account.",
+        btn_generate: "Let the ideas flow!",
+        btn_refresh: "Refresh inspirations",
+        btn_logout: "Log out"
+      },
+      pt: {
+        mode_multi: "Gerar uma ideia para cada rede social selecionada",
+        mode_single: "Gerar 3 opções diferentes para uma única rede social",
+        help_mode: "Escolha se deseja uma ideia por rede social ou várias ideias para uma única rede social.",
+        keyword_label: "Palavra-chave ou tema central",
+        help_keyword: "Escreva o tema principal sobre o qual deseja gerar ideias.",
+        keyword_suggestion: "Seja o mais preciso possível! Quanto mais específico for o seu tema, mais brilhantes serão as ideias que desbloquearemos juntos.",
+        last_input: "Carregar última informação capturada",
+        copytype_label: "Defina o tipo de copy",
+        help_copytype: "Selecione o tipo de texto. Algumas opções requerem conta Premium.",
+        networks_label: "Selecione a(s) rede(s) social(is)",
+        help_networks: "Selecione uma ou mais redes sociais. Algumas requerem conta Premium.",
+        generate: "Deixe as ideias fluírem!",
+        refresh: "Atualizar inspirações",
+        logout: "Sair",
+        free_copytypes: [
+          "Informativo ou educativo",
+          "Informal",
+          "Técnico ou profissional"
+        ],
+        premium_label: "Premium",
+        free_network: "Facebook",
+        generations_left: "Gerações restantes esta semana: ",
+        error_required: "Por favor, complete todos os campos obrigatórios.",
+        error_network: "Selecione pelo menos uma rede social.",
+        error_keyword: "Você deve escrever um tema.",
+        error_copytype: "Selecione um tipo de copy.",
+        generation_loading: "Gerando ideias...",
+        no_ideas: "Nenhuma ideia foi gerada. Tente outra palavra-chave.",
+        copy: "Copiar",
+        copied: "Texto copiado!",
+        feedback_thank: "Obrigado pelo seu feedback!",
+        feedback_modal: "Sua opinião ajuda a melhorar a qualidade das ideias geradas.",
+        close: "Fechar",
+        ad_full: "Publicidade: Explore nossa versão Premium sem anúncios!",
+        ad_light: "Publicidade moderada ativa por promoção.",
+        premium_admin: "Painel Admin Premium",
+        activate_premium: "Ativar premium global",
+        update_global: "Atualizar global",
+        premium_until: "Premium global ativo até: ",
+        premium_update_success: "Atualização bem-sucedida.",
+        gancho: "Gancho Verbal Impactante",
+        angulo: "Ângulo Narrativo",
+        texto: "Texto do Post",
+        hashtags: "Hashtags",
+        visual: "Formato Visual Sugerido",
+        cta: "Chamada para Ação (CTA)",
+        frasefinal: "Frase motivacional",
+        app_title: "FeedFlow",
+        login_title: "Faça login para começar",
+        label_language: "Idioma do aplicativo",
+        lang_help: "Escolha o idioma para a interface e as ideias geradas.",
+        keyword_placeholder: "Ex: marketing digital, receitas fáceis, fitness",
+        keyword_tooltip: "Escreva aqui o tema específico sobre o qual deseja gerar ideias. Exemplo: “Viagens ecológicas para crianças”.",
+        copytype_tooltip: "Escolha o formato de texto que você precisa para sua ideia. Por exemplo: Post padrão, história/story ou vídeo curto. Algumas opções requerem conta Premium.",
+        mode_label: "Selecione o modo de geração",
+        mode_tooltip: "Escolha se deseja obter uma ideia por rede social selecionada ou várias ideias para uma única rede social.",
+        networks_tooltip: "Marque uma ou mais redes sociais onde gostaria de publicar seu conteúdo. Algumas redes podem requerer conta Premium.",
+        btn_generate: "Deixe as ideias fluírem!",
+        btn_refresh: "Atualizar inspirações",
+        btn_logout: "Sair"
+      }
+    };
     // --- OPCIONES DE COPY Y REDES SOCIALES ---
     const COPYTYPE_OPTIONS = [
       { value: "beneficio", label: { es: "De beneficio y solución", en: "Benefit & Solution", pt: "Benefício e solução" }, premium: true },
@@ -984,7 +984,7 @@ At the end, include a motivational phrase:
       const form = validateForm();
       if (!form) return;
       if (!userPremium && !promoLaunch && userGenCount >= maxGenFree) {
-        alert(t("generations_left") + userGenCount + "/" + maxGenFree); 
+        alert(t("generations_left") + userGenCount + "/" + maxGenFree);
         return;
       }
       const { mode, keyword, copytype, selectedNetworks } = form;
@@ -1025,52 +1025,68 @@ At the end, include a motivational phrase:
     function renderIdeas(ideas, fraseFinal, selectedNetworks) {
       const container = document.getElementById("ff-results-container");
       container.innerHTML = "";
-      // Mostrar cada idea con la red social sólo en modo multi-red
-      ideas.forEach((idea, index) => {
+
+      ideas.forEach((idea, idx) => {
         const card = document.createElement("div");
-        card.className = "card mb-3 p-3";
-        // Determinar nombre de red social si aplica
-        let redSocial = "";
+        card.className = "ff-idea-card";
+
+        // Título de la red social si aplica
+        const header = document.createElement("div");
+        header.className = "ff-idea-header";
         if (selectedNetworks && selectedNetworks.length === ideas.length) {
-          const opt = NETWORK_OPTIONS.find(opt => opt.value === selectedNetworks[index]);
-          if (opt) redSocial = `<div style="font-weight:bold; color:#8e44ad; font-size:1.1em; margin-bottom:4px">${tNetLabel(opt)}</div>`;
+          const opt = NETWORK_OPTIONS.find(opt => opt.value === selectedNetworks[idx]);
+          header.textContent = opt ? tNetLabel(opt) : `${t("networks_label")} #${idx + 1}`;
+        } else {
+          header.textContent = `${t("networks_label")} #${idx + 1}`;
         }
-        card.innerHTML = `
-      ${redSocial}
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("gancho")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.gancho}</pre></div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("angulo")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.angulo}</pre></div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("texto")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.texto}</pre></div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("hashtags")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.hashtags}</pre></div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("visual")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.visual}</pre></div>
-      <div class="ff-idea-comp"><span class="ff-idea-label">${t("cta")}</span>: <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${idea.cta}</pre></div>
+        card.appendChild(header);
+
+        // Cuerpo de la idea
+        const body = document.createElement("div");
+        body.className = "ff-idea-body";
+        body.innerHTML = `
+      <div><strong>${t("gancho")}:</strong> <span>${idea.gancho}</span></div>
+      <div><strong>${t("angulo")}:</strong> <span>${idea.angulo}</span></div>
+      <div><strong>${t("texto")}:</strong> <span>${idea.texto}</span></div>
+      <div><strong>${t("hashtags")}:</strong> <span>${idea.hashtags}</span></div>
+      <div><strong>${t("visual")}:</strong> <span>${idea.visual}</span></div>
+      <div><strong>${t("cta")}:</strong> <span>${idea.cta}</span></div>
     `;
-        const copyBtn = document.createElement("button");
-        copyBtn.className = "button is-small is-success mt-2";
-        copyBtn.textContent = t("copy");
-        copyBtn.onclick = () => {
-          navigator.clipboard.writeText(
-            `Gancho: ${idea.gancho}\nÁngulo: ${idea.angulo}\nTexto: ${idea.texto}\nHashtags: ${idea.hashtags}\nVisual: ${idea.visual}\nCTA: ${idea.cta}`
-          );
-          alert(t("copied"));
-        };
-        const feedbackDiv = document.createElement("div");
-        feedbackDiv.className = "mt-2";
-        ["👍", "👎"].forEach(type => {
-          const btn = document.createElement("button");
-          btn.className = "button is-small ff-feedback-btn";
-          btn.dataset.feedback = (type === "👍") ? "positivo" : "negativo";
-          btn.dataset.ideaIndex = index;
-          btn.innerHTML = type;
-          feedbackDiv.appendChild(btn);
+        card.appendChild(body);
+
+        // Botones de acción
+        const actions = document.createElement("div");
+        actions.className = "ff-idea-actions";
+        actions.innerHTML = `
+      <button class="button is-success is-small ff-copy-btn">${t("copy")}</button>
+      <button class="button is-light is-small">👍</button>
+      <button class="button is-light is-small">💡</button>
+    `;
+        card.appendChild(actions);
+
+        // Copiar texto
+        actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
+          const textToCopy = `
+${idea.gancho}
+${idea.angulo}
+${idea.texto}
+${idea.hashtags}
+${idea.visual}
+${idea.cta}
+      `.trim();
+          navigator.clipboard.writeText(textToCopy);
+          actions.querySelector('.ff-copy-btn').innerText = t("copied");
+          setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
         });
-        card.appendChild(copyBtn);
-        card.appendChild(feedbackDiv);
+
         container.appendChild(card);
       });
+
+      // Frase final motivacional
       if (fraseFinal && fraseFinal.trim()) {
         const finalDiv = document.createElement("div");
         finalDiv.className = "ff-final-phrase";
-        finalDiv.innerHTML = `<span class="ff-idea-label">${t("frasefinal")}:</span> <pre style="white-space:pre-wrap; word-break:break-word; display:inline;">${fraseFinal.trim()}</pre>`;
+        finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
         container.appendChild(finalDiv);
       }
     }
