@@ -1047,27 +1047,32 @@ At the end, include a motivational phrase:
     document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
     document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
     const idiomaSeleccionado = window.currentLang || "es";
+    // Agrega este bloque JS reemplazando tu función renderIdeas y añade la función formatParagraphs
     function renderIdeas(ideas, fraseFinal, selectedNetworks) {
-      // Mostrar el modal y ocultar el formulario/configuración
+      // Oculta el formulario principal
       document.getElementById("ff-config-view").classList.add("is-hidden");
+      // Si el modal no existe, créalo y añádelo al body
       let modal = document.getElementById("ff-results-modal");
       if (!modal) {
         modal = document.createElement("div");
         modal.id = "ff-results-modal";
-        modal.className = "ff-results-modal";
+        modal.className = "ff-results-modal is-hidden";
         modal.innerHTML = `
-      <button id="ff-results-close" class="button is-small is-light" style="position:fixed;top:1.5em;left:1.5em;z-index:10;"><i class="fas fa-arrow-left"></i> Volver</button>
-      <div id="ff-results-content" style="width:100%;max-width:650px;margin:0 auto;"></div>
+      <button id="ff-results-close" class="button is-small is-light ff-modal-back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+      <div id="ff-results-content"></div>
     `;
         document.body.appendChild(modal);
         // Botón volver
         modal.querySelector("#ff-results-close").onclick = () => {
           modal.classList.add("is-hidden");
           document.getElementById("ff-config-view").classList.remove("is-hidden");
-          document.getElementById("ff-results-container").innerHTML = "";
+          // Limpiar resultados para evitar parpadeo al volver a abrir
+          modal.querySelector("#ff-results-content").innerHTML = "";
         };
       }
+      // Mostrar el modal
       modal.classList.remove("is-hidden");
+      // Limpiar y renderizar en el modal
       const container = modal.querySelector("#ff-results-content");
       container.innerHTML = "";
 
@@ -1075,15 +1080,10 @@ At the end, include a motivational phrase:
       ideas.forEach((idea, idx) => {
         const card = document.createElement("div");
         card.className = "ff-idea-card";
-        card.style.background = "#fff";
-        card.style.marginBottom = "2.5em";
-        card.style.boxShadow = "0 4px 16px rgba(142,68,173,0.10)";
-        card.style.borderLeft = "6px solid #8e44ad";
 
         // Header (red social)
         const header = document.createElement("div");
         header.className = "ff-idea-header";
-        header.style.marginBottom = "0.7em";
         if (selectedNetworks && selectedNetworks.length === ideas.length) {
           const opt = NETWORK_OPTIONS.find(opt => opt.value === selectedNetworks[idx]);
           header.textContent = opt ? tNetLabel(opt) : `${t("networks_label")} #${idx + 1}`;
@@ -1092,41 +1092,33 @@ At the end, include a motivational phrase:
         }
         card.appendChild(header);
 
-        // Ángulo + Formato Visual fusionados y destacados
-        const visualBlock = document.createElement("div");
-        visualBlock.style.background = "#faf7fd";
-        visualBlock.style.border = "1px dashed #e5dbfa";
-        visualBlock.style.borderRadius = "6px";
-        visualBlock.style.padding = "12px";
-        visualBlock.style.marginBottom = "0.8em";
-        visualBlock.innerHTML = `
-      <div style="font-size:1em;color:#8e44ad;"><strong>${t("visual")}:</strong></div>
-      <div style="font-size:1em;margin-top:0.3em"><em>${idea.visual}</em></div>
-      <div style="font-size:0.98em;color:#555;margin-top:0.6em;"><strong>${t("angulo")}:</strong> <span>${idea.angulo}</span></div>
+        // Bloque combinado Visual + Ángulo
+        const fusionado = document.createElement("div");
+        fusionado.className = "ff-visual-block";
+        fusionado.innerHTML = `
+      <div style="font-size:1.07em;color:#8e44ad;"><strong>Visual + Ángulo:</strong></div>
+      <div style="margin:0.5em 0 0.2em 0"><em>${idea.visual}</em></div>
+      <div style="font-size:0.98em;color:#555;"><strong>${t("angulo")}:</strong> ${idea.angulo}</div>
     `;
-        card.appendChild(visualBlock);
+        card.appendChild(fusionado);
 
         // Gancho
-        const ganchoDiv = document.createElement("div");
-        ganchoDiv.innerHTML = `<p style="font-weight:bold;margin-bottom:0.3em;color:#8e44ad">${t("gancho")}</p><p style="font-size:1.09em">${idea.gancho}</p>`;
-        card.appendChild(ganchoDiv);
+        card.innerHTML += `<div style="margin:0.7em 0 0.4em 0"><strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div>`;
 
-        // Texto del post en párrafos agradables
-        const textoDiv = document.createElement("div");
-        textoDiv.innerHTML = `<p style="font-weight:bold;margin-bottom:0.2em;color:#8e44ad">${t("texto")}</p>${formatParagraphs(idea.texto)}`;
-        card.appendChild(textoDiv);
+        // Texto en párrafos
+        card.innerHTML += `<div><strong style="color:#8e44ad">${t("texto")}:</strong>${formatParagraphs(idea.texto)}</div>`;
 
-        // Hashtags y CTA en bloques separados
+        // Hashtags y CTA
         card.innerHTML += `
-      <div style="margin-top:0.7em;">
-        <span style="font-weight:bold;color:#8e44ad">${t("hashtags")}:</span> <span style="font-size:1.03em">${idea.hashtags}</span>
+      <div style="margin-top:0.9em;">
+        <span style="font-weight:bold;color:#8e44ad">${t("hashtags")}:</span> <span>${idea.hashtags}</span>
       </div>
-      <div style="margin-top:0.4em;">
-        <span style="font-weight:bold;color:#8e44ad">${t("cta")}:</span> <span style="font-size:1.03em">${idea.cta}</span>
+      <div style="margin-top:0.3em;">
+        <span style="font-weight:bold;color:#8e44ad">${t("cta")}:</span> <span>${idea.cta}</span>
       </div>
     `;
 
-        // Acciones: Copiar, Compartir, Feedback
+        // Acciones
         const actions = document.createElement("div");
         actions.className = "ff-idea-actions";
         actions.style.marginTop = "1em";
@@ -1166,8 +1158,8 @@ ${idea.hashtags}
 
 ${idea.cta}
 
-${t("visual")}: ${idea.visual}
-${t("angulo")}: ${idea.angulo}
+Visual: ${idea.visual}
+Ángulo: ${idea.angulo}
       `.trim();
           if (navigator.share) {
             try {
