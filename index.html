@@ -1048,16 +1048,42 @@ At the end, include a motivational phrase:
     document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
     const idiomaSeleccionado = window.currentLang || "es";
     function renderIdeas(ideas, fraseFinal, selectedNetworks) {
-      const container = document.getElementById("ff-results-container");
+      // Mostrar el modal y ocultar el formulario/configuración
+      document.getElementById("ff-config-view").classList.add("is-hidden");
+      let modal = document.getElementById("ff-results-modal");
+      if (!modal) {
+        modal = document.createElement("div");
+        modal.id = "ff-results-modal";
+        modal.className = "ff-results-modal";
+        modal.innerHTML = `
+      <button id="ff-results-close" class="button is-small is-light" style="position:fixed;top:1.5em;left:1.5em;z-index:10;"><i class="fas fa-arrow-left"></i> Volver</button>
+      <div id="ff-results-content" style="width:100%;max-width:650px;margin:0 auto;"></div>
+    `;
+        document.body.appendChild(modal);
+        // Botón volver
+        modal.querySelector("#ff-results-close").onclick = () => {
+          modal.classList.add("is-hidden");
+          document.getElementById("ff-config-view").classList.remove("is-hidden");
+          document.getElementById("ff-results-container").innerHTML = "";
+        };
+      }
+      modal.classList.remove("is-hidden");
+      const container = modal.querySelector("#ff-results-content");
       container.innerHTML = "";
 
+      // Renderizar cada idea
       ideas.forEach((idea, idx) => {
         const card = document.createElement("div");
         card.className = "ff-idea-card";
+        card.style.background = "#fff";
+        card.style.marginBottom = "2.5em";
+        card.style.boxShadow = "0 4px 16px rgba(142,68,173,0.10)";
+        card.style.borderLeft = "6px solid #8e44ad";
 
         // Header (red social)
         const header = document.createElement("div");
         header.className = "ff-idea-header";
+        header.style.marginBottom = "0.7em";
         if (selectedNetworks && selectedNetworks.length === ideas.length) {
           const opt = NETWORK_OPTIONS.find(opt => opt.value === selectedNetworks[idx]);
           header.textContent = opt ? tNetLabel(opt) : `${t("networks_label")} #${idx + 1}`;
@@ -1066,43 +1092,98 @@ At the end, include a motivational phrase:
         }
         card.appendChild(header);
 
-        // Body
-        const body = document.createElement("div");
-        body.className = "ff-idea-body";
-        body.innerHTML = `
-      <div><strong>${t("gancho")}:</strong> <span>${idea.gancho}</span></div>
-      <div><strong>${t("angulo")}:</strong> <span>${idea.angulo}</span></div>
-      <div><strong>${t("texto")}:</strong> <span>${idea.texto}</span></div>
-      <div><strong>${t("hashtags")}:</strong> <span>${idea.hashtags}</span></div>
-      <div><strong>${t("visual")}:</strong> <span>${idea.visual}</span></div>
-      <div><strong>${t("cta")}:</strong> <span>${idea.cta}</span></div>
+        // Ángulo + Formato Visual fusionados y destacados
+        const visualBlock = document.createElement("div");
+        visualBlock.style.background = "#faf7fd";
+        visualBlock.style.border = "1px dashed #e5dbfa";
+        visualBlock.style.borderRadius = "6px";
+        visualBlock.style.padding = "12px";
+        visualBlock.style.marginBottom = "0.8em";
+        visualBlock.innerHTML = `
+      <div style="font-size:1em;color:#8e44ad;"><strong>${t("visual")}:</strong></div>
+      <div style="font-size:1em;margin-top:0.3em"><em>${idea.visual}</em></div>
+      <div style="font-size:0.98em;color:#555;margin-top:0.6em;"><strong>${t("angulo")}:</strong> <span>${idea.angulo}</span></div>
     `;
-        card.appendChild(body);
+        card.appendChild(visualBlock);
 
-        // Actions
+        // Gancho
+        const ganchoDiv = document.createElement("div");
+        ganchoDiv.innerHTML = `<p style="font-weight:bold;margin-bottom:0.3em;color:#8e44ad">${t("gancho")}</p><p style="font-size:1.09em">${idea.gancho}</p>`;
+        card.appendChild(ganchoDiv);
+
+        // Texto del post en párrafos agradables
+        const textoDiv = document.createElement("div");
+        textoDiv.innerHTML = `<p style="font-weight:bold;margin-bottom:0.2em;color:#8e44ad">${t("texto")}</p>${formatParagraphs(idea.texto)}`;
+        card.appendChild(textoDiv);
+
+        // Hashtags y CTA en bloques separados
+        card.innerHTML += `
+      <div style="margin-top:0.7em;">
+        <span style="font-weight:bold;color:#8e44ad">${t("hashtags")}:</span> <span style="font-size:1.03em">${idea.hashtags}</span>
+      </div>
+      <div style="margin-top:0.4em;">
+        <span style="font-weight:bold;color:#8e44ad">${t("cta")}:</span> <span style="font-size:1.03em">${idea.cta}</span>
+      </div>
+    `;
+
+        // Acciones: Copiar, Compartir, Feedback
         const actions = document.createElement("div");
         actions.className = "ff-idea-actions";
+        actions.style.marginTop = "1em";
         actions.innerHTML = `
-      <button class="button is-success is-small ff-copy-btn">${t("copy")}</button>
+      <button class="button is-success is-small ff-copy-btn" style="margin-right:0.7em">${t("copy")}</button>
+      <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
       <button class="button is-light is-small">👍</button>
-      <button class="button is-light is-small">💡</button>
+      <button class="button is-light is-small">👎</button>
     `;
-        card.appendChild(actions);
-
-        // Copiar texto
+        // Copiar
         actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
           const textToCopy = `
 ${idea.gancho}
-${idea.angulo}
+
 ${idea.texto}
+
 ${idea.hashtags}
-${idea.visual}
+
 ${idea.cta}
+
+${idea.visual}
+
+${idea.angulo}
       `.trim();
           navigator.clipboard.writeText(textToCopy);
           actions.querySelector('.ff-copy-btn').innerText = t("copied");
           setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
         });
+        // Compartir nativo
+        actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
+          const shareText = `
+${idea.gancho}
+
+${idea.texto}
+
+${idea.hashtags}
+
+${idea.cta}
+
+${t("visual")}: ${idea.visual}
+${t("angulo")}: ${idea.angulo}
+      `.trim();
+          if (navigator.share) {
+            try {
+              await navigator.share({
+                title: "Idea generada con FeedFlow",
+                text: shareText,
+                url: window.location.href
+              });
+            } catch (err) {
+              alert("No se pudo compartir: " + err);
+            }
+          } else {
+            alert("La función de compartir no está disponible en este dispositivo.");
+          }
+        });
+        card.appendChild(actions);
 
         container.appendChild(card);
       });
