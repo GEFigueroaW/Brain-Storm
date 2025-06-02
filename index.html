@@ -1025,33 +1025,32 @@ At the end, include a motivational phrase:
 `.trim();
     }
     function parseIdeasFromResponse(text) {
-      // Extrae bloques de ideas con delimitadores claros
-      const ideaBlocks = text.split(/---IDEA_\d+---/g).slice(1);
-      const ideas = ideaBlocks.map(block => {
-        // Encuentra el bloque hasta el FIN de la idea
-        const [body] = block.split(/---FIN_IDEA_\d+---/);
-        // Extrae cada campo usando un regex robusto que permite salto de línea o no
+      // Encuentra todos los bloques de ideas con regex global
+      const ideaRegex = /---IDEA_\d+---([\s\S]*?)---FIN_IDEA_\d+---/g;
+      let match, ideas = [];
+      while ((match = ideaRegex.exec(text)) !== null) {
+        const body = match[1];
         const getCampo = (label, altLabel) => {
           const pattern = new RegExp(`${label}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚa-záéíóú]|\\n#|\\n\\*\\*|\\n?\\s*\\w+?:|$)`, "i");
-          const match = pattern.exec(body);
-          if (match && match[1]) return match[1].trim();
+          const found = pattern.exec(body);
+          if (found && found[1]) return found[1].trim();
           if (altLabel) {
             const altPattern = new RegExp(`${altLabel}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚa-záéíóú]|\\n#|\\n\\*\\*|\\n?\\s*\\w+?:|$)`, "i");
-            const altMatch = altPattern.exec(body);
-            if (altMatch && altMatch[1]) return altMatch[1].trim();
+            const altFound = altPattern.exec(body);
+            if (altFound && altFound[1]) return altFound[1].trim();
           }
           return "";
         };
-        return {
+        ideas.push({
           gancho: getCampo("Gancho Verbal Impactante", "Gancho"),
           angulo: getCampo("Ángulo Narrativo", "Ángulo"),
           texto: getCampo("Texto del Post", "Texto"),
           hashtags: getCampo("Hashtags"),
           visual: getCampo("Formato Visual Sugerido", "Visual"),
           cta: getCampo("Llamada a la Acción \\(CTA\\)", "CTA")
-        };
-      });
-      // Extrae la frase final motivacional, aunque tenga saltos de línea extra
+        });
+      }
+      // Frase final motivacional
       const fraseFinal = (text.match(/---FRASE_FINAL---\s*([\s\S]+?)\s*---FIN_FRASE_FINAL---/) || [])[1]?.trim() || "";
       return { ideas, fraseFinal };
     }
