@@ -1046,7 +1046,8 @@ At the end, include a motivational phrase:
     }
     document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
     document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
-    const idiomaSeleccionado = window.currentLang || "es"; function renderIdeas(ideas, fraseFinal, selectedNetworks) {
+    const idiomaSeleccionado = window.currentLang || "es"; 
+    function renderIdeas(ideas, fraseFinal, selectedNetworks) {
       const container = document.getElementById("ff-results-container");
       container.innerHTML = "";
 
