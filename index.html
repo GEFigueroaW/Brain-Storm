@@ -1046,8 +1046,7 @@ At the end, include a motivational phrase:
     }
     document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
     document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
-    const idiomaSeleccionado = window.currentLang || "es";
-    function renderIdeas(ideas, fraseFinal, selectedNetworks) {
+    const idiomaSeleccionado = window.currentLang || "es"; function renderIdeas(ideas, fraseFinal, selectedNetworks) {
       const container = document.getElementById("ff-results-container");
       container.innerHTML = "";
 
@@ -1066,7 +1065,7 @@ At the end, include a motivational phrase:
         }
         card.appendChild(header);
 
-        // Cuerpo
+        // Body
         const body = document.createElement("div");
         body.className = "ff-idea-body";
         body.innerHTML = `
@@ -1079,7 +1078,7 @@ At the end, include a motivational phrase:
     `;
         card.appendChild(body);
 
-        // Botones de acción
+        // Actions
         const actions = document.createElement("div");
         actions.className = "ff-idea-actions";
         actions.innerHTML = `
