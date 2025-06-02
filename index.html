@@ -882,27 +882,54 @@
       lang = newLang;
       const t = tr[lang];
       document.title = t.app_title;
-      document.getElementById("auth-title").innerText = t.login_title;
-      document.getElementById("ff-label-language-app").innerText = t.label_language;
-      document.getElementById("ff-lang-help").innerText = t.lang_help;
-      document.getElementById("ff-label-mode").innerHTML = t.mode_label +
+
+      const elAuthTitle = document.getElementById("auth-title");
+      if (elAuthTitle) elAuthTitle.innerText = t.login_title;
+
+      const elLabelLanguageApp = document.getElementById("ff-label-language-app");
+      if (elLabelLanguageApp) elLabelLanguageApp.innerText = t.label_language;
+
+      const elLangHelp = document.getElementById("ff-lang-help");
+      if (elLangHelp) elLangHelp.innerText = t.lang_help;
+
+      const elLabelMode = document.getElementById("ff-label-mode");
+      if (elLabelMode) elLabelMode.innerHTML = t.mode_label +
         ` <span class="ff-help-icon" tabindex="0" id="help-mode"><i class="fas fa-question-circle"></i></span>` +
         `<span class="ff-help-tooltip">${t.mode_tooltip}</span>`;
-      document.getElementById("ff-label-copytype").innerHTML = t.copytype_label +
+
+      const elLabelCopytype = document.getElementById("ff-label-copytype");
+      if (elLabelCopytype) elLabelCopytype.innerHTML = t.copytype_label +
         ` <span class="ff-help-icon" tabindex="0" id="help-copytype"><i class="fas fa-question-circle"></i></span>` +
         `<span class="ff-help-tooltip">${t.copytype_tooltip}</span>`;
-      document.getElementById("ff-label-networks").innerHTML = t.networks_label +
+
+      const elLabelNetworks = document.getElementById("ff-label-networks");
+      if (elLabelNetworks) elLabelNetworks.innerHTML = t.networks_label +
         ` <span class="ff-help-icon" tabindex="0" id="help-networks"><i class="fas fa-question-circle"></i></span>` +
         `<span class="ff-help-tooltip">${t.networks_tooltip}</span>`;
-      document.getElementById("ff-generate-btn").innerText = t.btn_generate;
-      document.getElementById("ff-refresh-btn").innerText = t.btn_refresh;
-      document.getElementById("ff-logout-btn").innerText = t.btn_logout;
-      document.getElementById("ff-keyword").placeholder = t.keyword_placeholder;
-      document.querySelector('label[for="ff-keyword"]').innerText = t.keyword_label;
-      document.getElementById("help-keyword").nextElementSibling.innerText = t.keyword_tooltip;
-      renderCopytypeOptions();
-      renderNetworkOptions();
-      updateCounterUI();
+
+      const elGenerateBtn = document.getElementById("ff-generate-btn");
+      if (elGenerateBtn) elGenerateBtn.innerText = t.btn_generate;
+
+      const elRefreshBtn = document.getElementById("ff-refresh-btn");
+      if (elRefreshBtn) elRefreshBtn.innerText = t.btn_refresh;
+
+      const elLogoutBtn = document.getElementById("ff-logout-btn");
+      if (elLogoutBtn) elLogoutBtn.innerText = t.btn_logout;
+
+      const elKeyword = document.getElementById("ff-keyword");
+      if (elKeyword) elKeyword.placeholder = t.keyword_placeholder;
+
+      const elKeywordLabel = document.querySelector('label[for="ff-keyword"]');
+      if (elKeywordLabel) elKeywordLabel.innerText = t.keyword_label;
+
+      const elHelpKeyword = document.getElementById("help-keyword");
+      if (elHelpKeyword && elHelpKeyword.nextElementSibling) {
+        elHelpKeyword.nextElementSibling.innerText = t.keyword_tooltip;
+      }
+    }
+    renderCopytypeOptions();
+    renderNetworkOptions();
+    updateCounterUI();
     }
     function saveInputs() {
       lastInputs = {
