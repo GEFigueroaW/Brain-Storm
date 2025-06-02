@@ -1025,7 +1025,7 @@ At the end, include a motivational phrase:
 `.trim();
     }
     function parseIdeasFromResponse(text) {
-      // Encuentra todos los bloques de ideas con regex global
+      // Encuentra todos los bloques de ideas con regex global robusto
       const ideaRegex = /---IDEA_\d+---([\s\S]*?)---FIN_IDEA_\d+---/g;
       let match, ideas = [];
       while ((match = ideaRegex.exec(text)) !== null) {
