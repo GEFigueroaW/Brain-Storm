@@ -1372,7 +1372,91 @@ Visual: ${idea.visual}
       setLanguage(e.target.value);
     });
     setLang(document.getElementById("ff-auth-language-selector").value);
-    updateDatalist();    
+    updateDatalist();  
+    <div id="ff-results-modal" class="ff-results-modal"></div>
+<script type="module">
+  // Suponiendo que ya tienes tu función parseIdeasFromResponse
+
+  // Nuevo renderizador de slides/diapositivas
+  function renderSlides(ideas, fraseFinal) {
+    const container = document.getElementById("ff-results-modal");
+    if (!container) return;
+
+    if (!ideas || ideas.length === 0) {
+      container.innerHTML = `<div class="notification is-warning">No se generaron ideas.</div>`;
+      return;
+    }
+
+    // Generar HTML de slides
+    let slides = ideas.map((idea, idx) => `
+      <div class="slide" style="display: none">
+        <h2>💡 Idea ${idx + 1}</h2>
+        <p><strong>Gancho:</strong> ${idea.gancho || "—"}</p>
+        <p><strong>Ángulo:</strong> ${idea.angulo || "—"}</p>
+        <p style="font-size:1.2em;">${idea.texto || ""}</p>
+        <p><span>🏷️</span> <strong>Hashtags:</strong> ${idea.hashtags || ""}</p>
+        <p><span>🖼️</span> <strong>Visual:</strong> ${idea.visual || ""}</p>
+        <p><span>👉</span> <strong>CTA:</strong> ${idea.cta || ""}</p>
+      </div>
+    `);
+
+    // Slide extra para frase final
+    if (fraseFinal) {
+      slides.push(`
+        <div class="slide" style="display: none">
+          <h2>✨ Frase Final Motivacional</h2>
+          <p style="font-size:1.4em;">${fraseFinal}</p>
+        </div>
+      `);
+    }
+
+    // Controles de navegación
+    container.innerHTML = `
+      <div id="slide-container">
+        ${slides.join("")}
+      </div>
+      <div style="text-align:center;margin-top:1em;">
+        <button id="prev-slide">⏮️ Anterior</button>
+        <span id="slide-indicator"></span>
+        <button id="next-slide">Siguiente ⏭️</button>
+      </div>
+    `;
+
+    // Lógica de navegación
+    let current = 0;
+    const slideEls = container.querySelectorAll('.slide');
+    function showSlide(idx) {
+      slideEls.forEach((el, i) => el.style.display = idx === i ? 'block' : 'none');
+      container.querySelector('#slide-indicator').innerText = `Slide ${idx + 1} / ${slideEls.length}`;
+    }
+    container.querySelector('#prev-slide').onclick = () => {
+      current = (current - 1 + slideEls.length) % slideEls.length;
+      showSlide(current);
+    };
+    container.querySelector('#next-slide').onclick = () => {
+      current = (current + 1) % slideEls.length;
+      showSlide(current);
+    };
+    showSlide(current); // Muestra primer slide
+  }
+
+  // EJEMPLO de uso (debes llamar a esto después de parsear la respuesta real):
+  // const parsed = parseIdeasFromResponse(textoIA);
+  // renderSlides(parsed.ideas, parsed.fraseFinal);
+  </script>
+  <style>
+    .slide {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px 0 #0002;
+      padding: 2em;
+      margin: 2em auto;
+      max-width: 500px;
+      min-height: 300px;
+      transition: box-shadow 0.3s;
+      text-align: left;
+    }
+  </style>
   </script>
 </body>
 
