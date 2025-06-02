@@ -497,6 +497,7 @@
       Desarrollado por FeedFlow · 2025
     </p>
   </footer>
+  <div id="ff-results-modal" class="ff-results-modal"></div>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -1372,18 +1373,17 @@ Visual: ${idea.visual}
       setLanguage(e.target.value);
     });
     setLang(document.getElementById("ff-auth-language-selector").value);
-    updateDatalist();  
-    <div id="ff-results-modal" class="ff-results-modal"></div>
-<script type="module">
+    updateDatalist();
+    <script type="module">
   // Suponiendo que ya tienes tu función parseIdeasFromResponse
 
-  // Nuevo renderizador de slides/diapositivas
-  function renderSlides(ideas, fraseFinal) {
+      // Nuevo renderizador de slides/diapositivas
+      function renderSlides(ideas, fraseFinal) {
     const container = document.getElementById("ff-results-modal");
-    if (!container) return;
+      if (!container) return;
 
-    if (!ideas || ideas.length === 0) {
-      container.innerHTML = `<div class="notification is-warning">No se generaron ideas.</div>`;
+      if (!ideas || ideas.length === 0) {
+        container.innerHTML = `<div class="notification is-warning">No se generaron ideas.</div>`;
       return;
     }
 
@@ -1398,11 +1398,11 @@ Visual: ${idea.visual}
         <p><span>🖼️</span> <strong>Visual:</strong> ${idea.visual || ""}</p>
         <p><span>👉</span> <strong>CTA:</strong> ${idea.cta || ""}</p>
       </div>
-    `);
+      `);
 
-    // Slide extra para frase final
-    if (fraseFinal) {
-      slides.push(`
+      // Slide extra para frase final
+      if (fraseFinal) {
+        slides.push(`
         <div class="slide" style="display: none">
           <h2>✨ Frase Final Motivacional</h2>
           <p style="font-size:1.4em;">${fraseFinal}</p>
@@ -1410,8 +1410,8 @@ Visual: ${idea.visual}
       `);
     }
 
-    // Controles de navegación
-    container.innerHTML = `
+      // Controles de navegación
+      container.innerHTML = `
       <div id="slide-container">
         ${slides.join("")}
       </div>
@@ -1420,13 +1420,13 @@ Visual: ${idea.visual}
         <span id="slide-indicator"></span>
         <button id="next-slide">Siguiente ⏭️</button>
       </div>
-    `;
+      `;
 
-    // Lógica de navegación
-    let current = 0;
-    const slideEls = container.querySelectorAll('.slide');
-    function showSlide(idx) {
-      slideEls.forEach((el, i) => el.style.display = idx === i ? 'block' : 'none');
+      // Lógica de navegación
+      let current = 0;
+      const slideEls = container.querySelectorAll('.slide');
+      function showSlide(idx) {
+        slideEls.forEach((el, i) => el.style.display = idx === i ? 'block' : 'none');
       container.querySelector('#slide-indicator').innerText = `Slide ${idx + 1} / ${slideEls.length}`;
     }
     container.querySelector('#prev-slide').onclick = () => {
