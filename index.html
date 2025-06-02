@@ -1083,7 +1083,7 @@ At the end, include a motivational phrase:
           userGenCount++;
           finishLoadingOverlay();
           updateCounterUI();
-          renderIdeas(parsed.ideas, parsed.fraseFinal, selectedNetworks);
+          renderSlides(parsed.ideas, parsed.fraseFinal);
         } else {
           finishLoadingOverlay();
           document.getElementById("ff-results-container").innerHTML = `<div class="notification is-warning">${t("no_ideas")}</div>`;
