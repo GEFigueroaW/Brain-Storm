@@ -804,8 +804,45 @@
     let userGenCount = 0, maxGenFree = 3;
     let lang = "es";
     let promoLaunch = false;
+    let premiumGlobal = false;
+    let premiumEndDate = null;
     let lastInputs = null;
+    // --- ESTADO GLOBAL DE PROMO Y PREMIUM (FIRESTORE) ---
 
+    function subscribeToGlobalConfig() {
+      const globalConfigDoc = doc(db, "config", "globalConfig");
+      window.unsubscribeGlobalConfig = onSnapshot(globalConfigDoc, (snap) => {
+        const data = snap.data() || {};
+        promoLaunch = !!data.promoLaunch;
+        premiumGlobal = !!data.premiumGlobal;
+        premiumEndDate = data.premiumEndDate || null;
+
+        renderCopytypeOptions();
+        renderNetworkOptions();
+        updateCounterUI();
+        document.getElementById("ff-promo-status-text").innerText =
+          "Promoción de lanzamiento: " + (promoLaunch ? "Activa" : "Inactiva");
+        document.getElementById("ff-premium-status-text").innerText =
+          premiumGlobal
+            ? ("Premium global activo" + (premiumEndDate ? " hasta: " + premiumEndDate : ""))
+            : "Premium global inactivo";
+      });
+    }
+
+    subscribeToGlobalConfig();
+
+    async function updateGlobalConfig(updates) {
+      const globalConfigDoc = doc(db, "config", "globalConfig");
+      await setDoc(globalConfigDoc, updates, { merge: true });
+    }
+
+    document.getElementById("ff-activate-promo-btn").onclick = () => updateGlobalConfig({ promoLaunch: true });
+    document.getElementById("ff-deactivate-promo-btn").onclick = () => updateGlobalConfig({ promoLaunch: false });
+    document.getElementById("ff-set-premium-btn").onclick = () => {
+      const checked = document.getElementById("ff-toggle-premium-global").checked;
+      const endDate = document.getElementById("ff-premium-end-date").value || null;
+      updateGlobalConfig({ premiumGlobal: checked, premiumEndDate: endDate });
+    };
     // --- FUNCIONES UI ---
     function t(key) {
       return tr[lang] && tr[lang][key] ? tr[lang][key] : key;
@@ -905,9 +942,9 @@
       if (elHelpKeyword && elHelpKeyword.nextElementSibling) {
         elHelpKeyword.nextElementSibling.innerText = t.keyword_tooltip;
       }
-    renderCopytypeOptions();
-    renderNetworkOptions();
-    updateCounterUI();
+      renderCopytypeOptions();
+      renderNetworkOptions();
+      updateCounterUI();
     }
     function saveInputs() {
       lastInputs = {
