@@ -475,13 +475,14 @@
       Desarrollado por FeedFlow · 2025
     </p>
   </footer>
-  <div id="ff-results-modal" class="ff-results-modal"></div>
+  <div id="ff-results-modal" class="ff-results-modal is-hidden"></div>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
+    document.getElementById('ff-results-modal').classList.add('is-hidden');
     // --- CONFIGURACIÓN --
     const firebaseConfig = {
       apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
