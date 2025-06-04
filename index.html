@@ -1135,11 +1135,14 @@ At the end, include a motivational phrase:
         // Render simple: mostrar la idea como texto plano (ajusta visual si lo deseas)
         finishLoadingOverlay();
         updateCounterUI();
+        `<div class="notification is-primary" style="white-space:pre-line">${ideaText}</div>`;
+      } catch (e) {
+        finishLoadingOverlay();
         document.getElementById("ff-results-container").innerHTML =
-          `<div class="notification is-primary" style="white-space:pre-line">${ideaText}</div>`;
-
+          `<div class="notification is-danger">Error generando ideas: ${e.message || e}</div>`;
+        console.error(e);
       }
-    document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
+      document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
       document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
       const idiomaSeleccionado = window.currentLang || "es";
       // Agrega este bloque JS reemplazando tu función renderIdeas y añade la función formatParagraphs
