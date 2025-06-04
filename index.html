@@ -1115,10 +1115,15 @@ At the end, include a motivational phrase:
         if (mode === "single") nIdeas = 3;
         else nIdeas = selectedNetworks.length;
         const response = await generateIdeasFn({
-          keyword, copytype, language: lang, networks: selectedNetworks, mode, formatoSalida, nIdeas
+          keyword,
+          copytype,
+          language: lang,
+          networks: selectedNetworks,
+          mode,
+          formatoSalida,
+          nIdeas
         });
 
-        // NUEVO BLOQUE ADAPTADO:
         let ideaText = "";
         if (response.data && response.data.text) {
           ideaText = response.data.text;
@@ -1135,79 +1140,82 @@ At the end, include a motivational phrase:
         // Render simple: mostrar la idea como texto plano (ajusta visual si lo deseas)
         finishLoadingOverlay();
         updateCounterUI();
-        `<div class="notification is-primary" style="white-space:pre-line">${ideaText}</div>`;
+        document.getElementById("ff-results-container").innerHTML =
+          `<div class="notification is-primary" style="white-space:pre-line">${ideaText}</div>`;
+
       } catch (e) {
         finishLoadingOverlay();
         document.getElementById("ff-results-container").innerHTML =
           `<div class="notification is-danger">Error generando ideas: ${e.message || e}</div>`;
         console.error(e);
       }
-      document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
-      document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
-      const idiomaSeleccionado = window.currentLang || "es";
-      // Agrega este bloque JS reemplazando tu función renderIdeas y añade la función formatParagraphs
-      function renderIdeas(ideas, fraseFinal, selectedNetworks) {
-        // Oculta el formulario principal
-        document.getElementById("ff-config-view").classList.add("is-hidden");
-        // Si el modal no existe, créalo y añádelo al body
-        let modal = document.getElementById("ff-results-modal");
-        if (!modal) {
-          modal = document.createElement("div");
-          modal.id = "ff-results-modal";
-          modal.className = "ff-results-modal is-hidden";
-          modal.innerHTML = `
+    }
+    document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
+    document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
+    const idiomaSeleccionado = window.currentLang || "es";
+    // Agrega este bloque JS reemplazando tu función renderIdeas y añade la función formatParagraphs
+    function renderIdeas(ideas, fraseFinal, selectedNetworks) {
+      // Oculta el formulario principal
+      document.getElementById("ff-config-view").classList.add("is-hidden");
+      // Si el modal no existe, créalo y añádelo al body
+      let modal = document.getElementById("ff-results-modal");
+      if (!modal) {
+        modal = document.createElement("div");
+        modal.id = "ff-results-modal";
+        modal.className = "ff-results-modal is-hidden";
+        modal.innerHTML = `
       <button id="ff-results-close" class="button is-small is-light ff-modal-back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
       <div id="ff-results-content"></div>
     `;
-          document.body.appendChild(modal);
-          // Botón volver
-          modal.querySelector("#ff-results-close").onclick = () => {
-            modal.classList.add("is-hidden");
-            document.getElementById("ff-config-view").classList.remove("is-hidden");
-            // Limpiar resultados para evitar parpadeo al volver a abrir
-            modal.querySelector("#ff-results-content").innerHTML = "";
-          };
+        document.body.appendChild(modal);
+        // Botón volver
+        modal.querySelector("#ff-results-close").onclick = () => {
+          modal.classList.add("is-hidden");
+          document.getElementById("ff-config-view").classList.remove("is-hidden");
+          // Limpiar resultados para evitar parpadeo al volver a abrir
+          modal.querySelector("#ff-results-content").innerHTML = "";
+        };
+      }
+      // Mostrar el modal
+      modal.classList.remove("is-hidden");
+      // Limpiar y renderizar en el modal
+      const container = modal.querySelector("#ff-results-content");
+      container.innerHTML = "";
+
+      // Renderizar cada idea
+      ideas.forEach((idea, idx) => {
+        const card = document.createElement("div");
+        card.className = "ff-idea-card";
+
+        // Header (red social)
+        const header = document.createElement("div");
+        header.className = "ff-idea-header";
+        if (selectedNetworks && selectedNetworks.length === ideas.length) {
+          const opt = NETWORK_OPTIONS.find(opt => opt.value === selectedNetworks[idx]);
+          header.textContent = opt ? tNetLabel(opt) : `${t("networks_label")} #${idx + 1}`;
+        } else {
+          header.textContent = `${t("networks_label")} #${idx + 1}`;
         }
-        // Mostrar el modal
-        modal.classList.remove("is-hidden");
-        // Limpiar y renderizar en el modal
-        const container = modal.querySelector("#ff-results-content");
-        container.innerHTML = "";
+        card.appendChild(header);
 
-        // Renderizar cada idea
-        ideas.forEach((idea, idx) => {
-          const card = document.createElement("div");
-          card.className = "ff-idea-card";
-
-          // Header (red social)
-          const header = document.createElement("div");
-          header.className = "ff-idea-header";
-          if (selectedNetworks && selectedNetworks.length === ideas.length) {
-            const opt = NETWORK_OPTIONS.find(opt => opt.value === selectedNetworks[idx]);
-            header.textContent = opt ? tNetLabel(opt) : `${t("networks_label")} #${idx + 1}`;
-          } else {
-            header.textContent = `${t("networks_label")} #${idx + 1}`;
-          }
-          card.appendChild(header);
-
-          // Bloque combinado Visual + Ángulo
-          const fusionado = document.createElement("div");
-          fusionado.className = "ff-visual-block";
-          fusionado.innerHTML = `
+        // Bloque combinado Visual + Ángulo
+        const fusionado = document.createElement("div");
+        fusionado.className = "ff-visual-block";
+        fusionado.innerHTML = `
       <div style="font-size:1.07em;color:#8e44ad;"><strong>Visual + Ángulo:</strong></div>
       <div style="margin:0.5em 0 0.2em 0"><em>${idea.visual}</em></div>
       <div style="font-size:0.98em;color:#555;"><strong>${t("angulo")}:</strong> ${idea.angulo}</div>
     `;
-          card.appendChild(fusionado);
+        card.appendChild(fusionado);
 
-          // Gancho
-          card.innerHTML += `<div style="margin:0.7em 0 0.4em 0"><strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div>`;
+        // Gancho
+        card.innerHTML += `<div style="margin:0.7em 0 0.4em 0"><strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div>`;
 
-          // Texto en párrafos
-          card.innerHTML += `<div><strong style="color:#8e44ad">${t("texto")}:</strong>${formatParagraphs(idea.texto)}</div>`;
+        // Texto en párrafos
+        card.innerHTML += `<div><strong style="color:#8e44ad">${t("texto")}:</strong>${formatParagraphs(idea.texto)}</div>`;
 
-          // Hashtags y CTA
-          card.innerHTML += `
+        // Hashtags y CTA
+        card.innerHTML += `
       <div style="margin-top:0.9em;">
         <span style="font-weight:bold;color:#8e44ad">${t("hashtags")}:</span> <span>${idea.hashtags}</span>
       </div>
@@ -1216,19 +1224,19 @@ At the end, include a motivational phrase:
       </div>
     `;
 
-          // Acciones
-          const actions = document.createElement("div");
-          actions.className = "ff-idea-actions";
-          actions.style.marginTop = "1em";
-          actions.innerHTML = `
+        // Acciones
+        const actions = document.createElement("div");
+        actions.className = "ff-idea-actions";
+        actions.style.marginTop = "1em";
+        actions.innerHTML = `
       <button class="button is-success is-small ff-copy-btn" style="margin-right:0.7em">${t("copy")}</button>
       <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
       <button class="button is-light is-small">👍</button>
       <button class="button is-light is-small">👎</button>
     `;
-          // Copiar
-          actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
-            const textToCopy = `
+        // Copiar
+        actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
+          const textToCopy = `
 ${idea.gancho}
 
 ${idea.texto}
@@ -1241,13 +1249,13 @@ ${idea.visual}
 
 ${idea.angulo}
       `.trim();
-            navigator.clipboard.writeText(textToCopy);
-            actions.querySelector('.ff-copy-btn').innerText = t("copied");
-            setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
-          });
-          // Compartir nativo
-          actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
-            const shareText = `
+          navigator.clipboard.writeText(textToCopy);
+          actions.querySelector('.ff-copy-btn').innerText = t("copied");
+          setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
+        });
+        // Compartir nativo
+        actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
+          const shareText = `
 ${idea.gancho}
 
 ${idea.texto}
@@ -1259,169 +1267,169 @@ ${idea.cta}
 Visual: ${idea.visual}
 Ángulo: ${idea.angulo}
       `.trim();
-            if (navigator.share) {
-              try {
-                await navigator.share({
-                  title: "Idea generada con FeedFlow",
-                  text: shareText,
-                  url: window.location.href
-                });
-              } catch (err) {
-                alert("No se pudo compartir: " + err);
-              }
-            } else {
-              alert("La función de compartir no está disponible en este dispositivo.");
+          if (navigator.share) {
+            try {
+              await navigator.share({
+                title: "Idea generada con FeedFlow",
+                text: shareText,
+                url: window.location.href
+              });
+            } catch (err) {
+              alert("No se pudo compartir: " + err);
             }
-          });
-          card.appendChild(actions);
-
-          container.appendChild(card);
-        });
-
-        // Frase final motivacional
-        if (fraseFinal && fraseFinal.trim()) {
-          const finalDiv = document.createElement("div");
-          finalDiv.className = "ff-final-phrase";
-          finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
-          container.appendChild(finalDiv);
-        }
-      }
-      document.addEventListener("click", async (e) => {
-        if (e.target.classList.contains("ff-feedback-btn")) {
-          const feedbackType = e.target.dataset.feedback;
-          const ideaIndex = e.target.dataset.ideaIndex;
-          const user = auth.currentUser;
-          if (!user) return;
-          const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
-          try {
-            await recordFeedback({
-              uid: user.uid,
-              feedback: feedbackType,
-              ideaIndex: Number(ideaIndex),
-              timestamp: new Date().toISOString(),
-            });
-            document.getElementById("ff-feedback-modal").classList.add("is-active");
-          } catch (error) {
-            alert("Error al enviar feedback.");
-          }
-        }
-      });
-      document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
-        document.getElementById("ff-feedback-modal").classList.remove("is-active");
-      });
-      async function checkPremiumStatus(uid) {
-        try {
-          const configRef = doc(db, "appConfig", "global");
-          const configSnap = await getDoc(configRef);
-          const userRef = doc(db, "users", uid);
-          const userSnap = await getDoc(userRef);
-
-          userPremium = false;
-          promoLaunch = false;
-          maxGenFree = 3;
-
-          if (userSnap.exists()) {
-            userPremium = userSnap.data().premium || false;
-            userIsAdmin = userSnap.data().role === "admin";
-          }
-          if (configSnap.exists()) {
-            const global = configSnap.data();
-            const now = new Date();
-            const endDate = new Date(global.premiumGlobalEndDate);
-            if (global.isPremiumGlobalActive && now < endDate) {
-              userPremium = true;
-              promoLaunch = !!global.isLaunchPromoActive;
-            }
-          }
-          renderCopytypeOptions();
-          renderNetworkOptions();
-          updateCounterUI();
-          document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
-          if (!userPremium && !promoLaunch) {
-            const ad = document.createElement("div");
-            ad.className = "notification is-warning has-text-centered ff-ad";
-            ad.innerHTML = t("ad_full");
-            document.body.appendChild(ad);
-          } else if (promoLaunch) {
-            const ad = document.createElement("div");
-            ad.className = "has-text-centered has-text-grey-light ff-ad";
-            ad.innerHTML = `<small>${t("ad_light")}</small>`;
-            document.body.appendChild(ad);
-          }
-        } catch (error) { }
-      }
-      async function validarAdmin(uid) {
-        try {
-          const userRef = doc(db, "users", uid);
-          const userSnap = await getDoc(userRef);
-          if (userSnap.exists() && userSnap.data().role === "admin") {
-            document.getElementById("ff-admin-view").classList.remove("is-hidden");
           } else {
-            document.getElementById("ff-admin-view").classList.add("is-hidden");
+            alert("La función de compartir no está disponible en este dispositivo.");
           }
-        } catch (error) { }
-      }
-      document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
-        const isActive = document.getElementById("ff-toggle-premium-global").checked;
-        const endDate = document.getElementById("ff-premium-end-date").value;
-        const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
-        try {
-          await setPremiumGlobal({
-            isPremiumGlobalActive: isActive,
-            premiumGlobalEndDate: new Date(endDate).toISOString()
-          });
-          document.getElementById("ff-premium-status-text").textContent =
-            `${t("premium_until")}${new Date(endDate).toLocaleString()}`;
-          alert(t("premium_update_success"));
-        } catch (error) {
-          alert("Error al actualizar estado global.");
-        }
+        });
+        card.appendChild(actions);
+
+        container.appendChild(card);
       });
 
-      document.getElementById("ff-activate-promo-btn").addEventListener("click", async () => {
-        const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
-        await setPromo({ isLaunchPromoActive: true });
-        document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Activa";
-        alert("¡Promoción de lanzamiento activada!");
-      });
-      document.getElementById("ff-deactivate-promo-btn").addEventListener("click", async () => {
-        const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
-        await setPromo({ isLaunchPromoActive: false });
-        document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Inactiva";
-        alert("Promoción de lanzamiento desactivada.");
-      });
-      async function mostrarEstadoPromo() {
+      // Frase final motivacional
+      if (fraseFinal && fraseFinal.trim()) {
+        const finalDiv = document.createElement("div");
+        finalDiv.className = "ff-final-phrase";
+        finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
+        container.appendChild(finalDiv);
+      }
+    }
+    document.addEventListener("click", async (e) => {
+      if (e.target.classList.contains("ff-feedback-btn")) {
+        const feedbackType = e.target.dataset.feedback;
+        const ideaIndex = e.target.dataset.ideaIndex;
+        const user = auth.currentUser;
+        if (!user) return;
+        const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
+        try {
+          await recordFeedback({
+            uid: user.uid,
+            feedback: feedbackType,
+            ideaIndex: Number(ideaIndex),
+            timestamp: new Date().toISOString(),
+          });
+          document.getElementById("ff-feedback-modal").classList.add("is-active");
+        } catch (error) {
+          alert("Error al enviar feedback.");
+        }
+      }
+    });
+    document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
+      document.getElementById("ff-feedback-modal").classList.remove("is-active");
+    });
+    async function checkPremiumStatus(uid) {
+      try {
         const configRef = doc(db, "appConfig", "global");
         const configSnap = await getDoc(configRef);
-        let promo = configSnap.exists() && configSnap.data().isLaunchPromoActive;
-        document.getElementById("ff-promo-status-text").textContent =
-          "Promoción de lanzamiento: " + (promo ? "Activa" : "Inactiva");
-      }
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
 
-      onAuthStateChanged(auth, async user => {
-        if (user) {
-          document.getElementById("ff-auth-view").classList.add("is-hidden");
-          document.getElementById("ff-config-view").classList.remove("is-hidden");
-          await checkPremiumStatus(user.uid);
-          await validarAdmin(user.uid);
-          updateCounterUI();
-          await mostrarEstadoPromo();
-        } else {
-          document.getElementById("ff-config-view").classList.add("is-hidden");
-          document.getElementById("ff-auth-view").classList.remove("is-hidden");
-          document.getElementById("ff-admin-view").classList.add("is-hidden");
-          document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
+        userPremium = false;
+        promoLaunch = false;
+        maxGenFree = 3;
+
+        if (userSnap.exists()) {
+          userPremium = userSnap.data().premium || false;
+          userIsAdmin = userSnap.data().role === "admin";
         }
-      });
-      setLang(lang);
-      updateDatalist();
-      clearInputsOnChange();
-      updateNetworksByMode();
-      document.getElementById("ff-auth-language-selector").addEventListener("change", function (e) {
-        setLanguage(e.target.value);
-      });
-      setLang(document.getElementById("ff-auth-language-selector").value);
-      updateDatalist();
+        if (configSnap.exists()) {
+          const global = configSnap.data();
+          const now = new Date();
+          const endDate = new Date(global.premiumGlobalEndDate);
+          if (global.isPremiumGlobalActive && now < endDate) {
+            userPremium = true;
+            promoLaunch = !!global.isLaunchPromoActive;
+          }
+        }
+        renderCopytypeOptions();
+        renderNetworkOptions();
+        updateCounterUI();
+        document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
+        if (!userPremium && !promoLaunch) {
+          const ad = document.createElement("div");
+          ad.className = "notification is-warning has-text-centered ff-ad";
+          ad.innerHTML = t("ad_full");
+          document.body.appendChild(ad);
+        } else if (promoLaunch) {
+          const ad = document.createElement("div");
+          ad.className = "has-text-centered has-text-grey-light ff-ad";
+          ad.innerHTML = `<small>${t("ad_light")}</small>`;
+          document.body.appendChild(ad);
+        }
+      } catch (error) { }
+    }
+    async function validarAdmin(uid) {
+      try {
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists() && userSnap.data().role === "admin") {
+          document.getElementById("ff-admin-view").classList.remove("is-hidden");
+        } else {
+          document.getElementById("ff-admin-view").classList.add("is-hidden");
+        }
+      } catch (error) { }
+    }
+    document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
+      const isActive = document.getElementById("ff-toggle-premium-global").checked;
+      const endDate = document.getElementById("ff-premium-end-date").value;
+      const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
+      try {
+        await setPremiumGlobal({
+          isPremiumGlobalActive: isActive,
+          premiumGlobalEndDate: new Date(endDate).toISOString()
+        });
+        document.getElementById("ff-premium-status-text").textContent =
+          `${t("premium_until")}${new Date(endDate).toLocaleString()}`;
+        alert(t("premium_update_success"));
+      } catch (error) {
+        alert("Error al actualizar estado global.");
+      }
+    });
+
+    document.getElementById("ff-activate-promo-btn").addEventListener("click", async () => {
+      const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
+      await setPromo({ isLaunchPromoActive: true });
+      document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Activa";
+      alert("¡Promoción de lanzamiento activada!");
+    });
+    document.getElementById("ff-deactivate-promo-btn").addEventListener("click", async () => {
+      const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
+      await setPromo({ isLaunchPromoActive: false });
+      document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Inactiva";
+      alert("Promoción de lanzamiento desactivada.");
+    });
+    async function mostrarEstadoPromo() {
+      const configRef = doc(db, "appConfig", "global");
+      const configSnap = await getDoc(configRef);
+      let promo = configSnap.exists() && configSnap.data().isLaunchPromoActive;
+      document.getElementById("ff-promo-status-text").textContent =
+        "Promoción de lanzamiento: " + (promo ? "Activa" : "Inactiva");
+    }
+
+    onAuthStateChanged(auth, async user => {
+      if (user) {
+        document.getElementById("ff-auth-view").classList.add("is-hidden");
+        document.getElementById("ff-config-view").classList.remove("is-hidden");
+        await checkPremiumStatus(user.uid);
+        await validarAdmin(user.uid);
+        updateCounterUI();
+        await mostrarEstadoPromo();
+      } else {
+        document.getElementById("ff-config-view").classList.add("is-hidden");
+        document.getElementById("ff-auth-view").classList.remove("is-hidden");
+        document.getElementById("ff-admin-view").classList.add("is-hidden");
+        document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
+      }
+    });
+    setLang(lang);
+    updateDatalist();
+    clearInputsOnChange();
+    updateNetworksByMode();
+    document.getElementById("ff-auth-language-selector").addEventListener("change", function (e) {
+      setLanguage(e.target.value);
+    });
+    setLang(document.getElementById("ff-auth-language-selector").value);
+    updateDatalist();
 
   </script>
   <style>
