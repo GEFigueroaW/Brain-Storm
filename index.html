@@ -1055,9 +1055,9 @@
     document.querySelectorAll('input[name="ff-mode"]').forEach(el => el.addEventListener("change", updateNetworksByMode));
 
     // --- FORMATO DE SALIDA Y PARSER ---
-    function getPromptFormatoSalida(lang) {
-      if (lang === "es") {
-        return `
+function getPromptFormatoSalida(lang) {
+  if (lang === "es") {
+    return `
 Por cada idea, sigue exactamente este formato en español:
 ---IDEA_N---
 Gancho Verbal Impactante: [gancho impactante aquí]
@@ -1072,9 +1072,8 @@ Al final de todas las ideas, incluye una frase motivacional así:
 [frase motivacional aquí]
 ---FIN_FRASE_FINAL---
     `.trim();
-      }
-      // Agrega otros idiomas si lo deseas
-      return `
+  }
+  return `
 For each idea, use exactly this format in ${lang}:
 ---IDEA_N---
 Impactful Hook: [impactful hook here]
@@ -1089,13 +1088,7 @@ At the end, include a motivational phrase:
 [motivational phrase here]
 ---FIN_FRASE_FINAL---
 `.trim();
-    }
-At the end, include a motivational phrase:
-    --- FRASE_FINAL-- -
-      [motivational phrase here]
-    --- FIN_FRASE_FINAL-- -
-      `.trim();
-    }
+}
     function parseIdeasFromResponse(text) {
       // Encuentra todos los bloques de ideas con regex global robusto
       const ideaRegex = /---IDEA_\d+---([\s\S]*?)---FIN_IDEA_\d+---/g;
