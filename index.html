@@ -225,15 +225,40 @@
       bottom: 0;
       z-index: 3000;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      overflow-y: auto;
-      padding-top: 3.5em;
+      justify-content: center;
+      background: transparent !important;
     }
 
     .ff-results-modal.is-hidden {
       display: none;
+    }
+
+    .ff-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.18);
+      z-index: 1;
+    }
+
+    .ff-modal-canvas {
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+    }
+
+    .ff-idea-canvas-card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 1.2em;
+      box-shadow: 0 2px 14px rgba(142, 68, 173, 0.08);
+      padding: 2em 1em 1.3em 1em;
+      margin-bottom: 2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .ff-modal-back-btn {
@@ -1155,67 +1180,128 @@ At the end, include a motivational phrase:
     const idiomaSeleccionado = window.currentLang || "es";
     // Agrega este bloque JS reemplazando tu función renderIdeas y añade la función formatParagraphs
     function renderIdeas(ideas, fraseFinal, selectedNetworks) {
-      // Oculta el formulario principal
+      // Oculta el formulario principal y muestra el modal fullscreen
       document.getElementById("ff-config-view").classList.add("is-hidden");
-      // Si el modal no existe, créalo y añádelo al body
+
       let modal = document.getElementById("ff-results-modal");
       if (!modal) {
         modal = document.createElement("div");
         modal.id = "ff-results-modal";
-        modal.className = "ff-results-modal is-hidden";
-        modal.innerHTML = `
-      <button id="ff-results-close" class="button is-small is-light ff-modal-back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
-      <div id="ff-results-content"></div>
-    `;
         document.body.appendChild(modal);
-        // Botón volver
-        modal.querySelector("#ff-results-close").onclick = () => {
-          modal.classList.add("is-hidden");
-          document.getElementById("ff-config-view").classList.remove("is-hidden");
-          // Limpiar resultados para evitar parpadeo al volver a abrir
-          modal.querySelector("#ff-results-content").innerHTML = "";
-        };
       }
-      // Mostrar el modal
-      modal.classList.remove("is-hidden");
-      // Limpiar y renderizar en el modal
+
+      modal.className = "ff-results-modal is-active";
+      modal.innerHTML = `
+    <div class="ff-modal-overlay"></div>
+    <div class="ff-modal-canvas animate__animated animate__fadeInDown">
+      <button id="ff-results-close" class="button is-small is-light ff-modal-back-btn" style="position:absolute;top:1em;left:1em;z-index:10;">
+        <i class="fas fa-arrow-left"></i> Volver
+      </button>
+      <div id="ff-results-content"></div>
+    </div>
+  `;
+
+      // Fondo modal transparente
+      document.querySelector(".ff-modal-overlay").style = `
+    position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.18); z-index:1;
+  `;
+
+      // Lienzo tipo presentación
+      const canvas = modal.querySelector(".ff-modal-canvas");
+      canvas.style = `
+    background:rgba(255,255,255,0.96);
+    border-radius:2em;
+    margin:3em auto;
+    max-width:540px;
+    min-width:300px;
+    box-shadow:0 8px 32px 0 rgba(31,38,135,0.3);
+    padding:2.7em 2.1em 2.1em 2.1em;
+    position:relative;
+    z-index:2;
+  `;
+
+      // Contenido de ideas
       const container = modal.querySelector("#ff-results-content");
       container.innerHTML = "";
 
-      // Renderizar cada idea
       ideas.forEach((idea, idx) => {
+        // Prompt visual enriquecido
+        const visualPrompt = `
+Prompt para IA Visual:
+${idea.visual}
+${idea.angulo ? "Contexto narrativo: " + idea.angulo : ""}
+`;
+
         const card = document.createElement("div");
-        card.className = "ff-idea-card";
+        card.className = "ff-idea-canvas-card";
+        card.style = `
+      margin-bottom:2em; background:rgba(255,255,255,0.96); border-radius:1.2em;
+      box-shadow:0 2px 14px rgba(142,68,173,0.08); padding:2em 1em 1.3em 1em;
+      display:flex; flex-direction:column; align-items:center;`;
 
-        // Header (red social)
-        const header = document.createElement("div");
-        header.className = "ff-idea-header";
-        if (selectedNetworks && selectedNetworks.length === ideas.length) {
-          const opt = NETWORK_OPTIONS.find(opt => opt.value === selectedNetworks[idx]);
-          header.textContent = opt ? tNetLabel(opt) : `${t("networks_label")} #${idx + 1}`;
-        } else {
-          header.textContent = `${t("networks_label")} #${idx + 1}`;
-        }
-        card.appendChild(header);
+        card.innerHTML = `
+      <div style="font-size:1.5em;font-weight:700;color:#8e44ad;">${selectedNetworks && selectedNetworks.length === ideas.length ? selectedNetworks[idx].replace(/^./, c => c.toUpperCase()) : "Idea"}</div>
+      <div style="margin:1em 0 0.6em 0;">
+        <span class="ff-idea-label" style="color:#f1c40f">Gancho:</span>
+        <span>${idea.gancho}</span>
+      </div>
+      <div class="ff-idea-body" style="margin-bottom:0.5em;">
+        <span class="ff-idea-label" style="color:#8e44ad">Texto:</span>
+        <span>${idea.texto}</span>
+      </div>
+      <div style="margin-bottom:0.5em;">
+        <span class="ff-idea-label" style="color:#27ae60">Hashtags:</span>
+        <span>${idea.hashtags}</span>
+      </div>
+      <div class="ff-visual-block" style="background:#faf7fd; border:1px dashed #e5dbfa; border-radius:8px; padding:1.2em; margin-bottom:0.8em;">
+        <div style="font-weight:600; color:#8e44ad; margin-bottom:0.6em;">Prompt Visual para IA:</div>
+        <pre style="white-space:pre-line; font-family:inherit; font-size:1.04em; background:transparent; border:none; color:#262626;">${visualPrompt.trim()}</pre>
+      </div>
+      <div style="margin-bottom:0.7em; color:#9b59b6">
+        <span class="ff-idea-label" style="color:#9b59b6">CTA:</span>
+        <span>${idea.cta}</span>
+      </div>
+    `;
+        container.appendChild(card);
+      });
 
-        // Bloque combinado Visual + Ángulo
-        const fusionado = document.createElement("div");
-        fusionado.className = "ff-visual-block";
-        fusionado.innerHTML = `
+      // Frase final motivacional
+      if (fraseFinal) {
+        const finalPhrase = document.createElement("div");
+        finalPhrase.className = "ff-final-phrase";
+        finalPhrase.style = "margin-top:1.2em;font-style:italic;background:rgba(245,245,250,0.85);padding:1em 1.4em;border-radius:.5em;border-left:5px solid #8e44ad;font-size:1.12em;";
+        finalPhrase.textContent = fraseFinal;
+        container.appendChild(finalPhrase);
+      }
+
+      // Botón cerrar modal
+      modal.querySelector("#ff-results-close").onclick = () => {
+        modal.classList.remove("is-active");
+        modal.classList.add("is-hidden");
+        document.getElementById("ff-config-view").classList.remove("is-hidden");
+        container.innerHTML = "";
+      };
+    }
+    card.appendChild(header);
+
+    // Bloque combinado Visual + Ángulo
+    const fusionado = document.createElement("div");
+    fusionado.className = "ff-visual-block";
+    fusionado.innerHTML = `
       <div style="font-size:1.07em;color:#8e44ad;"><strong>Visual + Ángulo:</strong></div>
       <div style="margin:0.5em 0 0.2em 0"><em>${idea.visual}</em></div>
       <div style="font-size:0.98em;color:#555;"><strong>${t("angulo")}:</strong> ${idea.angulo}</div>
     `;
-        card.appendChild(fusionado);
+    card.appendChild(fusionado);
 
-        // Gancho
-        card.innerHTML += `<div style="margin:0.7em 0 0.4em 0"><strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div>`;
+    // Gancho
+    card.innerHTML += `<div style="margin:0.7em 0 0.4em 0"><strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div>`;
 
-        // Texto en párrafos
-        card.innerHTML += `<div><strong style="color:#8e44ad">${t("texto")}:</strong>${formatParagraphs(idea.texto)}</div>`;
+    // Texto en párrafos
+    card.innerHTML += `<div><strong style="color:#8e44ad">${t("texto")}:</strong>${formatParagraphs(idea.texto)}</div>`;
 
-        // Hashtags y CTA
-        card.innerHTML += `
+    // Hashtags y CTA
+    card.innerHTML += `
       <div style="margin-top:0.9em;">
         <span style="font-weight:bold;color:#8e44ad">${t("hashtags")}:</span> <span>${idea.hashtags}</span>
       </div>
@@ -1224,19 +1310,19 @@ At the end, include a motivational phrase:
       </div>
     `;
 
-        // Acciones
-        const actions = document.createElement("div");
-        actions.className = "ff-idea-actions";
-        actions.style.marginTop = "1em";
-        actions.innerHTML = `
+    // Acciones
+    const actions = document.createElement("div");
+    actions.className = "ff-idea-actions";
+    actions.style.marginTop = "1em";
+    actions.innerHTML = `
       <button class="button is-success is-small ff-copy-btn" style="margin-right:0.7em">${t("copy")}</button>
       <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
       <button class="button is-light is-small">👍</button>
       <button class="button is-light is-small">👎</button>
     `;
-        // Copiar
-        actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
-          const textToCopy = `
+    // Copiar
+    actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
+      const textToCopy = `
 ${idea.gancho}
 
 ${idea.texto}
@@ -1249,13 +1335,13 @@ ${idea.visual}
 
 ${idea.angulo}
       `.trim();
-          navigator.clipboard.writeText(textToCopy);
-          actions.querySelector('.ff-copy-btn').innerText = t("copied");
-          setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
-        });
-        // Compartir nativo
-        actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
-          const shareText = `
+      navigator.clipboard.writeText(textToCopy);
+      actions.querySelector('.ff-copy-btn').innerText = t("copied");
+      setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
+    });
+    // Compartir nativo
+    actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
+      const shareText = `
 ${idea.gancho}
 
 ${idea.texto}
@@ -1267,32 +1353,32 @@ ${idea.cta}
 Visual: ${idea.visual}
 Ángulo: ${idea.angulo}
       `.trim();
-          if (navigator.share) {
-            try {
-              await navigator.share({
-                title: "Idea generada con FeedFlow",
-                text: shareText,
-                url: window.location.href
-              });
-            } catch (err) {
-              alert("No se pudo compartir: " + err);
-            }
-          } else {
-            alert("La función de compartir no está disponible en este dispositivo.");
-          }
-        });
-        card.appendChild(actions);
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Idea generada con FeedFlow",
+            text: shareText,
+            url: window.location.href
+          });
+        } catch (err) {
+          alert("No se pudo compartir: " + err);
+        }
+      } else {
+        alert("La función de compartir no está disponible en este dispositivo.");
+      }
+    });
+    card.appendChild(actions);
 
-        container.appendChild(card);
+    container.appendChild(card);
       });
 
-      // Frase final motivacional
-      if (fraseFinal && fraseFinal.trim()) {
-        const finalDiv = document.createElement("div");
-        finalDiv.className = "ff-final-phrase";
-        finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
-        container.appendChild(finalDiv);
-      }
+    // Frase final motivacional
+    if (fraseFinal && fraseFinal.trim()) {
+      const finalDiv = document.createElement("div");
+      finalDiv.className = "ff-final-phrase";
+      finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
+      container.appendChild(finalDiv);
+    }
     }
     document.addEventListener("click", async (e) => {
       if (e.target.classList.contains("ff-feedback-btn")) {
