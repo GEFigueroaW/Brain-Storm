@@ -1073,8 +1073,8 @@ Al final de todas las ideas, incluye una frase motivacional así:
 ---FIN_FRASE_FINAL---
     `.trim();
       }
-    }
-    // Agrega otros idiomas si lo deseas
+      // Agrega otros idiomas si lo deseas
+      return `
 For each idea, use exactly this format in ${lang}:
 ---IDEA_N---
 Impactful Hook: [impactful hook here]
@@ -1090,6 +1090,12 @@ At the end, include a motivational phrase:
 ---FIN_FRASE_FINAL---
 `.trim();
     }
+At the end, include a motivational phrase:
+    --- FRASE_FINAL-- -
+      [motivational phrase here]
+    --- FIN_FRASE_FINAL-- -
+      `.trim();
+    }
     function parseIdeasFromResponse(text) {
       // Encuentra todos los bloques de ideas con regex global robusto
       const ideaRegex = /---IDEA_\d+---([\s\S]*?)---FIN_IDEA_\d+---/g;
@@ -1097,11 +1103,11 @@ At the end, include a motivational phrase:
       while ((match = ideaRegex.exec(text)) !== null) {
         const body = match[1];
         const getCampo = (label, altLabel) => {
-          const pattern = new RegExp(`${label}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚa-záéíóú]|\\n#|\\n\\*\\*|\\n?\\s*\\w+?:|$)`, "i");
+          const pattern = new RegExp(`${ label }: \\s * ([\\s\\S] *?)(?=\\n[A - ZÁÉÍÓÚa - záéíóú] |\\n# |\\n\\*\\*|\\n ?\\s *\\w +?:| $)`, "i");
           const found = pattern.exec(body);
           if (found && found[1]) return found[1].trim();
           if (altLabel) {
-            const altPattern = new RegExp(`${altLabel}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚa-záéíóú]|\\n#|\\n\\*\\*|\\n?\\s*\\w+?:|$)`, "i");
+            const altPattern = new RegExp(`${ altLabel }: \\s * ([\\s\\S] *?)(?=\\n[A - ZÁÉÍÓÚa - záéíóú] |\\n# |\\n\\*\\*|\\n ?\\s *\\w +?:| $)`, "i");
             const altFound = altPattern.exec(body);
             if (altFound && altFound[1]) return altFound[1].trim();
           }
@@ -1156,7 +1162,7 @@ At the end, include a motivational phrase:
 
         if (!ideaText || ideaText.trim() === "") {
           finishLoadingOverlay();
-          document.getElementById("ff-results-container").innerHTML = `<div class="notification is-warning">${t("no_ideas")}</div>`;
+          document.getElementById("ff-results-container").innerHTML = `< div class="notification is-warning" > ${ t("no_ideas") }</div > `;
           return;
         }
 
@@ -1164,12 +1170,12 @@ At the end, include a motivational phrase:
         finishLoadingOverlay();
         updateCounterUI();
         document.getElementById("ff-results-container").innerHTML =
-          `<div class="notification is-primary" style="white-space:pre-line">${ideaText}</div>`;
+          `< div class="notification is-primary" style = "white-space:pre-line" > ${ ideaText }</div > `;
 
       } catch (e) {
         finishLoadingOverlay();
         document.getElementById("ff-results-container").innerHTML =
-          `<div class="notification is-danger">Error generando ideas: ${e.message || e}</div>`;
+          `< div class="notification is-danger" > Error generando ideas: ${ e.message || e }</div > `;
         console.error(e);
       }
     }
@@ -1190,33 +1196,33 @@ At the end, include a motivational phrase:
 
       modal.className = "ff-results-modal is-active";
       modal.innerHTML = `
-    <div class="ff-modal-overlay"></div>
-    <div class="ff-modal-canvas animate__animated animate__fadeInDown">
-      <button id="ff-results-close" class="button is-small is-light ff-modal-back-btn" style="position:absolute;top:1em;left:1em;z-index:10;">
-        <i class="fas fa-arrow-left"></i> Volver
-      </button>
-      <div id="ff-results-content"></div>
-    </div>
-  `;
+      < div class="ff-modal-overlay" ></div >
+        <div class="ff-modal-canvas animate__animated animate__fadeInDown">
+          <button id="ff-results-close" class="button is-small is-light ff-modal-back-btn" style="position:absolute;top:1em;left:1em;z-index:10;">
+            <i class="fas fa-arrow-left"></i> Volver
+          </button>
+          <div id="ff-results-content"></div>
+        </div>
+    `;
 
       // Fondo modal transparente
       document.querySelector(".ff-modal-overlay").style = `
-    position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.18); z-index:1;
-  `;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.18); z - index: 1;
+    `;
 
       // Lienzo tipo presentación
       const canvas = modal.querySelector(".ff-modal-canvas");
       canvas.style = `
-    background:rgba(255,255,255,0.96);
-    border-radius:2em;
-    margin:3em auto;
-    max-width:540px;
-    min-width:300px;
-    box-shadow:0 8px 32px 0 rgba(31,38,135,0.3);
-    padding:2.7em 2.1em 2.1em 2.1em;
-    position:relative;
-    z-index:2;
-  `;
+    background: rgba(255, 255, 255, 0.96);
+    border - radius: 2em;
+    margin: 3em auto;
+    max - width: 540px;
+    min - width: 300px;
+    box - shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+    padding: 2.7em 2.1em 2.1em 2.1em;
+    position: relative;
+    z - index: 2;
+    `;
 
       // Contenido de ideas
       const container = modal.querySelector("#ff-results-content");
@@ -1226,19 +1232,19 @@ At the end, include a motivational phrase:
         // Prompt visual enriquecido
         const visualPrompt = `
 Prompt para IA Visual:
-${idea.visual}
-${idea.angulo ? "Contexto narrativo: " + idea.angulo : ""}
-`;
+${ idea.visual }
+${ idea.angulo ? "Contexto narrativo: " + idea.angulo : "" }
+    `;
 
         const card = document.createElement("div");
         card.className = "ff-idea-canvas-card";
         card.style = `
-      margin-bottom:2em; background:rgba(255,255,255,0.96); border-radius:1.2em;
-      box-shadow:0 2px 14px rgba(142,68,173,0.08); padding:2em 1em 1.3em 1em;
-      display:flex; flex-direction:column; align-items:center;`;
+    margin - bottom: 2em; background: rgba(255, 255, 255, 0.96); border - radius: 1.2em;
+    box - shadow: 0 2px 14px rgba(142, 68, 173, 0.08); padding: 2em 1em 1.3em 1em;
+    display: flex; flex - direction: column; align - items: center; `;
 
         card.innerHTML = `
-      <div style="font-size:1.5em;font-weight:700;color:#8e44ad;">${selectedNetworks && selectedNetworks.length === ideas.length ? selectedNetworks[idx].replace(/^./, c => c.toUpperCase()) : "Idea"}</div>
+      < div style = "font-size:1.5em;font-weight:700;color:#8e44ad;" > ${ selectedNetworks && selectedNetworks.length === ideas.length ? selectedNetworks[idx].replace(/^./, c => c.toUpperCase()) : "Idea" }</div >
       <div style="margin:1em 0 0.6em 0;">
         <span class="ff-idea-label" style="color:#f1c40f">Gancho:</span>
         <span>${idea.gancho}</span>
@@ -1286,23 +1292,23 @@ ${idea.angulo ? "Contexto narrativo: " + idea.angulo : ""}
     const fusionado = document.createElement("div");
     fusionado.className = "ff-visual-block";
     fusionado.innerHTML = `
-      <div style="font-size:1.07em;color:#8e44ad;"><strong>Visual + Ángulo:</strong></div>
+      < div style = "font-size:1.07em;color:#8e44ad;" > <strong>Visual + Ángulo:</strong></div >
       <div style="margin:0.5em 0 0.2em 0"><em>${idea.visual}</em></div>
       <div style="font-size:0.98em;color:#555;"><strong>${t("angulo")}:</strong> ${idea.angulo}</div>
     `;
     card.appendChild(fusionado);
 
     // Gancho
-    card.innerHTML += `<div style="margin:0.7em 0 0.4em 0"><strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div>`;
+    card.innerHTML += `< div style = "margin:0.7em 0 0.4em 0" > <strong style="color:#8e44ad">${t("gancho")}:</strong> ${ idea.gancho }</div > `;
 
     // Texto en párrafos
-    card.innerHTML += `<div><strong style="color:#8e44ad">${t("texto")}:</strong>${formatParagraphs(idea.texto)}</div>`;
+    card.innerHTML += `< div > <strong style="color:#8e44ad">${t("texto")}:</strong>${ formatParagraphs(idea.texto) }</div > `;
 
     // Hashtags y CTA
     card.innerHTML += `
-      <div style="margin-top:0.9em;">
+      < div style = "margin-top:0.9em;" >
         <span style="font-weight:bold;color:#8e44ad">${t("hashtags")}:</span> <span>${idea.hashtags}</span>
-      </div>
+      </div >
       <div style="margin-top:0.3em;">
         <span style="font-weight:bold;color:#8e44ad">${t("cta")}:</span> <span>${idea.cta}</span>
       </div>
@@ -1313,7 +1319,7 @@ ${idea.angulo ? "Contexto narrativo: " + idea.angulo : ""}
     actions.className = "ff-idea-actions";
     actions.style.marginTop = "1em";
     actions.innerHTML = `
-      <button class="button is-success is-small ff-copy-btn" style="margin-right:0.7em">${t("copy")}</button>
+      < button class="button is-success is-small ff-copy-btn" style = "margin-right:0.7em" > ${ t("copy") }</button >
       <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
       <button class="button is-light is-small">👍</button>
       <button class="button is-light is-small">👎</button>
@@ -1321,18 +1327,18 @@ ${idea.angulo ? "Contexto narrativo: " + idea.angulo : ""}
     // Copiar
     actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
       const textToCopy = `
-${idea.gancho}
+${ idea.gancho }
 
-${idea.texto}
+${ idea.texto }
 
-${idea.hashtags}
+${ idea.hashtags }
 
-${idea.cta}
+${ idea.cta }
 
-${idea.visual}
+${ idea.visual }
 
-${idea.angulo}
-      `.trim();
+${ idea.angulo }
+    `.trim();
       navigator.clipboard.writeText(textToCopy);
       actions.querySelector('.ff-copy-btn').innerText = t("copied");
       setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
@@ -1340,17 +1346,17 @@ ${idea.angulo}
     // Compartir nativo
     actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
       const shareText = `
-${idea.gancho}
+${ idea.gancho }
 
-${idea.texto}
+${ idea.texto }
 
-${idea.hashtags}
+${ idea.hashtags }
 
-${idea.cta}
+${ idea.cta }
 
-Visual: ${idea.visual}
-Ángulo: ${idea.angulo}
-      `.trim();
+    Visual: ${ idea.visual }
+    Ángulo: ${ idea.angulo }
+    `.trim();
       if (navigator.share) {
         try {
           await navigator.share({
@@ -1374,7 +1380,7 @@ Visual: ${idea.visual}
     if (fraseFinal && fraseFinal.trim()) {
       const finalDiv = document.createElement("div");
       finalDiv.className = "ff-final-phrase";
-      finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
+      finalDiv.innerHTML = `< strong > ${ t("frasefinal") }:</strong > <span>${fraseFinal}</span>`;
       container.appendChild(finalDiv);
     }
     }
@@ -1437,7 +1443,7 @@ Visual: ${idea.visual}
         } else if (promoLaunch) {
           const ad = document.createElement("div");
           ad.className = "has-text-centered has-text-grey-light ff-ad";
-          ad.innerHTML = `<small>${t("ad_light")}</small>`;
+          ad.innerHTML = `< small > ${ t("ad_light") }</small > `;
           document.body.appendChild(ad);
         }
       } catch (error) { }
@@ -1463,7 +1469,7 @@ Visual: ${idea.visual}
           premiumGlobalEndDate: new Date(endDate).toISOString()
         });
         document.getElementById("ff-premium-status-text").textContent =
-          `${t("premium_until")}${new Date(endDate).toLocaleString()}`;
+          `${ t("premium_until") }${ new Date(endDate).toLocaleString() }`;
         alert(t("premium_update_success"));
       } catch (error) {
         alert("Error al actualizar estado global.");
