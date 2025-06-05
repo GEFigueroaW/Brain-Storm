@@ -1096,11 +1096,11 @@ At the end, include a motivational phrase:
       while ((match = ideaRegex.exec(text)) !== null) {
         const body = match[1];
         const getCampo = (label, altLabel) => {
-          const pattern = new RegExp(`${label}: \\s * ([\\s\\S] *?)(?=\\n[A - ZÁÉÍÓÚa - záéíóú] |\\n# |\\n\\*\\*|\\n ?\\s *\\w +?:| $)`, "i");
+          const pattern = new RegExp(`${label}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚáéíóú - záéíóú]|\\n#|\\n\\*\\*|\\n ?\\s*\\w +:?|$)`, "i");
           const found = pattern.exec(body);
           if (found && found[1]) return found[1].trim();
           if (altLabel) {
-            const altPattern = new RegExp(`${altLabel}: \\s * ([\\s\\S] *?)(?=\\n[A - ZÁÉÍÓÚa - záéíóú] |\\n# |\\n\\*\\*|\\n ?\\s *\\w +?:| $)`, "i");
+            const altPattern = new RegExp(`${altLabel}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚáéíóú - záéíóú]|\\n#|\\n\\*\\*|\\n ?\\s*\\w +:?|$)`, "i");
             const altFound = altPattern.exec(body);
             if (altFound && altFound[1]) return altFound[1].trim();
           }
