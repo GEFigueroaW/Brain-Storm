@@ -1336,9 +1336,9 @@ Visual: ${idea.visual}
         modal.classList.remove("is-active");
         modal.classList.add("is-hidden");
         document.getElementById("ff-config-view").classList.remove("is-hidden");
-        container.innerHTML = "";
-      };
-    } card.appendChild(header);
+        card.appendChild(header); // aquí sí está definida
+        container.appendChild(card);
+        });
 
     // Bloque combinado Visual + Ángulo
     const fusionado = document.createElement("div");
