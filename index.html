@@ -1176,6 +1176,7 @@ At the end, include a motivational phrase:
     document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
     const idiomaSeleccionado = window.currentLang || "es";
     // Agrega este bloque JS reemplazando tu función renderIdeas y añade la función formatParagraphs
+    // --- FORMATO DE SALIDA Y PARSER ---
     function renderIdeas(ideas, fraseFinal, selectedNetworks) {
       // Oculta el formulario principal y muestra el modal fullscreen
       document.getElementById("ff-config-view").classList.add("is-hidden");
@@ -1189,33 +1190,33 @@ At the end, include a motivational phrase:
 
       modal.className = "ff-results-modal is-active";
       modal.innerHTML = `
-      < div class="ff-modal-overlay" ></div >
-        <div class="ff-modal-canvas animate__animated animate__fadeInDown">
-          <button id="ff-results-close" class="button is-small is-light ff-modal-back-btn" style="position:absolute;top:1em;left:1em;z-index:10;">
-            <i class="fas fa-arrow-left"></i> Volver
-          </button>
-          <div id="ff-results-content"></div>
-        </div>
-    `;
+    <div class="ff-modal-overlay"></div>
+    <div class="ff-modal-canvas animate__animated animate__fadeInDown">
+      <button id="ff-results-close" class="button is-small is-light ff-modal-back-btn" style="position:absolute;top:1em;left:1em;z-index:10;">
+        <i class="fas fa-arrow-left"></i> Volver
+      </button>
+      <div id="ff-results-content"></div>
+    </div>
+  `;
 
       // Fondo modal transparente
       document.querySelector(".ff-modal-overlay").style = `
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.18); z - index: 1;
-    `;
+    position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.18); z-index:1;
+  `;
 
       // Lienzo tipo presentación
       const canvas = modal.querySelector(".ff-modal-canvas");
       canvas.style = `
-    background: rgba(255, 255, 255, 0.96);
-    border - radius: 2em;
-    margin: 3em auto;
-    max - width: 540px;
-    min - width: 300px;
-    box - shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
-    padding: 2.7em 2.1em 2.1em 2.1em;
-    position: relative;
-    z - index: 2;
-    `;
+    background:rgba(255,255,255,0.96);
+    border-radius:2em;
+    margin:3em auto;
+    max-width:540px;
+    min-width:300px;
+    box-shadow:0 8px 32px 0 rgba(31,38,135,0.3);
+    padding:2.7em 2.1em 2.1em 2.1em;
+    position:relative;
+    z-index:2;
+  `;
 
       // Contenido de ideas
       const container = modal.querySelector("#ff-results-content");
@@ -1232,12 +1233,12 @@ ${idea.angulo ? "Contexto narrativo: " + idea.angulo : ""}
         const card = document.createElement("div");
         card.className = "ff-idea-canvas-card";
         card.style = `
-    margin - bottom: 2em; background: rgba(255, 255, 255, 0.96); border - radius: 1.2em;
-    box - shadow: 0 2px 14px rgba(142, 68, 173, 0.08); padding: 2em 1em 1.3em 1em;
-    display: flex; flex - direction: column; align - items: center; `;
+      margin-bottom:2em; background:rgba(255,255,255,0.96); border-radius:1.2em;
+      box-shadow:0 2px 14px rgba(142,68,173,0.08); padding:2em 1em 1.3em 1em;
+      display:flex; flex-direction:column; align-items:center;`;
 
         card.innerHTML = `
-      < div style = "font-size:1.5em;font-weight:700;color:#8e44ad;" > ${selectedNetworks && selectedNetworks.length === ideas.length ? selectedNetworks[idx].replace(/^./, c => c.toUpperCase()) : "Idea"}</div >
+      <div style="font-size:1.5em;font-weight:700;color:#8e44ad;">${selectedNetworks && selectedNetworks.length === ideas.length ? selectedNetworks[idx].replace(/^./, c => c.toUpperCase()) : "Idea"}</div>
       <div style="margin:1em 0 0.6em 0;">
         <span class="ff-idea-label" style="color:#f1c40f">Gancho:</span>
         <span>${idea.gancho}</span>
@@ -1259,16 +1260,75 @@ ${idea.angulo ? "Contexto narrativo: " + idea.angulo : ""}
         <span>${idea.cta}</span>
       </div>
     `;
+
+        // Acciones
+        const actions = document.createElement("div");
+        actions.className = "ff-idea-actions";
+        actions.style.marginTop = "1em";
+        actions.innerHTML = `
+      <button class="button is-success is-small ff-copy-btn" style="margin-right:0.7em">${t("copy")}</button>
+      <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
+      <button class="button is-light is-small">👍</button>
+      <button class="button is-light is-small">👎</button>
+    `;
+        // Copiar
+        actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
+          const textToCopy = `
+${idea.gancho}
+
+${idea.texto}
+
+${idea.hashtags}
+
+${idea.cta}
+
+${idea.visual}
+
+${idea.angulo}
+      `.trim();
+          navigator.clipboard.writeText(textToCopy);
+          actions.querySelector('.ff-copy-btn').innerText = t("copied");
+          setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
+        });
+        // Compartir nativo
+        actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
+          const shareText = `
+${idea.gancho}
+
+${idea.texto}
+
+${idea.hashtags}
+
+${idea.cta}
+
+Visual: ${idea.visual}
+Ángulo: ${idea.angulo}
+      `.trim();
+          if (navigator.share) {
+            try {
+              await navigator.share({
+                title: "Idea generada con FeedFlow",
+                text: shareText,
+                url: window.location.href
+              });
+            } catch (err) {
+              alert("No se pudo compartir: " + err);
+            }
+          } else {
+            alert("La función de compartir no está disponible en este dispositivo.");
+          }
+        });
+        card.appendChild(actions);
+
         container.appendChild(card);
       });
 
       // Frase final motivacional
-      if (fraseFinal) {
-        const finalPhrase = document.createElement("div");
-        finalPhrase.className = "ff-final-phrase";
-        finalPhrase.style = "margin-top:1.2em;font-style:italic;background:rgba(245,245,250,0.85);padding:1em 1.4em;border-radius:.5em;border-left:5px solid #8e44ad;font-size:1.12em;";
-        finalPhrase.textContent = fraseFinal;
-        container.appendChild(finalPhrase);
+      if (fraseFinal && fraseFinal.trim()) {
+        const finalDiv = document.createElement("div");
+        finalDiv.className = "ff-final-phrase";
+        finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
+        container.appendChild(finalDiv);
       }
 
       // Botón cerrar modal
@@ -1278,8 +1338,7 @@ ${idea.angulo ? "Contexto narrativo: " + idea.angulo : ""}
         document.getElementById("ff-config-view").classList.remove("is-hidden");
         container.innerHTML = "";
       };
-    }
-    card.appendChild(header);
+    } card.appendChild(header);
 
     // Bloque combinado Visual + Ángulo
     const fusionado = document.createElement("div");
