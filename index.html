@@ -1055,9 +1055,9 @@
     document.querySelectorAll('input[name="ff-mode"]').forEach(el => el.addEventListener("change", updateNetworksByMode));
 
     // --- FORMATO DE SALIDA Y PARSER ---
-function getPromptFormatoSalida(lang) {
-  if (lang === "es") {
-    return `
+    function getPromptFormatoSalida(lang) {
+      if (lang === "es") {
+        return `
 Por cada idea, sigue exactamente este formato en español:
 ---IDEA_N---
 Gancho Verbal Impactante: [gancho impactante aquí]
@@ -1072,8 +1072,8 @@ Al final de todas las ideas, incluye una frase motivacional así:
 [frase motivacional aquí]
 ---FIN_FRASE_FINAL---
     `.trim();
-  }
-  return `
+      }
+      return `
 For each idea, use exactly this format in ${lang}:
 ---IDEA_N---
 Impactful Hook: [impactful hook here]
@@ -1083,8 +1083,12 @@ AI Visual Prompt: [Describe in a detailed and explicit way the image or video to
 Call to Action (CTA): [cta here]
 ---FIN_IDEA_N---
 
+At the end, include a motivational phrase:
+---FRASE_FINAL---
+[motivational phrase here]
+---FIN_FRASE_FINAL---
 `.trim();
-}
+    }
     function parseIdeasFromResponse(text) {
       // Encuentra todos los bloques de ideas con regex global robusto
       const ideaRegex = /---IDEA_\d+---([\s\S]*?)---FIN_IDEA_\d+---/g;
@@ -1092,11 +1096,11 @@ Call to Action (CTA): [cta here]
       while ((match = ideaRegex.exec(text)) !== null) {
         const body = match[1];
         const getCampo = (label, altLabel) => {
-          const pattern = new RegExp(`${ label }: \\s * ([\\s\\S] *?)(?=\\n[A - ZÁÉÍÓÚa - záéíóú] |\\n# |\\n\\*\\*|\\n ?\\s *\\w +?:| $)`, "i");
+          const pattern = new RegExp(`${label}: \\s * ([\\s\\S] *?)(?=\\n[A - ZÁÉÍÓÚa - záéíóú] |\\n# |\\n\\*\\*|\\n ?\\s *\\w +?:| $)`, "i");
           const found = pattern.exec(body);
           if (found && found[1]) return found[1].trim();
           if (altLabel) {
-            const altPattern = new RegExp(`${ altLabel }: \\s * ([\\s\\S] *?)(?=\\n[A - ZÁÉÍÓÚa - záéíóú] |\\n# |\\n\\*\\*|\\n ?\\s *\\w +?:| $)`, "i");
+            const altPattern = new RegExp(`${altLabel}: \\s * ([\\s\\S] *?)(?=\\n[A - ZÁÉÍÓÚa - záéíóú] |\\n# |\\n\\*\\*|\\n ?\\s *\\w +?:| $)`, "i");
             const altFound = altPattern.exec(body);
             if (altFound && altFound[1]) return altFound[1].trim();
           }
@@ -1151,7 +1155,7 @@ Call to Action (CTA): [cta here]
 
         if (!ideaText || ideaText.trim() === "") {
           finishLoadingOverlay();
-          document.getElementById("ff-results-container").innerHTML = `< div class="notification is-warning" > ${ t("no_ideas") }</div > `;
+          document.getElementById("ff-results-container").innerHTML = `< div class="notification is-warning" > ${t("no_ideas")}</div > `;
           return;
         }
 
@@ -1159,12 +1163,12 @@ Call to Action (CTA): [cta here]
         finishLoadingOverlay();
         updateCounterUI();
         document.getElementById("ff-results-container").innerHTML =
-          `< div class="notification is-primary" style = "white-space:pre-line" > ${ ideaText }</div > `;
+          `< div class="notification is-primary" style = "white-space:pre-line" > ${ideaText}</div > `;
 
       } catch (e) {
         finishLoadingOverlay();
         document.getElementById("ff-results-container").innerHTML =
-          `< div class="notification is-danger" > Error generando ideas: ${ e.message || e }</div > `;
+          `< div class="notification is-danger" > Error generando ideas: ${e.message || e}</div > `;
         console.error(e);
       }
     }
@@ -1221,8 +1225,8 @@ Call to Action (CTA): [cta here]
         // Prompt visual enriquecido
         const visualPrompt = `
 Prompt para IA Visual:
-${ idea.visual }
-${ idea.angulo ? "Contexto narrativo: " + idea.angulo : "" }
+${idea.visual}
+${idea.angulo ? "Contexto narrativo: " + idea.angulo : ""}
     `;
 
         const card = document.createElement("div");
@@ -1233,7 +1237,7 @@ ${ idea.angulo ? "Contexto narrativo: " + idea.angulo : "" }
     display: flex; flex - direction: column; align - items: center; `;
 
         card.innerHTML = `
-      < div style = "font-size:1.5em;font-weight:700;color:#8e44ad;" > ${ selectedNetworks && selectedNetworks.length === ideas.length ? selectedNetworks[idx].replace(/^./, c => c.toUpperCase()) : "Idea" }</div >
+      < div style = "font-size:1.5em;font-weight:700;color:#8e44ad;" > ${selectedNetworks && selectedNetworks.length === ideas.length ? selectedNetworks[idx].replace(/^./, c => c.toUpperCase()) : "Idea"}</div >
       <div style="margin:1em 0 0.6em 0;">
         <span class="ff-idea-label" style="color:#f1c40f">Gancho:</span>
         <span>${idea.gancho}</span>
@@ -1288,10 +1292,10 @@ ${ idea.angulo ? "Contexto narrativo: " + idea.angulo : "" }
     card.appendChild(fusionado);
 
     // Gancho
-    card.innerHTML += `< div style = "margin:0.7em 0 0.4em 0" > <strong style="color:#8e44ad">${t("gancho")}:</strong> ${ idea.gancho }</div > `;
+    card.innerHTML += `< div style = "margin:0.7em 0 0.4em 0" > <strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div > `;
 
     // Texto en párrafos
-    card.innerHTML += `< div > <strong style="color:#8e44ad">${t("texto")}:</strong>${ formatParagraphs(idea.texto) }</div > `;
+    card.innerHTML += `< div > <strong style="color:#8e44ad">${t("texto")}:</strong>${formatParagraphs(idea.texto)}</div > `;
 
     // Hashtags y CTA
     card.innerHTML += `
@@ -1308,7 +1312,7 @@ ${ idea.angulo ? "Contexto narrativo: " + idea.angulo : "" }
     actions.className = "ff-idea-actions";
     actions.style.marginTop = "1em";
     actions.innerHTML = `
-      < button class="button is-success is-small ff-copy-btn" style = "margin-right:0.7em" > ${ t("copy") }</button >
+      < button class="button is-success is-small ff-copy-btn" style = "margin-right:0.7em" > ${t("copy")}</button >
       <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
       <button class="button is-light is-small">👍</button>
       <button class="button is-light is-small">👎</button>
@@ -1316,17 +1320,17 @@ ${ idea.angulo ? "Contexto narrativo: " + idea.angulo : "" }
     // Copiar
     actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
       const textToCopy = `
-${ idea.gancho }
+${idea.gancho}
 
-${ idea.texto }
+${idea.texto}
 
-${ idea.hashtags }
+${idea.hashtags}
 
-${ idea.cta }
+${idea.cta}
 
-${ idea.visual }
+${idea.visual}
 
-${ idea.angulo }
+${idea.angulo}
     `.trim();
       navigator.clipboard.writeText(textToCopy);
       actions.querySelector('.ff-copy-btn').innerText = t("copied");
@@ -1335,16 +1339,16 @@ ${ idea.angulo }
     // Compartir nativo
     actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
       const shareText = `
-${ idea.gancho }
+${idea.gancho}
 
-${ idea.texto }
+${idea.texto}
 
-${ idea.hashtags }
+${idea.hashtags}
 
-${ idea.cta }
+${idea.cta}
 
-    Visual: ${ idea.visual }
-    Ángulo: ${ idea.angulo }
+    Visual: ${idea.visual}
+    Ángulo: ${idea.angulo}
     `.trim();
       if (navigator.share) {
         try {
@@ -1369,7 +1373,7 @@ ${ idea.cta }
     if (fraseFinal && fraseFinal.trim()) {
       const finalDiv = document.createElement("div");
       finalDiv.className = "ff-final-phrase";
-      finalDiv.innerHTML = `< strong > ${ t("frasefinal") }:</strong > <span>${fraseFinal}</span>`;
+      finalDiv.innerHTML = `< strong > ${t("frasefinal")}:</strong > <span>${fraseFinal}</span>`;
       container.appendChild(finalDiv);
     }
     }
@@ -1432,7 +1436,7 @@ ${ idea.cta }
         } else if (promoLaunch) {
           const ad = document.createElement("div");
           ad.className = "has-text-centered has-text-grey-light ff-ad";
-          ad.innerHTML = `< small > ${ t("ad_light") }</small > `;
+          ad.innerHTML = `< small > ${t("ad_light")}</small > `;
           document.body.appendChild(ad);
         }
       } catch (error) { }
@@ -1458,7 +1462,7 @@ ${ idea.cta }
           premiumGlobalEndDate: new Date(endDate).toISOString()
         });
         document.getElementById("ff-premium-status-text").textContent =
-          `${ t("premium_until") }${ new Date(endDate).toLocaleString() }`;
+          `${t("premium_until")}${new Date(endDate).toLocaleString()}`;
         alert(t("premium_update_success"));
       } catch (error) {
         alert("Error al actualizar estado global.");
