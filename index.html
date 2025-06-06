@@ -1275,8 +1275,7 @@ Visual: ${idea.visual}
       container.appendChild(card);
 
       // Frase final motivacional
-      // Asegúrate que la variable fraseFinal venga en el objeto idea o ponle un valor por defecto
-      let fraseFinal = idea.fraseFinal || ""; // o puedes usar una frase fija: let fraseFinal = "¡Sigue creando, tu próxima idea puede ser viral!";
+      let fraseFinal = idea.fraseFinal || ""; // o una frase fija si prefieres
       if (fraseFinal && fraseFinal.trim()) {
         const finalDiv = document.createElement("div");
         finalDiv.className = "ff-final-phrase";
@@ -1291,7 +1290,7 @@ Visual: ${idea.visual}
         document.getElementById("ff-config-view").classList.remove("is-hidden");
         container.innerHTML = "";
       };
-    }    // Gancho
+    }
     card.innerHTML += `< div style = "margin:0.7em 0 0.4em 0" > <strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div > `;
 
     // Texto en párrafos
