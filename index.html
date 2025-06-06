@@ -1090,7 +1090,6 @@ At the end, include a motivational phrase:
 `.trim();
     }
     function parseIdeasFromResponse(text) {
-      // Encuentra todos los bloques de ideas con regex global robusto
       const ideaRegex = /---IDEA_\d+---([\s\S]*?)---FIN_IDEA_\d+---/g;
       let match, ideas = [];
       while ((match = ideaRegex.exec(text)) !== null) {
@@ -1115,7 +1114,6 @@ At the end, include a motivational phrase:
           cta: getCampo("Llamada a la Acción \\(CTA\\)", "CTA")
         });
       }
-      // Frase final motivacional
       const fraseFinal = (text.match(/---FRASE_FINAL---\s*([\s\S]+?)\s*---FIN_FRASE_FINAL---/) || [])[1]?.trim() || "";
       return { ideas, fraseFinal };
     }
