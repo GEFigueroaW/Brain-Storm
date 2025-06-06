@@ -1253,7 +1253,7 @@ Visual: ${idea.visual}
       // ...puedes agregar más bloques si necesitas...
 
       container.appendChild(card);
-    }); // <-- Solo uno, correcto
+    }; // <-- Solo uno, correcto
 
     // Frase final motivacional
     if (fraseFinal && fraseFinal.trim()) {
@@ -1270,7 +1270,6 @@ Visual: ${idea.visual}
       document.getElementById("ff-config-view").classList.remove("is-hidden");
       container.innerHTML = "";
     };
-}
     // Bloque combinado Visual + Ángulo
     const fusionado = document.createElement("div");
     fusionado.className = "ff-visual-block";
