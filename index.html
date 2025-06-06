@@ -1275,7 +1275,7 @@ Visual: ${idea.visual}
       container.appendChild(card);
 
       // Frase final motivacional
-      let fraseFinal = idea.fraseFinal || ""; // o una frase fija si prefieres
+      let fraseFinal = idea.fraseFinal || "";
       if (fraseFinal && fraseFinal.trim()) {
         const finalDiv = document.createElement("div");
         finalDiv.className = "ff-final-phrase";
@@ -1290,89 +1290,7 @@ Visual: ${idea.visual}
         document.getElementById("ff-config-view").classList.remove("is-hidden");
         container.innerHTML = "";
       };
-    }
-    card.innerHTML += `< div style = "margin:0.7em 0 0.4em 0" > <strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div > `;
-
-    // Texto en párrafos
-    card.innerHTML += `< div > <strong style="color:#8e44ad">${t("texto")}:</strong>${formatParagraphs(idea.texto)}</div > `;
-
-    // Hashtags y CTA
-    card.innerHTML += `
-      < div style = "margin-top:0.9em;" >
-        <span style="font-weight:bold;color:#8e44ad">${t("hashtags")}:</span> <span>${idea.hashtags}</span>
-      </div >
-      <div style="margin-top:0.3em;">
-        <span style="font-weight:bold;color:#8e44ad">${t("cta")}:</span> <span>${idea.cta}</span>
-      </div>
-    `;
-
-    // Acciones
-    const actions = document.createElement("div");
-    actions.className = "ff-idea-actions";
-    actions.style.marginTop = "1em";
-    actions.innerHTML = `
-      < button class="button is-success is-small ff-copy-btn" style = "margin-right:0.7em" > ${t("copy")}</button >
-      <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
-      <button class="button is-light is-small">👍</button>
-      <button class="button is-light is-small">👎</button>
-    `;
-    // Copiar
-    actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
-      const textToCopy = `
-${idea.gancho}
-
-${idea.texto}
-
-${idea.hashtags}
-
-${idea.cta}
-
-${idea.visual}
-
-${idea.angulo}
-    `.trim();
-      navigator.clipboard.writeText(textToCopy);
-      actions.querySelector('.ff-copy-btn').innerText = t("copied");
-      setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
-    });
-    // Compartir nativo
-    actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
-      const shareText = `
-${idea.gancho}
-
-${idea.texto}
-
-${idea.hashtags}
-
-${idea.cta}
-
-    Visual: ${idea.visual}
-    Ángulo: ${idea.angulo}
-    `.trim();
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: "Idea generada con FeedFlow",
-            text: shareText,
-            url: window.location.href
-          });
-        } catch (err) {
-          alert("No se pudo compartir: " + err);
-        }
-      } else {
-        alert("La función de compartir no está disponible en este dispositivo.");
-      }
-      card.appendChild(actions);
-      container.appendChild(card);
-    });
-    // Frase final motivacional
-    if (fraseFinal && fraseFinal.trim()) {
-      const finalDiv = document.createElement("div");
-      finalDiv.className = "ff-final-phrase";
-      finalDiv.innerHTML = `< strong > ${t("frasefinal")}:</strong > <span>${fraseFinal}</span>`;
-      container.appendChild(finalDiv);
-    }
-    document.addEventListener("click", async (e) => {
+    } document.addEventListener("click", async (e) => {
       if (e.target.classList.contains("ff-feedback-btn")) {
         const feedbackType = e.target.dataset.feedback;
         const ideaIndex = e.target.dataset.ideaIndex;
