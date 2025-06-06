@@ -1188,7 +1188,26 @@ At the end, include a motivational phrase:
       document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
       document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
 
-      // Si necesitas renderizar acciones (copiar, compartir, likes) para cada idea,
+      function renderIdeasFromText(ideasText) {
+        const container = document.getElementById("ff-ideas-container");
+        container.innerHTML = "";
+
+        // Separa las ideas por "---" ignorando líneas vacías
+        const ideaBlocks = ideasText
+          .split(/\n-{3,}\n/)
+          .map(b => b.trim())
+          .filter(Boolean);
+
+        ideaBlocks.forEach((block, idx) => {
+          const card = document.createElement("div");
+          card.className = "ff-idea-card";
+          let html = block
+            .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\n/g, "<br>");
+          card.innerHTML = html;
+          container.appendChild(card);
+        });
+      }
       // colócalo **dentro de una función** así:
       function renderIdeaActions(idea) {
         const card = document.createElement("div");
