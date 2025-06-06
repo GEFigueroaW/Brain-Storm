@@ -286,12 +286,22 @@
       }
 
       .ff-idea-card {
-        border: 1px solid #ececec;
-        border-radius: 8px;
-        padding: 16px;
-        background: #faf7fd;
-        margin-bottom: 1.3em;
-        box-shadow: 0 2px 8px rgba(142, 68, 173, 0.06);
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 18px #0001;
+        margin-bottom: 2em;
+        padding: 1.5em 2em;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1.5px solid #e0e0e0;
+        transition: box-shadow 0.2s;
+        font-size: 1.11em;
+        white-space: pre-line;
+      }
+
+      .ff-idea-card strong {
+        color: #8e44ad;
       }
 
       .ff-idea-header {
@@ -969,96 +979,97 @@
         elHelpKeyword.nextElementSibling.innerText = t.keyword_tooltip;
       }
       renderCopytypeOptions();
-      renderNetworkOptions();
-      updateCounterUI();
-    }
-    function saveInputs() {
-      lastInputs = {
-        mode: document.querySelector('input[name="ff-mode"]:checked').value,
-        keyword: document.getElementById("ff-keyword").value,
-        copytype: document.getElementById("ff-copytype").value,
-        networks: Array.from(document.querySelectorAll(".ff-social:checked")).map(el => el.value)
-      };
-      localStorage.setItem("ff-last-inputs", JSON.stringify(lastInputs));
-    }
-    function restoreInputs() {
-      if (!lastInputs) lastInputs = JSON.parse(localStorage.getItem("ff-last-inputs") || "null");
-      if (!lastInputs) return;
-      document.querySelector(`input[name="ff-mode"][value="${lastInputs.mode}"]`).checked = true;
-      document.getElementById("ff-keyword").value = lastInputs.keyword;
-      document.getElementById("ff-copytype").value = lastInputs.copytype;
-      renderNetworkOptions();
-      lastInputs.networks.forEach(val => {
-        const el = document.querySelector(`.ff-social[value="${val}"]`);
-        if (el) el.checked = true;
-      });
-    }
-    function clearInputsOnChange() {
-      document.getElementById("ff-keyword").addEventListener("input", () => localStorage.removeItem("ff-last-inputs"));
-      document.getElementById("ff-copytype").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
-      document.getElementById("ff-networks-container").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
-    }
-    const SUGGESTED_KEYWORDS = ["marketing digital", "recetas fáciles", "fitness", "emprendimiento", "finanzas", "viajes", "tecnología", "salud mental", "moda", "gaming"];
-    function updateDatalist() {
-      const datalist = document.getElementById("ff-keyword-datalist");
-      datalist.innerHTML = "";
-      SUGGESTED_KEYWORDS.forEach(k => {
-        const opt = document.createElement("option");
-        opt.value = k;
-        datalist.appendChild(opt);
-      });
-    }
-
-    // --- EVENTOS Y LOGICA GENERAL ---
-    document.getElementById("ff-google-login").addEventListener("click", async () => {
-      const provider = new GoogleAuthProvider();
-      try { await signInWithPopup(auth, provider); }
-      catch (error) { alert("Error al iniciar sesión."); }
-    });
-    document.getElementById("ff-logout-btn").addEventListener("click", async () => await signOut(auth));
-    document.getElementById("ff-last-input-btn").addEventListener("click", restoreInputs);
-    document.getElementById("ff-auth-language-selector").addEventListener("change", e => {
-      setLang(e.target.value);
-      updateDatalist();
-    });
-    document.querySelectorAll(".ff-help-icon").forEach(icon => {
-      icon.addEventListener("focus", e => e.target.nextElementSibling.style.display = "block");
-      icon.addEventListener("blur", e => e.target.nextElementSibling.style.display = "none");
-    });
-    function validateForm() {
-      const mode = document.querySelector('input[name="ff-mode"]:checked').value;
-      const keyword = document.getElementById("ff-keyword").value.trim();
-      const copytype = document.getElementById("ff-copytype").value;
-      const selectedNetworks = Array.from(document.querySelectorAll(".ff-social:checked")).map(el => el.value);
-      if (!keyword) { alert(t("error_keyword")); return false; }
-      if (!copytype) { alert(t("error_copytype")); return false; }
-      if (mode === "multi" && selectedNetworks.length < 1) { alert(t("error_network")); return false; }
-      if (mode === "single" && selectedNetworks.length !== 1) { alert(t("error_network")); return false; }
-      return { mode, keyword, copytype, selectedNetworks };
-    }
-    function updateNetworksByMode() {
-      const mode = document.querySelector('input[name="ff-mode"]:checked').value;
-      renderNetworkOptions();
-      if (mode === "single") {
-        document.querySelectorAll(".ff-social").forEach(cb => {
-          cb.addEventListener("change", function () {
-            if (this.checked) {
-              document.querySelectorAll(".ff-social").forEach(other => {
-                if (other !== this) { other.checked = false; other.disabled = true; }
-              });
-            } else {
-              document.querySelectorAll(".ff-social").forEach(cb => cb.disabled = false);
-            }
-          });
+      renderNetworfunction renderIdeas(ideas) {
+        kOptions();
+        updateCounterUI();
+      }
+      function saveInputs() {
+        lastInputs = {
+          mode: document.querySelector('input[name="ff-mode"]:checked').value,
+          keyword: document.getElementById("ff-keyword").value,
+          copytype: document.getElementById("ff-copytype").value,
+          networks: Array.from(document.querySelectorAll(".ff-social:checked")).map(el => el.value)
+        };
+        localStorage.setItem("ff-last-inputs", JSON.stringify(lastInputs));
+      }
+      function restoreInputs() {
+        if (!lastInputs) lastInputs = JSON.parse(localStorage.getItem("ff-last-inputs") || "null");
+        if (!lastInputs) return;
+        document.querySelector(`input[name="ff-mode"][value="${lastInputs.mode}"]`).checked = true;
+        document.getElementById("ff-keyword").value = lastInputs.keyword;
+        document.getElementById("ff-copytype").value = lastInputs.copytype;
+        renderNetworkOptions();
+        lastInputs.networks.forEach(val => {
+          const el = document.querySelector(`.ff-social[value="${val}"]`);
+          if (el) el.checked = true;
         });
       }
-    }
-    document.querySelectorAll('input[name="ff-mode"]').forEach(el => el.addEventListener("change", updateNetworksByMode));
+      function clearInputsOnChange() {
+        document.getElementById("ff-keyword").addEventListener("input", () => localStorage.removeItem("ff-last-inputs"));
+        document.getElementById("ff-copytype").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
+        document.getElementById("ff-networks-container").addEventListener("change", () => localStorage.removeItem("ff-last-inputs"));
+      }
+      const SUGGESTED_KEYWORDS = ["marketing digital", "recetas fáciles", "fitness", "emprendimiento", "finanzas", "viajes", "tecnología", "salud mental", "moda", "gaming"];
+      function updateDatalist() {
+        const datalist = document.getElementById("ff-keyword-datalist");
+        datalist.innerHTML = "";
+        SUGGESTED_KEYWORDS.forEach(k => {
+          const opt = document.createElement("option");
+          opt.value = k;
+          datalist.appendChild(opt);
+        });
+      }
 
-    // --- FORMATO DE SALIDA Y PARSER ---
-    function getPromptFormatoSalida(lang) {
-      if (lang === "es") {
-        return `
+      // --- EVENTOS Y LOGICA GENERAL ---
+      document.getElementById("ff-google-login").addEventListener("click", async () => {
+        const provider = new GoogleAuthProvider();
+        try { await signInWithPopup(auth, provider); }
+        catch (error) { alert("Error al iniciar sesión."); }
+      });
+      document.getElementById("ff-logout-btn").addEventListener("click", async () => await signOut(auth));
+      document.getElementById("ff-last-input-btn").addEventListener("click", restoreInputs);
+      document.getElementById("ff-auth-language-selector").addEventListener("change", e => {
+        setLang(e.target.value);
+        updateDatalist();
+      });
+      document.querySelectorAll(".ff-help-icon").forEach(icon => {
+        icon.addEventListener("focus", e => e.target.nextElementSibling.style.display = "block");
+        icon.addEventListener("blur", e => e.target.nextElementSibling.style.display = "none");
+      });
+      function validateForm() {
+        const mode = document.querySelector('input[name="ff-mode"]:checked').value;
+        const keyword = document.getElementById("ff-keyword").value.trim();
+        const copytype = document.getElementById("ff-copytype").value;
+        const selectedNetworks = Array.from(document.querySelectorAll(".ff-social:checked")).map(el => el.value);
+        if (!keyword) { alert(t("error_keyword")); return false; }
+        if (!copytype) { alert(t("error_copytype")); return false; }
+        if (mode === "multi" && selectedNetworks.length < 1) { alert(t("error_network")); return false; }
+        if (mode === "single" && selectedNetworks.length !== 1) { alert(t("error_network")); return false; }
+        return { mode, keyword, copytype, selectedNetworks };
+      }
+      function updateNetworksByMode() {
+        const mode = document.querySelector('input[name="ff-mode"]:checked').value;
+        renderNetworkOptions();
+        if (mode === "single") {
+          document.querySelectorAll(".ff-social").forEach(cb => {
+            cb.addEventListener("change", function () {
+              if (this.checked) {
+                document.querySelectorAll(".ff-social").forEach(other => {
+                  if (other !== this) { other.checked = false; other.disabled = true; }
+                });
+              } else {
+                document.querySelectorAll(".ff-social").forEach(cb => cb.disabled = false);
+              }
+            });
+          });
+        }
+      }
+      document.querySelectorAll('input[name="ff-mode"]').forEach(el => el.addEventListener("change", updateNetworksByMode));
+
+      // --- FORMATO DE SALIDA Y PARSER ---
+      function getPromptFormatoSalida(lang) {
+        if (lang === "es") {
+          return `
 Por cada idea, sigue exactamente este formato en español:
 ---IDEA_N---
 Gancho Verbal Impactante: [gancho impactante aquí]
@@ -1073,8 +1084,8 @@ Al final de todas las ideas, incluye una frase motivacional así:
 [frase motivacional aquí]
 ---FIN_FRASE_FINAL---
     `.trim();
-      }
-      return `
+        }
+        return `
 For each idea, use exactly this format in ${lang}:
 ---IDEA_N---
 Impactful Hook: [impactful hook here]
@@ -1089,114 +1100,114 @@ At the end, include a motivational phrase:
 [motivational phrase here]
 ---FIN_FRASE_FINAL---
 `.trim();
-    }
-    function parseIdeasFromResponse(text) {
-      const ideaRegex = /---IDEA_\d+---([\s\S]*?)---FIN_IDEA_\d+---/g;
-      let match, ideas = [];
-      while ((match = ideaRegex.exec(text)) !== null) {
-        const body = match[1];
-        const getCampo = (label, altLabel) => {
-          const pattern = new RegExp(`${label}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚáéíóú - záéíóú]|\\n#|\\n\\*\\*|\\n ?\\s*\\w +:?|$)`, "i");
-          const found = pattern.exec(body);
-          if (found && found[1]) return found[1].trim();
-          if (altLabel) {
-            const altPattern = new RegExp(`${altLabel}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚáéíóú - záéíóú]|\\n#|\\n\\*\\*|\\n ?\\s*\\w +:?|$)`, "i");
-            const altFound = altPattern.exec(body);
-            if (altFound && altFound[1]) return altFound[1].trim();
-          }
-          return "";
-        };
-        ideas.push({
-          gancho: getCampo("Gancho Verbal Impactante", "Gancho"),
-          angulo: getCampo("Ángulo Narrativo", "Ángulo"),
-          texto: getCampo("Texto del Post", "Texto"),
-          hashtags: getCampo("Hashtags"),
-          visual: getCampo("Formato Visual Sugerido", "Visual"),
-          cta: getCampo("Llamada a la Acción \\(CTA\\)", "CTA")
-        });
       }
-      const fraseFinal = (text.match(/---FRASE_FINAL---\s*([\s\S]+?)\s*---FIN_FRASE_FINAL---/) || [])[1]?.trim() || "";
-      return { ideas, fraseFinal };
-    }
-    async function generateIdeas(refresh = false) {
-      const form = validateForm();
-      if (!form) return;
-      if (!userPremium && !promoLaunch && userGenCount >= maxGenFree) {
-        alert(t("generations_left") + userGenCount + "/" + maxGenFree);
-        return;
-      }
-      const { mode, keyword, copytype, selectedNetworks } = form;
-      saveInputs();
-      showLoadingOverlay(lang);
-
-      try {
-        const formatoSalida = getPromptFormatoSalida(lang);
-        const generateIdeasFn = httpsCallable(functions, "generateIdeas");
-        let nIdeas = 1;
-        if (mode === "single") nIdeas = 3;
-        else nIdeas = selectedNetworks.length;
-        const response = await generateIdeasFn({
-          keyword,
-          copytype,
-          language: lang,
-          networks: selectedNetworks,
-          mode,
-          formatoSalida,
-          nIdeas
-        });
-
-        let ideaText = "";
-        if (response.data && response.data.text) {
-          ideaText = response.data.text;
-        } else if (response.data && response.data.ideasText) {
-          ideaText = response.data.ideasText;
+      function parseIdeasFromResponse(text) {
+        const ideaRegex = /---IDEA_\d+---([\s\S]*?)---FIN_IDEA_\d+---/g;
+        let match, ideas = [];
+        while ((match = ideaRegex.exec(text)) !== null) {
+          const body = match[1];
+          const getCampo = (label, altLabel) => {
+            const pattern = new RegExp(`${label}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚáéíóú - záéíóú]|\\n#|\\n\\*\\*|\\n ?\\s*\\w +:?|$)`, "i");
+            const found = pattern.exec(body);
+            if (found && found[1]) return found[1].trim();
+            if (altLabel) {
+              const altPattern = new RegExp(`${altLabel}:\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚáéíóú - záéíóú]|\\n#|\\n\\*\\*|\\n ?\\s*\\w +:?|$)`, "i");
+              const altFound = altPattern.exec(body);
+              if (altFound && altFound[1]) return altFound[1].trim();
+            }
+            return "";
+          };
+          ideas.push({
+            gancho: getCampo("Gancho Verbal Impactante", "Gancho"),
+            angulo: getCampo("Ángulo Narrativo", "Ángulo"),
+            texto: getCampo("Texto del Post", "Texto"),
+            hashtags: getCampo("Hashtags"),
+            visual: getCampo("Formato Visual Sugerido", "Visual"),
+            cta: getCampo("Llamada a la Acción \\(CTA\\)", "CTA")
+          });
         }
-
-        if (!ideaText || ideaText.trim() === "") {
-          finishLoadingOverlay();
-          document.getElementById("ff-results-container").innerHTML = `< div class="notification is-warning" > ${t("no_ideas")}</div > `;
+        const fraseFinal = (text.match(/---FRASE_FINAL---\s*([\s\S]+?)\s*---FIN_FRASE_FINAL---/) || [])[1]?.trim() || "";
+        return { ideas, fraseFinal };
+      }
+      async function generateIdeas(refresh = false) {
+        const form = validateForm();
+        if (!form) return;
+        if (!userPremium && !promoLaunch && userGenCount >= maxGenFree) {
+          alert(t("generations_left") + userGenCount + "/" + maxGenFree);
           return;
         }
+        const { mode, keyword, copytype, selectedNetworks } = form;
+        saveInputs();
+        showLoadingOverlay(lang);
 
-        // Render simple: mostrar la idea como texto plano (ajusta visual si lo deseas)
-        finishLoadingOverlay();
-        updateCounterUI();
-        document.getElementById("ff-results-container").innerHTML =
-          `< div class="notification is-primary" style = "white-space:pre-line" > ${ideaText}</div > `;
+        try {
+          const formatoSalida = getPromptFormatoSalida(lang);
+          const generateIdeasFn = httpsCallable(functions, "generateIdeas");
+          let nIdeas = 1;
+          if (mode === "single") nIdeas = 3;
+          else nIdeas = selectedNetworks.length;
+          const response = await generateIdeasFn({
+            keyword,
+            copytype,
+            language: lang,
+            networks: selectedNetworks,
+            mode,
+            formatoSalida,
+            nIdeas
+          });
 
-      } catch (e) {
-        finishLoadingOverlay();
-        document.getElementById("ff-results-container").innerHTML =
-          `< div class="notification is-danger" > Error generando ideas: ${e.message || e}</div > `;
-        console.error(e);
+          let ideaText = "";
+          if (response.data && response.data.text) {
+            ideaText = response.data.text;
+          } else if (response.data && response.data.ideasText) {
+            ideaText = response.data.ideasText;
+          }
+
+          if (!ideaText || ideaText.trim() === "") {
+            finishLoadingOverlay();
+            document.getElementById("ff-results-container").innerHTML = `< div class="notification is-warning" > ${t("no_ideas")}</div > `;
+            return;
+          }
+
+          // Render simple: mostrar la idea como texto plano (ajusta visual si lo deseas)
+          finishLoadingOverlay();
+          updateCounterUI();
+          document.getElementById("ff-results-container").innerHTML =
+            `< div class="notification is-primary" style = "white-space:pre-line" > ${ideaText}</div > `;
+
+        } catch (e) {
+          finishLoadingOverlay();
+          document.getElementById("ff-results-container").innerHTML =
+            `< div class="notification is-danger" > Error generando ideas: ${e.message || e}</div > `;
+          console.error(e);
+        }
       }
-    }
 
-    const idiomaSeleccionado = window.currentLang || "es";
+      const idiomaSeleccionado = window.currentLang || "es";
 
-    document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
-    document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
+      document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
+      document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
 
-    // Si necesitas renderizar acciones (copiar, compartir, likes) para cada idea,
-    // colócalo **dentro de una función** así:
-    function renderIdeaActions(idea) {
-      const card = document.createElement("div");
-      card.className = "ff-idea-card";
+      // Si necesitas renderizar acciones (copiar, compartir, likes) para cada idea,
+      // colócalo **dentro de una función** así:
+      function renderIdeaActions(idea) {
+        const card = document.createElement("div");
+        card.className = "ff-idea-card";
 
-      // Acciones
-      const actions = document.createElement("div");
-      actions.className = "ff-idea-actions";
-      actions.style.marginTop = "1em";
-      actions.innerHTML = `
+        // Acciones
+        const actions = document.createElement("div");
+        actions.className = "ff-idea-actions";
+        actions.style.marginTop = "1em";
+        actions.innerHTML = `
     <button class="button is-success is-small ff-copy-btn" style="margin-right:0.7em">${t("copy")}</button>
     <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
     <button class="button is-light is-small">👍</button>
     <button class="button is-light is-small">👎</button>
   `;
 
-      // Copiar
-      actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
-        const textToCopy = `
+        // Copiar
+        actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
+          const textToCopy = `
 ${idea.gancho}
 
 ${idea.texto}
@@ -1209,14 +1220,14 @@ ${idea.visual}
 
 ${idea.angulo}
     `.trim();
-        navigator.clipboard.writeText(textToCopy);
-        actions.querySelector('.ff-copy-btn').innerText = t("copied");
-        setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
-      });
+          navigator.clipboard.writeText(textToCopy);
+          actions.querySelector('.ff-copy-btn').innerText = t("copied");
+          setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
+        });
 
-      // Compartir nativo
-      actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
-        const shareText = `
+        // Compartir nativo
+        actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
+          const shareText = `
 ${idea.gancho}
 
 ${idea.texto}
@@ -1228,41 +1239,41 @@ ${idea.cta}
 Visual: ${idea.visual}
 Ángulo: ${idea.angulo}
     `.trim();
-        if (navigator.share) {
-          try {
-            await navigator.share({
-              title: "Idea generada con FeedFlow",
-              text: shareText,
-              url: window.location.href
-            });
-          } catch (err) {
-            alert("No se pudo compartir: " + err);
+          if (navigator.share) {
+            try {
+              await navigator.share({
+                title: "Idea generada con FeedFlow",
+                text: shareText,
+                url: window.location.href
+              });
+            } catch (err) {
+              alert("No se pudo compartir: " + err);
+            }
+          } else {
+            alert("La función de compartir no está disponible en este dispositivo.");
           }
-        } else {
-          alert("La función de compartir no está disponible en este dispositivo.");
-        }
-      });
+        });
 
-      card.appendChild(actions);
+        card.appendChild(actions);
 
-      // Visual + Ángulo
-      const fusionado = document.createElement("div");
-      fusionado.className = "ff-visual-block";
-      fusionado.innerHTML = `
+        // Visual + Ángulo
+        const fusionado = document.createElement("div");
+        fusionado.className = "ff-visual-block";
+        fusionado.innerHTML = `
     <div style="font-size:1.07em;color:#8e44ad;"><strong>Visual + Ángulo:</strong></div>
     <div style="margin:0.5em 0 0.2em 0"><em>${idea.visual}</em></div>
     <div style="font-size:0.98em;color:#555;"><strong>${t("angulo")}:</strong> ${idea.angulo}</div>
   `;
-      card.appendChild(fusionado);
+        card.appendChild(fusionado);
 
-      // Gancho
-      card.innerHTML += `<div style="margin:0.7em 0 0.4em 0"><strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div>`;
+        // Gancho
+        card.innerHTML += `<div style="margin:0.7em 0 0.4em 0"><strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div>`;
 
-      // Texto en párrafos
-      card.innerHTML += `<div><strong style="color:#8e44ad">${t("texto")}:</strong> ${formatParagraphs(idea.texto)}</div>`;
+        // Texto en párrafos
+        card.innerHTML += `<div><strong style="color:#8e44ad">${t("texto")}:</strong> ${formatParagraphs(idea.texto)}</div>`;
 
-      // Hashtags y CTA
-      card.innerHTML += `
+        // Hashtags y CTA
+        card.innerHTML += `
     <div style="margin-top:0.9em;">
       <span style="font-weight:bold;color:#8e44ad">${t("hashtags")}:</span> <span>${idea.hashtags}</span>
     </div>
@@ -1271,162 +1282,162 @@ Visual: ${idea.visual}
     </div>
   `;
 
-      // ...puedes agregar más bloques si necesitas...
+        // ...puedes agregar más bloques si necesitas...
 
-      container.appendChild(card);
+        container.appendChild(card);
 
-      // Frase final motivacional
-      let fraseFinal = idea.fraseFinal || "";
-      if (fraseFinal && fraseFinal.trim()) {
-        const finalDiv = document.createElement("div");
-        finalDiv.className = "ff-final-phrase";
-        finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
-        container.appendChild(finalDiv);
-      }
-
-      // Botón cerrar modal
-      modal.querySelector("#ff-results-close").onclick = () => {
-        modal.classList.remove("is-active");
-        modal.classList.add("is-hidden");
-        document.getElementById("ff-config-view").classList.remove("is-hidden");
-        container.innerHTML = "";
-      };
-    } document.addEventListener("click", async (e) => {
-      if (e.target.classList.contains("ff-feedback-btn")) {
-        const feedbackType = e.target.dataset.feedback;
-        const ideaIndex = e.target.dataset.ideaIndex;
-        const user = auth.currentUser;
-        if (!user) return;
-        const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
-        try {
-          await recordFeedback({
-            uid: user.uid,
-            feedback: feedbackType,
-            ideaIndex: Number(ideaIndex),
-            timestamp: new Date().toISOString(),
-          });
-          document.getElementById("ff-feedback-modal").classList.add("is-active");
-        } catch (error) {
-          alert("Error al enviar feedback.");
+        // Frase final motivacional
+        let fraseFinal = idea.fraseFinal || "";
+        if (fraseFinal && fraseFinal.trim()) {
+          const finalDiv = document.createElement("div");
+          finalDiv.className = "ff-final-phrase";
+          finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
+          container.appendChild(finalDiv);
         }
-      }
-    });
-    document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
-      document.getElementById("ff-feedback-modal").classList.remove("is-active");
-    });
-    async function checkPremiumStatus(uid) {
-      try {
-        const configRef = doc(db, "appConfig", "global");
-        const configSnap = await getDoc(configRef);
-        const userRef = doc(db, "users", uid);
-        const userSnap = await getDoc(userRef);
 
-        userPremium = false;
-        promoLaunch = false;
-        maxGenFree = 3;
-
-        if (userSnap.exists()) {
-          userPremium = userSnap.data().premium || false;
-          userIsAdmin = userSnap.data().role === "admin";
-        }
-        if (configSnap.exists()) {
-          const global = configSnap.data();
-          const now = new Date();
-          const endDate = new Date(global.premiumGlobalEndDate);
-          if (global.isPremiumGlobalActive && now < endDate) {
-            userPremium = true;
-            promoLaunch = !!global.isLaunchPromoActive;
+        // Botón cerrar modal
+        modal.querySelector("#ff-results-close").onclick = () => {
+          modal.classList.remove("is-active");
+          modal.classList.add("is-hidden");
+          document.getElementById("ff-config-view").classList.remove("is-hidden");
+          container.innerHTML = "";
+        };
+      } document.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("ff-feedback-btn")) {
+          const feedbackType = e.target.dataset.feedback;
+          const ideaIndex = e.target.dataset.ideaIndex;
+          const user = auth.currentUser;
+          if (!user) return;
+          const recordFeedback = httpsCallable(functions, "recordIdeaFeedback");
+          try {
+            await recordFeedback({
+              uid: user.uid,
+              feedback: feedbackType,
+              ideaIndex: Number(ideaIndex),
+              timestamp: new Date().toISOString(),
+            });
+            document.getElementById("ff-feedback-modal").classList.add("is-active");
+          } catch (error) {
+            alert("Error al enviar feedback.");
           }
         }
-        renderCopytypeOptions();
-        renderNetworkOptions();
-        updateCounterUI();
-        document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
-        if (!userPremium && !promoLaunch) {
-          const ad = document.createElement("div");
-          ad.className = "notification is-warning has-text-centered ff-ad";
-          ad.innerHTML = t("ad_full");
-          document.body.appendChild(ad);
-        } else if (promoLaunch) {
-          const ad = document.createElement("div");
-          ad.className = "has-text-centered has-text-grey-light ff-ad";
-          ad.innerHTML = `< small > ${t("ad_light")}</small > `;
-          document.body.appendChild(ad);
+      });
+      document.getElementById("ff-close-feedback")?.addEventListener("click", () => {
+        document.getElementById("ff-feedback-modal").classList.remove("is-active");
+      });
+      async function checkPremiumStatus(uid) {
+        try {
+          const configRef = doc(db, "appConfig", "global");
+          const configSnap = await getDoc(configRef);
+          const userRef = doc(db, "users", uid);
+          const userSnap = await getDoc(userRef);
+
+          userPremium = false;
+          promoLaunch = false;
+          maxGenFree = 3;
+
+          if (userSnap.exists()) {
+            userPremium = userSnap.data().premium || false;
+            userIsAdmin = userSnap.data().role === "admin";
+          }
+          if (configSnap.exists()) {
+            const global = configSnap.data();
+            const now = new Date();
+            const endDate = new Date(global.premiumGlobalEndDate);
+            if (global.isPremiumGlobalActive && now < endDate) {
+              userPremium = true;
+              promoLaunch = !!global.isLaunchPromoActive;
+            }
+          }
+          renderCopytypeOptions();
+          renderNetworkOptions();
+          updateCounterUI();
+          document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
+          if (!userPremium && !promoLaunch) {
+            const ad = document.createElement("div");
+            ad.className = "notification is-warning has-text-centered ff-ad";
+            ad.innerHTML = t("ad_full");
+            document.body.appendChild(ad);
+          } else if (promoLaunch) {
+            const ad = document.createElement("div");
+            ad.className = "has-text-centered has-text-grey-light ff-ad";
+            ad.innerHTML = `< small > ${t("ad_light")}</small > `;
+            document.body.appendChild(ad);
+          }
+        } catch (error) { }
+      }
+      async function validarAdmin(uid) {
+        try {
+          const userRef = doc(db, "users", uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists() && userSnap.data().role === "admin") {
+            document.getElementById("ff-admin-view").classList.remove("is-hidden");
+          } else {
+            document.getElementById("ff-admin-view").classList.add("is-hidden");
+          }
+        } catch (error) { }
+      }
+      document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
+        const isActive = document.getElementById("ff-toggle-premium-global").checked;
+        const endDate = document.getElementById("ff-premium-end-date").value;
+        const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
+        try {
+          await setPremiumGlobal({
+            isPremiumGlobalActive: isActive,
+            premiumGlobalEndDate: new Date(endDate).toISOString()
+          });
+          document.getElementById("ff-premium-status-text").textContent =
+            `${t("premium_until")}${new Date(endDate).toLocaleString()}`;
+          alert(t("premium_update_success"));
+        } catch (error) {
+          alert("Error al actualizar estado global.");
         }
-      } catch (error) { }
-    }
-    async function validarAdmin(uid) {
-      try {
-        const userRef = doc(db, "users", uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists() && userSnap.data().role === "admin") {
-          document.getElementById("ff-admin-view").classList.remove("is-hidden");
+      });
+
+      document.getElementById("ff-activate-promo-btn").addEventListener("click", async () => {
+        const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
+        await setPromo({ isLaunchPromoActive: true });
+        document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Activa";
+        alert("¡Promoción de lanzamiento activada!");
+      });
+      document.getElementById("ff-deactivate-promo-btn").addEventListener("click", async () => {
+        const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
+        await setPromo({ isLaunchPromoActive: false });
+        document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Inactiva";
+        alert("Promoción de lanzamiento desactivada.");
+      });
+      async function mostrarEstadoPromo() {
+        const configRef = doc(db, "appConfig", "global");
+        const configSnap = await getDoc(configRef);
+        let promo = configSnap.exists() && configSnap.data().isLaunchPromoActive;
+        document.getElementById("ff-promo-status-text").textContent =
+          "Promoción de lanzamiento: " + (promo ? "Activa" : "Inactiva");
+      }
+
+      onAuthStateChanged(auth, async user => {
+        if (user) {
+          document.getElementById("ff-auth-view").classList.add("is-hidden");
+          document.getElementById("ff-config-view").classList.remove("is-hidden");
+          await checkPremiumStatus(user.uid);
+          await validarAdmin(user.uid);
+          updateCounterUI();
+          await mostrarEstadoPromo();
         } else {
+          document.getElementById("ff-config-view").classList.add("is-hidden");
+          document.getElementById("ff-auth-view").classList.remove("is-hidden");
           document.getElementById("ff-admin-view").classList.add("is-hidden");
+          document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
         }
-      } catch (error) { }
-    }
-    document.getElementById("ff-set-premium-btn").addEventListener("click", async () => {
-      const isActive = document.getElementById("ff-toggle-premium-global").checked;
-      const endDate = document.getElementById("ff-premium-end-date").value;
-      const setPremiumGlobal = httpsCallable(functions, "setPremiumGlobalStatus");
-      try {
-        await setPremiumGlobal({
-          isPremiumGlobalActive: isActive,
-          premiumGlobalEndDate: new Date(endDate).toISOString()
-        });
-        document.getElementById("ff-premium-status-text").textContent =
-          `${t("premium_until")}${new Date(endDate).toLocaleString()}`;
-        alert(t("premium_update_success"));
-      } catch (error) {
-        alert("Error al actualizar estado global.");
-      }
-    });
-
-    document.getElementById("ff-activate-promo-btn").addEventListener("click", async () => {
-      const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
-      await setPromo({ isLaunchPromoActive: true });
-      document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Activa";
-      alert("¡Promoción de lanzamiento activada!");
-    });
-    document.getElementById("ff-deactivate-promo-btn").addEventListener("click", async () => {
-      const setPromo = httpsCallable(functions, "setPremiumGlobalStatus");
-      await setPromo({ isLaunchPromoActive: false });
-      document.getElementById("ff-promo-status-text").textContent = "Promoción de lanzamiento: Inactiva";
-      alert("Promoción de lanzamiento desactivada.");
-    });
-    async function mostrarEstadoPromo() {
-      const configRef = doc(db, "appConfig", "global");
-      const configSnap = await getDoc(configRef);
-      let promo = configSnap.exists() && configSnap.data().isLaunchPromoActive;
-      document.getElementById("ff-promo-status-text").textContent =
-        "Promoción de lanzamiento: " + (promo ? "Activa" : "Inactiva");
-    }
-
-    onAuthStateChanged(auth, async user => {
-      if (user) {
-        document.getElementById("ff-auth-view").classList.add("is-hidden");
-        document.getElementById("ff-config-view").classList.remove("is-hidden");
-        await checkPremiumStatus(user.uid);
-        await validarAdmin(user.uid);
-        updateCounterUI();
-        await mostrarEstadoPromo();
-      } else {
-        document.getElementById("ff-config-view").classList.add("is-hidden");
-        document.getElementById("ff-auth-view").classList.remove("is-hidden");
-        document.getElementById("ff-admin-view").classList.add("is-hidden");
-        document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
-      }
-    });
-    setLang(lang);
-    updateDatalist();
-    clearInputsOnChange();
-    updateNetworksByMode();
-    document.getElementById("ff-auth-language-selector").addEventListener("change", function (e) {
-      setLanguage(e.target.value);
-    });
-    setLang(document.getElementById("ff-auth-language-selector").value);
-    updateDatalist();
+      });
+      setLang(lang);
+      updateDatalist();
+      clearInputsOnChange();
+      updateNetworksByMode();
+      document.getElementById("ff-auth-language-selector").addEventListener("change", function (e) {
+        setLanguage(e.target.value);
+      });
+      setLang(document.getElementById("ff-auth-language-selector").value);
+      updateDatalist();
 
   </script>
   <style>
