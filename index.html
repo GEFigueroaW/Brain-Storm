@@ -1170,71 +1170,76 @@ At the end, include a motivational phrase:
         console.error(e);
       }
     }
+
+    const idiomaSeleccionado = window.currentLang || "es";
+
     document.getElementById("ff-generate-btn").addEventListener("click", () => generateIdeas(false));
     document.getElementById("ff-refresh-btn").addEventListener("click", () => generateIdeas(true));
-    const idiomaSeleccionado = window.currentLang || "es";
-    // Agrega este bloque JS reemplazando tu función renderIdeas y añade la función formatParagraphs
-    // --- FORMATO DE SALIDA Y PARSER ---
-    // Renderizado de ideas: bloque completo, limpio y listo para reemplazar
-    `;
 
-    // Acciones
-    const actions = document.createElement("div");
-    actions.className = "ff-idea-actions";
-    actions.style.marginTop = "1em";
-    actions.innerHTML = `
-      < button class="button is-success is-small ff-copy-btn" style = "margin-right:0.7em" > ${ t("copy") }</button >
-      <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
-      <button class="button is-light is-small">👍</button>
-      <button class="button is-light is-small">👎</button>
-    `;
-    // Copiar
-    actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
-      const textToCopy = `
-${ idea.gancho }
+    // Si necesitas renderizar acciones (copiar, compartir, likes) para cada idea,
+    // colócalo **dentro de una función** así:
+    function renderIdeaActions(idea) {
+      const actions = document.createElement("div");
+      actions.className = "ff-idea-actions";
+      actions.style.marginTop = "1em";
+      actions.innerHTML = `
+    <button class="button is-success is-small ff-copy-btn" style="margin-right:0.7em">${t("copy")}</button>
+    <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
+    <button class="button is-light is-small">👍</button>
+    <button class="button is-light is-small">👎</button>
+  `;
 
-${ idea.texto }
+      // Copiar
+      actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
+        const textToCopy = `
+${idea.gancho}
 
-${ idea.hashtags }
+${idea.texto}
 
-${ idea.cta }
+${idea.hashtags}
 
-${ idea.visual }
+${idea.cta}
 
-${ idea.angulo }
+${idea.visual}
+
+${idea.angulo}
     `.trim();
-      navigator.clipboard.writeText(textToCopy);
-      actions.querySelector('.ff-copy-btn').innerText = t("copied");
-      setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
-    });
-    // Compartir nativo
-    actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
-      const shareText = `
-${ idea.gancho }
+        navigator.clipboard.writeText(textToCopy);
+        actions.querySelector('.ff-copy-btn').innerText = t("copied");
+        setTimeout(() => actions.querySelector('.ff-copy-btn').innerText = t("copy"), 1200);
+      });
 
-${ idea.texto }
+      // Compartir nativo
+      actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
+        const shareText = `
+${idea.gancho}
 
-${ idea.hashtags }
+${idea.texto}
 
-${ idea.cta }
+${idea.hashtags}
 
-    Visual: ${ idea.visual }
-    Ángulo: ${ idea.angulo }
+${idea.cta}
+
+Visual: ${idea.visual}
+Ángulo: ${idea.angulo}
     `.trim();
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: "Idea generada con FeedFlow",
-            text: shareText,
-            url: window.location.href
-          });
-        } catch (err) {
-          alert("No se pudo compartir: " + err);
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "Idea generada con FeedFlow",
+              text: shareText,
+              url: window.location.href
+            });
+          } catch (err) {
+            alert("No se pudo compartir: " + err);
+          }
+        } else {
+          alert("La función de compartir no está disponible en este dispositivo.");
         }
-      } else {
-        alert("La función de compartir no está disponible en este dispositivo.");
-      }
-    });
+      });
+
+      return actions;
+    }
     card.appendChild(actions);
 
     // Si quieres agregar el bloque Visual + Ángulo, aquí lo puedes hacer:
@@ -1250,23 +1255,23 @@ ${ idea.cta }
     container.appendChild(card);
   });
 
-  // Frase final motivacional
-  if (fraseFinal && fraseFinal.trim()) {
-    const finalDiv = document.createElement("div");
-    finalDiv.className = "ff-final-phrase";
-    finalDiv.innerHTML = `< strong > ${ t("frasefinal") }:</strong > <span>${fraseFinal}</span>`;
-    container.appendChild(finalDiv);
-  }
+    // Frase final motivacional
+    if (fraseFinal && fraseFinal.trim()) {
+      const finalDiv = document.createElement("div");
+      finalDiv.className = "ff-final-phrase";
+      finalDiv.innerHTML = `< strong > ${t("frasefinal")}:</strong > <span>${fraseFinal}</span>`;
+      container.appendChild(finalDiv);
+    }
 
-  // Botón cerrar modal
-  modal.querySelector("#ff-results-close").onclick = () => {
-    modal.classList.remove("is-active");
-    modal.classList.add("is-hidden");
-    document.getElementById("ff-config-view").classList.remove("is-hidden");
-    container.innerHTML = "";
-  };
+    // Botón cerrar modal
+    modal.querySelector("#ff-results-close").onclick = () => {
+      modal.classList.remove("is-active");
+      modal.classList.add("is-hidden");
+      document.getElementById("ff-config-view").classList.remove("is-hidden");
+      container.innerHTML = "";
+    };
 }
-// Bloque combinado Visual + Ángulo
+    // Bloque combinado Visual + Ángulo
     const fusionado = document.createElement("div");
     fusionado.className = "ff-visual-block";
     fusionado.innerHTML = `
@@ -1277,10 +1282,10 @@ ${ idea.cta }
     card.appendChild(fusionado);
 
     // Gancho
-    card.innerHTML += `< div style = "margin:0.7em 0 0.4em 0" > <strong style="color:#8e44ad">${t("gancho")}:</strong> ${ idea.gancho }</div > `;
+    card.innerHTML += `< div style = "margin:0.7em 0 0.4em 0" > <strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div > `;
 
     // Texto en párrafos
-    card.innerHTML += `< div > <strong style="color:#8e44ad">${t("texto")}:</strong>${ formatParagraphs(idea.texto) }</div > `;
+    card.innerHTML += `< div > <strong style="color:#8e44ad">${t("texto")}:</strong>${formatParagraphs(idea.texto)}</div > `;
 
     // Hashtags y CTA
     card.innerHTML += `
@@ -1297,7 +1302,7 @@ ${ idea.cta }
     actions.className = "ff-idea-actions";
     actions.style.marginTop = "1em";
     actions.innerHTML = `
-      < button class="button is-success is-small ff-copy-btn" style = "margin-right:0.7em" > ${ t("copy") }</button >
+      < button class="button is-success is-small ff-copy-btn" style = "margin-right:0.7em" > ${t("copy")}</button >
       <button class="button is-light is-small ff-share-btn" style="margin-right:0.7em">📤 Compartir</button>
       <button class="button is-light is-small">👍</button>
       <button class="button is-light is-small">👎</button>
@@ -1305,17 +1310,17 @@ ${ idea.cta }
     // Copiar
     actions.querySelector('.ff-copy-btn').addEventListener('click', () => {
       const textToCopy = `
-${ idea.gancho }
+${idea.gancho}
 
-${ idea.texto }
+${idea.texto}
 
-${ idea.hashtags }
+${idea.hashtags}
 
-${ idea.cta }
+${idea.cta}
 
-${ idea.visual }
+${idea.visual}
 
-${ idea.angulo }
+${idea.angulo}
     `.trim();
       navigator.clipboard.writeText(textToCopy);
       actions.querySelector('.ff-copy-btn').innerText = t("copied");
@@ -1324,16 +1329,16 @@ ${ idea.angulo }
     // Compartir nativo
     actions.querySelector('.ff-share-btn').addEventListener('click', async () => {
       const shareText = `
-${ idea.gancho }
+${idea.gancho}
 
-${ idea.texto }
+${idea.texto}
 
-${ idea.hashtags }
+${idea.hashtags}
 
-${ idea.cta }
+${idea.cta}
 
-    Visual: ${ idea.visual }
-    Ángulo: ${ idea.angulo }
+    Visual: ${idea.visual}
+    Ángulo: ${idea.angulo}
     `.trim();
       if (navigator.share) {
         try {
@@ -1348,14 +1353,14 @@ ${ idea.cta }
       } else {
         alert("La función de compartir no está disponible en este dispositivo.");
       }
-    card.appendChild(actions);
-    container.appendChild(card);
-      });
+      card.appendChild(actions);
+      container.appendChild(card);
+    });
     // Frase final motivacional
     if (fraseFinal && fraseFinal.trim()) {
       const finalDiv = document.createElement("div");
       finalDiv.className = "ff-final-phrase";
-      finalDiv.innerHTML = `< strong > ${ t("frasefinal") }:</strong > <span>${fraseFinal}</span>`;
+      finalDiv.innerHTML = `< strong > ${t("frasefinal")}:</strong > <span>${fraseFinal}</span>`;
       container.appendChild(finalDiv);
     }
     document.addEventListener("click", async (e) => {
@@ -1417,7 +1422,7 @@ ${ idea.cta }
         } else if (promoLaunch) {
           const ad = document.createElement("div");
           ad.className = "has-text-centered has-text-grey-light ff-ad";
-          ad.innerHTML = `< small > ${ t("ad_light") }</small > `;
+          ad.innerHTML = `< small > ${t("ad_light")}</small > `;
           document.body.appendChild(ad);
         }
       } catch (error) { }
@@ -1443,7 +1448,7 @@ ${ idea.cta }
           premiumGlobalEndDate: new Date(endDate).toISOString()
         });
         document.getElementById("ff-premium-status-text").textContent =
-          `${ t("premium_until") }${ new Date(endDate).toLocaleString() }`;
+          `${t("premium_until")}${new Date(endDate).toLocaleString()}`;
         alert(t("premium_update_success"));
       } catch (error) {
         alert("Error al actualizar estado global.");
