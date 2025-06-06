@@ -1270,16 +1270,6 @@ Visual: ${idea.visual}
       document.getElementById("ff-config-view").classList.remove("is-hidden");
       container.innerHTML = "";
     };
-    // Bloque combinado Visual + Ángulo
-    const fusionado = document.createElement("div");
-    fusionado.className = "ff-visual-block";
-    fusionado.innerHTML = `
-      < div style = "font-size:1.07em;color:#8e44ad;" > <strong>Visual + Ángulo:</strong></div >
-      <div style="margin:0.5em 0 0.2em 0"><em>${idea.visual}</em></div>
-      <div style="font-size:0.98em;color:#555;"><strong>${t("angulo")}:</strong> ${idea.angulo}</div>
-    `;
-    card.appendChild(fusionado);
-
     // Gancho
     card.innerHTML += `< div style = "margin:0.7em 0 0.4em 0" > <strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div > `;
 
