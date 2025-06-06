@@ -1172,8 +1172,7 @@ At the end, include a motivational phrase:
           // Render simple: mostrar la idea como texto plano (ajusta visual si lo deseas)
           finishLoadingOverlay();
           updateCounterUI();
-          document.getElementById("ff-results-container").innerHTML =
-            `< div class="notification is-primary" style = "white-space:pre-line" > ${ideaText}</div > `;
+          renderIdeasFromText(ideaText);
 
         } catch (e) {
           finishLoadingOverlay();
