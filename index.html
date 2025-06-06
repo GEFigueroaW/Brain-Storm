@@ -1179,6 +1179,10 @@ At the end, include a motivational phrase:
     // Si necesitas renderizar acciones (copiar, compartir, likes) para cada idea,
     // colócalo **dentro de una función** así:
     function renderIdeaActions(idea) {
+      const card = document.createElement("div");
+      card.className = "ff-idea-card";
+
+      // Acciones
       const actions = document.createElement("div");
       actions.className = "ff-idea-actions";
       actions.style.marginTop = "1em";
@@ -1250,27 +1254,44 @@ Visual: ${idea.visual}
   `;
       card.appendChild(fusionado);
 
+      // Gancho
+      card.innerHTML += `<div style="margin:0.7em 0 0.4em 0"><strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div>`;
+
+      // Texto en párrafos
+      card.innerHTML += `<div><strong style="color:#8e44ad">${t("texto")}:</strong> ${formatParagraphs(idea.texto)}</div>`;
+
+      // Hashtags y CTA
+      card.innerHTML += `
+    <div style="margin-top:0.9em;">
+      <span style="font-weight:bold;color:#8e44ad">${t("hashtags")}:</span> <span>${idea.hashtags}</span>
+    </div>
+    <div style="margin-top:0.3em;">
+      <span style="font-weight:bold;color:#8e44ad">${t("cta")}:</span> <span>${idea.cta}</span>
+    </div>
+  `;
+
       // ...puedes agregar más bloques si necesitas...
 
       container.appendChild(card);
-    }; // <-- Solo uno, correcto
 
-    // Frase final motivacional
-    if (fraseFinal && fraseFinal.trim()) {
-      const finalDiv = document.createElement("div");
-      finalDiv.className = "ff-final-phrase";
-      finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
-      container.appendChild(finalDiv);
-    }
+      // Frase final motivacional
+      // Asegúrate que la variable fraseFinal venga en el objeto idea o ponle un valor por defecto
+      let fraseFinal = idea.fraseFinal || ""; // o puedes usar una frase fija: let fraseFinal = "¡Sigue creando, tu próxima idea puede ser viral!";
+      if (fraseFinal && fraseFinal.trim()) {
+        const finalDiv = document.createElement("div");
+        finalDiv.className = "ff-final-phrase";
+        finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
+        container.appendChild(finalDiv);
+      }
 
-    // Botón cerrar modal
-    modal.querySelector("#ff-results-close").onclick = () => {
-      modal.classList.remove("is-active");
-      modal.classList.add("is-hidden");
-      document.getElementById("ff-config-view").classList.remove("is-hidden");
-      container.innerHTML = "";
-    };
-    // Gancho
+      // Botón cerrar modal
+      modal.querySelector("#ff-results-close").onclick = () => {
+        modal.classList.remove("is-active");
+        modal.classList.add("is-hidden");
+        document.getElementById("ff-config-view").classList.remove("is-hidden");
+        container.innerHTML = "";
+      };
+    }    // Gancho
     card.innerHTML += `< div style = "margin:0.7em 0 0.4em 0" > <strong style="color:#8e44ad">${t("gancho")}:</strong> ${idea.gancho}</div > `;
 
     // Texto en párrafos
