@@ -1238,22 +1238,22 @@ Visual: ${idea.visual}
         }
       });
 
-      return actions;
-    }
-    card.appendChild(actions);
+      card.appendChild(actions);
 
-    // Si quieres agregar el bloque Visual + Ángulo, aquí lo puedes hacer:
-    const fusionado = document.createElement("div");
-    fusionado.className = "ff-visual-block";
-    fusionado.innerHTML = `
-      < div style = "font-size:1.07em;color:#8e44ad;" > <strong>Visual + Ángulo:</strong></div >
-      <div style="margin:0.5em 0 0.2em 0"><em>${idea.visual}</em></div>
-      <div style="font-size:0.98em;color:#555;"><strong>${t("angulo")}:</strong> ${idea.angulo}</div>
-    `;
-    card.appendChild(fusionado);
+      // Visual + Ángulo
+      const fusionado = document.createElement("div");
+      fusionado.className = "ff-visual-block";
+      fusionado.innerHTML = `
+    <div style="font-size:1.07em;color:#8e44ad;"><strong>Visual + Ángulo:</strong></div>
+    <div style="margin:0.5em 0 0.2em 0"><em>${idea.visual}</em></div>
+    <div style="font-size:0.98em;color:#555;"><strong>${t("angulo")}:</strong> ${idea.angulo}</div>
+  `;
+      card.appendChild(fusionado);
 
-    container.appendChild(card);
-  });
+      // ...puedes agregar más bloques si necesitas...
+
+      container.appendChild(card);
+    }); // <--- AQUÍ debe cerrar el ciclo forEach, NO debe haber ninguna llave de cierre extra después.
 
     // Frase final motivacional
     if (fraseFinal && fraseFinal.trim()) {
