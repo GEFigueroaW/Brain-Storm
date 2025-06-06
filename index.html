@@ -1252,14 +1252,14 @@ Visual: ${idea.visual}
 
       // ...puedes agregar más bloques si necesitas...
 
-container.appendChild(card);
-}); // <-- Solo uno, correcto
+      container.appendChild(card);
+    }); // <-- Solo uno, correcto
 
     // Frase final motivacional
     if (fraseFinal && fraseFinal.trim()) {
       const finalDiv = document.createElement("div");
       finalDiv.className = "ff-final-phrase";
-      finalDiv.innerHTML = `< strong > ${t("frasefinal")}:</strong > <span>${fraseFinal}</span>`;
+      finalDiv.innerHTML = `<strong>${t("frasefinal")}:</strong> <span>${fraseFinal}</span>`;
       container.appendChild(finalDiv);
     }
 
