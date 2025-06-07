@@ -552,11 +552,37 @@
 
     document.getElementById('ff-results-modal').classList.add('is-hidden');
 
-    function formatIdeaText(ideaText) {
-      // Convierte **negritas** a <strong> y saltos de línea a <br>
-      return ideaText
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n/g, '<br>');
+    function beautifyIdea(rawIdea) {
+      const replacements = [
+        { label: "Gancho Verbal Impactante:", emoji: "🎯", bold: true },
+        { label: "Texto del Post:", emoji: "💬", bold: false },
+        { label: "Hashtags:", emoji: "🔖", bold: false },
+        { label: "CTA:", emoji: "👇", bold: true },
+        { label: "Prompt Visual para IA:", emoji: "✨", bold: true }
+      ];
+
+      let html = rawIdea.trim();
+
+      replacements.forEach(section => {
+        const reg = new RegExp(section.label + '\\s*(.*?)(?=\\n[A-ZÁÉÍÓÚ]|\\n---|$)', 'gs');
+        html = html.replace(reg, (match, p1) => {
+          let labelHtml = `${section.emoji} ${section.bold ? `<strong>${section.label.replace(":", "")}</strong>` : section.label.replace(":", "")}`;
+          let contentHtml = p1.replace(/\n/g, "<br>").trim();
+          if (section.label.startsWith("Hashtags")) {
+            contentHtml = `<span style="font-weight:bold; color:#8e44ad; font-size:1.05em">${contentHtml}</span>`;
+          }
+          return `<div style="margin-bottom:0.6em">${labelHtml}<br>${contentHtml}</div>`;
+        });
+      });
+
+      html = html.replace(/(#\w+)/g, '<span style="color:#8e44ad;font-weight:bold;">$1</span>');
+      html = html.replace(/---/g, '<hr>');
+      html = html.replace(/^\s*FR.*ASE FINAL.*:?\s*/im, '<div class="ff-final-phrase">');
+      html = html.replace(/--?FIN.*FR.*ASE.*--?/im, '</div>');
+      html = html.replace(/(\s*<br>\s*){2,}/g, '<br>');
+      html = html.replace(/SIN LAG/gi, 'SIN LAG 🎮');
+
+      return `<div class="ff-idea-card" style="margin-bottom:1.5em;padding:1.2em 1em;background:#fff;border-radius:14px;box-shadow:0 2px 14px rgba(142,68,173,0.08);font-size:1.09em;">${html}</div>`;
     }
     // --- CONFIGURACIÓN --
     const firebaseConfig = {
@@ -1093,7 +1119,7 @@
           cb.addEventListener("change", function () {
             if (this.checked) {
               document.querySelectorAll(".ff-social").forEach(other => {
-                if (other !== this) { other.checked = false; other.disabled = true; }
+                if (other !== this) { other.checked = false; other.disabled = true; } fv
               });
             } else {
               document.querySelectorAll(".ff-social").forEach(cb => cb.disabled = false);
@@ -1222,7 +1248,7 @@ At the end, include a motivational phrase:
           // Si la respuesta contiene varias ideas separadas por "---", divídelas en tarjetas
           const ideas = ideaText.split(/\n-{3,}\n/); // separador --- (tres o más guiones)
           document.getElementById("ff-ideas-container").innerHTML = ideas.map(idea =>
-            `<div class="ff-idea-card">${formatIdeaText(idea.trim())}</div>`
+            beautifyIdea(idea.trim())
           ).join('');
           return;
         }
