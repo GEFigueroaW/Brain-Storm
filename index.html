@@ -1334,7 +1334,7 @@ Visual: ${idea.visual}
       document.getElementById("ff-config-view").classList.remove("is-hidden");
       container.innerHTML = "";
     };
-      } document.addEventListener("click", async (e) => {
+      document.addEventListener("click", async (e) => {
       if (e.target.classList.contains("ff-feedback-btn")) {
         const feedbackType = e.target.dataset.feedback;
         const ideaIndex = e.target.dataset.ideaIndex;
