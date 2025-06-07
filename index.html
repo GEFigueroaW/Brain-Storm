@@ -1188,23 +1188,40 @@ At the end, include a motivational phrase:
           nIdeas
         });
 
-        let ideaText = "";
-        if (response.data && response.data.text) {
-          ideaText = response.data.text;
-        } else if (response.data && response.data.ideasText) {
-          ideaText = response.data.ideasText;
-        }
+let ideas = [];
+let ideaText = "";
 
-        if (!ideaText || ideaText.trim() === "") {
-          finishLoadingOverlay();
-          document.getElementById("ff-results-container").innerHTML = `< div class="notification is-warning" > ${t("no_ideas")}</div > `;
-          return;
-        }
+if (response.data) {
+  if (Array.isArray(response.data.ideas)) {
+    ideas = response.data.ideas;
+  } else if (response.data.text) {
+    ideaText = response.data.text;
+  } else if (response.data.ideasText) {
+    ideaText = response.data.ideasText;
+  }
+}
 
-        // Render simple: mostrar la idea como texto plano (ajusta visual si lo deseas)
-        finishLoadingOverlay();
-        updateCounterUI();
-        renderIdeasAsObjects(ideas);
+// Si hay ideas (array), renderiza como objetos
+if (ideas.length) {
+  finishLoadingOverlay();
+  updateCounterUI();
+  renderIdeasAsObjects(ideas);
+  return;
+}
+
+// Si hay idea como texto, muéstrala como texto plano
+if (ideaText.trim() !== "") {
+  finishLoadingOverlay();
+  updateCounterUI();
+  document.getElementById("ff-ideas-container").innerHTML =
+    `<div class="ff-idea-card">${ideaText}</div>`;
+  return;
+}
+
+// Si no hay nada, muestra advertencia
+finishLoadingOverlay();
+document.getElementById("ff-results-container").innerHTML =
+  `<div class="notification is-warning">${t("no_ideas")}</div>`;
 
       } catch (e) {
         finishLoadingOverlay();
