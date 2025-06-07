@@ -551,6 +551,13 @@
     import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
     document.getElementById('ff-results-modal').classList.add('is-hidden');
+
+    function formatIdeaText(ideaText) {
+      // Convierte **negritas** a <strong> y saltos de línea a <br>
+      return ideaText
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
     // --- CONFIGURACIÓN --
     const firebaseConfig = {
       apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
@@ -1212,8 +1219,11 @@ At the end, include a motivational phrase:
         if (ideaText.trim() !== "") {
           finishLoadingOverlay();
           updateCounterUI();
-          document.getElementById("ff-ideas-container").innerHTML =
-            `<div class="ff-idea-card">${ideaText}</div>`;
+          // Si la respuesta contiene varias ideas separadas por "---", divídelas en tarjetas
+          const ideas = ideaText.split(/\n-{3,}\n/); // separador --- (tres o más guiones)
+          document.getElementById("ff-ideas-container").innerHTML = ideas.map(idea =>
+            `<div class="ff-idea-card">${formatIdeaText(idea.trim())}</div>`
+          ).join('');
           return;
         }
 
