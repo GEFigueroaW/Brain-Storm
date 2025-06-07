@@ -1450,7 +1450,15 @@ Visual: ${idea.visual}
     });
     setLang(document.getElementById("ff-auth-language-selector").value);
     updateDatalist();
-
+    <div id="ff-results-modal" class="modal is-hidden">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+    <!-- Aquí van las tarjetas de ideas -->
+        <div id="ff-ideas-container"></div>
+        <!-- Botón para cerrar el modal -->
+        <button id="ff-results-close" class="modal-close is-large" aria-label="close">Cerrar</button>
+      </div>
+    </div>
   </script>
   <style>
     .slide {
