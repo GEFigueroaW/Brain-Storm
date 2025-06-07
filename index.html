@@ -1468,6 +1468,7 @@ Visual: ${idea.visual}
         document.getElementById("ff-auth-view").classList.remove("is-hidden");
         document.getElementById("ff-admin-view").classList.add("is-hidden");
         document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
+        if (window.unsubscribeGlobalConfig) window.unsubscribeGlobalConfig();
       }
     });
     setLang(lang);
