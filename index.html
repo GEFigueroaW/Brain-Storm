@@ -1307,7 +1307,7 @@ Visual: ${idea.visual}
         container.appendChild(card);
       });
     }
-    // Botón cerrar modal
+    const modal = document.getElementById("ff-results-modal");
     modal.querySelector("#ff-results-close").onclick = () => {
       modal.classList.remove("is-active");
       modal.classList.add("is-hidden");
