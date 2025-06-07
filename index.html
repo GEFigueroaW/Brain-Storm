@@ -357,7 +357,19 @@
       .ff-section {
         padding: 1em 0.2em;
       }
+    
+      .slide {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px 0 #0002;
+      padding: 2em;
+      margin: 2em auto;
+      max-width: 500px;
+      min-height: 300px;
+      transition: box-shadow 0.3s;
+      text-align: left;
     }
+ 
   </style>
 </head>
 
@@ -1307,13 +1319,6 @@ Visual: ${idea.visual}
         container.appendChild(card);
       });
     }
-    const modal = document.getElementById("ff-results-modal");
-    modal.querySelector("#ff-results-close").onclick = () => {
-      modal.classList.remove("is-active");
-      modal.classList.add("is-hidden");
-      document.getElementById("ff-config-view").classList.remove("is-hidden");
-      container.innerHTML = "";
-    };
     document.addEventListener("click", async (e) => {
       if (e.target.classList.contains("ff-feedback-btn")) {
         const feedbackType = e.target.dataset.feedback;
@@ -1450,20 +1455,14 @@ Visual: ${idea.visual}
     });
     setLang(document.getElementById("ff-auth-language-selector").value);
     updateDatalist();
-  </script>
-  <style>
-    .slide {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 2px 16px 0 #0002;
-      padding: 2em;
-      margin: 2em auto;
-      max-width: 500px;
-      min-height: 300px;
-      transition: box-shadow 0.3s;
-      text-align: left;
-    }
-  </style>
+        const modal = document.getElementById("ff-results-modal");
+    modal.querySelector("#ff-results-close").onclick = () => {
+      modal.classList.remove("is-active");
+      modal.classList.add("is-hidden");
+      document.getElementById("ff-config-view").classList.remove("is-hidden");
+      container.innerHTML = "";
+    };
+
   </script>
       <div id="ff-results-modal" class="modal is-hidden">
       <div class="modal-background"></div>
