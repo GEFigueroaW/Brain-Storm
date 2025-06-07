@@ -553,36 +553,51 @@
     document.getElementById('ff-results-modal').classList.add('is-hidden');
 
     function beautifyIdea(rawIdea) {
-      const replacements = [
-        { label: "Gancho Verbal Impactante:", emoji: "🎯", bold: true },
-        { label: "Texto del Post:", emoji: "💬", bold: false },
-        { label: "Hashtags:", emoji: "🔖", bold: false },
-        { label: "CTA:", emoji: "👇", bold: true },
-        { label: "Prompt Visual para IA:", emoji: "✨", bold: true }
+      // Elimina cualquier markdown "**"
+      let idea = rawIdea.replace(/\*\*/g, '');
+
+      // Bloques y emojis (sin emoji en Prompt Visual para IA)
+      const sections = [
+        { label: "Gancho Verbal Impactante:", emoji: "💡" },
+        { label: "Texto del Post:", emoji: "💬" },
+        { label: "Hashtags:", emoji: "🏷️" },
+        { label: "CTA:", emoji: "👇" },
+        { label: "Prompt Visual para IA:", emoji: "" } // Sin emoji aquí
       ];
 
-      let html = rawIdea.trim();
+      // Formatea cada sección con su emoji y salto de línea doble después de cada punto
+      sections.forEach(section => {
+        // Regex para encontrar la sección y su contenido
+        const reg = new RegExp(section.label + '\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚ]|\\n---|$)', 'g');
+        idea = idea.replace(reg, (match, p1) => {
+          // Inserta doble salto de línea después de cada punto NO seguido de número o letra
+          let content = p1.replace(/\. ?/g, ".\n\n").trim();
+          content = content.replace(/\n{3,}/g, "\n\n"); // No más de dos saltos juntos
 
-      replacements.forEach(section => {
-        const reg = new RegExp(section.label + '\\s*(.*?)(?=\\n[A-ZÁÉÍÓÚ]|\\n---|$)', 'gs');
-        html = html.replace(reg, (match, p1) => {
-          let labelHtml = `${section.emoji} ${section.bold ? `<strong>${section.label.replace(":", "")}</strong>` : section.label.replace(":", "")}`;
-          let contentHtml = p1.replace(/\n/g, "<br>").trim();
-          if (section.label.startsWith("Hashtags")) {
-            contentHtml = `<span style="font-weight:bold; color:#8e44ad; font-size:1.05em">${contentHtml}</span>`;
+          // Dale formato: emoji + título + contenido
+          let label = section.emoji ? `${section.emoji} ${section.label.replace(":", "")}` : section.label.replace(":", "");
+          if (section.label === "Hashtags:") {
+            // Agrupa todos los hashtags en una sola línea, elimina códigos html
+            content = content.replace(/<[^>]*>/g, '').replace(/ +/g, ' ').trim();
           }
-          return `<div style="margin-bottom:0.6em">${labelHtml}<br>${contentHtml}</div>`;
+          return `${label}\n${content}\n\n`;
         });
       });
 
-      html = html.replace(/(#\w+)/g, '<span style="color:#8e44ad;font-weight:bold;">$1</span>');
-      html = html.replace(/---/g, '<hr>');
-      html = html.replace(/^\s*FR.*ASE FINAL.*:?\s*/im, '<div class="ff-final-phrase">');
-      html = html.replace(/--?FIN.*FR.*ASE.*--?/im, '</div>');
-      html = html.replace(/(\s*<br>\s*){2,}/g, '<br>');
-      html = html.replace(/SIN LAG/gi, 'SIN LAG 🎮');
+      // Elimina estilos rotos y etiquetas html residuales
+      idea = idea.replace(/<[^>]*>/g, '');
 
-      return `<div class="ff-idea-card" style="margin-bottom:1.5em;padding:1.2em 1em;background:#fff;border-radius:14px;box-shadow:0 2px 14px rgba(142,68,173,0.08);font-size:1.09em;">${html}</div>`;
+      // Limpia exceso de saltos de línea
+      idea = idea.replace(/\n{4,}/g, "\n\n");
+
+      // Limpia espacio antes de hashtags
+      idea = idea.replace(/\s+#/g, " #");
+
+      // Opcional: quita líneas vacías al inicio y fin
+      idea = idea.trim();
+
+      // Devuelve en bloque preformateado para fácil copiar/pegar
+      return `<pre style="white-space:pre-wrap;font-size:1.08em;background:#fff;border-radius:14px;padding:1.2em 1em;margin-bottom:1.5em;">${idea}</pre>`;
     }
     // --- CONFIGURACIÓN --
     const firebaseConfig = {
