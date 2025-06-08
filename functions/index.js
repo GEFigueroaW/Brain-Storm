@@ -1,4 +1,4 @@
- const functions = require("firebase-functions");
+const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const axios = require("axios");
 
@@ -50,7 +50,6 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
 
 // ====== Utilidad para construir el prompt ======
 function construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas) {
-  // Unir redes en string
   const redes = Array.isArray(networks) ? networks.join(", ") : networks;
   const plural = Array.isArray(networks) && networks.length > 1;
 
@@ -86,43 +85,45 @@ CTA: ¿Listo para transformar tu perfil? Comenta "QUIERO" y te envío la guía. 
 
 Prompt Visual para IA: Imagen de una laptop con gráficas ascendentes y un perfil profesional resaltado.
 `;
+  return mensaje;
+}
 
-  // ====== Panel Admin Premium: setPremiumGlobalStatus usando onCall ======
-  exports.setPremiumGlobalStatus = functions.https.onCall(async (data, context) => {
-    // Validar autenticación y admin
-    if (!context.auth) {
-      throw new functions.https.HttpsError("unauthenticated", "El usuario debe estar autenticado.");
-    }
+// ====== Panel Admin Premium: setPremiumGlobalStatus usando onCall ======
+exports.setPremiumGlobalStatus = functions.https.onCall(async (data, context) => {
+  // Validar autenticación y admin
+  if (!context.auth) {
+    throw new functions.https.HttpsError("unauthenticated", "El usuario debe estar autenticado.");
+  }
 
-    // Puedes agregar validación de admin si quieres aquí
+  // Puedes agregar validación de admin si quieres aquí
 
-    // Permitir actualizar cualquier combinación de campos
-    const updateFields = {};
+  // Permitir actualizar cualquier combinación de campos
+  const updateFields = {};
 
-    // Si el campo está presente (aunque sea false o null), lo tomamos
-    if ("isPremiumGlobalActive" in data) {
-      updateFields.isPremiumGlobalActive = !!data.isPremiumGlobalActive;
-    }
-    if ("premiumGlobalEndDate" in data) {
-      // Si es string vacío o indefinido, lo ponemos null
-      updateFields.premiumGlobalEndDate = data.premiumGlobalEndDate ? data.premiumGlobalEndDate : null;
-    }
-    if ("isLaunchPromoActive" in data) {
-      updateFields.isLaunchPromoActive = !!data.isLaunchPromoActive;
-    }
+  // Si el campo está presente (aunque sea false o null), lo tomamos
+  if ("isPremiumGlobalActive" in data) {
+    updateFields.isPremiumGlobalActive = !!data.isPremiumGlobalActive;
+  }
+  if ("premiumGlobalEndDate" in data) {
+    // Si es string vacío o indefinido, lo ponemos null
+    updateFields.premiumGlobalEndDate = data.premiumGlobalEndDate ? data.premiumGlobalEndDate : null;
+  }
+  if ("isLaunchPromoActive" in data) {
+    updateFields.isLaunchPromoActive = !!data.isLaunchPromoActive;
+  }
 
-    // Si no hay ningún campo relevante, error
-    if (Object.keys(updateFields).length === 0) {
-      throw new functions.https.HttpsError("invalid-argument", "No se enviaron campos válidos para actualizar.");
-    }
+  // Si no hay ningún campo relevante, error
+  if (Object.keys(updateFields).length === 0) {
+    throw new functions.https.HttpsError("invalid-argument", "No se enviaron campos válidos para actualizar.");
+  }
 
-    try {
-      // Guardar en appConfig/global
-      await admin.firestore().collection('appConfig').doc('global').set(updateFields, { merge: true });
+  try {
+    // Guardar en appConfig/global
+    await admin.firestore().collection('appConfig').doc('global').set(updateFields, { merge: true });
 
-      return { success: true };
-    } catch (error) {
-      console.error("❌ Error en setPremiumGlobalStatus:", error);
-      throw new functions.https.HttpsError("internal", "No se pudo actualizar el estado premium global.");
-    }
-  });
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Error en setPremiumGlobalStatus:", error);
+    throw new functions.https.HttpsError("internal", "No se pudo actualizar el estado premium global.");
+  }
+});
