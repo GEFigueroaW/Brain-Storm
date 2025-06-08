@@ -562,41 +562,32 @@
         { label: "Texto del Post:", emoji: "💬" },
         { label: "Hashtags:", emoji: "🏷️" },
         { label: "CTA:", emoji: "👇" },
-        { label: "Prompt Visual para IA:", emoji: "" } // Sin emoji aquí
+        { label: "Prompt Visual para IA:", emoji: "" }
       ];
 
-      // Formatea cada sección con su emoji y salto de línea doble después de cada punto
       sections.forEach(section => {
-        // Regex para encontrar la sección y su contenido
         const reg = new RegExp(section.label + '\\s*([\\s\\S]*?)(?=\\n[A-ZÁÉÍÓÚ]|\\n---|$)', 'g');
         idea = idea.replace(reg, (match, p1) => {
-          // Inserta doble salto de línea después de cada punto NO seguido de número o letra
-          let content = p1.replace(/\. ?/g, ".\n\n").trim();
-          content = content.replace(/\n{3,}/g, "\n\n"); // No más de dos saltos juntos
+          // Salto doble después de cada punto final seguido de espacio y mayúscula o fin de línea / texto
+          let content = p1.replace(/(\.)(\s+)([A-ZÁÉÍÓÚÑ])/g, ".\n\n$3")
+            .replace(/(\?)(\s+)([A-ZÁÉÍÓÚÑ])/g, "?\n\n$3")
+            .replace(/(\!)(\s+)([A-ZÁÉÍÓÚÑ])/g, "!\n\n$3")
+            .trim();
 
-          // Dale formato: emoji + título + contenido
+          // Emoji solo en las secciones que sí deben llevarlo
           let label = section.emoji ? `${section.emoji} ${section.label.replace(":", "")}` : section.label.replace(":", "");
           if (section.label === "Hashtags:") {
-            // Agrupa todos los hashtags en una sola línea, elimina códigos html
             content = content.replace(/<[^>]*>/g, '').replace(/ +/g, ' ').trim();
           }
           return `${label}\n${content}\n\n`;
         });
       });
 
-      // Elimina estilos rotos y etiquetas html residuales
       idea = idea.replace(/<[^>]*>/g, '');
-
-      // Limpia exceso de saltos de línea
       idea = idea.replace(/\n{4,}/g, "\n\n");
-
-      // Limpia espacio antes de hashtags
       idea = idea.replace(/\s+#/g, " #");
-
-      // Opcional: quita líneas vacías al inicio y fin
       idea = idea.trim();
 
-      // Devuelve en bloque preformateado para fácil copiar/pegar
       return `<pre style="white-space:pre-wrap;font-size:1.08em;background:#fff;border-radius:14px;padding:1.2em 1em;margin-bottom:1.5em;">${idea}</pre>`;
     }
     // --- CONFIGURACIÓN --
