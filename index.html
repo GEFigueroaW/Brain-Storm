@@ -603,6 +603,8 @@
 
     const app = initializeApp(firebaseConfig);
     // --- App Check (AQUÍ VA EL BLOQUE NUEVO) ---
+    self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+    
     const appCheck = initializeAppCheck(app, {
       provider: new ReCaptchaV3Provider('6Lc70FkrAAAAAPbnQ9McMdGYOEbFFXlrtgn_gbZ0'), // Pega aquí tu clave de sitio pública
       isTokenAutoRefreshEnabled: true
