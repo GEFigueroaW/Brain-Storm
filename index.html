@@ -1207,6 +1207,9 @@ At the end, include a motivational phrase:
         return;
       }
 
+      console.log("UID:", auth.currentUser?.uid);
+      console.log("Token:", await auth.currentUser?.getIdToken());
+
       await auth.currentUser.getIdToken(true);
       
       const form = validateForm();
