@@ -1207,6 +1207,8 @@ At the end, include a motivational phrase:
         return;
       }
 
+      await auth.currentUser.getIdToken(true);
+      
       const form = validateForm();
       if (!form) return;
       if (!userPremium && !promoLaunch && userGenCount >= maxGenFree) {
