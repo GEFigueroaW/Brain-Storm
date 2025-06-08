@@ -1201,6 +1201,12 @@ At the end, include a motivational phrase:
       return { ideas, fraseFinal };
     }
     async function generateIdeas(refresh = false) {
+      // --- VERIFICACIÓN DE AUTENTICACIÓN ---
+      if (!auth.currentUser) {
+        alert("Debes iniciar sesión para generar ideas.");
+        return;
+      }
+
       const form = validateForm();
       if (!form) return;
       if (!userPremium && !promoLaunch && userGenCount >= maxGenFree) {
