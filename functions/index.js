@@ -11,11 +11,12 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "El usuario debe estar autenticado.");
   }
-
   if (!keyword || !copytype || !language || !networks || !mode) {
     throw new functions.https.HttpsError("invalid-argument", "Faltan campos obligatorios.");
   }
-
+  if (!Array.isArray(networks) || networks.length === 0) {
+    throw new functions.https.HttpsError("invalid-argument", "Selecciona al menos una red social.");
+  }
   const apiKey = functions.config().deepseek.key;
   if (!apiKey) {
     console.error("❌ No se encontró la API Key de Deepseek en functions.config()");
@@ -34,17 +35,10 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
         Authorization: `Bearer ${apiKey}`,
       },
     });
-
-    const textoGenerado = response.data.choices?.[0]?.message?.content || "";
-    console.log("IDEAS GENERADAS:", textoGenerado);
-
-    return {
-      text: textoGenerado
-    };
-
+    return { ideas: response.data, prompt };
   } catch (error) {
-    console.error("❌ Error en generateIdeas:", error.response?.data || error.message);
-    throw new functions.https.HttpsError("internal", "No se pudieron generar ideas.");
+    console.error("Error generando idea:", error);
+    throw new functions.https.HttpsError("internal", "Ocurrió un error generando la idea.");
   }
 });
 
