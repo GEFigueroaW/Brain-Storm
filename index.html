@@ -605,7 +605,7 @@
 
     // --- Fin App Check ---
     const auth = getAuth(app);
-    const functions = getFunctions(app);
+    const functions = getFunctions(app, "us-central1");
     const db = getFirestore(app);
     window.auth = auth;
     window.db = db;
@@ -1227,6 +1227,7 @@ At the end, include a motivational phrase:
 
       try {
         const formatoSalida = getPromptFormatoSalida(lang);
+        await auth.currentUser.getIdToken(true); // <-- fuerza renovación
         const generateIdeasFn = httpsCallable(functions, "generateIdeas");
         let nIdeas = 1;
         if (mode === "single") nIdeas = 3;
