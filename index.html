@@ -1516,10 +1516,14 @@ Visual: ${idea.visual}
       if (user) {
         document.getElementById("ff-auth-view").classList.add("is-hidden");
         document.getElementById("ff-config-view").classList.remove("is-hidden");
-        await checkPremiumStatus(user.uid);
-        await validarAdmin(user.uid);
-        updateCounterUI();
-        await mostrarEstadoPromo();
+        try {
+          await checkPremiumStatus(user.uid);
+          await validarAdmin(user.uid);
+          updateCounterUI();
+          await mostrarEstadoPromo();
+        } catch (e) {
+          console.error("Error al actualizar el estado del usuario:", e);
+        }
       } else {
         document.getElementById("ff-config-view").classList.add("is-hidden");
         document.getElementById("ff-auth-view").classList.remove("is-hidden");
@@ -1527,8 +1531,7 @@ Visual: ${idea.visual}
         document.querySelectorAll(".ff-ad")?.forEach(el => el.remove());
         if (window.unsubscribeGlobalConfig) window.unsubscribeGlobalConfig();
       }
-    });
-    setLang(lang);
+    }); setLang(lang);
     updateDatalist();
     clearInputsOnChange();
     updateNetworksByMode();
