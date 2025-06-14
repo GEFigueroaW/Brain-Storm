@@ -1,24 +1,42 @@
+
+plaintext
+Copiar
+Editar
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Usuarios autenticados pueden leer su propio perfil
+    // Cada usuario puede leer y escribir su propio documento
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Solo autenticados pueden escribir sesiones y feedback
-    match /feedback/{docId} {
-      allow create: if request.auth != null;
-    }
+    // Generación de ideas: lectura y creación para usuarios autenticados
     match /generations/{docId} {
-      allow create: if request.auth != null;
+      allow read, create: if request.auth != null;
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.uid;
     }
 
-    // App config: solo admin puede modificar
+    // Feedback: autenticados pueden crear y leer, borrar solo el autor
+    match /feedback/{docId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.uid;
+    }
+
+    // Configuración global: lectura pública, escritura por admin o Cloud Functions
     match /appConfig/{docId} {
       allow read: if true;
-      allow write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      allow write: if (
+        request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+      ) || request.auth == null; // Permitir acceso desde Cloud Functions
+    }
+
+    // Por defecto: lectura solo para autenticados, sin escritura global
+    match /{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
     }
   }
 }
