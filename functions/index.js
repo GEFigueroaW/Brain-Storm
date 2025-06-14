@@ -4,7 +4,7 @@ const axios = require("axios");
 
 if (!admin.apps.length) admin.initializeApp();
 
-// ====== Función para generar ideas (https.onCall) ======
+// ========== FUNCIÓN PRINCIPAL ==========
 exports.generateIdeas = functions.https.onCall(async (data, context) => {
   const { keyword, copytype, language, networks, mode, formatoSalida, nIdeas } = data;
 
@@ -17,9 +17,10 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
   if (!Array.isArray(networks) || networks.length === 0) {
     throw new functions.https.HttpsError("invalid-argument", "Selecciona al menos una red social.");
   }
+
   const apiKey = functions.config().deepseek.key;
   if (!apiKey) {
-    console.error("❌ No se encontró la API Key de Deepseek en functions.config()");
+    console.error("❌ No se encontró la API Key de Deepseek");
     throw new functions.https.HttpsError("internal", "API Key no configurada.");
   }
 
@@ -35,6 +36,7 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
         Authorization: `Bearer ${apiKey}`,
       },
     });
+
     return { ideas: response.data, prompt };
   } catch (error) {
     console.error("Error generando idea:", error);
@@ -42,7 +44,7 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
   }
 });
 
-// ====== Utilidad para construir el prompt ======
+// ========== CONSTRUCTOR DE PROMPT ==========
 function construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas) {
   const redes = Array.isArray(networks) ? networks.join(", ") : networks;
   const plural = Array.isArray(networks) && networks.length > 1;
@@ -81,39 +83,30 @@ Prompt Visual para IA: Imagen de una laptop con gráficas ascendentes y un perfi
 `;
   return mensaje;
 }
-// ====== Panel Admin Premium: setPremiumGlobalStatus usando onCall ======
+
+// ========== FUNCIÓN ADMIN: Panel Premium ==========
 exports.setPremiumGlobalStatus = functions.https.onCall(async (data, context) => {
-  // Validar autenticación y admin
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "El usuario debe estar autenticado.");
   }
 
-  // Puedes agregar validación de admin si quieres aquí
-
-  // Permitir actualizar cualquier combinación de campos
   const updateFields = {};
-
-  // Si el campo está presente (aunque sea false o null), lo tomamos
   if ("isPremiumGlobalActive" in data) {
     updateFields.isPremiumGlobalActive = !!data.isPremiumGlobalActive;
   }
   if ("premiumGlobalEndDate" in data) {
-    // Si es string vacío o indefinido, lo ponemos null
-    updateFields.premiumGlobalEndDate = data.premiumGlobalEndDate ? data.premiumGlobalEndDate : null;
+    updateFields.premiumGlobalEndDate = data.premiumGlobalEndDate || null;
   }
   if ("isLaunchPromoActive" in data) {
     updateFields.isLaunchPromoActive = !!data.isLaunchPromoActive;
   }
 
-  // Si no hay ningún campo relevante, error
   if (Object.keys(updateFields).length === 0) {
     throw new functions.https.HttpsError("invalid-argument", "No se enviaron campos válidos para actualizar.");
   }
 
   try {
-    // Guardar en appConfig/global
-    await admin.firestore().collection('appConfig').doc('global').set(updateFields, { merge: true });
-
+    await admin.firestore().collection("appConfig").doc("global").set(updateFields, { merge: true });
     return { success: true };
   } catch (error) {
     console.error("❌ Error en setPremiumGlobalStatus:", error);
