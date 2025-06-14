@@ -81,7 +81,6 @@ Prompt Visual para IA: Imagen de una laptop con gráficas ascendentes y un perfi
 `;
   return mensaje;
 }
-
 // ====== Panel Admin Premium: setPremiumGlobalStatus usando onCall ======
 exports.setPremiumGlobalStatus = functions.https.onCall(async (data, context) => {
   // Validar autenticación y admin
