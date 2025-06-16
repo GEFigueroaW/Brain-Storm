@@ -18,7 +18,7 @@ exports.generateIdeas = onCall({ region: "us-central1" }, async (data, context) 
     throw new Error("Selecciona al menos una red social.");
   }
 
-  const apiKey = process.env.DEEPSEEK_API_KEY || "AQUÍ_TU_API_KEY"; // O usa functions.config() si ya lo configuraste con `firebase functions:config:set`
+  const apiKey = process.env.DEEPSEEK_API_KEY || "AQUÍ_TU_API_KEY"; // O usa functions.config() si lo configuraste
   if (!apiKey) {
     console.error("❌ No se encontró la API Key de Deepseek");
     throw new Error("API Key no configurada.");
@@ -41,6 +41,43 @@ exports.generateIdeas = onCall({ region: "us-central1" }, async (data, context) 
   } catch (error) {
     console.error("Error generando idea:", error);
     throw new Error("Ocurrió un error generando la idea.");
+  }
+});
+
+// ========== FUNCIÓN ADMIN ==========
+exports.setPremiumGlobalStatus = onCall({ region: "us-central1" }, async (data, context) => {
+  if (!context.auth) {
+    throw new Error("El usuario debe estar autenticado.");
+  }
+
+  const updateFields = {};
+
+  if ("isPremiumGlobalActive" in data) {
+    updateFields.isPremiumGlobalActive = !!data.isPremiumGlobalActive;
+  }
+
+  if ("premiumGlobalEndDate" in data) {
+    updateFields.premiumGlobalEndDate = data.premiumGlobalEndDate || null;
+  }
+
+  if ("isLaunchPromoActive" in data) {
+    updateFields.isLaunchPromoActive = !!data.isLaunchPromoActive;
+  }
+
+  if (Object.keys(updateFields).length === 0) {
+    throw new Error("No se enviaron campos válidos para actualizar.");
+  }
+
+  try {
+    await admin.firestore()
+      .collection("appConfig")
+      .doc("global")
+      .set(updateFields, { merge: true });
+
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Error en setPremiumGlobalStatus:", error);
+    throw new Error("No se pudo actualizar el estado premium global.");
   }
 });
 
