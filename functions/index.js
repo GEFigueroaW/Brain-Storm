@@ -1,27 +1,27 @@
-const functions = require("firebase-functions");
+const { onCall } = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
 const axios = require("axios");
 
 if (!admin.apps.length) admin.initializeApp();
 
 // ========== FUNCIÓN PRINCIPAL ==========
-exports.generateIdeas = functions.https.onCall(async (data, context) => {
+exports.generateIdeas = onCall({ region: "us-central1" }, async (data, context) => {
   const { keyword, copytype, language, networks, mode, formatoSalida, nIdeas } = data;
 
   if (!context.auth) {
-    throw new functions.https.HttpsError("unauthenticated", "El usuario debe estar autenticado.");
+    throw new Error("El usuario debe estar autenticado.");
   }
   if (!keyword || !copytype || !language || !networks || !mode) {
-    throw new functions.https.HttpsError("invalid-argument", "Faltan campos obligatorios.");
+    throw new Error("Faltan campos obligatorios.");
   }
   if (!Array.isArray(networks) || networks.length === 0) {
-    throw new functions.https.HttpsError("invalid-argument", "Selecciona al menos una red social.");
+    throw new Error("Selecciona al menos una red social.");
   }
 
-  const apiKey = functions.config().deepseek.key;
+  const apiKey = process.env.DEEPSEEK_API_KEY || "AQUÍ_TU_API_KEY"; // O usa functions.config() si ya lo configuraste con `firebase functions:config:set`
   if (!apiKey) {
     console.error("❌ No se encontró la API Key de Deepseek");
-    throw new functions.https.HttpsError("internal", "API Key no configurada.");
+    throw new Error("API Key no configurada.");
   }
 
   const prompt = construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas);
@@ -40,7 +40,7 @@ exports.generateIdeas = functions.https.onCall(async (data, context) => {
     return { ideas: response.data, prompt };
   } catch (error) {
     console.error("Error generando idea:", error);
-    throw new functions.https.HttpsError("internal", "Ocurrió un error generando la idea.");
+    throw new Error("Ocurrió un error generando la idea.");
   }
 });
 
@@ -49,7 +49,7 @@ function construirPrompt(keyword, copytype, language, networks, mode, formatoSal
   const redes = Array.isArray(networks) ? networks.join(", ") : networks;
   const plural = Array.isArray(networks) && networks.length > 1;
 
-  let mensaje = `
+  return `
 Eres un experto en redacción creativa para redes sociales. Genera ideas de copy para ${redes} siguiendo estas reglas:
 
 - Haz cada bloque de texto lo más informativo, educativo y persuasivo posible, usando el máximo de palabras recomendadas para el tipo de red social.
@@ -81,7 +81,6 @@ CTA: ¿Listo para transformar tu perfil? Comenta "QUIERO" y te envío la guía. 
 
 Prompt Visual para IA: Imagen de una laptop con gráficas ascendentes y un perfil profesional resaltado.
 `;
-  return mensaje;
 }
 
 // ========== FUNCIÓN ADMIN: Panel Premium ==========
