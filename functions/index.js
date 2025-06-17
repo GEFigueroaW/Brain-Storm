@@ -18,7 +18,7 @@ exports.generateIdeas = onCall({ region: "us-central1" }, async (data, context) 
     throw new Error("Selecciona al menos una red social.");
   }
 
-  const apiKey = process.env.DEEPSEEK_API_KEY || "AQUÍ_TU_API_KEY"; // O usa functions.config() si lo configuraste
+  const apiKey = process.env.DEEPSEEK_API_KEY || "AQUÍ_TU_API_KEY";
   if (!apiKey) {
     console.error("❌ No se encontró la API Key de Deepseek");
     throw new Error("API Key no configurada.");
@@ -27,15 +27,19 @@ exports.generateIdeas = onCall({ region: "us-central1" }, async (data, context) 
   const prompt = construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas);
 
   try {
-    const response = await axios.post("https://api.deepseek.com/chat/completions", {
-      model: "deepseek-chat",
-      messages: [{ role: "user", content: prompt }],
-    }, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+    const response = await axios.post(
+      "https://api.deepseek.com/chat/completions",
+      {
+        model: "deepseek-chat",
+        messages: [{ role: "user", content: prompt }],
       },
-    });
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+      }
+    );
 
     return { ideas: response.data, prompt };
   } catch (error) {
@@ -44,22 +48,19 @@ exports.generateIdeas = onCall({ region: "us-central1" }, async (data, context) 
   }
 });
 
-// ========== FUNCIÓN ADMIN ==========
+// ========== FUNCIÓN ADMIN: Panel Premium ==========
 exports.setPremiumGlobalStatus = onCall({ region: "us-central1" }, async (data, context) => {
   if (!context.auth) {
     throw new Error("El usuario debe estar autenticado.");
   }
 
   const updateFields = {};
-
   if ("isPremiumGlobalActive" in data) {
     updateFields.isPremiumGlobalActive = !!data.isPremiumGlobalActive;
   }
-
   if ("premiumGlobalEndDate" in data) {
     updateFields.premiumGlobalEndDate = data.premiumGlobalEndDate || null;
   }
-
   if ("isLaunchPromoActive" in data) {
     updateFields.isLaunchPromoActive = !!data.isLaunchPromoActive;
   }
@@ -69,11 +70,7 @@ exports.setPremiumGlobalStatus = onCall({ region: "us-central1" }, async (data, 
   }
 
   try {
-    await admin.firestore()
-      .collection("appConfig")
-      .doc("global")
-      .set(updateFields, { merge: true });
-
+    await admin.firestore().collection("appConfig").doc("global").set(updateFields, { merge: true });
     return { success: true };
   } catch (error) {
     console.error("❌ Error en setPremiumGlobalStatus:", error);
@@ -117,7 +114,7 @@ Hashtags: #LinkedIn #B2B #Empleo #Reclutamiento
 CTA: ¿Listo para transformar tu perfil? Comenta "QUIERO" y te envío la guía. 💡
 
 Prompt Visual para IA: Imagen de una laptop con gráficas ascendentes y un perfil profesional resaltado.
-`;
+  `;
 }
 
 // ========== FUNCIÓN ADMIN: Panel Premium ==========
