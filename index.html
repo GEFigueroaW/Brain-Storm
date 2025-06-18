@@ -606,7 +606,7 @@
     // --- Fin App Check ---
     const auth = getAuth(app);
     const functions = getFunctions(app, "us-central1");
-    const generateIdeasFn = httpsCallable(functions, "generateIdeas");
+    const generateIdeasCallable = httpsCallable(functions, "generateIdeas");
     const db = getFirestore(app);
     window.auth = auth;
     window.db = db;
@@ -670,7 +670,6 @@
       const phrases = LOADING_PHRASES[lang] || LOADING_PHRASES['es'];
       let progress = 0;
       loadingPhraseIndex = 0
-      const generateIdeas = httpsCallable(functions, "generateIdeas");
       bar.style.width = "0%";
       mot.textContent = phrases[loadingPhraseIndex];
       overlay.classList.remove("is-hidden");
