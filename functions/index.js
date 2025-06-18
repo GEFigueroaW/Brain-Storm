@@ -5,48 +5,54 @@ const axios = require("axios");
 if (!admin.apps.length) admin.initializeApp();
 
 // ========== FUNCIÓN PRINCIPAL ==========
-exports.generateIdeas = onCall({ region: "us-central1" }, async (data, context) => {
-  const { keyword, copytype, language, networks, mode, formatoSalida, nIdeas } = data;
+exports.generateIdeas = onCall(
+  {
+    region: "us-central1",
+    enforceAppCheck: false
+  },
+  async (data, context) => {
 
-  if (!context.auth) {
-    throw new Error("El usuario debe estar autenticado.");
-  }
-  if (!keyword || !copytype || !language || !networks || !mode) {
-    throw new Error("Faltan campos obligatorios.");
-  }
-  if (!Array.isArray(networks) || networks.length === 0) {
-    throw new Error("Selecciona al menos una red social.");
-  }
+    const { keyword, copytype, language, networks, mode, formatoSalida, nIdeas } = data;
 
-  const apiKey = process.env.DEEPSEEK_API_KEY || "AQUÍ_TU_API_KEY";
-  if (!apiKey) {
-    console.error("❌ No se encontró la API Key de Deepseek");
-    throw new Error("API Key no configurada.");
-  }
+    if (!context.auth) {
+      throw new Error("El usuario debe estar autenticado.");
+    }
+    if (!keyword || !copytype || !language || !networks || !mode) {
+      throw new Error("Faltan campos obligatorios.");
+    }
+    if (!Array.isArray(networks) || networks.length === 0) {
+      throw new Error("Selecciona al menos una red social.");
+    }
 
-  const prompt = construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas);
+    const apiKey = process.env.DEEPSEEK_API_KEY || "AQUÍ_TU_API_KEY";
+    if (!apiKey) {
+      console.error("❌ No se encontró la API Key de Deepseek");
+      throw new Error("API Key no configurada.");
+    }
 
-  try {
-    const response = await axios.post(
-      "https://api.deepseek.com/chat/completions",
-      {
-        model: "deepseek-chat",
-        messages: [{ role: "user", content: prompt }],
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
+    const prompt = construirPrompt(keyword, copytype, language, networks, mode, formatoSalida, nIdeas);
+
+    try {
+      const response = await axios.post(
+        "https://api.deepseek.com/chat/completions",
+        {
+          model: "deepseek-chat",
+          messages: [{ role: "user", content: prompt }],
         },
-      }
-    );
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+        }
+      );
 
-    return { ideas: response.data, prompt };
-  } catch (error) {
-    console.error("Error generando idea:", error);
-    throw new Error("Ocurrió un error generando la idea.");
-  }
-});
+      return { ideas: response.data, prompt };
+    } catch (error) {
+      console.error("Error generando idea:", error);
+      throw new Error("Ocurrió un error generando la idea.");
+    }
+  });
 
 // ========== FUNCIÓN ADMIN: Panel Premium ==========
 exports.setPremiumGlobalStatus = onCall({ region: "us-central1" }, async (data, context) => {
