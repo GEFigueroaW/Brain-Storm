@@ -601,8 +601,12 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    // --- App Check (AQUÍ VA EL BLOQUE NUEVO) ---
+    import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check.js";
 
+    initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider('AQUI_TU_SITE_KEY_DE_RECAPTCHA_V3'),
+      isTokenAutoRefreshEnabled: true
+    });
     // --- Fin App Check ---
     const auth = getAuth(app);
     const functions = getFunctions(app, "us-central1");
