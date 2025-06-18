@@ -606,10 +606,11 @@
     // --- Fin App Check ---
     const auth = getAuth(app);
     const functions = getFunctions(app, "us-central1");
-    const generateIdeasCallable = httpsCallable(functions, "generateIdeas");
+    const generateIdeasFn = httpsCallable(functions, "generateIdeas");
     const db = getFirestore(app);
     window.auth = auth;
     window.db = db;
+
     // --- FRASES DE CARGA
     const LOADING_PHRASES = {
       es: [
@@ -1231,7 +1232,7 @@ At the end, include a motivational phrase:
         let nIdeas = 1;
         if (mode === "single") nIdeas = 3;
         else nIdeas = selectedNetworks.length;
-        const response = await generateIdeasFn({
+        const response = await generateIdeasCallable({
           keyword,
           copytype,
           language: lang,
