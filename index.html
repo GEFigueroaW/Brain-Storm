@@ -1232,7 +1232,7 @@ At the end, include a motivational phrase:
         let nIdeas = 1;
         if (mode === "single") nIdeas = 3;
         else nIdeas = selectedNetworks.length;
-        const response = await generateIdeasCallable({
+        const response = await generateIdeasFn({
           keyword,
           copytype,
           language: lang,
