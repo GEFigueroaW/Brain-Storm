@@ -1,0 +1,33 @@
+body {
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+  color: #5a189a;
+}
+
+button {
+  border-radius: 12px !important;
+}
+
+input, select {
+  border-radius: 8px !important;
+}
+
+#results-container .idea-card {
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+#results-container .blurred {
+  filter: blur(3px);
+  opacity: 0.5;
+}
+
+.hidden {
+  display: none !important;
+}
