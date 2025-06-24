@@ -1,13 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const effectSelect = document.getElementById("desiredEffect");
-  const effectDescription = document.getElementById("effectDescription");
-  const copySelect = document.getElementById("copyType");
-  const copyDescription = document.getElementById("copyDescription");
-  const generateButton = document.getElementById("generateBtn");
-  const modeRadios = document.getElementsByName("mode");
+// app.js profesional y definitivo
 
-  // Efectos posibles
-  const effects = {
+// Mapas de descripciones
+const efectos = {
     "Aspiración": "Generar deseo de superación, logro o alcanzar un ideal.",
     "Credibilidad/Autoridad": "Transmitir experiencia, conocimientos sólidos y respaldo profesional.",
     "Curiosidad": "Despertar el interés, la intriga o el deseo de saber más.",
@@ -16,90 +10,82 @@ document.addEventListener("DOMContentLoaded", () => {
     "Reflexión": "Invitar a pensar, cuestionar o analizar un tema en profundidad.",
     "Seguridad/Confianza": "Generar tranquilidad, certeza y sensación de respaldo.",
     "Simplemente informar": "Comunicar hechos o datos de manera objetiva y directa."
-  };
+};
 
-  // Tipos de copy posibles
-  const copyTypes = {
-    "De beneficio o solución": "Presenta cómo el producto o servicio resuelve un problema.",
-    "De novedad o lanzamiento": "Enfatiza algo nuevo, exclusivo o recién lanzado.",
+const tiposCopy = {
+    "De beneficio o solución": "Enfocado en mostrar cómo se resuelve un problema o necesidad.",
+    "De novedad o lanzamiento": "Anuncia algo nuevo o innovador.",
     "De interacción o pregunta": "Involucra a la audiencia haciendo preguntas o fomentando respuestas.",
-    "De urgencia o escasez": "Genera sensación de tiempo limitado o pocas unidades disponibles.",
-    "Informativo o educativo": "Brinda conocimiento o datos útiles al público.",
-    "Informal": "Lenguaje relajado, cercano y cotidiano.",
-    "Llamada a la acción (CTA)": "Instruye claramente qué acción debe realizar el lector.",
-    "Narrativo o storytelling": "Cuenta una historia o experiencia emocional.",
-    "Posicionamiento o branding": "Refuerza la identidad o valores de la marca.",
+    "De urgencia o escasez": "Genera sensación de inmediatez o limitada disponibilidad.",
+    "Informativo o educativo": "Entrega conocimiento o datos relevantes.",
+    "Informal": "Lenguaje cercano, relajado y coloquial.",
+    "Llamada a la acción (CTA)": "Invita directamente a realizar una acción específica.",
+    "Narrativo o storytelling": "Cuenta una historia o experiencia para conectar emocionalmente.",
+    "Posicionamiento o branding": "Fortalece la identidad de marca.",
     "Testimonio o prueba social": "Muestra validación social con opiniones, reseñas o casos de éxito.",
     "Técnico o profesional": "Contenido especializado, detallado o para públicos expertos.",
     "Venta directa o persuasivo": "Enfocado directamente en la conversión a compra o contratación."
-  };
+};
 
-  // Cargar efectos en el select
-  for (const [key, desc] of Object.entries(effects)) {
-    const option = document.createElement("option");
-    option.value = key;
-    option.textContent = key;
-    effectSelect.appendChild(option);
-  }
+// Referencias de DOM
+const efectoSelect = document.getElementById("desiredEffect");
+const efectoDesc = document.getElementById("desiredEffectDescription");
+const copySelect = document.getElementById("copyType");
+const copyDesc = document.getElementById("copyTypeDescription");
+const generarBtn = document.getElementById("generateBtn");
 
-  // Cargar tipos de copy en el select
-  for (const [key, desc] of Object.entries(copyTypes)) {
-    const option = document.createElement("option");
-    option.value = key;
-    option.textContent = key;
-    copySelect.appendChild(option);
-  }
+// Carga inicial de descripciones
+efectoSelect.addEventListener("change", () => {
+    const valor = efectoSelect.value;
+    efectoDesc.textContent = efectos[valor] || "";
+});
 
-  // Mostrar descripción de efecto
-  effectSelect.addEventListener("change", () => {
-    const selected = effectSelect.value;
-    effectDescription.textContent = effects[selected] || "";
-  });
+copySelect.addEventListener("change", () => {
+    const valor = copySelect.value;
+    copyDesc.textContent = tiposCopy[valor] || "";
+});
 
-  // Mostrar descripción de tipo de copy
-  copySelect.addEventListener("change", () => {
-    const selected = copySelect.value;
-    copyDescription.textContent = copyTypes[selected] || "";
-  });
-
-  generateButton.addEventListener("click", async () => {
+// Función principal de generación
+generarBtn.addEventListener("click", async () => {
+    const modo = document.querySelector('input[name="generationMode"]:checked')?.value;
     const keyword = document.getElementById("keyword").value.trim();
-    const desiredEffect = effectSelect.value;
-    const copyType = copySelect.value;
-    const networkCheckboxes = document.querySelectorAll("input[name='networks']:checked");
-    const networks = Array.from(networkCheckboxes).map(cb => cb.value);
-    let mode = "";
-    modeRadios.forEach(radio => { if (radio.checked) mode = radio.value; });
+    const redesSeleccionadas = Array.from(document.querySelectorAll('input[name="networks"]:checked')).map(cb => cb.value);
+    const efecto = efectoSelect.value;
+    const tipoCopy = copySelect.value;
 
-    if (!keyword || !desiredEffect || !copyType || networks.length === 0 || !mode) {
-      alert("Por favor completa todos los campos y selecciona al menos una red social.");
-      return;
+    if (!modo || !keyword || redesSeleccionadas.length === 0 || !efecto || !tipoCopy) {
+        alert("Por favor completa todos los campos y selecciona al menos una red social.");
+        return;
     }
-
-    generateButton.disabled = true;
-    generateButton.textContent = "Generando...";
 
     try {
-      const response = await fetch("https://us-central1-brain-storm-8f0d8.cloudfunctions.net/api", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword, desiredEffect, copyType, networks, mode })
-      });
+        generarBtn.disabled = true;
+        generarBtn.textContent = "Generando...";
 
-      if (!response.ok) {
-        throw new Error("Error al generar las ideas");
-      }
+        const response = await fetch("https://us-central1-brain-storm-8f0d8.cloudfunctions.net/api", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                mode: modo,
+                keyword: keyword,
+                networks: redesSeleccionadas,
+                desiredEffect: efecto,
+                copyType: tipoCopy
+            })
+        });
 
-      const data = await response.json();
-      console.log("Ideas generadas:", data);
+        if (!response.ok) throw new Error("Error en el servidor");
 
-      alert("¡Ideas generadas correctamente! Revisa consola para verlas.");
+        const data = await response.json();
+        console.log("Ideas generadas:", data);
+        alert("¡Ideas generadas con éxito (ver consola para resultados)!");
+        // Aquí luego conectaremos con results.html para presentar profesionalmente
+
     } catch (error) {
-      console.error(error);
-      alert("Ocurrió un error al generar las ideas.");
+        console.error("Error al generar las ideas:", error);
+        alert("Ocurrió un error al generar las ideas.");
+    } finally {
+        generarBtn.disabled = false;
+        generarBtn.textContent = "Generar Ideas";
     }
-
-    generateButton.disabled = false;
-    generateButton.textContent = "Generar Ideas";
-  });
 });
