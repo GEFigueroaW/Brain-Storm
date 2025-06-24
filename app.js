@@ -1,100 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FeedFlow 2.0 - Generador IA</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .descripcion { font-style: italic; color: #555; font-size: 0.875rem; margin-top: 5px; }
-    .resultado { white-space: pre-wrap; background: #f9f9f9; border-radius: 8px; padding: 10px; }
-  </style>
-</head>
-<body class="bg-light">
-
-<div class="container py-5">
-  <h1 class="mb-4 text-center">FeedFlow 2.0 - Generador de Ideas IA</h1>
-
-  <div class="card shadow-lg p-4">
-
-    <div class="mb-4">
-      <label class="form-label">Modo de generación:</label>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="mode" id="multiMode" value="multi" checked>
-        <label class="form-check-label" for="multiMode">Multi-redes (una idea por red seleccionada)</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="mode" id="singleMode" value="single">
-        <label class="form-check-label" for="singleMode">Una red (tres ideas distintas)</label>
-      </div>
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label">Ideas para:</label>
-      <div class="row row-cols-2 row-cols-md-3 g-2">
-        <div><input type="checkbox" value="Facebook"> Facebook</div>
-        <div><input type="checkbox" value="Instagram"> Instagram</div>
-        <div><input type="checkbox" value="LinkedIn"> LinkedIn</div>
-        <div><input type="checkbox" value="X"> X (antes Twitter)</div>
-        <div><input type="checkbox" value="WhatsApp"> WhatsApp</div>
-        <div><input type="checkbox" value="Telegram"> Telegram</div>
-        <div><input type="checkbox" value="Reddit"> Reddit</div>
-        <div><input type="checkbox" value="TikTok"> TikTok</div>
-        <div><input type="checkbox" value="YouTube"> YouTube</div>
-      </div>
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label">Idea o palabra clave:</label>
-      <input type="text" id="keyword" class="form-control" placeholder="Escribe aquí...">
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label">¿Qué efecto quieres generar?</label>
-      <select id="desiredEffect" class="form-select">
-        <option value="" selected disabled>Selecciona un efecto</option>
-        <option value="Aspiración">Aspiración</option>
-        <option value="Credibilidad/Autoridad">Credibilidad/Autoridad</option>
-        <option value="Curiosidad">Curiosidad</option>
-        <option value="Empatía">Empatía</option>
-        <option value="Motivación">Motivación</option>
-        <option value="Reflexión">Reflexión</option>
-        <option value="Seguridad/Confianza">Seguridad/Confianza</option>
-        <option value="Simplemente informar">Simplemente informar</option>
-      </select>
-      <div id="effectDesc" class="descripcion"></div>
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label">Tipo de copy:</label>
-      <select id="copyType" class="form-select">
-        <option value="" selected disabled>Selecciona un tipo</option>
-        <option value="De beneficio o solución">De beneficio o solución</option>
-        <option value="De novedad o lanzamiento">De novedad o lanzamiento</option>
-        <option value="De interacción o pregunta">De interacción o pregunta</option>
-        <option value="De urgencia o escasez">De urgencia o escasez</option>
-        <option value="Informativo o educativo">Informativo o educativo</option>
-        <option value="Informal">Informal</option>
-        <option value="Llamada a la acción (CTA)">Llamada a la acción (CTA)</option>
-        <option value="Narrativo o storytelling">Narrativo o storytelling</option>
-        <option value="Posicionamiento o branding">Posicionamiento o branding</option>
-        <option value="Testimonio o prueba social">Testimonio o prueba social</option>
-        <option value="Técnico o profesional">Técnico o profesional</option>
-        <option value="Venta directa o persuasivo">Venta directa o persuasivo</option>
-      </select>
-      <div id="copyDesc" class="descripcion"></div>
-    </div>
-
-    <div class="d-grid">
-      <button id="generateBtn" class="btn btn-primary btn-lg">Generar Ideas</button>
-    </div>
-  </div>
-
-  <div id="results" class="mt-5"></div>
-</div>
-
-<!-- Scripts -->
-<script type="module">
+// Inicialización de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-functions.js";
 
@@ -111,7 +15,9 @@ const app = initializeApp(firebaseConfig);
 const functions = getFunctions(app);
 const generateIdeas = httpsCallable(functions, 'generateIdeas');
 
-const effectDescriptions = {
+// Datos estáticos
+
+const effectOptions = {
   "Aspiración": "Generar deseo de superación, logro o alcanzar un ideal.",
   "Credibilidad/Autoridad": "Transmitir experiencia, conocimientos sólidos y respaldo profesional.",
   "Curiosidad": "Despertar el interés, la intriga o el deseo de saber más.",
@@ -122,7 +28,7 @@ const effectDescriptions = {
   "Simplemente informar": "Comunicar hechos o datos de manera objetiva y directa."
 };
 
-const copyDescriptions = {
+const copyOptions = {
   "De beneficio o solución": "Muestra cómo se resuelve un problema o se logra un beneficio concreto.",
   "De novedad o lanzamiento": "Presenta algo nuevo, exclusivo o recientemente lanzado.",
   "De interacción o pregunta": "Involucra a la audiencia haciendo preguntas o fomentando respuestas.",
@@ -137,15 +43,37 @@ const copyDescriptions = {
   "Venta directa o persuasivo": "Enfocado directamente en la conversión a compra o contratación."
 };
 
+// Inicializa selects dinámicos
+
+window.addEventListener('DOMContentLoaded', () => {
+  const effectSelect = document.getElementById('desiredEffect');
+  for (let key in effectOptions) {
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = key;
+    effectSelect.appendChild(opt);
+  }
+
+  const copySelect = document.getElementById('copyType');
+  for (let key in copyOptions) {
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = key;
+    copySelect.appendChild(opt);
+  }
+});
+
+// Actualiza descripción dinámica
+
 document.getElementById('desiredEffect').addEventListener('change', e => {
-  document.getElementById('effectDesc').textContent = effectDescriptions[e.target.value] || "";
+  document.getElementById('effectDesc').textContent = effectOptions[e.target.value] || "";
 });
 
 document.getElementById('copyType').addEventListener('change', e => {
-  document.getElementById('copyDesc').textContent = copyDescriptions[e.target.value] || "";
+  document.getElementById('copyDesc').textContent = copyOptions[e.target.value] || "";
 });
 
-// Evento de generación
+// Acción de generación IA
 
 document.getElementById('generateBtn').addEventListener('click', async () => {
   const keyword = document.getElementById('keyword').value.trim();
@@ -183,7 +111,3 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     document.getElementById('results').innerHTML = '<div class="alert alert-danger">Error al generar las ideas.</div>';
   }
 });
-</script>
-
-</body>
-</html>
