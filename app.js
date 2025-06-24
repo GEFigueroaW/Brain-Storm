@@ -83,6 +83,7 @@ if (document.getElementById('generate-btn')) {
     document.getElementById("greeting").innerText = `¡Hola, ${userData.name}!`;
     document.getElementById("counter").innerText = !isPremium ? `Generaciones restantes esta semana: ${userData.generationCredits}/3` : "";
 
+    // Render redes
     const container = document.getElementById("networks-container");
     networksFull.forEach(net => {
       const btn = document.createElement("button");
@@ -99,6 +100,7 @@ if (document.getElementById('generate-btn')) {
       container.appendChild(btn);
     });
 
+    // Render copies
     const copySel = document.getElementById("copytype");
     for (const [type, desc] of Object.entries(copyOptions)) {
       const opt = document.createElement("option");
@@ -131,30 +133,25 @@ if (document.getElementById('generate-btn')) {
     document.getElementById('generate-btn').classList.add("is-loading");
 
     try {
-      const user = firebase.auth().currentUser;
-      const idToken = await user.getIdToken();
-
+      const idToken = await auth.currentUser.getIdToken();
       const response = await fetch("https://us-central1-brain-storm-8f0d8.cloudfunctions.net/generateIdeas", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${idToken}`
         },
-        body: JSON.stringify({
-          keyword, copytype, copyDescription, language, networks: selectedNetworks, mode
-        })
+        body: JSON.stringify({ keyword, copytype, copyDescription, language, networks: selectedNetworks, mode })
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Error interno en el servidor");
+        const errData = await response.json();
+        throw new Error(errData.error || "Error desconocido");
       }
 
       const data = await response.json();
       sessionStorage.setItem("results", data.result);
       sessionStorage.setItem("isPremium", isPremium);
       window.location.href = "results.html";
-
     } catch (e) {
       alert("Error: " + e.message);
     }
@@ -184,55 +181,5 @@ if (document.getElementById('results-container')) {
 
   document.getElementById("new-gen-btn").addEventListener("click", () => {
     window.location.href = "config.html";
-  });
-}
-
-// =================== PANTALLA: admin.html ===================
-if (document.getElementById('save-admin-btn')) {
-  auth.onAuthStateChanged(async (user) => {
-    if (!user) {
-      window.location.href = "index.html";
-      return;
-    }
-    const email = user.email;
-    const adminDoc = await db.collection("admins").doc(email).get();
-    if (!adminDoc.exists) {
-      alert("Acceso denegado");
-      window.location.href = "index.html";
-    }
-
-    const configDoc = await db.collection("appConfig").doc("global").get();
-    const config = configDoc.exists ? configDoc.data() : {};
-    document.getElementById("premium-global").checked = config.isPremiumGlobalActive || false;
-    document.getElementById("launch-promo").checked = config.isLaunchPromoActive || false;
-    if (config.premiumGlobalEndDate) {
-      const date = new Date(config.premiumGlobalEndDate._seconds * 1000);
-      document.getElementById("premium-end-date").value = date.toISOString().split('T')[0];
-    }
-  });
-
-  document.getElementById("save-admin-btn").addEventListener("click", async () => {
-    const user = firebase.auth().currentUser;
-    const idToken = await user.getIdToken();
-
-    try {
-      const response = await fetch("https://us-central1-brain-storm-8f0d8.cloudfunctions.net/setPremiumGlobalStatus", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${idToken}`
-        },
-        body: JSON.stringify({
-          isPremiumGlobalActive: document.getElementById("premium-global").checked,
-          isLaunchPromoActive: document.getElementById("launch-promo").checked,
-          premiumGlobalEndDate: document.getElementById("premium-end-date").value || null
-        })
-      });
-
-      if (!response.ok) throw new Error("Error al actualizar la configuración");
-      alert("Configuración actualizada");
-    } catch (e) {
-      alert("Error: " + e.message);
-    }
   });
 }
