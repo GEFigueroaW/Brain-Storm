@@ -12,7 +12,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-const functions = firebase.functions();
 
 // =================== VARIABLES GLOBALES ===================
 let userData = null;
@@ -50,7 +49,6 @@ if (document.getElementById('login-btn')) {
 
   auth.onAuthStateChanged(async (user) => {
     if (user) {
-      // Validamos si existe el usuario en Firestore
       const userDoc = await db.collection("users").doc(user.uid).get();
       if (!userDoc.exists) {
         await db.collection("users").doc(user.uid).set({
@@ -85,7 +83,6 @@ if (document.getElementById('generate-btn')) {
     document.getElementById("greeting").innerText = `¡Hola, ${userData.name}!`;
     document.getElementById("counter").innerText = !isPremium ? `Generaciones restantes esta semana: ${userData.generationCredits}/3` : "";
 
-    // Render redes
     const container = document.getElementById("networks-container");
     networksFull.forEach(net => {
       const btn = document.createElement("button");
@@ -102,7 +99,6 @@ if (document.getElementById('generate-btn')) {
       container.appendChild(btn);
     });
 
-    // Render copies
     const copySel = document.getElementById("copytype");
     for (const [type, desc] of Object.entries(copyOptions)) {
       const opt = document.createElement("option");
@@ -135,11 +131,30 @@ if (document.getElementById('generate-btn')) {
     document.getElementById('generate-btn').classList.add("is-loading");
 
     try {
-      const generateIdeas = functions.httpsCallable("generateIdeas");
-      const res = await generateIdeas({ keyword, copytype, copyDescription, language, networks: selectedNetworks, mode });
-      sessionStorage.setItem("results", res.data.result);
+      const user = firebase.auth().currentUser;
+      const idToken = await user.getIdToken();
+
+      const response = await fetch("https://us-central1-brain-storm-8f0d8.cloudfunctions.net/generateIdeas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`
+        },
+        body: JSON.stringify({
+          keyword, copytype, copyDescription, language, networks: selectedNetworks, mode
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error interno en el servidor");
+      }
+
+      const data = await response.json();
+      sessionStorage.setItem("results", data.result);
       sessionStorage.setItem("isPremium", isPremium);
       window.location.href = "results.html";
+
     } catch (e) {
       alert("Error: " + e.message);
     }
@@ -197,17 +212,24 @@ if (document.getElementById('save-admin-btn')) {
   });
 
   document.getElementById("save-admin-btn").addEventListener("click", async () => {
-    const setPremium = functions.httpsCallable("setPremiumGlobalStatus");
-    const premiumGlobalActive = document.getElementById("premium-global").checked;
-    const launchPromo = document.getElementById("launch-promo").checked;
-    const endDate = document.getElementById("premium-end-date").value;
+    const user = firebase.auth().currentUser;
+    const idToken = await user.getIdToken();
 
     try {
-      await setPremium({
-        isPremiumGlobalActive: premiumGlobalActive,
-        isLaunchPromoActive: launchPromo,
-        premiumGlobalEndDate: endDate || null
+      const response = await fetch("https://us-central1-brain-storm-8f0d8.cloudfunctions.net/setPremiumGlobalStatus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`
+        },
+        body: JSON.stringify({
+          isPremiumGlobalActive: document.getElementById("premium-global").checked,
+          isLaunchPromoActive: document.getElementById("launch-promo").checked,
+          premiumGlobalEndDate: document.getElementById("premium-end-date").value || null
+        })
       });
+
+      if (!response.ok) throw new Error("Error al actualizar la configuración");
       alert("Configuración actualizada");
     } catch (e) {
       alert("Error: " + e.message);
