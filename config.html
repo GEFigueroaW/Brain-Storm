@@ -2,86 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>FeedFlow 2.0 - Configuración de Generación</title>
+  <title>FeedFlow 2.0 - Generador IA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f9f8fc;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 30px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #5b2c82; /* Morado */
-    }
-    label {
-      font-weight: 600;
-      display: block;
-      margin-top: 20px;
-    }
-    select, input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-    .small-description {
-      font-size: 0.85em;
-      color: #555;
-      margin-top: 5px;
-      font-style: italic;
-    }
-    .checkbox-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .checkbox-group label {
-      display: flex;
-      align-items: center;
-      font-weight: normal;
-    }
-    .button {
-      background-color: #d4af37; /* Dorado */
-      color: white;
-      border: none;
-      padding: 15px;
-      margin-top: 30px;
-      width: 100%;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .button:hover {
-      background-color: #bfa235;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
+  <script src="i18n.js"></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h1>FeedFlow 2.0 - Generador de Ideas IA</h1>
+    <h1 data-i18n="generate_title">Generador de Ideas IA</h1>
 
-    <label>Modo de generación:</label>
+    <label data-i18n="mode_label">Modo de generación:</label>
     <div class="checkbox-group">
-      <label><input type="radio" name="mode" value="multi" checked> Multi-redes (una idea por red seleccionada)</label>
-      <label><input type="radio" name="mode" value="single"> Una red (tres ideas distintas)</label>
+      <label><input type="radio" name="mode" value="multi" checked> <span data-i18n="mode_multi">Multi-redes (una idea por red seleccionada)</span></label>
+      <label><input type="radio" name="mode" value="single"> <span data-i18n="mode_single">Una red (tres ideas distintas)</span></label>
     </div>
 
-    <label>Ideas para:</label>
+    <label data-i18n="networks_label">Ideas para:</label>
     <div class="checkbox-group">
       <label><input type="checkbox" name="network" value="Facebook"> Facebook</label>
       <label><input type="checkbox" name="network" value="Instagram"> Instagram</label>
@@ -94,10 +31,10 @@
       <label><input type="checkbox" name="network" value="YouTube"> YouTube</label>
     </div>
 
-    <label>Idea o palabra clave:</label>
-    <input type="text" id="keyword" placeholder="Ej: yoga, salud financiera, productividad...">
+    <label data-i18n="keyword_label">Idea o palabra clave:</label>
+    <input type="text" id="keyword" placeholder="Ej: yoga, productividad...">
 
-    <label>¿Qué efecto quieres generar?</label>
+    <label data-i18n="effect_label">¿Qué efecto quieres generar?</label>
     <select id="desiredEffect">
       <option value="">Selecciona...</option>
       <option value="Aspiración">Aspiración</option>
@@ -111,7 +48,7 @@
     </select>
     <div class="small-description"><span id="effectDescription"></span></div>
 
-    <label>Tipo de copy:</label>
+    <label data-i18n="copy_label">Tipo de copy:</label>
     <select id="copyType">
       <option value="">Selecciona...</option>
       <option value="De beneficio o solución">De beneficio o solución</option>
@@ -129,45 +66,7 @@
     </select>
     <div class="small-description"><span id="copyDescription"></span></div>
 
-    <button class="button">Generar Ideas</button>
+    <button class="button" id="generateBtn" data-i18n="generate_button">Generar Ideas</button>
   </div>
-
-  <script>
-    const effectDescriptions = {
-      "Aspiración": "Generar deseo de superación, logro o alcanzar un ideal.",
-      "Credibilidad/Autoridad": "Transmitir experiencia, conocimientos sólidos y respaldo profesional.",
-      "Curiosidad": "Despertar el interés, la intriga o el deseo de saber más.",
-      "Empatía": "Mostrar comprensión, conexión emocional o identificación con la audiencia.",
-      "Motivación": "Impulsar a la acción positiva, generar entusiasmo y energía.",
-      "Reflexión": "Invitar a pensar, cuestionar o analizar un tema en profundidad.",
-      "Seguridad/Confianza": "Generar tranquilidad, certeza y sensación de respaldo.",
-      "Simplemente informar": "Comunicar hechos o datos de manera objetiva y directa."
-    };
-
-    const copyDescriptions = {
-      "De beneficio o solución": "Presenta cómo el producto o servicio resuelve un problema.",
-      "De novedad o lanzamiento": "Anuncia algo nuevo o recientemente disponible.",
-      "De interacción o pregunta": "Involucra a la audiencia haciendo preguntas o fomentando respuestas.",
-      "De urgencia o escasez": "Genera sensación de urgencia o limitación de disponibilidad.",
-      "Informativo o educativo": "Brinda información o conocimiento útil.",
-      "Informal": "Lenguaje coloquial, cercano y casual.",
-      "Llamada a la acción (CTA)": "Indica claramente el siguiente paso que debe tomar el usuario.",
-      "Narrativo o storytelling": "Cuenta historias o casos que conecten emocionalmente.",
-      "Posicionamiento o branding": "Fortalece la identidad y reputación de la marca.",
-      "Testimonio o prueba social": "Muestra validación social con opiniones o casos de éxito.",
-      "Técnico o profesional": "Contenido detallado para públicos expertos.",
-      "Venta directa o persuasivo": "Enfocado directamente en convertir en venta o contratación."
-    };
-
-    document.getElementById("desiredEffect").addEventListener("change", function() {
-      const val = this.value;
-      document.getElementById("effectDescription").textContent = effectDescriptions[val] || "";
-    });
-
-    document.getElementById("copyType").addEventListener("change", function() {
-      const val = this.value;
-      document.getElementById("copyDescription").textContent = copyDescriptions[val] || "";
-    });
-  </script>
 </body>
 </html>
