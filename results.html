@@ -2,28 +2,87 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>FeedFlow - Resultados</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <title>FeedFlow 2.0 - Resultados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f8fc;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #5b2c82; /* Morado */
+    }
+    .result-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-left: 8px solid #d4af37; /* Dorado */
+    }
+    .result-card h3 {
+      color: #5b2c82;
+      margin-top: 0;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: inherit;
+    }
+    .back-button {
+      background-color: #d4af37;
+      color: white;
+      border: none;
+      padding: 15px;
+      margin-top: 20px;
+      width: 100%;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .back-button:hover {
+      background-color: #bfa235;
+    }
+  </style>
 </head>
-<body class="has-background-light">
+<body>
+  <div class="container">
+    <h1>Resultados Generados</h1>
 
-  <section class="section">
-    <h2 class="title has-text-centered">Resultados Generados</h2>
+    <div id="results"></div>
 
-    <div id="results-container"></div>
+    <button class="back-button" onclick="volver()">Volver a Generar Nuevas Ideas</button>
+  </div>
 
-    <div class="has-text-centered mt-5">
-      <button id="new-gen-btn" class="button is-warning is-large">Nueva Generación</button>
-    </div>
-  </section>
+  <script>
+    // Recuperamos los resultados desde el localStorage (simplemente como ejemplo inicial)
+    const storedResults = JSON.parse(localStorage.getItem("feedflowResults"));
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-functions-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script src="app.js" defer></script>
+    const resultsDiv = document.getElementById("results");
+
+    if (storedResults && storedResults.length > 0) {
+      storedResults.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "result-card";
+        card.innerHTML = `<h3>${item.network}</h3><pre>${item.result}</pre>`;
+        resultsDiv.appendChild(card);
+      });
+    } else {
+      resultsDiv.innerHTML = "<p>No hay resultados disponibles.</p>";
+    }
+
+    function volver() {
+      window.location.href = "config.html";
+    }
+  </script>
 </body>
 </html>
