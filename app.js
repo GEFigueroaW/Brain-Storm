@@ -27,12 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await response.json();
 
-      console.log("Ideas generadas:", data);
-
-      // Guardar los resultados en localStorage
       localStorage.setItem("feedflowResults", JSON.stringify(data.ideas));
-
-      // Redirigir al results.html
       window.location.href = "results.html";
 
     } catch (error) {
