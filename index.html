@@ -2,15 +2,28 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>FeedFlow 2.0</title>
+  <title>FeedFlow 2.0 - Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="i18n.js"></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h1>Bienvenido a FeedFlow 2.0</h1>
-    <p>Generador de Ideas IA para Redes Sociales</p>
-    <button class="button" onclick="window.location.href='config.html'">Iniciar Generación</button>
+    <h1>FeedFlow 2.0</h1>
+
+    <label for="languageSelect">Selecciona tu idioma:</label>
+    <select id="languageSelect">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+    </select>
+
+    <button id="loginGoogleBtn" class="button">Iniciar sesión con Google</button>
+    <button id="logoutBtn" class="button hidden">Cerrar sesión</button>
+
   </div>
 </body>
 </html>
