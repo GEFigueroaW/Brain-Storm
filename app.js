@@ -1,4 +1,4 @@
-// Definimos los valores de los selectores
+// Definición de los selectores
 const effects = {
   "Aspiración": "Generar deseo de superación, logro o alcanzar un ideal.",
   "Credibilidad/Autoridad": "Transmitir experiencia, conocimientos sólidos y respaldo profesional.",
@@ -25,14 +25,13 @@ const copyTypes = {
   "Venta directa o persuasivo": "Enfocado directamente en la conversión a compra o contratación."
 };
 
-// Cargamos los selectores al iniciar
+// Cargar selectores al iniciar
 window.addEventListener("DOMContentLoaded", () => {
   const effectSelect = document.getElementById("desiredEffect");
   const copySelect = document.getElementById("copyType");
   const effectDesc = document.getElementById("effectDescription");
   const copyDesc = document.getElementById("copyDescription");
 
-  // Cargar efectos
   for (const [key, desc] of Object.entries(effects)) {
     const option = document.createElement("option");
     option.value = key;
@@ -40,7 +39,6 @@ window.addEventListener("DOMContentLoaded", () => {
     effectSelect.appendChild(option);
   }
 
-  // Cargar tipos de copy
   for (const [key, desc] of Object.entries(copyTypes)) {
     const option = document.createElement("option");
     option.value = key;
@@ -48,23 +46,21 @@ window.addEventListener("DOMContentLoaded", () => {
     copySelect.appendChild(option);
   }
 
-  // Mostrar descripción al seleccionar efecto
   effectSelect.addEventListener("change", () => {
     const selected = effectSelect.value;
     effectDesc.textContent = effects[selected] || "";
   });
 
-  // Mostrar descripción al seleccionar copy
   copySelect.addEventListener("change", () => {
     const selected = copySelect.value;
     copyDesc.textContent = copyTypes[selected] || "";
   });
 });
 
-// Lógica para generar ideas IA
+// Generar ideas IA
 document.getElementById("generateBtn").addEventListener("click", async () => {
   const mode = document.querySelector('input[name="mode"]:checked').value;
-  const selectedNetworks = Array.from(document.querySelectorAll('input[name="networks"]:checked')).map(el => el.value);
+  const selectedNetworks = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(el => el.value);
   const keyword = document.getElementById("keyword").value.trim();
   const desiredEffect = document.getElementById("desiredEffect").value;
   const copyType = document.getElementById("copyType").value;
