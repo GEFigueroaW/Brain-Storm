@@ -1,6 +1,5 @@
 // Inicialización de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-functions.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
@@ -11,11 +10,9 @@ const firebaseConfig = {
   appId: "1:401208607043:web:6f35fc81fdce7b3fbeaff6"
 };
 
-const app = initializeApp(firebaseConfig);
-const functions = getFunctions(app);
-const generateIdeas = httpsCallable(functions, 'generateIdeas');
+initializeApp(firebaseConfig);
 
-// Datos estáticos
+const API_ENDPOINT = "https://us-central1-brain-storm-8f0d8.cloudfunctions.net/generateIdeas";
 
 const effectOptions = {
   "Aspiración": "Generar deseo de superación, logro o alcanzar un ideal.",
@@ -43,8 +40,6 @@ const copyOptions = {
   "Venta directa o persuasivo": "Enfocado directamente en la conversión a compra o contratación."
 };
 
-// Inicializa selects dinámicos
-
 window.addEventListener('DOMContentLoaded', () => {
   const effectSelect = document.getElementById('desiredEffect');
   for (let key in effectOptions) {
@@ -63,8 +58,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Actualiza descripción dinámica
-
 document.getElementById('desiredEffect').addEventListener('change', e => {
   document.getElementById('effectDesc').textContent = effectOptions[e.target.value] || "";
 });
@@ -72,8 +65,6 @@ document.getElementById('desiredEffect').addEventListener('change', e => {
 document.getElementById('copyType').addEventListener('change', e => {
   document.getElementById('copyDesc').textContent = copyOptions[e.target.value] || "";
 });
-
-// Acción de generación IA
 
 document.getElementById('generateBtn').addEventListener('click', async () => {
   const keyword = document.getElementById('keyword').value.trim();
@@ -94,8 +85,20 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
   document.getElementById('results').innerHTML = '<div class="alert alert-info">Generando ideas, por favor espera...</div>';
 
   try {
-    const response = await generateIdeas({ keyword, desiredEffect, copyType, networks: selectedNetworks, mode });
-    const ideas = response.data.ideas;
+    const response = await fetch(API_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ keyword, desiredEffect, copyType, networks: selectedNetworks, mode })
+    });
+
+    if (!response.ok) {
+      throw new Error('Error en el servidor');
+    }
+
+    const data = await response.json();
+    const ideas = data.ideas;
 
     let output = '<h4>Resultados generados:</h4>';
     ideas.forEach(item => {
