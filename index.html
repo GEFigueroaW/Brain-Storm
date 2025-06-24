@@ -2,74 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <title>FeedFlow 2.0</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FeedFlow 2.0 - Generador IA</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .descripcion { font-style: italic; color: #555; font-size: 0.875rem; margin-top: 5px; }
-    .resultado { white-space: pre-wrap; background: #f9f9f9; border-radius: 8px; padding: 10px; }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-light">
-
-<div class="container py-5">
-  <h1 class="mb-4 text-center">FeedFlow 2.0 - Generador de Ideas IA</h1>
-
-  <div class="card shadow-lg p-4">
-
-    <div class="mb-4">
-      <label class="form-label">Modo de generación:</label>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="mode" id="multiMode" value="multi" checked>
-        <label class="form-check-label" for="multiMode">Multi-redes (una idea por red seleccionada)</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="mode" id="singleMode" value="single">
-        <label class="form-check-label" for="singleMode">Una red (tres ideas distintas)</label>
-      </div>
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label">Ideas para:</label>
-      <div class="row row-cols-2 row-cols-md-3 g-2">
-        <div><input type="checkbox" value="Facebook"> Facebook</div>
-        <div><input type="checkbox" value="Instagram"> Instagram</div>
-        <div><input type="checkbox" value="LinkedIn"> LinkedIn</div>
-        <div><input type="checkbox" value="X"> X (antes Twitter)</div>
-        <div><input type="checkbox" value="WhatsApp"> WhatsApp</div>
-        <div><input type="checkbox" value="Telegram"> Telegram</div>
-        <div><input type="checkbox" value="Reddit"> Reddit</div>
-        <div><input type="checkbox" value="TikTok"> TikTok</div>
-        <div><input type="checkbox" value="YouTube"> YouTube</div>
-      </div>
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label">Idea o palabra clave:</label>
-      <input type="text" id="keyword" class="form-control" placeholder="Escribe aquí...">
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label">¿Qué efecto quieres generar?</label>
-      <select id="desiredEffect" class="form-select"></select>
-      <div id="effectDesc" class="descripcion"></div>
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label">Tipo de copy:</label>
-      <select id="copyType" class="form-select"></select>
-      <div id="copyDesc" class="descripcion"></div>
-    </div>
-
-    <div class="d-grid">
-      <button id="generateBtn" class="btn btn-primary btn-lg">Generar Ideas</button>
-    </div>
+<body>
+  <div class="container">
+    <h1>Bienvenido a FeedFlow 2.0</h1>
+    <p>Generador de Ideas IA para Redes Sociales</p>
+    <button class="button" onclick="window.location.href='config.html'">Iniciar Generación</button>
   </div>
-
-  <div id="results" class="mt-5"></div>
-</div>
-
-<script type="module" src="app.js"></script>
-
 </body>
 </html>
