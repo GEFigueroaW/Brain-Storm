@@ -2,56 +2,174 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>FeedFlow 2.0 - Generador de Ideas IA</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>FeedFlow 2.0 - Configuración de Generación</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f8fc;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #5b2c82; /* Morado */
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 20px;
+    }
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .small-description {
+      font-size: 0.85em;
+      color: #555;
+      margin-top: 5px;
+      font-style: italic;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      font-weight: normal;
+    }
+    .button {
+      background-color: #d4af37; /* Dorado */
+      color: white;
+      border: none;
+      padding: 15px;
+      margin-top: 30px;
+      width: 100%;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #bfa235;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>FeedFlow 2.0 - Generador de Ideas IA</h1>
 
-  <h2>FeedFlow 2.0 - Generador de Ideas IA</h2>
-
-  <form id="ideaForm">
-    <div>
-      <label>Modo de generación:</label><br>
-      <input type="radio" name="mode" value="multi" checked> Multi-redes (una idea por red seleccionada)<br>
-      <input type="radio" name="mode" value="single"> Una red (tres ideas distintas)
+    <label>Modo de generación:</label>
+    <div class="checkbox-group">
+      <label><input type="radio" name="mode" value="multi" checked> Multi-redes (una idea por red seleccionada)</label>
+      <label><input type="radio" name="mode" value="single"> Una red (tres ideas distintas)</label>
     </div>
 
-    <div>
-      <label>Ideas para:</label><br>
-      <input type="checkbox" name="networks" value="Facebook"> Facebook
-      <input type="checkbox" name="networks" value="Instagram"> Instagram
-      <input type="checkbox" name="networks" value="LinkedIn"> LinkedIn
-      <input type="checkbox" name="networks" value="X (antes Twitter)"> X (antes Twitter)
-      <input type="checkbox" name="networks" value="WhatsApp"> WhatsApp
-      <input type="checkbox" name="networks" value="Telegram"> Telegram
-      <input type="checkbox" name="networks" value="Reddit"> Reddit
-      <input type="checkbox" name="networks" value="TikTok"> TikTok
-      <input type="checkbox" name="networks" value="YouTube"> YouTube
+    <label>Ideas para:</label>
+    <div class="checkbox-group">
+      <label><input type="checkbox" name="network" value="Facebook"> Facebook</label>
+      <label><input type="checkbox" name="network" value="Instagram"> Instagram</label>
+      <label><input type="checkbox" name="network" value="LinkedIn"> LinkedIn</label>
+      <label><input type="checkbox" name="network" value="X"> X (antes Twitter)</label>
+      <label><input type="checkbox" name="network" value="WhatsApp"> WhatsApp</label>
+      <label><input type="checkbox" name="network" value="Telegram"> Telegram</label>
+      <label><input type="checkbox" name="network" value="Reddit"> Reddit</label>
+      <label><input type="checkbox" name="network" value="TikTok"> TikTok</label>
+      <label><input type="checkbox" name="network" value="YouTube"> YouTube</label>
     </div>
 
-    <div>
-      <label for="keyword">Idea o palabra clave:</label>
-      <input type="text" id="keyword" required>
+    <label>Idea o palabra clave:</label>
+    <input type="text" id="keyword" placeholder="Ej: yoga, salud financiera, productividad...">
+
+    <label>¿Qué efecto quieres generar?</label>
+    <select id="desiredEffect">
+      <option value="">Selecciona...</option>
+      <option value="Credibilidad/Autoridad">Credibilidad/Autoridad</option>
+      <option value="Motivación">Motivación</option>
+      <option value="Curiosidad">Curiosidad</option>
+      <option value="Confianza">Seguridad/Confianza</option>
+      <option value="Urgencia">Urgencia/Escasez</option>
+      <option value="Simplemente informar">Simplemente informar</option>
+    </select>
+    <div class="small-description">
+      <span id="effectDescription"></span>
     </div>
 
-    <div>
-      <label for="desiredEffect">¿Qué efecto quieres generar?</label>
-      <select id="desiredEffect" required></select>
-      <p id="effectDescription"></p>
+    <label>Tipo de copy:</label>
+    <select id="copyType">
+      <option value="">Selecciona...</option>
+      <option value="De beneficio o solución">De beneficio o solución</option>
+      <option value="De novedad o lanzamiento">De novedad o lanzamiento</option>
+      <option value="De interacción o pregunta">De interacción o pregunta</option>
+      <option value="De urgencia o escasez">De urgencia o escasez</option>
+      <option value="Informativo o educativo">Informativo o educativo</option>
+      <option value="Informal">Informal</option>
+      <option value="Llamada a la acción (CTA)">Llamada a la acción (CTA)</option>
+      <option value="Narrativo o storytelling">Narrativo o storytelling</option>
+      <option value="Posicionamiento o branding">Posicionamiento o branding</option>
+      <option value="Testimonio o prueba social">Testimonio o prueba social</option>
+      <option value="Técnico o profesional">Técnico o profesional</option>
+      <option value="Venta directa o persuasivo">Venta directa o persuasivo</option>
+    </select>
+    <div class="small-description">
+      <span id="copyDescription"></span>
     </div>
 
-    <div>
-      <label for="copyType">Tipo de copy:</label>
-      <select id="copyType" required></select>
-      <p id="copyDescription"></p>
-    </div>
+    <button class="button">Generar Ideas</button>
+  </div>
 
-    <button type="submit">Generar Ideas</button>
-  </form>
+  <script>
+    // Descripciones de efectos
+    const effectDescriptions = {
+      "Credibilidad/Autoridad": "Transmitir experiencia, conocimientos sólidos y respaldo profesional.",
+      "Motivación": "Impulsar a la acción positiva, generar entusiasmo y energía.",
+      "Curiosidad": "Despertar el interés, la intriga o el deseo de saber más.",
+      "Confianza": "Generar tranquilidad, certeza y sensación de respaldo.",
+      "Urgencia": "Crear sensación de tiempo limitado o escasez de recursos.",
+      "Simplemente informar": "Comunicar hechos o datos de manera objetiva y directa."
+    };
 
-  <div id="results"></div>
+    // Descripciones de tipos de copy
+    const copyDescriptions = {
+      "De beneficio o solución": "Enfocado en el valor o solución que ofrece el producto o servicio.",
+      "De novedad o lanzamiento": "Presenta algo nuevo, innovador o recientemente lanzado.",
+      "De interacción o pregunta": "Involucra a la audiencia haciendo preguntas o fomentando respuestas.",
+      "De urgencia o escasez": "Genera miedo a perder la oportunidad (FOMO).",
+      "Informativo o educativo": "Aporta datos, conocimientos o formación valiosa.",
+      "Informal": "Lenguaje relajado, cotidiano o humorístico.",
+      "Llamada a la acción (CTA)": "Invita directamente a tomar acción.",
+      "Narrativo o storytelling": "Cuenta una historia para conectar emocionalmente.",
+      "Posicionamiento o branding": "Fortalece la marca y su percepción.",
+      "Testimonio o prueba social": "Muestra validación social con opiniones, reseñas o casos de éxito.",
+      "Técnico o profesional": "Contenido especializado, detallado o para públicos expertos.",
+      "Venta directa o persuasivo": "Enfocado directamente en la conversión a compra o contratación."
+    };
 
-  <script src="app.js"></script>
+    document.getElementById("desiredEffect").addEventListener("change", function() {
+      const value = this.value;
+      document.getElementById("effectDescription").textContent = effectDescriptions[value] || "";
+    });
 
+    document.getElementById("copyType").addEventListener("change", function() {
+      const value = this.value;
+      document.getElementById("copyDescription").textContent = copyDescriptions[value] || "";
+    });
+  </script>
 </body>
 </html>
