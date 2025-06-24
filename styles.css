@@ -1,4 +1,3 @@
-/* Base general */
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f9f8fc;
@@ -7,30 +6,26 @@ body {
   padding: 0;
 }
 
-/* Contenedor general */
 .container {
-  max-width: 600px;
-  margin: 40px auto;
+  max-width: 700px;
+  margin: 50px auto;
   padding: 30px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
-/* Títulos */
 h1 {
   text-align: center;
   color: #5b2c82; /* Morado */
 }
 
-/* Etiquetas de los campos */
 label {
   font-weight: 600;
   display: block;
   margin-top: 20px;
 }
 
-/* Inputs y selects */
 select, input[type="text"] {
   width: 100%;
   padding: 10px;
@@ -40,7 +35,6 @@ select, input[type="text"] {
   font-size: 16px;
 }
 
-/* Descripciones dinámicas */
 .small-description {
   font-size: 0.85em;
   color: #555;
@@ -48,7 +42,6 @@ select, input[type="text"] {
   font-style: italic;
 }
 
-/* Grupo de checkboxes de redes */
 .checkbox-group {
   display: flex;
   flex-wrap: wrap;
@@ -62,8 +55,7 @@ select, input[type="text"] {
   font-weight: normal;
 }
 
-/* Botón principal */
-.button {
+.button, .back-button {
   background-color: #d4af37; /* Dorado */
   color: white;
   border: none;
@@ -76,18 +68,17 @@ select, input[type="text"] {
   transition: background-color 0.3s ease;
 }
 
-.button:hover {
+.button:hover, .back-button:hover {
   background-color: #bfa235;
 }
 
-/* Resultados (results.html) */
 .result-card {
   background: white;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  border-left: 8px solid #d4af37; /* Dorado */
+  border-left: 8px solid #d4af37;
 }
 
 .result-card h3 {
@@ -101,20 +92,6 @@ pre {
   font-family: inherit;
 }
 
-/* Botón volver (results.html) */
-.back-button {
-  background-color: #d4af37;
-  color: white;
-  border: none;
-  padding: 15px;
-  margin-top: 20px;
-  width: 100%;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.back-button:hover {
-  background-color: #bfa235;
+.hidden {
+  display: none !important;
 }
