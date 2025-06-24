@@ -2,56 +2,131 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>FeedFlow - Configuración</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeedFlow 2.0 - Generador de Ideas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .descripcion { font-style: italic; color: #555; font-size: 0.875rem; margin-top: 5px; }
+  </style>
 </head>
-<body class="has-background-light">
+<body class="bg-light">
 
-  <section class="section">
-    <h2 class="title has-text-centered" id="greeting">¡Hola!</h2>
+<div class="container py-5">
+  <h1 class="mb-4 text-center">FeedFlow 2.0</h1>
 
-    <div class="field">
-      <label class="label">Modo:</label>
-      <div class="control">
-        <label class="radio"><input type="radio" name="mode" value="multi" checked> Multi-redes</label>
-        <label class="radio"><input type="radio" name="mode" value="single"> Una red - 3 ideas</label>
+  <div class="card shadow-lg p-4">
+
+    <div class="mb-4">
+      <label class="form-label">Modo de generación:</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="mode" id="multiMode" value="multi" checked>
+        <label class="form-check-label" for="multiMode">Multi-redes (una idea por red seleccionada)</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="mode" id="singleMode" value="single">
+        <label class="form-check-label" for="singleMode">Una red (tres ideas distintas)</label>
       </div>
     </div>
 
-    <div class="field">
-      <label class="label">Redes Sociales:</label>
-      <div id="networks-container" class="buttons"></div>
-    </div>
-
-    <div class="field">
-      <label class="label">Palabra clave:</label>
-      <input id="keyword" class="input" type="text" placeholder="Escribe el tema...">
-    </div>
-
-    <div class="field">
-      <label class="label">Tipo de Copy:</label>
-      <div class="control">
-        <div class="select is-fullwidth">
-          <select id="copytype"></select>
-        </div>
-        <p class="help" id="copy-description"></p>
+    <div class="mb-4">
+      <label class="form-label">Ideas para:</label>
+      <div class="row row-cols-2 row-cols-md-3 g-2">
+        <div><input type="checkbox" value="Facebook"> Facebook</div>
+        <div><input type="checkbox" value="Instagram"> Instagram</div>
+        <div><input type="checkbox" value="LinkedIn"> LinkedIn</div>
+        <div><input type="checkbox" value="X"> X (antes Twitter)</div>
+        <div><input type="checkbox" value="WhatsApp"> WhatsApp</div>
+        <div><input type="checkbox" value="Telegram"> Telegram</div>
+        <div><input type="checkbox" value="Reddit"> Reddit</div>
+        <div><input type="checkbox" value="TikTok"> TikTok</div>
+        <div><input type="checkbox" value="YouTube"> YouTube</div>
       </div>
     </div>
 
-    <p id="counter" class="has-text-danger"></p>
-
-    <div class="has-text-centered mt-5">
-      <button id="generate-btn" class="button is-success is-large">Generar Ideas</button>
+    <div class="mb-4">
+      <label class="form-label">Idea o palabra clave:</label>
+      <input type="text" id="keyword" class="form-control" placeholder="Escribe aquí...">
     </div>
-  </section>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-functions-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script src="app.js" defer></script>
+    <div class="mb-4">
+      <label class="form-label">¿Qué efecto quieres generar?</label>
+      <select id="desiredEffect" class="form-select">
+        <option value="" selected disabled>Selecciona un efecto</option>
+        <option value="Aspiración">Aspiración</option>
+        <option value="Credibilidad/Autoridad">Credibilidad/Autoridad</option>
+        <option value="Curiosidad">Curiosidad</option>
+        <option value="Empatía">Empatía</option>
+        <option value="Motivación">Motivación</option>
+        <option value="Reflexión">Reflexión</option>
+        <option value="Seguridad/Confianza">Seguridad/Confianza</option>
+        <option value="Simplemente informar">Simplemente informar</option>
+      </select>
+      <div id="effectDesc" class="descripcion"></div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label">Tipo de copy:</label>
+      <select id="copyType" class="form-select">
+        <option value="" selected disabled>Selecciona un tipo</option>
+        <option value="De beneficio o solución">De beneficio o solución</option>
+        <option value="De novedad o lanzamiento">De novedad o lanzamiento</option>
+        <option value="De interacción o pregunta">De interacción o pregunta</option>
+        <option value="De urgencia o escasez">De urgencia o escasez</option>
+        <option value="Informativo o educativo">Informativo o educativo</option>
+        <option value="Informal">Informal</option>
+        <option value="Llamada a la acción (CTA)">Llamada a la acción (CTA)</option>
+        <option value="Narrativo o storytelling">Narrativo o storytelling</option>
+        <option value="Posicionamiento o branding">Posicionamiento o branding</option>
+        <option value="Testimonio o prueba social">Testimonio o prueba social</option>
+        <option value="Técnico o profesional">Técnico o profesional</option>
+        <option value="Venta directa o persuasivo">Venta directa o persuasivo</option>
+      </select>
+      <div id="copyDesc" class="descripcion"></div>
+    </div>
+
+    <div class="d-grid">
+      <button id="generateBtn" class="btn btn-primary btn-lg">Generar Ideas</button>
+    </div>
+  </div>
+
+  <div id="results" class="mt-5"></div>
+</div>
+
+<script>
+const effectDescriptions = {
+  "Aspiración": "Generar deseo de superación, logro o alcanzar un ideal.",
+  "Credibilidad/Autoridad": "Transmitir experiencia, conocimientos sólidos y respaldo profesional.",
+  "Curiosidad": "Despertar el interés, la intriga o el deseo de saber más.",
+  "Empatía": "Mostrar comprensión, conexión emocional o identificación con la audiencia.",
+  "Motivación": "Impulsar a la acción positiva, generar entusiasmo y energía.",
+  "Reflexión": "Invitar a pensar, cuestionar o analizar un tema en profundidad.",
+  "Seguridad/Confianza": "Generar tranquilidad, certeza y sensación de respaldo.",
+  "Simplemente informar": "Comunicar hechos o datos de manera objetiva y directa."
+};
+
+const copyDescriptions = {
+  "De beneficio o solución": "Muestra cómo se resuelve un problema o se logra un beneficio concreto.",
+  "De novedad o lanzamiento": "Presenta algo nuevo, exclusivo o recientemente lanzado.",
+  "De interacción o pregunta": "Involucra a la audiencia haciendo preguntas o fomentando respuestas.",
+  "De urgencia o escasez": "Incentiva acción rápida mostrando limitación de tiempo o cantidad.",
+  "Informativo o educativo": "Brinda conocimiento, datos o explicación sobre un tema.",
+  "Informal": "Lenguaje cercano, casual, desenfadado.",
+  "Llamada a la acción (CTA)": "Directo en inducir al usuario a realizar una acción específica.",
+  "Narrativo o storytelling": "Cuenta una historia o relato para conectar emocionalmente.",
+  "Posicionamiento o branding": "Refuerza la identidad de marca, misión o valores.",
+  "Testimonio o prueba social": "Muestra validación social con opiniones, reseñas o casos de éxito.",
+  "Técnico o profesional": "Contenido especializado, detallado o para públicos expertos.",
+  "Venta directa o persuasivo": "Enfocado directamente en la conversión a compra o contratación."
+};
+
+document.getElementById('desiredEffect').addEventListener('change', e => {
+  document.getElementById('effectDesc').textContent = effectDescriptions[e.target.value] || "";
+});
+
+document.getElementById('copyType').addEventListener('change', e => {
+  document.getElementById('copyDesc').textContent = copyDescriptions[e.target.value] || "";
+});
+</script>
+
 </body>
 </html>
