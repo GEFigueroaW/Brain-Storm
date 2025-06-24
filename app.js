@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const generateButton = document.getElementById("generateBtn");
   const modeRadios = document.getElementsByName("mode");
 
-  // Diccionario de descripciones de efectos
-  const effectDescriptions = {
+  // Efectos posibles
+  const effects = {
     "Aspiración": "Generar deseo de superación, logro o alcanzar un ideal.",
     "Credibilidad/Autoridad": "Transmitir experiencia, conocimientos sólidos y respaldo profesional.",
     "Curiosidad": "Despertar el interés, la intriga o el deseo de saber más.",
@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "Simplemente informar": "Comunicar hechos o datos de manera objetiva y directa."
   };
 
-  // Diccionario de descripciones de tipos de copy
-  const copyDescriptions = {
+  // Tipos de copy posibles
+  const copyTypes = {
     "De beneficio o solución": "Presenta cómo el producto o servicio resuelve un problema.",
     "De novedad o lanzamiento": "Enfatiza algo nuevo, exclusivo o recién lanzado.",
     "De interacción o pregunta": "Involucra a la audiencia haciendo preguntas o fomentando respuestas.",
@@ -34,16 +34,32 @@ document.addEventListener("DOMContentLoaded", () => {
     "Venta directa o persuasivo": "Enfocado directamente en la conversión a compra o contratación."
   };
 
-  // Actualizar descripción al seleccionar un efecto
+  // Cargar efectos en el select
+  for (const [key, desc] of Object.entries(effects)) {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = key;
+    effectSelect.appendChild(option);
+  }
+
+  // Cargar tipos de copy en el select
+  for (const [key, desc] of Object.entries(copyTypes)) {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = key;
+    copySelect.appendChild(option);
+  }
+
+  // Mostrar descripción de efecto
   effectSelect.addEventListener("change", () => {
     const selected = effectSelect.value;
-    effectDescription.textContent = effectDescriptions[selected] || "";
+    effectDescription.textContent = effects[selected] || "";
   });
 
-  // Actualizar descripción al seleccionar un tipo de copy
+  // Mostrar descripción de tipo de copy
   copySelect.addEventListener("change", () => {
     const selected = copySelect.value;
-    copyDescription.textContent = copyDescriptions[selected] || "";
+    copyDescription.textContent = copyTypes[selected] || "";
   });
 
   generateButton.addEventListener("click", async () => {
@@ -52,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const copyType = copySelect.value;
     const networkCheckboxes = document.querySelectorAll("input[name='networks']:checked");
     const networks = Array.from(networkCheckboxes).map(cb => cb.value);
-
     let mode = "";
     modeRadios.forEach(radio => { if (radio.checked) mode = radio.value; });
 
@@ -78,9 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
       console.log("Ideas generadas:", data);
 
-      // Aquí puedes procesar los resultados como desees
       alert("¡Ideas generadas correctamente! Revisa consola para verlas.");
-
     } catch (error) {
       console.error(error);
       alert("Ocurrió un error al generar las ideas.");
