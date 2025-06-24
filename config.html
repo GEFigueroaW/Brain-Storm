@@ -86,7 +86,7 @@
       <label><input type="checkbox" name="network" value="Facebook"> Facebook</label>
       <label><input type="checkbox" name="network" value="Instagram"> Instagram</label>
       <label><input type="checkbox" name="network" value="LinkedIn"> LinkedIn</label>
-      <label><input type="checkbox" name="network" value="X"> X (antes Twitter)</label>
+      <label><input type="checkbox" name="network" value="X (antes Twitter)"> X (antes Twitter)</label>
       <label><input type="checkbox" name="network" value="WhatsApp"> WhatsApp</label>
       <label><input type="checkbox" name="network" value="Telegram"> Telegram</label>
       <label><input type="checkbox" name="network" value="Reddit"> Reddit</label>
@@ -100,16 +100,16 @@
     <label>¿Qué efecto quieres generar?</label>
     <select id="desiredEffect">
       <option value="">Selecciona...</option>
+      <option value="Aspiración">Aspiración</option>
       <option value="Credibilidad/Autoridad">Credibilidad/Autoridad</option>
-      <option value="Motivación">Motivación</option>
       <option value="Curiosidad">Curiosidad</option>
-      <option value="Confianza">Seguridad/Confianza</option>
-      <option value="Urgencia">Urgencia/Escasez</option>
+      <option value="Empatía">Empatía</option>
+      <option value="Motivación">Motivación</option>
+      <option value="Reflexión">Reflexión</option>
+      <option value="Seguridad/Confianza">Seguridad/Confianza</option>
       <option value="Simplemente informar">Simplemente informar</option>
     </select>
-    <div class="small-description">
-      <span id="effectDescription"></span>
-    </div>
+    <div class="small-description"><span id="effectDescription"></span></div>
 
     <label>Tipo de copy:</label>
     <select id="copyType">
@@ -127,48 +127,46 @@
       <option value="Técnico o profesional">Técnico o profesional</option>
       <option value="Venta directa o persuasivo">Venta directa o persuasivo</option>
     </select>
-    <div class="small-description">
-      <span id="copyDescription"></span>
-    </div>
+    <div class="small-description"><span id="copyDescription"></span></div>
 
     <button class="button">Generar Ideas</button>
   </div>
 
   <script>
-    // Descripciones de efectos
     const effectDescriptions = {
+      "Aspiración": "Generar deseo de superación, logro o alcanzar un ideal.",
       "Credibilidad/Autoridad": "Transmitir experiencia, conocimientos sólidos y respaldo profesional.",
-      "Motivación": "Impulsar a la acción positiva, generar entusiasmo y energía.",
       "Curiosidad": "Despertar el interés, la intriga o el deseo de saber más.",
-      "Confianza": "Generar tranquilidad, certeza y sensación de respaldo.",
-      "Urgencia": "Crear sensación de tiempo limitado o escasez de recursos.",
+      "Empatía": "Mostrar comprensión, conexión emocional o identificación con la audiencia.",
+      "Motivación": "Impulsar a la acción positiva, generar entusiasmo y energía.",
+      "Reflexión": "Invitar a pensar, cuestionar o analizar un tema en profundidad.",
+      "Seguridad/Confianza": "Generar tranquilidad, certeza y sensación de respaldo.",
       "Simplemente informar": "Comunicar hechos o datos de manera objetiva y directa."
     };
 
-    // Descripciones de tipos de copy
     const copyDescriptions = {
-      "De beneficio o solución": "Enfocado en el valor o solución que ofrece el producto o servicio.",
-      "De novedad o lanzamiento": "Presenta algo nuevo, innovador o recientemente lanzado.",
+      "De beneficio o solución": "Presenta cómo el producto o servicio resuelve un problema.",
+      "De novedad o lanzamiento": "Anuncia algo nuevo o recientemente disponible.",
       "De interacción o pregunta": "Involucra a la audiencia haciendo preguntas o fomentando respuestas.",
-      "De urgencia o escasez": "Genera miedo a perder la oportunidad (FOMO).",
-      "Informativo o educativo": "Aporta datos, conocimientos o formación valiosa.",
-      "Informal": "Lenguaje relajado, cotidiano o humorístico.",
-      "Llamada a la acción (CTA)": "Invita directamente a tomar acción.",
-      "Narrativo o storytelling": "Cuenta una historia para conectar emocionalmente.",
-      "Posicionamiento o branding": "Fortalece la marca y su percepción.",
-      "Testimonio o prueba social": "Muestra validación social con opiniones, reseñas o casos de éxito.",
-      "Técnico o profesional": "Contenido especializado, detallado o para públicos expertos.",
-      "Venta directa o persuasivo": "Enfocado directamente en la conversión a compra o contratación."
+      "De urgencia o escasez": "Genera sensación de urgencia o limitación de disponibilidad.",
+      "Informativo o educativo": "Brinda información o conocimiento útil.",
+      "Informal": "Lenguaje coloquial, cercano y casual.",
+      "Llamada a la acción (CTA)": "Indica claramente el siguiente paso que debe tomar el usuario.",
+      "Narrativo o storytelling": "Cuenta historias o casos que conecten emocionalmente.",
+      "Posicionamiento o branding": "Fortalece la identidad y reputación de la marca.",
+      "Testimonio o prueba social": "Muestra validación social con opiniones o casos de éxito.",
+      "Técnico o profesional": "Contenido detallado para públicos expertos.",
+      "Venta directa o persuasivo": "Enfocado directamente en convertir en venta o contratación."
     };
 
     document.getElementById("desiredEffect").addEventListener("change", function() {
-      const value = this.value;
-      document.getElementById("effectDescription").textContent = effectDescriptions[value] || "";
+      const val = this.value;
+      document.getElementById("effectDescription").textContent = effectDescriptions[val] || "";
     });
 
     document.getElementById("copyType").addEventListener("change", function() {
-      const value = this.value;
-      document.getElementById("copyDescription").textContent = copyDescriptions[value] || "";
+      const val = this.value;
+      document.getElementById("copyDescription").textContent = copyDescriptions[val] || "";
     });
   </script>
 </body>
