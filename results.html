@@ -3,38 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>FeedFlow 2.0 - Resultados</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <script src="i18n.js"></script>
-  <script src="app.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h1 data-i18n="results_title">Resultados Generados</h1>
-
+    <h1>Resultados Generados</h1>
     <div id="results"></div>
-
-    <button class="back-button" onclick="volver()" data-i18n="generate_more">Generar Nuevas Ideas</button>
   </div>
 
-  <script>
-    const storedResults = JSON.parse(localStorage.getItem("feedflowResults"));
-    const resultsDiv = document.getElementById("results");
-
-    if (storedResults && storedResults.length > 0) {
-      storedResults.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "result-card";
-        card.innerHTML = `<h3>${item.network}</h3><pre>${item.result}</pre>`;
-        resultsDiv.appendChild(card);
-      });
-    } else {
-      resultsDiv.innerHTML = "<p>No hay resultados disponibles.</p>";
-    }
-
-    function volver() {
-      window.location.href = "config.html";
-    }
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
