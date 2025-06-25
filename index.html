@@ -4,159 +4,146 @@
   <meta charset="UTF-8">
   <title>FeedFlow 2.0 - Generador IA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Estilos -->
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #400080, #8000ff);
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    h1 {
+      text-align: center;
+      color: #5e0acc;
+    }
+    .btn {
+      background-color: #f5b800;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #d49f00;
+    }
+    .hidden { display: none; }
+    select, input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .result {
+      background: #eee;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-
-  <div class="container">
+  <div class="container" id="login-container">
     <h1>FeedFlow 2.0 - Generador de Ideas IA</h1>
-
-    <div id="login-container">
-      <button id="loginBtn">Iniciar sesión con GitHub</button>
-    </div>
-
-    <div id="language-selector" style="display:none;">
-      <label>Idioma:</label>
-      <select id="language">
-        <option value="es">Español</option>
-        <option value="en">English</option>
-        <option value="pt">Português</option>
-      </select>
-    </div>
-
-    <div id="generator-form" style="display:none;">
-      <h2>Modo de generación:</h2>
-      <label><input type="radio" name="mode" value="multi" checked> Multi-redes</label>
-      <label><input type="radio" name="mode" value="single"> Una red (3 ideas)</label>
-
-      <h2>Ideas para:</h2>
-      <div id="networks">
-        <label><input type="checkbox" name="network" value="Facebook"> Facebook</label>
-        <label><input type="checkbox" name="network" value="Instagram"> Instagram</label>
-        <label><input type="checkbox" name="network" value="LinkedIn"> LinkedIn</label>
-        <label><input type="checkbox" name="network" value="X"> X (antes Twitter)</label>
-        <label><input type="checkbox" name="network" value="TikTok"> TikTok</label>
-        <label><input type="checkbox" name="network" value="WhatsApp"> WhatsApp</label>
-        <label><input type="checkbox" name="network" value="YouTube"> YouTube</label>
-      </div>
-
-      <h2>Idea o palabra clave:</h2>
-      <input type="text" id="keyword">
-
-      <h2>¿Qué efecto quieres generar?</h2>
-      <select id="effect">
-        <option value="">Selecciona...</option>
-        <option value="Motivación">Motivación</option>
-        <option value="Credibilidad/Autoridad">Credibilidad/Autoridad</option>
-        <option value="Curiosidad">Curiosidad</option>
-        <option value="Urgencia o escasez">Urgencia o escasez</option>
-      </select>
-      <p id="effect-desc"></p>
-
-      <h2>Tipo de copy:</h2>
-      <select id="copyType">
-        <option value="">Selecciona...</option>
-        <option value="Llamada a la acción (CTA)">Llamada a la acción (CTA)</option>
-        <option value="Testimonio o prueba social">Testimonio o prueba social</option>
-        <option value="Informativo o educativo">Informativo o educativo</option>
-        <option value="Técnico o profesional">Técnico o profesional</option>
-      </select>
-      <p id="copy-desc"></p>
-
-      <button id="generateBtn">Generar Ideas</button>
-    </div>
-
-    <div id="results" style="display:none;">
-      <h2>Resultados:</h2>
-      <div id="output"></div>
-    </div>
-
+    <button class="btn" id="google-login">Iniciar sesión con Google</button>
   </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GithubAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+  <div class="container hidden" id="main-app">
+    <h1>Generador de Ideas IA</h1>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8",
-    authDomain: "brain-storm-8f0d8.firebaseapp.com",
-    databaseURL: "https://brain-storm-8f0d8-default-rtdb.firebaseio.com",
-    projectId: "brain-storm-8f0d8",
-    storageBucket: "brain-storm-8f0d8.firebasestorage.app",
-    messagingSenderId: "401208607043",
-    appId: "1:401208607043:web:1ec3ea3dabacbe11beaff6"
-  };
+    <label for="language">Idioma:</label>
+    <select id="language">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+    </select>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth();
+    <label for="mode">Modo de generación:</label>
+    <select id="mode">
+      <option value="multi">Multi-redes (una idea por red seleccionada)</option>
+      <option value="single">Una red (tres ideas distintas)</option>
+    </select>
 
-  document.getElementById('loginBtn').addEventListener('click', () => {
-    const provider = new GithubAuthProvider();
-    signInWithPopup(auth, provider)
-      .catch(e => alert("Error al iniciar sesión: " + e));
-  });
+    <label>Ideas para:</label><br>
+    <input type="checkbox" value="Facebook" class="network"> Facebook
+    <input type="checkbox" value="Instagram" class="network"> Instagram
+    <input type="checkbox" value="LinkedIn" class="network"> LinkedIn
+    <input type="checkbox" value="X" class="network"> X (antes Twitter)
+    <input type="checkbox" value="TikTok" class="network"> TikTok
+    <input type="checkbox" value="YouTube" class="network"> YouTube
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      document.getElementById('login-container').style.display = 'none';
-      document.getElementById('language-selector').style.display = 'block';
-      document.getElementById('generator-form').style.display = 'block';
-    }
-  });
+    <label for="keyword">Idea o palabra clave:</label>
+    <input type="text" id="keyword" placeholder="Escribe tu palabra clave...">
 
-  // Descripciones dinámicas:
-  const effects = {
-    "Motivación": "Generar entusiasmo, energía positiva y deseo de actuar.",
-    "Credibilidad/Autoridad": "Transmitir experiencia, conocimientos sólidos y respaldo profesional.",
-    "Curiosidad": "Despertar el interés, la intriga o el deseo de saber más.",
-    "Urgencia o escasez": "Motivar a actuar rápido por tiempo limitado o recursos escasos."
-  };
+    <label for="effect">¿Qué efecto quieres generar?</label>
+    <select id="effect">
+      <option value="Motivación">Motivación</option>
+      <option value="Curiosidad">Curiosidad</option>
+      <option value="Urgencia o escasez">Urgencia o escasez</option>
+      <option value="Credibilidad/Autoridad">Credibilidad/Autoridad</option>
+    </select>
 
-  const copyTypes = {
-    "Llamada a la acción (CTA)": "Invita directamente a realizar una acción inmediata.",
-    "Testimonio o prueba social": "Muestra validación social con opiniones o casos de éxito.",
-    "Informativo o educativo": "Aporta conocimiento útil, consejos o formación.",
-    "Técnico o profesional": "Contenido especializado, para públicos expertos."
-  };
+    <label for="copy">Tipo de copy:</label>
+    <select id="copy">
+      <option value="Llamada a la acción (CTA)">Llamada a la acción (CTA)</option>
+      <option value="Testimonio o prueba social">Testimonio o prueba social</option>
+      <option value="Informativo o educativo">Informativo o educativo</option>
+      <option value="Técnico o profesional">Técnico o profesional</option>
+      <option value="Posicionamiento o branding">Posicionamiento o branding</option>
+    </select>
 
-  document.getElementById('effect').addEventListener('change', e => {
-    document.getElementById('effect-desc').innerText = effects[e.target.value] || '';
-  });
+    <button class="btn" id="generate">Generar Ideas</button>
 
-  document.getElementById('copyType').addEventListener('change', e => {
-    document.getElementById('copy-desc').innerText = copyTypes[e.target.value] || '';
-  });
+    <div id="results" class="result hidden"></div>
+  </div>
 
-  document.getElementById('generateBtn').addEventListener('click', async () => {
-    const keyword = document.getElementById('keyword').value.trim();
-    const effect = document.getElementById('effect').value;
-    const copyType = document.getElementById('copyType').value;
-    const networks = Array.from(document.querySelectorAll("input[name='network']:checked")).map(el => el.value);
-    const mode = document.querySelector("input[name='mode']:checked").value;
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_AUTH_DOMAIN",
+      projectId: "TU_PROJECT_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
 
-    if (!keyword || !effect || !copyType || networks.length === 0) {
-      alert("Por favor completa todos los campos.");
-      return;
-    }
+    document.getElementById("google-login").addEventListener("click", () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then(() => {
+          document.getElementById("login-container").classList.add("hidden");
+          document.getElementById("main-app").classList.remove("hidden");
+        })
+        .catch(error => {
+          alert("Error al iniciar sesión: " + error.message);
+        });
+    });
 
-    try {
-      const response = await fetch("https://us-central1-brain-storm-8f0d8.cloudfunctions.net/api/generateIdeas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword, desiredEffect: effect, copyType, networks, mode })
-      });
-      const data = await response.json();
-      document.getElementById('results').style.display = 'block';
-      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
-    } catch (error) {
-      alert("Error al generar ideas.");
-    }
-  });
-</script>
+    document.getElementById("generate").addEventListener("click", () => {
+      const keyword = document.getElementById("keyword").value;
+      const effect = document.getElementById("effect").value;
+      const copy = document.getElementById("copy").value;
+      const mode = document.getElementById("mode").value;
+      const networks = Array.from(document.querySelectorAll('.network:checked')).map(cb => cb.value);
+      
+      if (!keyword || !effect || !copy || networks.length === 0) {
+        alert("Por favor completa todos los campos y selecciona al menos una red.");
+        return;
+      }
 
+      document.getElementById("results").classList.remove("hidden");
+      document.getElementById("results").innerText = "Simulación de generación de ideas para: " + keyword + " con efecto " + effect + " y tipo de copy " + copy + " para redes: " + networks.join(", ");
+    });
+  </script>
 </body>
 </html>
