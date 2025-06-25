@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>FeedFlow 2.0 - Generador de Ideas</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Generador de Ideas IA</h1>
+
+    <label for="mode">Modo de generación:</label>
+    <select id="mode">
+      <option value="multi">Multi-redes (una idea por red)</option>
+      <option value="single">Una red (tres ideas distintas)</option>
+    </select>
+
+    <label>Ideas para:</label><br>
+    <div class="networks">
+      <input type="checkbox" value="Facebook" class="network"> Facebook
+      <input type="checkbox" value="Instagram" class="network"> Instagram
+      <input type="checkbox" value="LinkedIn" class="network"> LinkedIn
+      <input type="checkbox" value="X" class="network"> X (Twitter)
+      <input type="checkbox" value="TikTok" class="network"> TikTok
+      <input type="checkbox" value="WhatsApp" class="network"> WhatsApp
+      <input type="checkbox" value="Telegram" class="network"> Telegram
+      <input type="checkbox" value="Reddit" class="network"> Reddit
+      <input type="checkbox" value="YouTube" class="network"> YouTube
+    </div>
+
+    <label>Idea o palabra clave:</label>
+    <input type="text" id="keyword">
+
+    <label>¿Qué efecto quieres generar?</label>
+    <select id="effect">
+      <option value="Credibilidad / Autoridad">Credibilidad / Autoridad</option>
+      <option value="Curiosidad">Curiosidad</option>
+      <option value="Motivación">Motivación</option>
+      <option value="Inspiración">Inspiración</option>
+      <option value="Confianza">Confianza</option>
+      <option value="Felicidad">Felicidad</option>
+      <option value="Empoderamiento">Empoderamiento</option>
+      <option value="Identificación personal">Identificación personal</option>
+      <option value="Informar">Informar</option>
+      <option value="Reflexión">Reflexión</option>
+    </select>
+
+    <label>Tipo de copy:</label>
+    <select id="copyType">
+      <option value="De beneficio o solución">De beneficio o solución</option>
+      <option value="De novedad o lanzamiento">De novedad o lanzamiento</option>
+      <option value="De interacción o pregunta">De interacción o pregunta</option>
+      <option value="De urgencia o escasez">De urgencia o escasez</option>
+      <option value="Informativo o educativo">Informativo o educativo</option>
+      <option value="Informal">Informal</option>
+      <option value="Llamada a la acción (CTA)">Llamada a la acción (CTA)</option>
+      <option value="Narrativo o storytelling">Narrativo o storytelling</option>
+      <option value="Posicionamiento o branding">Posicionamiento o branding</option>
+      <option value="Testimonio o prueba social">Testimonio o prueba social</option>
+      <option value="Técnico o profesional">Técnico o profesional</option>
+      <option value="Venta directa o persuasivo">Venta directa o persuasivo</option>
+    </select>
+
+    <button id="generateBtn">Generar Ideas</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
