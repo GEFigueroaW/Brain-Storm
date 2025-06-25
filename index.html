@@ -2,150 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>FeedFlow 2.0 - Generador de Ideas IA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #400080, #8000ff);
-      color: #333;
-    }
-    .container {
-      max-width: 600px;
-      margin: 60px auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    }
-    h1 {
-      text-align: center;
-      color: #5e0acc;
-    }
-    .btn {
-      background-color: #f5b800;
-      color: #fff;
-      border: none;
-      padding: 15px 30px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background-color: #d49f00;
-    }
-    .hidden { display: none; }
-    select, input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    .result {
-      background: #eee;
-      padding: 15px;
-      margin-top: 20px;
-      border-radius: 5px;
-    }
-  </style>
+  <title>FeedFlow 2.0 - Login</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container" id="login-container">
-    <h1>FeedFlow 2.0 - Generador de Ideas IA</h1>
-    <button class="btn" id="google-login">Iniciar sesión con Google</button>
-  </div>
-
-  <div class="container hidden" id="main-app">
-    <h1>Generador de Ideas IA</h1>
-
-    <label for="language">Idioma:</label>
+  <div class="container">
+    <h1>FeedFlow 2.0</h1>
+    <label for="language">Selecciona el idioma:</label>
     <select id="language">
       <option value="es">Español</option>
       <option value="en">English</option>
       <option value="pt">Português</option>
     </select>
-
-    <label for="mode">Modo de generación:</label>
-    <select id="mode">
-      <option value="multi">Multi-redes (una idea por red seleccionada)</option>
-      <option value="single">Una red (tres ideas distintas)</option>
-    </select>
-
-    <label>Ideas para:</label><br>
-    <input type="checkbox" value="Facebook" class="network"> Facebook
-    <input type="checkbox" value="Instagram" class="network"> Instagram
-    <input type="checkbox" value="LinkedIn" class="network"> LinkedIn
-    <input type="checkbox" value="X" class="network"> X (antes Twitter)
-    <input type="checkbox" value="TikTok" class="network"> TikTok
-    <input type="checkbox" value="YouTube" class="network"> YouTube
-
-    <label for="keyword">Idea o palabra clave:</label>
-    <input type="text" id="keyword" placeholder="Escribe tu palabra clave...">
-
-    <label for="effect">¿Qué efecto quieres generar?</label>
-    <select id="effect">
-      <option value="Motivación">Motivación</option>
-      <option value="Curiosidad">Curiosidad</option>
-      <option value="Urgencia o escasez">Urgencia o escasez</option>
-      <option value="Credibilidad/Autoridad">Credibilidad/Autoridad</option>
-    </select>
-
-    <label for="copy">Tipo de copy:</label>
-    <select id="copy">
-      <option value="Llamada a la acción (CTA)">Llamada a la acción (CTA)</option>
-      <option value="Testimonio o prueba social">Testimonio o prueba social</option>
-      <option value="Informativo o educativo">Informativo o educativo</option>
-      <option value="Técnico o profesional">Técnico o profesional</option>
-      <option value="Posicionamiento o branding">Posicionamiento o branding</option>
-    </select>
-
-    <button class="btn" id="generate">Generar Ideas</button>
-
-    <div id="results" class="result hidden"></div>
+    <button id="loginBtn">Iniciar sesión con Google</button>
   </div>
 
-  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: 'AIzaSyCScJA-UGs3WcBnfAm-6K94ybZ4bzBahz8',
-      authDomain: 'brain-storm-8f0d8.firebaseapp.com',
-      projectId: 'brain-storm-8f0d8'
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    document.getElementById("google-login").addEventListener("click", () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider)
-        .then(() => {
-          document.getElementById("login-container").classList.add("hidden");
-          document.getElementById("main-app").classList.remove("hidden");
-        })
-        .catch(error => {
-          alert("Error al iniciar sesión: " + error.message);
-        });
-    });
-
-    document.getElementById("generate").addEventListener("click", () => {
-      const keyword = document.getElementById("keyword").value;
-      const effect = document.getElementById("effect").value;
-      const copy = document.getElementById("copy").value;
-      const mode = document.getElementById("mode").value;
-      const networks = Array.from(document.querySelectorAll('.network:checked')).map(cb => cb.value);
-      
-      if (!keyword || !effect || !copy || networks.length === 0) {
-        alert("Por favor completa todos los campos y selecciona al menos una red.");
-        return;
-      }
-
-      document.getElementById("results").classList.remove("hidden");
-      document.getElementById("results").innerText = "Simulación de generación de ideas para: " + keyword + " con efecto " + effect + " y tipo de copy " + copy + " para redes: " + networks.join(", ");
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
