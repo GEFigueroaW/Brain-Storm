@@ -1,97 +1,53 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f8fc;
-  color: #333;
+  background: linear-gradient(to bottom, #3a0ca3, #7209b7);
+  color: #fff;
   margin: 0;
   padding: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .container {
-  max-width: 700px;
-  margin: 50px auto;
+  background-color: #fff;
+  color: #333;
   padding: 30px;
-  background-color: white;
+  margin-top: 40px;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
 
 h1 {
+  color: #7209b7;
+  margin-bottom: 20px;
   text-align: center;
-  color: #5b2c82; /* Morado */
 }
 
-label {
-  font-weight: 600;
-  display: block;
+button {
+  background-color: #fca311;
+  border: none;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #e29500;
+}
+
+.form-group {
   margin-top: 20px;
 }
 
 select, input[type="text"] {
   width: 100%;
   padding: 10px;
-  margin-top: 8px;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  border-radius: 5px;
   font-size: 16px;
-}
-
-.small-description {
-  font-size: 0.85em;
-  color: #555;
-  margin-top: 5px;
-  font-style: italic;
-}
-
-.checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.checkbox-group label {
-  display: flex;
-  align-items: center;
-  font-weight: normal;
-}
-
-.button, .back-button {
-  background-color: #d4af37; /* Dorado */
-  color: white;
-  border: none;
-  padding: 15px;
-  margin-top: 30px;
-  width: 100%;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.button:hover, .back-button:hover {
-  background-color: #bfa235;
-}
-
-.result-card {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  border-left: 8px solid #d4af37;
-}
-
-.result-card h3 {
-  color: #5b2c82;
-  margin-top: 0;
-}
-
-pre {
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-family: inherit;
-}
-
-.hidden {
-  display: none !important;
 }
