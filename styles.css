@@ -1,53 +1,93 @@
+/* styles.css - FeedFlow 2.0 profesional */
+
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom, #3a0ca3, #7209b7);
-  color: #fff;
+  background: linear-gradient(135deg, #4b0082, #800080, #DAA520);
+  color: #333;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
 }
 
 .container {
-  background-color: #fff;
-  color: #333;
-  padding: 30px;
-  margin-top: 40px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 600px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  max-width: 800px;
+  margin: 50px auto;
+  background: #fff;
+  border-radius: 15px;
+  padding: 30px 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
 h1 {
-  color: #7209b7;
-  margin-bottom: 20px;
   text-align: center;
+  color: #4b0082;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+h3 {
+  color: #4b0082;
+}
+
+label {
+  font-weight: 600;
+  margin-top: 15px;
+  display: block;
+}
+
+input[type="text"], select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #4b0082;
+  border-radius: 8px;
+  margin-top: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
 }
 
 button {
-  background-color: #fca311;
+  background-color: #DAA520;
+  color: white;
   border: none;
-  color: #fff;
-  padding: 12px 20px;
+  padding: 15px 25px;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 18px;
+  margin-top: 30px;
   cursor: pointer;
-  margin-top: 20px;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #e29500;
+  background-color: #b8860b;
 }
 
-.form-group {
-  margin-top: 20px;
+.results {
+  margin-top: 40px;
+  padding: 20px;
+  background: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-select, input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+.results pre {
+  background: #efefef;
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+.networks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 8px;
+}
+
+.networks label {
+  font-weight: normal;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
 }
