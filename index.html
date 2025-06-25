@@ -1,139 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FeedFlow 2.0 - Generador de Ideas IA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      background: linear-gradient(to right, #4B0082, #FFD700);
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    .container {
-      max-width: 800px;
-      margin: 50px auto;
-      background: #fff;
-      border-radius: 10px;
-      padding: 30px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    h1 {
-      text-align: center;
-      color: #4B0082;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin: 15px 0 5px;
-    }
-    input[type="text"], select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .networks {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .networks label {
-      font-weight: normal;
-    }
-    .mode {
-      margin: 20px 0;
-    }
-    button {
-      background-color: #4B0082;
-      color: #fff;
-      border: none;
-      padding: 15px 30px;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    button:disabled {
-      background-color: #999;
-      cursor: not-allowed;
-    }
-    .result {
-      margin-top: 30px;
-      padding: 20px;
-      background: #f9f9f9;
-      border-radius: 10px;
-    }
-    pre {
-      background: #eee;
-      padding: 10px;
-      border-radius: 5px;
-      overflow-x: auto;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <h1>FeedFlow 2.0 - Generador de Ideas IA</h1>
 
-    <form id="ideaForm">
-      <div class="mode">
-        <label>Modo de generación:</label>
-        <label><input type="radio" name="mode" value="multi" checked> Multi-redes (una idea por red seleccionada)</label>
-        <label><input type="radio" name="mode" value="single"> Una red (tres ideas distintas)</label>
-      </div>
-
-      <label>Ideas para:</label>
-      <div class="networks">
-        <label><input type="checkbox" name="networks" value="Facebook"> Facebook</label>
-        <label><input type="checkbox" name="networks" value="Instagram"> Instagram</label>
-        <label><input type="checkbox" name="networks" value="LinkedIn"> LinkedIn</label>
-        <label><input type="checkbox" name="networks" value="X (antes Twitter)"> X (antes Twitter)</label>
-        <label><input type="checkbox" name="networks" value="WhatsApp"> WhatsApp</label>
-        <label><input type="checkbox" name="networks" value="Telegram"> Telegram</label>
-        <label><input type="checkbox" name="networks" value="Reddit"> Reddit</label>
-        <label><input type="checkbox" name="networks" value="TikTok"> TikTok</label>
-        <label><input type="checkbox" name="networks" value="YouTube"> YouTube</label>
-      </div>
-
-      <label>Idea o palabra clave:</label>
-      <input type="text" id="keyword" placeholder="Escribe tu palabra clave" required>
-
-      <label>¿Qué efecto quieres generar?</label>
-      <select id="desiredEffect" required>
-        <option value="">Seleccione...</option>
-        <option value="Credibilidad/Autoridad">Credibilidad/Autoridad</option>
-        <option value="Motivación">Motivación</option>
-        <option value="Seguridad/Confianza">Seguridad/Confianza</option>
-        <option value="Curiosidad">Curiosidad</option>
-        <option value="Urgencia o escasez">Urgencia o escasez</option>
-        <option value="Inspiración o empatía">Inspiración o empatía</option>
-        <option value="Diversión o entretenimiento">Diversión o entretenimiento</option>
-      </select>
-
-      <label>Tipo de copy:</label>
-      <select id="copyType" required>
-        <option value="">Seleccione...</option>
-        <option value="Informativo o educativo">Informativo o educativo</option>
-        <option value="Llamada a la acción (CTA)">Llamada a la acción (CTA)</option>
-        <option value="Venta directa o persuasivo">Venta directa o persuasivo</option>
-        <option value="Testimonio o prueba social">Testimonio o prueba social</option>
-        <option value="De interacción o pregunta">De interacción o pregunta</option>
-        <option value="Técnico o profesional">Técnico o profesional</option>
-        <option value="Posicionamiento o branding">Posicionamiento o branding</option>
-      </select>
-
-      <button type="submit" id="generateBtn">Generar Ideas</button>
-    </form>
-
-    <div class="result" id="resultContainer" style="display: none;">
-      <h3>Resultados:</h3>
-      <div id="resultContent"></div>
+    <div id="login-section">
+      <button id="loginBtn">Iniciar sesión con Google</button>
     </div>
 
+    <div id="main-section" style="display:none;">
+      <div>
+        <label>Selecciona idioma:</label>
+        <select id="language">
+          <option value="es">Español</option>
+          <option value="en">English</option>
+          <option value="pt">Português</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Modo de generación:</label><br>
+        <input type="radio" name="mode" value="multi" checked> Multi-redes<br>
+        <input type="radio" name="mode" value="single"> Una red (3 ideas distintas)
+      </div>
+
+      <div class="form-group">
+        <label>Ideas para:</label><br>
+        <input type="checkbox" name="network" value="Facebook"> Facebook
+        <input type="checkbox" name="network" value="Instagram"> Instagram
+        <input type="checkbox" name="network" value="LinkedIn"> LinkedIn
+        <input type="checkbox" name="network" value="X"> X (Twitter)
+        <input type="checkbox" name="network" value="WhatsApp"> WhatsApp
+        <input type="checkbox" name="network" value="Telegram"> Telegram
+        <input type="checkbox" name="network" value="YouTube"> YouTube
+        <input type="checkbox" name="network" value="TikTok"> TikTok
+        <input type="checkbox" name="network" value="Reddit"> Reddit
+      </div>
+
+      <div class="form-group">
+        <label>Idea o palabra clave:</label>
+        <input type="text" id="keyword">
+      </div>
+
+      <div class="form-group">
+        <label>¿Qué efecto quieres generar?</label>
+        <select id="effect">
+          <option value="">Seleccione...</option>
+        </select>
+        <div id="effect-description"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de copy:</label>
+        <select id="copy">
+          <option value="">Seleccione...</option>
+        </select>
+        <div id="copy-description"></div>
+      </div>
+
+      <button id="generateBtn">Generar Ideas</button>
+      <div id="result"></div>
+    </div>
   </div>
 
   <script src="app.js"></script>
