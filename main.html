@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="mainTitle">Generar Contenido - FeedFlow</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1><span data-i18n="welcome"></span> <span id="username"></span>!</h1>
+        <button id="logoutBtn" data-i18n="logout">Cerrar sesión</button>
+    </header>
+
+    <div class="container">
+        <form id="contentForm">
+            <!-- Campo: Idea/Palabra Clave -->
+            <div class="form-group">
+                <label data-i18n="ideaKeyword">Idea o palabra clave</label>
+                <input type="text" id="keyword" required>
+            </div>
+
+            <!-- Selector: Modo de Generación -->
+            <div class="form-group">
+                <label data-i18n="generationMode">Modo de generación</label>
+                <select id="generationMode">
+                    <option value="multi" data-i18n="multiMode">Multi-redes</option>
+                    <option value="single" data-i18n="singleMode">Una red</option>
+                </select>
+            </div>
+
+            <!-- Selector: Redes Sociales -->
+            <div class="form-group">
+                <label data-i18n="socialNetworks">Redes sociales</label>
+                <div id="networksContainer" class="checkbox-group">
+                    <!-- Las opciones se generan dinámicamente en JS -->
+                </div>
+            </div>
+
+            <!-- Selector: Tipo de Copy -->
+            <div class="form-group">
+                <label data-i18n="copyType">Tipo de copy</label>
+                <select id="copyType">
+                    <!-- Las opciones se generan dinámicamente en JS -->
+                </select>
+                <div id="copyTypeDescription" class="description-box"></div>
+            </div>
+
+            <!-- Selector: Efecto Deseado -->
+            <div class="form-group">
+                <label data-i18n="desiredEffect">Efecto deseado</label>
+                <select id="desiredEffect">
+                    <!-- Las opciones se generan dinámicamente en JS -->
+                </select>
+                <div id="effectDescription" class="description-box"></div>
+            </div>
+
+            <!-- Contador de Créditos -->
+            <div id="creditCounter" class="credit-counter" style="display: none;">
+                <span data-i18n="remainingCredits">Generaciones restantes:</span>
+                <span id="creditCount">0/3</span>
+            </div>
+
+            <!-- Botón de Generación -->
+            <button type="submit" id="generateBtn" class="generate-btn pulse-animation">
+                <span data-i18n="generateButton">¡Que fluyan las ideas!</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="/js/generate.js"></script>
+</body>
+</html>

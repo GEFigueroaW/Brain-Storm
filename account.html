@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="accountTitle">Mi Cuenta - FeedFlow</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1 data-i18n="accountTitle">Mi Cuenta</h1>
+        <button id="backBtn" data-i18n="backButton">Volver</button>
+        <button id="logoutBtn" data-i18n="logout">Cerrar sesión</button>
+    </header>
+
+    <div class="container">
+        <div id="accountInfo" class="account-card">
+            <h2 data-i18n="subscriptionStatus">Estado de Suscripción</h2>
+            <div id="subscriptionStatus" class="loading">
+                <p data-i18n="loadingSubscription">Cargando información de suscripción...</p>
+            </div>
+            
+            <div id="subscriptionActions" style="display: none;">
+                <button id="manageSubscriptionBtn" class="btn" data-i18n="manageSubscription">Gestionar Suscripción</button>
+                <button id="upgradePlanBtn" class="btn secondary" data-i18n="upgradePlan">Cambiar Plan</button>
+            </div>
+        </div>
+        
+        <div class="account-card">
+            <h2 data-i18n="usageStats">Estadísticas de Uso</h2>
+            <div id="usageStats">
+                <div class="stat">
+                    <span data-i18n="generationsThisMonth">Generaciones este mes:</span>
+                    <span id="monthlyGenerations">0</span>
+                </div>
+                <div class="stat">
+                    <span data-i18n="favoriteNetworks">Redes más usadas:</span>
+                    <span id="topNetworks">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="/js/account.js"></script>
+</body>
+</html>

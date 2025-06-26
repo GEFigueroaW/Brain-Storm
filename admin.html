@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="adminTitle">Admin - FeedFlow</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1 data-i18n="adminTitle">Panel de Administración</h1>
+        <button id="logoutBtn" data-i18n="logout">Cerrar sesión</button>
+    </header>
+
+    <div class="container">
+        <div class="admin-section">
+            <h2 data-i18n="globalSettings">Configuración Global</h2>
+            
+            <div class="admin-card">
+                <h3 data-i18n="premiumSettings">Configuración Premium</h3>
+                <div class="toggle-group">
+                    <label data-i18n="globalPremium">Premium Global:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="globalPremiumToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span id="premiumStatus" data-i18n="inactive">Inactivo</span>
+                </div>
+                
+                <div class="toggle-group">
+                    <label data-i18n="launchPromo">Promoción de Lanzamiento:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="launchPromoToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span id="promoStatus" data-i18n="inactive">Inactivo</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <h2 data-i18n="liveStats">Estadísticas en Tiempo Real</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 data-i18n="activeUsers">Usuarios Activos</h3>
+                    <p class="stat-value" id="activeUsersCount">0</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3 data-i18n="premiumUsers">Usuarios Premium</h3>
+                    <p class="stat-value" id="premiumUsersCount">0</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3 data-i18n="generationsToday">Generaciones Hoy</h3>
+                    <p class="stat-value" id="dailyGenerations">0</p>
+                </div>
+            </div>
+            
+            <div class="admin-card">
+                <h3 data-i18n="userLocations">Ubicación de Usuarios</h3>
+                <div id="locationMap">
+                    <!-- Mapa o lista de ubicaciones -->
+                    <ul id="locationsList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

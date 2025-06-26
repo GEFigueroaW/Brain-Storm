@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="resultsTitle">Resultados - FeedFlow</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1><span data-i18n="resultsTitle">Resultados Generados</span></h1>
+        <button id="backBtn" data-i18n="backButton">Volver</button>
+        <button id="logoutBtn" data-i18n="logout">Cerrar sesión</button>
+    </header>
+
+    <div class="container">
+        <div id="resultsHeader">
+            <h2 data-i18n="generatedFor">Generado para:</h2>
+            <p><strong data-i18n="keywordLabel">Palabra clave:</strong> <span id="resultKeyword"></span></p>
+            <p><strong data-i18n="networksLabel">Redes:</strong> <span id="resultNetworks"></span></p>
+        </div>
+
+        <div id="resultsContainer" class="results-grid">
+            <!-- Las ideas generadas se insertarán aquí dinámicamente -->
+        </div>
+        
+        <div id="finalPhraseContainer" class="final-phrase">
+            <p id="finalPhrase"></p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="/js/results.js"></script>
+</body>
+</html>

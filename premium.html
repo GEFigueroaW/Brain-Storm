@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="premiumTitle">Premium - FeedFlow</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1 data-i18n="premiumTitle">Suscríbete a FeedFlow Premium</h1>
+        <button id="backBtn" data-i18n="backButton">Volver</button>
+        <button id="logoutBtn" data-i18n="logout">Cerrar sesión</button>
+    </header>
+
+    <div class="container">
+        <div class="pricing-plans">
+            <div class="pricing-card">
+                <h3 data-i18n="monthlyPlan">Plan Mensual</h3>
+                <p class="price">$9<span data-i18n="monthly">/mes</span></p>
+                <ul>
+                    <li data-i18n="unlimitedGenerations">Generaciones ilimitadas</li>
+                    <li data-i18n="allNetworks">Todas las redes sociales</li>
+                    <li data-i18n="allCopyTypes">Todos los tipos de copy</li>
+                    <li data-i18n="allEffects">Todos los efectos</li>
+                    <li data-i18n="visualUnlock">Visuales desbloqueados</li>
+                </ul>
+                <button id="monthlyBtn" class="subscribe-btn" data-i18n="subscribe">Suscribirse</button>
+            </div>
+            
+            <div class="pricing-card recommended">
+                <div class="recommended-badge" data-i18n="recommended">Recomendado</div>
+                <h3 data-i18n="annualPlan">Plan Anual</h3>
+                <p class="price">$90<span data-i18n="annual">/año</span></p>
+                <p class="savings" data-i18n="twoMonthsFree">¡2 meses gratis!</p>
+                <ul>
+                    <li data-i18n="unlimitedGenerations">Generaciones ilimitadas</li>
+                    <li data-i18n="allNetworks">Todas las redes sociales</li>
+                    <li data-i18n="allCopyTypes">Todos los tipos de copy</li>
+                    <li data-i18n="allEffects">Todos los efectos</li>
+                    <li data-i18n="visualUnlock">Visuales desbloqueados</li>
+                    <li data-i18n="prioritySupport">Soporte prioritario</li>
+                </ul>
+                <button id="annualBtn" class="subscribe-btn" data-i18n="subscribe">Suscribirse</button>
+            </div>
+        </div>
+        
+        <div id="paymentStatus" class="payment-status">
+            <!-- Mensajes de estado de pago -->
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="/js/premium.js"></script>
+</body>
+</html>
